@@ -1,0 +1,24 @@
+/*常见问题*/
+.questions{  padding: 10px 15px;  }
+.questionsDetail{  padding: 4px 15px;  font-size: 15px;  display: none;  }
+/**消息**/
+#centerMsg .toolBar{
+    background: -webkit-linear-gradient(to right, #FFC700 , #FCAE06); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(to right, #FFC700 , #FCAE06); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(to right, #FFC700 , #FCAE06); /* Firefox 3.6 - 15 */
+    background: linear-gradient(to right, #FFC700 , #FCAE06); /* 标准的语法 */
+}
+#centerMsg .toolBar span{color:#fff}
+#centerMsg .msgContainer{margin-top: 45px;font-size: 14px;}
+#centerMsg .msgContainer .msgItems{padding:15px 10px;}
+#centerMsg .msgContainer .msgItems .msgTime{text-align: center}
+#centerMsg .msgContainer .msgItems .msgTime span{background: #ddd;padding: 4px 6px;border-radius: 30px;}
+#centerMsg .msgContainer .msgItems .msgContent{background: #fff;
+    border-radius:4px;margin-top: 10px;border-top: 2px solid #F1C619;box-shadow: 0 2px 5px #F3F3F3;padding: 10px 15px;}
+#centerMsg .msgContainer .msgBtnContainer{text-align: right}
+#centerMsg .msgContainer .msgBtnContainer button{padding: 6px 15px;border:none;border-radius: 30px;background:#EC744F;color:#fff;outline: none;}
+/**我的分期申请**/
+#mineBystages .btnList{font-size: 14px;height: 30px;line-height: 30px;background: #fff;padding: 0 15px;}
+#mineBystages .btnList ul li{list-style: none;display: inline-block;width: 20%;text-align: center}
+#mineBystages .btnList ul li:first-child{width: 15%}
+#mineBystages .btnList ul li.activeBtn p:last-child{height: 2px;width: 85%;background: #F88B0F;margin: 0 auto}

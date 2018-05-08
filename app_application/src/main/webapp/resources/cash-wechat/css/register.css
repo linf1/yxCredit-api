@@ -1,0 +1,32 @@
+#userlogin{  font-size: 18px;  color: #000;  text-align: center;  }
+#logo{  margin-top:70px;  text-align: center;  }
+#logo img{  width:25%;  height:25%;  }
+.content-wrapper{  margin:34px 10% 0;  }
+#btn{  padding:0 10px;  height:40px;  border:none;  border-left:1px solid #ddd;  background: #fff;  font-size: 14px;  color:#7e7e7e;  outline: none;  }
+.regist{  margin: 0 10%;  font-size: 12px;  color:#A7A7A7  }
+.regist p{  position: relative;  padding-left: 30px;  }
+.regist p .icon-orhook{  position: absolute;  left: 0;  top: -7px;  }
+.regist p .icon-grayhook{  position: absolute;  left: 0;  top: -7px;  }
+
+#uselogin{  width:70%;  height:40px;  line-height: 40px;  background-color:#ffda44 ;  margin: 40px auto 0 auto;  border:1px solid #ffda44;  border-radius: 20px;  text-align: center;  }
+
+.ulogin{  margin: 20px auto;  }
+.ulogin p{  text-align: center;  font-size: 12px;  }
+.ulogin p>span{  text-decoration: none;  color:#ff8351;  }
+#registerContainer .inputContainer span.icon-eyeopen{  right: 14px;  }
+.btnDisabled{  background: #f5f5f5!important;  border:none!important;  color:#ddd!important  }
+.registContainer{  margin: 26px auto;  text-align: center;  }
+.registContainer .registBtn{ outline: none; width: 70%;  border: none;  height: 40px;  line-height: 40px;  border-radius: 30px;  background: #FDE300;  }
+#registerContainer .weui-cells:before{  border: none;  }
+#registerContainer .weui-cells{  font-size: 14px;  margin: 30px auto;  }
+#registerContainer .weui-cells:last-child{margin-bottom: 10px}
+#registerContainer .weui-cell{padding: 0}
+#registerContainer .icon-phone{    font-size: 26px;  padding-right: 5px;  }
+#registerContainer .icon-pwd{font-size: 18px;  padding-right: 5px;}
+#registerContainer .icon-pwd:before{color:#FEE576}
+#registerContainer .icon-code{color:#FEE576;padding-right: 5px}
+#registerContainer .icon-orhook:before,.icon-grayhook:before{position: relative;top:3px}
+
+
+
+

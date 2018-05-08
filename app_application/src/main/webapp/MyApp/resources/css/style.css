@@ -1,0 +1,108 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?2u1l42');
+  src:  url('fonts/icomoon.eot?2u1l42#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?2u1l42') format('truetype'),
+    url('fonts/icomoon.woff?2u1l42') format('woff'),
+    url('fonts/icomoon.svg?2u1l42#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-activeMark:before {
+  content: "\e900";
+  color: #fe6600;
+}
+.icon-add:before {
+  content: "\e901";
+}
+.icon-add-brand:before {
+  content: "\e902";
+  color: #f90;
+}
+.icon-add-edition:before {
+  content: "\e903";
+  color: #f90;
+}
+.icon-add-model:before {
+  content: "\e904";
+  color: #f90;
+}
+.icon-back:before {
+  content: "\e905";
+}
+.icon-clear:before {
+  content: "\e906";
+}
+.icon-close-eye:before {
+  content: "\e907";
+  color: #ccc;
+}
+.icon-exit:before {
+  content: "\e908";
+  color: #fca215;
+}
+.icon-history:before {
+  content: "\e909";
+  color: #cdcdcd;
+}
+.icon-imageAdd:before {
+  content: "\e90a";
+  color: #bfbfbf;
+}
+.icon-more:before {
+  content: "\e90b";
+}
+.icon-open-eye:before {
+  content: "\e90c";
+  color: #ccc;
+}
+.icon-password:before {
+  content: "\e90d";
+  color: #f7e873;
+}
+.icon-scanAddress:before {
+  content: "\e90e";
+  color: #64d178;
+}
+.icon-scanBirth:before {
+  content: "\e90f";
+}
+.icon-scanCard:before {
+  content: "\e910";
+  color: #7c8efe;
+}
+.icon-scanName:before {
+  content: "\e911";
+  color: #42a5e8;
+}
+.icon-scanSex:before {
+  content: "\e912";
+  color: #c9820c;
+}
+.icon-search:before {
+  content: "\e913";
+}
+.icon-store:before {
+  content: "\e914";
+  color: #fca215;
+}
+.icon-user:before {
+  content: "\e915";
+  color: #f7e873;
+}

@@ -1,0 +1,20 @@
+/**登录**/
+.logoBg{height:200px;background: #FFCC00}
+.loginForm{margin:20px auto;text-align: center}
+.loginForm .inputItems{height: 44px;line-height: 44px;width: 80%;margin: 0 10% 20px 10%;border-bottom: 1px solid #CBCBC7;position: relative}
+.loginForm .inputItems input{height: 30px;line-height: 30px;width: 90%;outline: none;border: none;}
+.loginForm .inputItems span{font-size: 20px;vertical-align: text-bottom;}
+.loginForm .inputItems .pwdBtn{position: absolute;right:0;top:15px;z-index: 10}
+.loginFooter{color:#4C4C4C;font-size: 14px;position: fixed;bottom: 20px;width: 100%;text-align: center;}
+.loginFooter span:first-child{display: inline-block;padding-right: 10px}
+.loginFooter span:last-child{display: inline-block;padding-left: 10px;border-left: 1px solid #F7F7F7}
+/**注册**/
+.headerBar{background: #fff}
+.logoTitle{padding: 60px 10% 0 10%;}
+.logoTitle p{font-size: 20px;}
+#registerContainer .loginForm{margin: 40px auto}
+.loginForm .inputItems .getCode{position: absolute;width: 30%;right: 0;top:13px;border: none;outline: none;background: #fff;}
+#registerContainer .loginBtn{margin-bottom: 0}
+.registerFooter{font-size: 14px;text-align: center;margin-top: 5px;}
+.registerPageInfo{color:#FAEA85}
+.icon-code:before{  color: #FFDA44}

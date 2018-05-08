@@ -1,0 +1,81 @@
+/**home页**/
+.weui-tabbar{
+    background: #fff;
+    position: fixed;
+    bottom:0;
+}
+.weui-tabbar a:first-child .weui-tabbar__icon{
+    background: url(../images/home.png) no-repeat center center;
+    background-size: 98%;
+}
+.weui-tabbar a:first-child.weui-bar__item--on .weui-tabbar__icon{
+    background: url(../images/home_active.png) no-repeat center center;
+    background-size: 98%;
+}
+.weui-tabbar a:nth-child(2) .weui-tabbar__icon{
+    background: url(../images/repay.png) no-repeat center center;
+    background-size: 100%;
+}
+.weui-tabbar a:nth-child(2).weui-bar__item--on .weui-tabbar__icon{
+    background: url(../images/repay_active.png) no-repeat center center;
+    background-size: 100%;
+}
+.weui-tabbar a:nth-child(3) .weui-tabbar__icon{
+    background: url(../images/msg.png) no-repeat center center;
+    background-size: 83%;
+}
+.weui-tabbar a:nth-child(3).weui-bar__item--on .weui-tabbar__icon{
+    background: url(../images/msg_active.png) no-repeat center center;
+    background-size: 83%;
+}
+.weui-tabbar a:nth-child(4) .weui-tabbar__icon{
+    background: url(../images/user.png) no-repeat center center;
+    background-size: 83%;
+}
+.weui-tabbar a:nth-child(4).weui-bar__item--on .weui-tabbar__icon{
+    background: url(../images/user_active.png) no-repeat center center;
+    background-size: 83%;
+}
+.weui-tabbar__item.weui-bar__item--on .weui-tabbar__label{
+    color:#FDD945
+}
+
+#tab1{background: #FAFAFA}
+#tab1 .toolBar{
+    background: -webkit-linear-gradient(to right, #FFC803 , #FCAE04); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(to right, #FFC803 , #FCAE04); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(to right, #FFC803 , #FCAE04); /* Firefox 3.6 - 15 */
+    background: linear-gradient(to right, #FFC803 , #FCAE04); /* 标准的语法 */
+    color:#fff
+}
+#tab1 .productContainer{margin-top: 44px;font-size: 14px;}
+#tab1 .productContainer .productTitle{padding:0 15px;background: #fff;color:#8E8D81;height: 30px;line-height: 30px;}
+#tab1 .productContainer .productTitle li{list-style: none;display: inline-block;margin-right: 20px;}
+#tab1 .productContainer .productTitle li:first-child i{display: inline-block;width: 20px;height: 20px;background: url(../images/shopping_image.png) no-repeat center center;background-size: cover;vertical-align: text-bottom;margin-right: 4px}
+#tab1 .productContainer .productTitle li:last-child i{display: inline-block;width: 20px;height: 20px;background: url(../images/cash_image.png) no-repeat center center;background-size: cover;vertical-align: text-bottom;margin-right: 4px}
+#tab1 .productContainer .productTitle li.productActive p:last-child{width: 100%;height: 2px;background: #F98300;}
+#tab1 .productContent,.productFooter{margin: 10px;}
+#tab1 .productContent .swiper-slide img,.productFooter .swiper-slide img{width: 100%}
+#tab1 .productContent .swiper-slide p{text-align: center;position: absolute;bottom: 14%;width: 100%;}
+#tab1 .productContent .swiper-slide p.money{bottom: 42%;color:#fff;font-size: 30px;}
+#tab1 .productContent .swiper-slide p img{width: 25%}
+@media screen and (max-width: 414px) {
+    #tab1 .productContent .swiper-slide p.money{
+        bottom: 43%;
+    }
+}
+@media screen and (max-width: 375px) {
+    #tab1 .productContent .swiper-slide p.money{
+        bottom: 42%;
+    }
+}
+@media screen and (max-width: 360px) {
+    #tab1 .productContent .swiper-slide p.money{
+        bottom: 42%;
+    }
+}
+@media screen and (max-width: 320px) {
+    #tab1 .productContent .swiper-slide p.money{
+        bottom: 41.5%;
+    }
+}

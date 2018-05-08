@@ -1,0 +1,17 @@
+body{background: #FEE2CC;font-family: 'Microsoft YaHei'}
+.header{height: 272px}
+.bodyInfo .infoItemsOne{margin: 0 10px;}
+.bodyInfo .infoItemsOne img{width: 100%}
+.header p{text-align: center;color:#fff;font-size: 20px;padding-top: 40px;}
+.bodyInfo{background: #FFF9EA;margin: 10px 15px;border-left: 1px solid #F4D9C4;border-right: 1px solid #F4D9C4;border-radius: 4px;padding: 0 0 10px 0;}
+.bodyInfo .infoItems{height: 40px;line-height: 40px;background: #fff;margin: 10px 24px;border-radius: 4px;position: relative}
+.bodyInfo .infoItems input{border:none;outline: none;padding: 10px 0;}
+.bodyInfo .infoItems input#userPhoneCode{width: 50%}
+.bodyInfo .infoItems input#userPhonePwd{width: 70%}
+.bodyInfo .infoItems button{float: right;border: none;background: #fff;margin-top: 10px;color: #FF8929;outline: none}
+.bodyInfo .infoItems .icon-phone{font-size: 24px;vertical-align: text-top}
+.bodyInfo .infoItems .icon-pwd{font-size: 21px;vertical-align: text-top;margin-left: 2px;}
+.bodyInfo .infoItems .icon-code{margin: 0 4px}
+.bodyInfo .infoItems #changeEye{position: absolute;top: 13px;right: 15px;}
+.bodyInfo .btnContainer{text-align: center;margin: 20px 24px;}
+.bodyInfo .btnContainer #registerBtn{height: 40px;line-height: 40px;font-size: 14px;border: none;background: #FDE200;border-radius: 3px;width: 100%;outline: none;box-shadow: 5px 5px 5px #E16F4C;}

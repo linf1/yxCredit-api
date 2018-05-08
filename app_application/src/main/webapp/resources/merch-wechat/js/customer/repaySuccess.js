@@ -1,0 +1,10 @@
+$(".commBtn").bind("click",function(){
+    try{
+        if(linked.backRepayAction&&typeof(linked.backRepayAction)=="function"){
+            linked.backRepayAction();
+        }else{
+        }
+    }catch(e){
+        alert(e);
+    }
+});

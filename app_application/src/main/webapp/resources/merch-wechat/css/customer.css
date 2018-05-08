@@ -1,0 +1,1195 @@
+.rightWord{float: right}
+.topic{
+    text-align: center;
+}
+body{
+    padding: 0;
+    margin: 0;
+    background-color: #fafafa;
+}
+.topic img{
+    width:100%;
+}
+.topic-text{
+    position: relative;
+    bottom: 45px;
+    color: #fff;
+    font-size: 18px;
+}
+li {
+    list-style: none;
+}
+.nav-box {
+    height: 40px;
+    line-height: 40px;
+    padding: 5px;
+    background-color: transparent;
+}
+.nav-box li {
+    float: left;
+    padding: 0 10px;
+    cursor: pointer;
+}
+.nav-box li.active {
+    border-bottom: 3px solid #F58B01;
+    background-color: transparent;
+}
+.icon-spfq{
+    font-size: 22px;
+    /*position: relative;*/
+    /*top: 3px;*/
+}
+
+.scan-img{
+    width: 26px;
+    position: relative;
+    bottom: 4px;
+}
+.scan-header{
+    height: 47px;
+    background-color: #fff;
+    position: relative;
+    top: -25px;
+}
+
+.am-slider{
+    margin: 10px;
+    position: relative;
+    top: -105px;
+}
+.am-slider-default .am-control-nav {
+    width: 100%;
+    position: absolute;
+    bottom:4px;
+    text-align: right;
+}
+.am-slider-default .am-control-nav li a {
+    width: 15px;
+    height: 4px;
+}
+.am-slider-default .am-control-nav li a.am-active {
+    background-color: #fff;
+}
+.scan-footer{
+    background-color: #fff;
+    position: fixed;
+    bottom: 0;
+    width:100%;
+    padding: 8px 0 2px;
+}
+.scan-footer ul{
+    padding: 0;
+    margin: 0;
+}
+.scan-footer ul li{
+    float: left;
+    width: 25%;
+    text-align: center;
+}
+.icon-me{
+    font-size: 30px;
+}
+.icon-xx,.icon-hk,.icon-sy{
+    font-size: 30px;
+}
+.Btn{
+    width: 80px;
+    height: 80px;
+    background-color: #FCE300;
+    border-radius: 50%;
+    position: relative;
+    left: 38%;
+    bottom: 106px;
+    z-index: 10;
+}
+.icon-sm{
+    position: relative;
+    left: 24px;
+    top: 10px;
+    font-size: 32px;
+}
+.Btn-text{
+    font-size: 10px;
+    position: relative;
+    left: 16px;
+    bottom: 5px;
+    color: #81541D;
+}
+
+.icon-xj2{
+    position: relative;
+    font-size: 28px;
+    left: 26px;
+    top: 12px;
+}
+.Btnone{
+    width: 80px;
+    height: 80px;
+    background-color: #FCE300;
+    border-radius: 50%;
+    position: relative;
+    left: 38%;
+    bottom: 106px;
+    z-index: 10;
+}
+.num{
+    position: relative;
+    bottom: 167px;
+    font-size: 20px;
+    color: #fff;
+}
+
+/*信用认证*/
+.attestation-top{
+    height: 50px;
+    line-height: 50px;
+    background-color: #fff;
+    text-align: center;
+    box-shadow: 4px 0 10px #E4E4E4;
+}
+.attestation-content{
+    height: 40px;
+    line-height: 40px;
+    background-color: #FEEA94;
+    text-align: center;
+}
+.content-text{
+    font-size: 12px;
+    color: #BE8A03;
+}
+.icon-rz{
+    font-size: 30px;
+    position: relative;
+    top: 20px;
+    left: 10px;
+}
+.content-center{
+    background-color: #fff;
+    height: 132px;
+}
+.center-top{
+    /*margin: 10px 5px 20px 50px;*/
+    margin: 10px 5px -8px 50px;
+    border-bottom: 1px solid #ddd;
+    position: relative;
+    bottom: 48px;
+    padding-bottom: 28px;
+}
+.center-bottom{
+    margin: 10px 5px 10px 50px;
+    position: relative;
+    bottom: 98px;
+}
+.top-one{
+    position: relative;
+    top: 19px;
+    font-size: 15px;
+}
+.top-two{
+    font-size: 12px;
+    color: #BBBBBB;
+    position: relative;
+    top: 22px;
+}
+.top-three{
+    float: right;
+    color: #0D88FF;
+}
+.icon-next{
+    float: right;
+    position: relative;
+    top: 3px;
+}
+.icon-face{
+    font-size: 25px;
+    position: relative;
+    bottom: 18px;
+    left: 14px;
+}
+.top-name{
+    float: right;
+}
+.content-bottom{
+    background-color: #fff;
+    margin-top: 10px;
+    height: 65px;
+}
+.relation{
+    margin: 10px 5px 10px 50px;
+    position: relative;
+    bottom: 54px;
+}
+.icon-lxr{
+    font-size: 26px;
+    position: relative;
+    top: 16px;
+    left: 14px;
+}
+.top-two img{
+    width: 28px;
+    float: right;
+    position: relative;
+    bottom: 30px;
+    left: 51px;
+}
+.attestation-footer{
+    text-align: center;
+    background-color: #FEE300;
+    border-radius: 30px;
+    margin: 20% 15%;
+}
+.button{
+    border: none;
+    background-color: #FEE300;
+    padding: 7px;
+    font-size: 16px;
+    color: #794C2F;
+    outline: none;
+}
+
+/*商品分期详情*/
+.commodity-top{
+    margin-top: 10px;
+    background-color: #fff;
+    padding: 10px 0;
+}
+.commodity-topic{
+    font-size: 14px;
+    height: 20px;
+    line-height: 30px;
+}
+.commodity-topic p{
+    padding-left: 15px;
+    color: #B1B1B1;
+}
+.commodity-title img{
+    width: 20px;
+    padding-left: 15px;
+
+}
+.title-text{
+    font-size: 15px;
+    color: #5C5C5C;
+    position: relative;
+    bottom: 4px;
+}
+.commodity-content{
+    background-color: #FEF9F6;
+    padding: 1px 0;
+}
+.commodity-content img{
+    float: left;
+    width: 82px;
+    /*padding-left: 15px;*/
+    padding: 0 12px;
+    position: relative;
+    top: 3px;
+    line-height: 82px;
+    height: 82px;
+    margin-top: 13px;
+}
+
+
+
+.commodity-content{
+    height: 115px;
+}
+.commodity-content-text{
+    position: relative;
+    top: 11px;
+}
+.content-text-two{
+    position: relative;
+    top: 14px;
+}
+.content-text-three{
+    position: relative;
+    top: 30px;
+}
+
+/*.commodity-content-text{*/
+    /*position: relative;*/
+    /*!*left: 10px;*!*/
+/*}*/
+.content-text-one{
+    font-size: 15px;
+}
+.content-text-two{
+    font-size: 13px;
+}
+.content-text-two span{
+    background-color: #FEED7B;
+    padding: 2px 4px;
+    color: #B17C2E;
+}
+.content-text-three{
+    font-size: 14px;
+}
+.content-text-three span:first-child{
+    color: #FF3200;
+}
+.content-text-three span:last-child{
+    padding-left: 10px;
+}
+.commodity-content-one{
+    background-color: #fff;
+    margin-top: 10px;
+}
+
+.content-one{
+    border-bottom: 1px solid #E1E1E1;
+    height: 45px;
+    line-height: 45px;
+    margin: 0 15px;
+
+}
+.user-input{
+    border: none;
+    outline: none;
+    text-align: right;
+    float: right;
+    position: relative;
+    top: 16px;
+    background-color: transparent;
+}
+.content-two{
+    margin-top: 10px;
+    background-color: #fff;
+}
+.content-two-one{
+    height: 45px;
+    line-height: 45px;
+    margin: 0 15px;
+}
+.content-two-one img{
+    width: 13px;
+    float: right;
+    position: relative;
+    top: 17px;
+    margin-left: 4px;
+}
+.content-one span{
+    font-size: 13px;
+}
+.content-two span{
+    font-size: 13px;
+}
+
+/*分期订单详情*/
+.commodity-content-footer{
+    background-color: #fff;
+    margin-top: 10px;
+    height: 45px;
+    line-height: 45px;
+}
+.footer-one{
+    font-size: 12px;
+    color: #B7B7B7;
+    padding-left: 15px;
+}
+.commodity-content-footer img{
+    width: 13px;
+    position: relative;
+    top: 2px;
+}
+.footer-two{
+    /*float: right;*/
+    padding: 0 12px;
+    background-color:#EF7550;
+    color: #fff;
+    font-size: 13px;
+}
+/*我的分期申请*/
+.apply{
+    background-color: #fff;
+    margin-top: -12px;
+    font-size: 15px;
+}
+.apply-text{
+    float: left;
+    padding: 0 15px;
+    position: relative;
+    top: 14px;
+}
+.text-time{
+    font-size: 13px;
+    height: 25px;
+    line-height: 32px;
+    padding-left: 13px;
+    color: #BABABA;
+    text-align: right;
+}
+.time-text{
+    float: right;
+    position: relative;
+    right: 4%;
+}
+.affirm{
+    border: 2px solid #D6863D;
+    padding: 2px 7px;
+    border-radius: 30px;
+    color: #D6863D;
+    position: relative;
+    right: 4%;
+}
+@media screen and (max-width:414px){
+    .repayment{
+        position: relative;
+        left: 35px;
+    }
+}
+@media screen and (max-width:375px){
+    .repayment{
+        position: relative;
+        left: 15px;
+    }
+}
+@media screen and (max-width:360px){
+    .repayment {
+        position: relative;
+        left: 12px;
+    }
+}
+@media screen and (max-width:320px){
+    .commodity-title img{
+      width:18px;
+    }
+    .title-text{
+        font-size: 13px;
+    }
+    .text-time{
+        font-size: 10px;
+    }
+    .repayment{
+        position: relative;
+        left: 5px;
+    }
+    .affirm{
+        /*float: left;*/
+        right: 2%;
+    }
+}
+.text_three{
+    color: #979893;
+    font-size: 13px;
+}
+
+
+/*商品分期（申请支付成功）*/
+.apply_content{
+    text-align: center;
+    margin-top: 50px;
+}
+.apply_content p:first-child{
+    font-size: 17px;
+}
+.apply_content p:nth-child(2){
+    font-size: 14px;
+    color:#B5B5B5;
+}
+/*支付*/
+.pay_top{
+    background-color: #FBA206;
+    position: relative;
+    /*bottom: 28px;*/
+    text-align: center;
+}
+.pay_top p:first-child{
+    font-size: 30px;
+    color: #fff;
+    padding: 20px 0 0;
+    position: relative;
+    bottom: 12px;
+}
+.pay_top p:nth-child(2){
+    font-size: 14px;
+    color:#fff;
+    position: relative;
+    bottom: 14px;
+}
+.pay_top_content{
+    background-color: #fff;
+    height: 45px;
+    line-height: 45px;
+    padding-left: 15px;
+    font-size: 14px;
+    position: relative;
+    /*bottom: 40px;*/
+}
+.pay_top_content img{
+    width: 20px;
+    position: relative;
+    top: 4px;
+}
+.pay_top_content span:nth-child(3){
+    float: right;
+    position: relative;
+    right: 3%;
+}
+.pay_top_type{
+    background-color: #fff;
+    height: 45px;
+    line-height: 45px;
+    position: relative;
+    top: 18px;
+}
+.pay_top_type img:first-child{
+    width: 26px;
+    padding-left: 15px;
+    position: relative;
+    top: 3px;
+}
+.pay_top_type img:nth-child(3){
+    width: 20px;
+    float: right;
+    position: relative;
+    top: 12px;
+    right: 3%;
+}
+.bank_type{
+    font-size: 14px;
+}
+.pay_type{
+    font-size: 15px;
+    position: relative;
+    /*bottom: 35px;*/
+}
+/*支付成功*/
+.pay_success{
+    text-align: center;
+}
+.success_img{
+    width: 60px;
+    margin-top: 45px;
+}
+.pay_success p:nth-child(3){
+    font-size: 14px;
+    color: #B2B2B2;
+    position: relative;
+    bottom: 10px;
+    border-bottom: 1px solid #EDEDED;
+    margin: 10%;
+    padding-bottom: 50px;
+}
+.hint{
+    font-size: 14px;
+    color: #B1B1B1;
+    position: relative;
+    bottom: 5px;
+}
+/*影像资料*/
+.box{
+    background-color: #fff;
+    margin-top: 5px;
+    padding: 15px;
+    float: left;
+    width:100%;
+}
+.check{
+    width: 100px;
+    height: 100px;
+    border: 1px solid #ddd;
+    float: left;
+
+}
+@media screen and (max-width:414px){
+    .check{
+        margin:13px;
+    }
+}
+@media screen and (max-width:375px){
+    .check{
+        margin:7px;
+    }
+}
+@media screen and (max-width:360px){
+    .check{
+        margin:4px;
+    }
+}
+@media screen and (max-width:320px){
+    .check{
+        margin:22px;
+    }
+}
+/*我的*/
+.mine-header{
+    background-color:#FDB856;
+    padding: 10px 0 15px;
+}
+.img_one{
+    width:60px;
+    padding-left: 20px;
+}
+.img_two{
+    float: right;
+    position: relative;
+    top: 24px;
+    right: 4%;
+    width: 12px;
+}
+.mine-header span{
+    color: #fff;
+    position: relative;
+    bottom: 30px;
+    left: 15px;
+}
+.imgs_one,.imgs_two{
+    width:20px;
+    position: relative;
+    top: 4px;
+}
+.mine-left{
+    padding: 0;
+    margin: 0;
+    padding-left: 15px;
+}
+.mine-left li{
+    float: left;
+    width:50%;
+}
+.mine-left li span{
+    font-size: 15px;
+}
+.mine-bottom{
+    padding: 0;
+    margin: 0;
+}
+.mine-bottom li{
+    float: left;
+    width:50%;
+    text-align: center;
+    font-size: 14px;
+    color: #B3AD9E;
+}
+.string{
+    /*color: #f3f3f3;*/
+    background-color:#f3f3f3;
+    width:2px;
+    height: 22px;
+    display: inline-block;
+    margin: 5% 22%;
+}
+.mine-middle{
+    clear: both;
+    text-align: center;
+}
+.mine-content{
+    background: #fff;
+    height: 110px;
+    padding: 10px 0 20px;
+}
+.mine-middle span:first-child{
+    position: relative;
+    bottom: 20px;
+    font-size: 18px;
+    color: #ff6600;
+}
+.mine-middle span:nth-child(3){
+    position: relative;
+    bottom: 20px;
+    font-size: 18px;
+    color: #ff6600;
+}
+
+/*还款*/
+.pay{
+    /*background-color: #FDB856;*/
+    /*background-image: linear-gradient(to left, #FD8701,#FFAA01);*/
+    background-image: linear-gradient(to left,#fe8702,#ffae00);
+    padding: 10px 0 18px;
+}
+.pay_one{
+    text-align: right;
+}
+.pay_one span{
+    font-size: 14px;
+    color: #ffffcc;
+    position: relative;
+    right: 4%;
+}
+.pay_one img{
+    width: 15px;
+    position: relative;
+    top: 3px;
+    right: 12px;
+}
+.text_one{
+    padding-left: 15px;
+    font-size: 15px;
+    color: #ffffcc;
+}
+.text_two{
+    font-size: 28px;
+    padding-left: 15px;
+    color: #fff;
+}
+.pay_two{
+    padding-left: 15px;
+    font-size: 15px;
+    color: #ffffcc;
+}
+.pay_img{
+    text-align: center;
+    margin-top: 50px;
+}
+.repay{
+    background-color: #fff;
+    height: 210px;
+}
+.pay_img img{
+    width: 160px;
+}
+.repay_one{
+    margin: 0 5%;
+    padding: 15px 0;
+    font-size: 15px;
+    border-bottom: 1px solid #ddd;
+}
+.repay_two{
+    margin-top: 15px;
+}
+.repay_three{
+    padding: 15px;
+    font-size: 15px;
+    position: relative;
+    bottom: 80px;
+}
+.repay_three span:nth-child(2){
+    float: right;
+}
+.repay_two img{
+    width:66px;
+    padding-left: 15px;
+}
+.repay_type{
+    position: relative;
+    padding-left: 68px;
+    bottom: 74px;
+    font-size: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 28px;
+    margin: 0 5%;
+}
+.repay_text{
+    font-size: 13px;
+}
+.repay_btn{
+    color: #fff;
+    background-color:#EF7550;
+}
+.repay_btn{
+    border-radius: 30px;
+    float: right;
+    position: relative;
+}
+@media screen and (max-width:414px){
+
+@media screen and (max-width: 414px) {
+    .minePage{padding-bottom: 120px;}
+}
+@media screen and (max-width: 375px) {
+    .minePage{padding-bottom: 60px;}
+}
+@media screen and (max-width: 360px) {
+    .minePage{padding-bottom: 15px;}
+}
+@media screen and (max-width: 320px) {
+   .minePage{padding-bottom: 60px;}
+}
+
+
+@media screen and (max-width: 414px) {
+    .repay_btn{
+        padding: 4px 10px;
+        bottom:28px;
+        font-size: 15px;
+    }
+    .repay_four{
+        bottom:80px;
+    }
+}
+}
+@media screen and (max-width:375px){
+    .repay_btn{
+        padding: 3px 8px;
+        bottom:28px;
+        font-size: 15px;
+    }
+    .repay_four{
+        bottom:80px;
+    }
+}
+@media screen and (max-width:360px){
+    .repay_btn{
+        padding: 3px 7px;
+        bottom: 28px;
+        font-size: 14px;
+    }
+    .repay_four{
+        bottom:80px;
+    }
+}
+@media screen and (max-width:320px){
+    .repay_two img{
+        width: 58px;
+    }
+    .repay_type {
+        position: relative;
+        padding-left: 60px;
+        bottom: 63px;
+        font-size: 12px;
+    }
+    .repay_btn {
+        padding: 3px 8px;
+        bottom: 22px;
+        font-size: 13px;
+    }
+    .repay_four{
+        bottom: 66px;
+    }
+}
+.repay_four{
+    padding: 15px 0;
+    font-size: 15px;
+    position: relative;
+    /*bottom: 80px;*/
+    border-bottom: 1px solid #ddd;
+    margin: 0 5%;
+}
+.repay_bottom{
+    background-color: #fff;
+    height: 270px;
+}
+
+/*还款*/
+.back{
+    width: 10px;
+    float: left;
+    position: relative;
+    top: 16px;
+    left: 4%;
+}
+.refund{
+    background-color:#FFC602;
+}
+.refund_img{
+    width: 92%;
+    margin: 0 4%;
+}
+.bill{
+    text-align: right;
+    color: #FF6000;
+    font-size: 15px;
+    position: relative;
+    right: 3%;
+    padding-bottom: 4px;
+}
+.next1{
+    width:7px;
+}
+.refund-content{
+    background-color: #fff;
+    width: 90%;
+    margin: 0 5%;
+    position: relative;
+    bottom: 10px;
+    padding: 10px 0;
+}
+.Apple_img{
+    width:66px;
+    padding-left: 15px;
+    float: left;
+}
+.RefundContent-text{
+    position: relative;
+    /*left: 28%;*/
+    /*bottom: 72px;*/
+}
+.RefundContent{
+    background-color: #fff;
+    margin-top: 5px;
+    height: 76px;
+}
+.refund{
+    height: 158px;
+}
+.bottom_img{
+    position: relative;
+    bottom: 10px;
+    width: 90%;
+    margin: 0 5%;
+}
+.refundText{
+    height: 45px;
+    line-height: 45px;
+    margin-top: 20px;
+    background-color: #fff;
+    font-size: 14px;
+    text-align: right;
+    padding: 0 5%;
+}
+.refundText_img{
+    width: 8px;
+    position: relative;
+    top: 2px;
+}
+.refundText span:first-child{
+    float:left;
+}
+.underline{
+    border-bottom: 1px solid #E9E9E9;
+}
+
+/*开始*/
+.refundText_bank{
+    color:#7B7B7B;
+}
+.refundText_buttom{
+    background-color: #fff;
+    margin-top: 20px;
+}
+.underline{
+    border-bottom: 1px solid #E9E9E9;
+    height: 45px;
+    line-height: 45px;
+    /*margin-top: 20px;*/
+    background-color: #fff;
+    font-size: 14px;
+    text-align: right;
+    margin: 0 5%;
+}
+.underline span:first-child{
+    float:left;
+}
+.underline_text{
+    font-size: 13px;
+    color: #565656;
+    padding: 8px 45px;
+}
+.money{
+    /*padding-left: 25%;*/
+}
+.moneyThree{
+    padding-left: 34%;
+}
+
+@media screen and (max-width: 414px) {
+    .moneyThree{
+        padding-left: 33%;
+    }
+    .RefundContent-text {
+        left: 4%;
+    }
+}
+@media screen and (max-width: 375px) {
+    .moneyThree{
+        padding-left: 34%;
+    }
+    .RefundContent-text {
+        left: 3%;
+    }
+}
+@media screen and (max-width: 360px) {
+    .moneyThree{
+        padding-left: 35%;
+    }
+    .RefundContent-text {
+        left: 3%;
+    }
+}
+@media screen and (max-width: 320px) {
+    .moneyThree{
+        padding-left: 36%;
+    }
+    .RefundContent-text {
+        left: 1%;
+    }
+}
+.refundText_footer{
+    height: 45px;
+    line-height: 45px;
+    margin-top: 20px;
+    background-color: #fff;
+    font-size: 13px;
+    text-align: right;
+    padding: 0 5%;
+}
+.refundText_footer_one{
+    float: left;
+    color: #B0B0B0;
+}
+.refundText_footer_two{
+    float: left;
+    position: relative;
+    left: 8px;
+    font-size: 16px;
+    color: #C93629;
+}
+.refundText_footer_three{
+    background-color: #EC744F;
+    padding: 14px 15px;
+    color: #fff;
+    position: relative;
+    left: 18px;
+}
+.refund_choose{
+    background-color: #fff;
+    margin-top: 15px;
+}
+.check_one{
+    width: 18px;
+    float: left;
+    position: relative;
+    top:14px;
+}
+.check_two{
+    width: 18px;
+    float: left;
+    position: relative;
+    top:22px;
+    /*left: 19px;*/
+}
+.refund_choose_one{
+    float: left;
+    position: relative;
+    left: 8px;
+}
+.refund_choose_two{
+    color:#7B7B7B;
+}
+.R_text{
+    position: relative;
+    left: 10px;
+    display: inline-block;
+    font-size: 14px;
+    padding: 10px 0;
+}
+.P_text{
+    width:230px;
+    color:#878787;
+}
+.under_line{
+    border-bottom: 1px solid #ddd;
+    margin: 0 5%;
+}
+/*邀请好友，拿奖励*/
+.InviteFriendsTitle{
+    text-align: center;
+    background-color: #fff;
+    height: 7%;
+    line-height: 45px;
+}
+.icon-back{
+    float: left;
+    position: relative;
+    top: 16px;
+    left: 15px;
+}
+.InviteFriendsImg{
+    width:100%;
+    height:100%;
+}
+.InviteFriendsBtn{
+    width:75%;
+}
+.ImgContainer{
+    position: absolute;
+    top: 42%;
+    text-align: center;
+}
+.rewards{
+    position: absolute;
+    top: 3%;
+    left:4%;
+    color: #fff;
+    background-color: #FC8B45;
+    padding: 2px 12px;
+    border-radius: 50px;
+}
+.rewards .icon-next:before{
+    color: #fff;
+}
+.SuccessQuan{
+    text-align: center;
+    position: absolute;
+    top: 15%;
+}
+.InviteFriendsSuccessMoney{
+    position: absolute;
+    top:17%;
+    text-align: center;
+    left: 0;
+    right: 0;
+    color: #755203;
+}
+.surplus{
+    position: absolute;
+    text-align: center;
+    left: 0;
+    right: 0;
+    top: 36%;
+    color: #fff;
+}
+.FriendsRecord{
+    height: 45px;
+    line-height: 45px;
+    padding-left: 18px;
+}
+.FriendsRecordContainer{
+    display: flex;
+    font-size: 14px;
+}
+.FriendsRecordContainerOne{
+    flex: .4;
+    text-align: center;
+}
+.FriendsRecordContainerTwo{
+    flex: .7;
+}
+.FriendsRecordContainerThree{
+    flex: .5;
+}
+.FriendsRecordContainerFour{
+    flex: .6;
+}
+.FriendsRecordContainerOne img{
+    padding: 5px 0;
+}
+.FriendsRecordContainerTwo p{
+    padding: 14px 0;
+}
+.FriendsRecordContainerThree p{
+    padding: 14px 0;
+}
+.FriendsRecordContainerFour p{
+    padding: 14px 0;
+}
+@media screen and (max-width:320px){
+    .FriendsRecordContainerTwo{
+        flex: .6;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,12 @@
+include "app_application"
+include "manage_facade"
+include "manage_service"
+include "order_facade"
+include "order_service"
+include "product_facade"
+include "product_service"
+include "user_facade"
+include "user_service"
+include 'erp_api'
+include "service_base"
+include "commons_tools"

@@ -1,0 +1,9 @@
+body{background: #FF6600}
+.logoContainer{margin: 40px auto 0 auto;text-align: center;color:#fff}
+.logoContainer img{width: 60%;margin: 20px auto 0 auto;}
+.logoContainer h1{font-size: 30px;}
+.logoContainer p{font-size: 20px;margin: 15px auto;font-family: "Microsoft YaHei"}
+.bodyContainer img{width: 100%}
+.btnContainer{text-align: center;margin:25px auto}
+.btnContainer p{color:#fff;}
+.btnContainer button{color: #FF6D30;font-weight:bold;font-size: 20px; margin: 10px auto;border: none;height: 46px;line-height: 46px;padding: 0 30px;border-radius: 30px;outline: none;background: #FFE288;box-shadow: 0 4px 0 #FF8E3B;}

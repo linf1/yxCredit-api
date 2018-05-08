@@ -1,0 +1,785 @@
+body, html {
+    height: 100%;
+    -webkit-tap-highlight-color: transparent;
+    padding: 0;
+    margin: 0;
+    font-family: "Microsoft YaHei";
+}
+div,p{
+    margin:0;
+    padding: 0;
+}
+.demos-title {
+    text-align: center;
+    font-size: 34px;
+    color: #3cc51f;
+    font-weight: 400;
+    margin: 0 15%;
+}
+
+.demos-sub-title {
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+}
+
+.demos-header {
+    padding: 35px 0;
+}
+
+.demos-content-padded {
+    padding: 15px;
+}
+
+.demos-second-title {
+    text-align: center;
+    font-size: 24px;
+    color: #3cc51f;
+    font-weight: 400;
+    margin: 0 15%;
+}
+
+footer {
+    text-align: center;
+    font-size: 14px;
+    padding: 20px;
+}
+
+footer a {
+    color: #999;
+    text-decoration: none;
+}
+.right{
+    float: right;
+}
+.icon-back{
+    font-size: 20px;
+}
+.left{
+    float: left;
+}
+.textRight{
+    text-align: right;
+}
+.fontWeight{
+    font-weight: bold;
+    margin-left: 6px;
+}
+.grayWord{
+    color:#808080;
+    font-size: 12px;
+}
+/*home*/
+.weui-tabbar{
+  background: #fff;
+}
+.weui-tabbar a:first-child .weui-tabbar__icon{
+    background: url(../images/home.png) no-repeat center center;
+    background-size: 98%;
+}
+.weui-tabbar a:first-child.weui-bar__item--on .weui-tabbar__icon{
+    background: url(../images/home-active.png) no-repeat center center;
+    background-size: 98%;
+}
+.weui-tabbar a:nth-child(2) .weui-tabbar__icon{
+    background: url(../images/repay.png) no-repeat center center;
+    background-size: 100%;
+}
+.weui-tabbar a:nth-child(2).weui-bar__item--on .weui-tabbar__icon{
+    background: url(../images/repay-active.png) no-repeat center center;
+    background-size: 100%;
+}
+.weui-tabbar a:nth-child(3) .weui-tabbar__icon{
+    background: url(../images/person.png) no-repeat center center;
+    background-size: 83%;
+}
+.weui-tabbar a:nth-child(3).weui-bar__item--on .weui-tabbar__icon{
+    background: url(../images/person-active.png) no-repeat center center;
+    background-size: 83%;
+}
+.weui-tabbar__item.weui-bar__item--on .weui-tabbar__label{
+    color:#FDD945
+}
+
+/*首页*/
+#tab1{
+    background: #F6F6F6;
+}
+#swiperContainer{
+    height: 29%;
+    background: #ddd;
+    position: relative;
+}
+.msgContainer{
+    position: absolute;
+    top: 10px;
+    z-index: 10;
+    right: 15px;
+    background: #9E9E9E;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    text-align: center;
+    line-height: 52px;
+}
+.msgContainer .icon-msg{
+    font-size: 24px;
+    color: #fff;
+}
+.msgContainer .icon-msg span{
+    font-size: 10px;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: #f00;
+    border-radius: 50%;
+    text-align: center;
+    color: #fff;
+    line-height: 20px;
+    position: absolute;
+    top: 0px;
+    right: 0;
+}
+#swiperContainer .swiper-container{
+    height: 100%;
+}
+#swiperContainer .swiper-container .swiper-slide img{
+    width: 100%;
+}
+.swiper-pagination-bullet-active{
+    background: #fff;
+    width: 20px;
+    border-radius: 10px;
+}
+#homeContainer{
+    background: #fff;
+    margin: 10px 0 60px 0;
+    font-size: 14px;
+    padding: 10px 15px;
+}
+#homeContentTitle p{
+    padding: 10px 0;
+    line-height: 16px;
+}
+#homeContentProduct{
+    text-align: center;
+    box-shadow: 0 0 10px #F3F3F3;
+    margin: 10px 0;
+    padding: 10px 15px;
+}
+#homeContentProduct .productContent{
+    border-bottom: 1px dashed #CCCCCC;
+    padding-bottom: 10px;
+}
+#homeContentProduct .productContent p:first-child{
+    color:#f51e28;
+}
+#homeContentProduct .productContent p:last-child{
+    border-bottom: 1px dashed #ddd;
+    padding-bottom: 10px;
+}
+#homeContentProduct .productContent h2{
+    font-size: 30px;
+    font-weight: normal;
+}
+#homeContentProduct .productBtnList{
+    text-align: left;
+    padding:10px 0;
+}
+#homeContentProduct .productContent .productMoneyTitle{
+    text-align: left;
+}
+ul.btnList{
+    list-style: none;
+    text-align: center;
+    margin-top: 15px;
+}
+ul.btnList li{
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    border: 1px solid #F86F19;
+    color:#F86F19;
+    margin: 4px 10px;
+    border-radius: 30px;
+    width: 24%;
+}
+ul.btnList li.active{
+   background: #F86F19;
+    color:#fff
+}
+#homeContentDetail{
+    box-shadow: 0 0 10px #F3F3F3;
+    margin: 14px 0;
+}
+#homeContentDetail .detailContainer{
+    display: flex;
+    font-size: 12px;
+    padding: 10px 0;
+}
+#homeContentDetail .detailContainer .detailContent{
+    flex: 1;
+    padding: 10px;
+}
+#homeContentDetail .detailContainer .detailContent:first-child{
+    border-right: 1px solid #f3f3f3;
+    padding: 10px;
+}
+.my-btn{
+    width: 80%!important;
+    border-radius: 30px;
+    background: #FFDA44;
+    border: none;
+    color: #333;
+}
+#homeContentFooter p{
+    text-align: center;
+    color:#666;
+    font-size: 12px;
+    margin-top: 4px;
+}
+/*身份认证*/
+/*信息标题*/
+.infoTitle{
+    display: flex;
+    margin-top: 50px;
+    text-align: center;
+    font-size: 14px;
+    background: #fff;
+    /*padding: 10px 0;*/
+}
+.infoTitle .infoContent{
+    flex: 1;
+    position: relative;
+}
+.infoTitle .infoContent .infoImg{
+    width: 30px;
+    height: 30px;
+    margin: 2px auto;
+}
+.infoTitle .infoContent .infoImgActive{
+    width: 34px;
+    height: 34px;
+    margin: 0 auto;
+}
+.infoTitle .infoContent .infoLine{
+    position: absolute;
+    width: 80%;
+    height: 1px;
+    background: #ddd;
+    top: 16px;
+    right: -50px;
+}
+.infoTitle .infoContent .infoLineActive{
+    background: #FFCF13;
+}
+.infoTitle .infoContent:last-child .infoLine{
+    height: 0;
+}
+.infoTitle .infoContent:nth-child(1) .infoImg{
+    background: url(../images/one.png) no-repeat center center;
+    background-size: cover;
+}
+.infoTitle .infoContent:nth-child(2) .infoImg{
+    background: url(../images/two_d.png) no-repeat center center;
+    background-size: cover;
+}
+.infoTitle .infoContent:nth-child(2) .infoImgActive{
+    background: url(../images/two.png) no-repeat center center;
+    background-size: cover;
+}
+.infoTitle .infoContent:nth-child(3) .infoImg{
+    background: url(../images/three_d.png) no-repeat center center;
+    background-size: cover;
+}
+.infoTitle .infoContent:nth-child(3) .infoImgActive{
+    background: url(../images/three.png) no-repeat center center;
+    background-size: cover;
+}
+.infoTitle .infoContent:nth-child(4) .infoImg{
+    background: url(../images/four_d.png) no-repeat center center;
+    background-size: cover;
+}
+.infoTitle .infoContent:nth-child(4) .infoImgActive{
+    background: url(../images/four.png) no-repeat center center;
+    background-size: cover;
+}
+.infoTitle .infoContent .infoImgActive{
+    width: 34px;
+    height: 34px;
+    margin: 0 auto;
+    background: url(../images/one.png) no-repeat center center;
+    background-size: cover;
+}
+
+/**/
+.infoPhoto{
+    margin: 10px 0;
+    background: #fff;
+    padding: 10px 15px;
+    font-weight: bold;
+    text-align: center;
+}
+.infoPhoto .infoPhotoContent{
+    display: flex;
+}
+.infoPhoto .infoPhotoContent .infoPhotoImg{
+    flex: 1;
+    padding: 10px;
+    height:120px
+}
+.infoPhoto .infoPhotoContent .infoPhotoImg img{
+    height: 100%;
+    width: 100%;
+}
+.infoMsg{
+    font-size: 14px;
+    margin-left: 15px;
+    height: 30px;
+    line-height: 30px;
+}
+.weui-cells{
+    margin-top: 0;
+    font-size: 14px;
+}
+.weui-cell:before{
+    left: 0;
+    border-top: 1px dashed #F0F0F0;
+}
+.weui-cell span{
+    margin-right: 10px;
+}
+
+
+/*个人信息*/
+.infoContent{
+    margin: 10px auto;
+}
+/*人脸识别*/
+.infoLiveContainer{
+    text-align: center;
+    background: #fff;
+    margin: 10px auto;
+    padding: 20px 0;
+}
+.infoLiveContainer p.infoLiveMsg{
+    font-size: 12px;
+    color:#D5D5D5
+}
+.infoLiveContainer .infoLiveImg{
+    width: 60%;
+    margin: 20px 20%;
+}
+.infoLiveContainer .infoLiveImg img{
+    width: 100%;
+}
+/*授权*/
+.operatorInfo{
+    width: 80%;
+    margin: -80px auto 20px auto;
+}
+.operatorInfo .icon-phone:before{
+    color: #F4EA29;
+    font-size: 24px;
+    vertical-align: sub;
+}
+.zhiMaInfo .operatorInfoBody .icon-pwd1:before{
+    color:#16bba2
+}
+.operatorInfo .operatorInfoTitle{
+    text-align: center;
+    position: relative;
+    padding: 10px 0;
+    background: #FAFAE0;
+    font-size: 14px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+.operatorInfo .operatorInfoTitle i{
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: url(../images/must.png) no-repeat center right;
+    background-size: cover;
+    top: 0;
+    right: 0;
+}
+.operatorInfo .operatorInfoTitle .operatorIcon span{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    margin: 0 6px;
+}
+.operatorInfo .operatorInfoTitle .operatorIcon span:first-child{
+    background: url(../images/yidong.png) no-repeat center center;
+    background-size: cover;
+}
+.operatorInfo .operatorInfoTitle .operatorIcon span:nth-child(2){
+    background: url(../images/liantong.png) no-repeat center center;
+    background-size: cover;
+}
+.operatorInfo .operatorInfoTitle .operatorIcon span:last-child{
+    background: url(../images/dianxin.png) no-repeat center center;
+    background-size: cover;
+}
+.operatorInfo .operatorInfoBody{
+    background: #fff;
+    padding: 15px;
+    border-radius: 4px;
+    box-shadow: 0 0 10px #CFCFCF;
+}
+.operatorInfo .operatorInfoBody .weui-cell{
+    border: 1px solid #DADADA;
+    margin: 10px auto;
+    border-radius: 4px;
+}
+.operatorInfo .operatorInfoBody .weui-cell:before{
+    border: none;
+}
+.zhiMaInfo .operatorInfoTitle{
+    background: #40D788;
+}
+.zhiMaInfo .operatorInfoTitle .zhiMaInfoIcon span{
+    display: inline-block;
+    width: 100px;
+    height: 30px;
+    margin-top: 10px;
+    background: url(../images/zhimaLogo.png) no-repeat center center;
+    background-size: cover;
+}
+/***提现卡*/
+.cardInfoOne{
+    margin-top: 50px;
+    background: #fff;
+    padding: 10px 15px;
+    font-size: 14px;
+}
+.cardInfoOne p,.cardInfoTwo p{
+    height: 22px;
+    line-height: 22px;
+}
+.cardInfoTwo{
+    margin: 10px auto;
+    background: #fff;
+    font-size: 14px;
+}
+
+/*常见问题*/
+.questions{
+    padding: 10px 15px;
+}
+.questionsDetail{
+    padding: 4px 15px;
+    font-size: 12px;
+    display: none;
+}
+/*设置*/
+.imgContent{
+    width: 30px;
+    height: 30px;
+}
+.imgContent img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+/*待放款订单*/
+.orderInfoTitle{
+    margin-top: 50px;
+    font-size: 14px;
+    background: #fff;
+    padding: 10px 15px;
+}
+.orderInfoTitle p{
+
+}
+.orderInfoTitle .titleContainer{
+    display: flex;
+    text-align: center;
+}
+.orderInfoTitle .titleContainer .titleContent{
+    flex: 1;
+    border-right: 1px solid #ddd;
+}
+.orderInfoTitle .titleContainer .titleContent:last-child{
+    border: none;
+}
+.orderInfoTitle .titleContainer .titleContent p:first-child{
+    color:#878787;
+    padding-bottom: 6px;
+}
+.orderInfoBody{
+    background: #fff;
+    margin-top: 10px;
+    padding: 10px 0;
+    font-size: 14px;
+}
+.orderInfoBody .orderInfoBodyTitleContainer{
+    display: flex;
+    text-align: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+.orderInfoBody .orderInfoBodyTitleContainer .orderInfoBodyTitleContent{
+    flex: 1;
+}
+.orderInfoBody .orderInfoBodyTitleContainer .orderInfoBodyTitleContent:first-child{
+    text-align: right;
+}
+.orderInfoBody .orderInfoBodyTitleContainer .orderInfoBodyTitleContent:last-child{
+    text-align: left;
+}
+.orderInfoBody .orderInfoBodyTitleContainer .orderInfoBodyTitleContent .orderLine{
+    display: inline-block;
+    width: 50%;
+    height: 1px;
+    background: #999;
+    margin-bottom: 4px;
+}
+.orderInfoBody .orderStateContainer{
+    padding: 10px 15px;
+}
+.current_up{
+    display: inline-block;
+    width: 16px;
+    height: 18px;
+    background: url(../images/current_up.png) no-repeat center center;
+    background-size: cover;
+    vertical-align: sub;
+    margin-right: 6px;
+}
+.current{
+    display: inline-block;
+    width: 17px;
+    height: 20px;
+    background: url(../images/current.png) no-repeat center center;
+    background-size: cover;
+    vertical-align: sub;
+    margin-right: 6px;
+}
+.current_down{
+    display: inline-block;
+    width: 16px;
+    height: 20px;
+    background: url(../images/current_down.png) no-repeat center center;
+    background-size: cover;
+    vertical-align: sub;
+    margin-right: 6px;
+}
+.stateIconCurrent{
+    width: 34px;
+    height: 34px;
+}
+.orderInfoBody .orderStateContainer .orderStateContent .orderStateLine{
+    padding-left: 14px;
+    border-left: 1px solid #ddd;
+    margin-left: 8px;
+    margin-bottom: 4px;
+    padding-bottom: 10px;
+    height: 50px;
+}
+.orderInfoBody .orderStateContainer .orderStateContent .orderStateLine p{
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 6px;
+}
+.orderInfoBody .orderStateContainer .orderStateContent:last-child .orderStateLine{
+    border-left:none
+}
+.orderInfoBody .orderStateContainer .orderStateContent:last-child .orderStateLine p{
+    border-bottom:none
+}
+.orderInfoBody .orderStateContainer .orderStateNull .orderStateLine p{
+    visibility: hidden;
+}
+.orderInfoBody .orderStateContainer .currentTitle{
+    color:#ff6633
+}
+/*我的*/
+#tab3{
+    background: #f6f6f6;
+}
+.mineTitleContainer{
+    width: 100%;
+    background: url(../images/mineBg.png) no-repeat center center;
+    padding-top: 10px;
+    background-size: cover;
+    color:#fff
+}
+.mineTitleContainer .mineTitleP{
+    margin:0 15px;
+    font-size: 14px;
+    padding: 10px 0;
+}
+.mineTitleContainer .mineTitleP .user{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background: url(../images/user.png) no-repeat center center;
+    background-size: cover;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+.mineTitleContainer .withdraw{
+     padding: 0 15px;
+    height: 60px;
+    line-height: 60px;
+ }
+.mineTitleContainer .withdraw .withdrawMoney{
+    font-size: 36px;
+    vertical-align: bottom;
+}
+.mineTitleContainer .withdraw .withdrawBtn{
+    display: inline-block;
+    width: 80px;
+    margin: 0 10px;
+    background: #f00;
+    text-align: center;
+    border-radius: 4px;
+    height: 30px;
+    line-height: 30px;
+}
+.mineTitleContainer .lending{
+    padding: 10px 15px;
+    position: relative;
+}
+.mineTitleContainer .lending .lendingBtn{
+    position: absolute;
+    right: 0px;
+    top: -30px;
+    padding: 4px 20px;
+    background: #f00;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    height: 30px;
+    line-height: 30px;
+}
+.minContainer{
+    margin: 10px auto 60px auto;
+}
+.minContainer .weui-cells{
+    margin-top: 10px;
+}
+.minContainer .weui-cells .weui-cell{
+    padding:15px;
+}
+.minContainer .hongBao{
+    display: inline-block;
+    padding-left: 14px;
+    background: url(../images/hongbao.png) no-repeat center left;
+    background-size: 12%;
+}
+.msg{
+    font-style: normal;
+    font-size: 10px;
+    padding: 4px 6px;
+    background: #f00;
+    position: absolute;
+    right: -10px;
+    border-radius: 50%;
+}
+.relName{
+    display: inline-block;
+    font-size: 10px;
+    background: #FFBC7D;
+    margin: 0 10px;
+    padding: 4px 10px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    color: #c14400;
+}
+/*还款首页*/
+#tab2{
+    background: #f6f6f6;
+}
+.repaymentContainer .repaymentContentTitle{
+    text-align: center;
+    background: #fff;
+    padding: 10px 0;
+}
+.repaymentContainer .repaymentContentTitle .icon-msg{
+    position: absolute;
+    top: 16px;
+    right: 15px;
+    font-size: 24px;
+}
+.repaymentContainer .repaymentContentTitle .icon-msg:before{
+    color:#333
+}
+.repaymentContentCard{
+    background:#FFDA44;
+    margin: 60px 10px 10px 10px;
+    border-radius: 6px;
+}
+.repaymentContentCard .repaymentContentCardOne{
+    height: 33px;
+    line-height: 33px;
+    text-align: right;
+    font-size: 12px;
+    padding-right: 15px;
+    color:#A0997D
+}
+.repaymentContentCard .repaymentContentCardTwo{
+    height: 24px;
+    background: #FFF8DA;
+    font-size: 12px;
+    line-height: 24px;
+}
+.repaymentContentCard .repaymentContentCardThree p:first-child{
+    margin: 14px 0 4px 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+.repaymentContentCard .repaymentContentCardThree p:nth-child(2){
+    color:#88805F;
+    font-size: 12px;
+}
+.repaymentContentCard .repaymentContentCardThree p:nth-child(2) span{
+    color:#000;
+}
+.repaymentContentCard .repaymentContentCardThree button{
+    margin: 10px auto;
+    padding: 8px 25px;
+    border: none;
+    background: #FF7220;
+    border-radius: 30px;
+    color:#fff;
+    outline: none;
+}
+.quest{
+    padding: 0px 6px;
+    border: 1px solid #A0997D;
+    border-radius: 50%;
+    font-size: 10px;
+    color:#A0997D
+}
+.repaymentContentBody{
+    background: #fff;
+    font-size: 14px;
+}
+.repaymentContentFooter{
+    margin: 10px auto 60px auto;
+    font-size: 14px;
+    background: #fff;
+}
+.repaymentContentFooter .repaymentContentFooterInfo{
+    display: flex;
+    text-align: center;
+    color:#666
+}
+.repaymentContentFooter .repaymentContentFooterInfo .repaymentContentFooterInfoContent{
+    flex: 1;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+/*开户*/
+.cardInfoMsg{
+    font-size: 14px;
+    padding-left: 15px;
+    height: 30px;
+    line-height: 40px;
+}
+.openContent{
+    font-size: 14px;
+    background: #fff;
+}
+.weui-btn:after{border: none}

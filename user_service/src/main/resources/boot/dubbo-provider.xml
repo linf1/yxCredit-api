@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd  
+            http://code.alibabatech.com/schema/dubbo  
+            http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="user-service"/>
+
+    <dubbo:provider filter="authProviderInterceptor,logProviderInterceptor"></dubbo:provider>
+
+    <!-- 使用zookeeper注册中心暴露服务地址 -->
+    <dubbo:registry protocol="zookeeper" address="${zk.host}"/>
+
+   <!-- <dubbo:registry protocol="zookeeper" address="192.168.102.109:2181" />-->
+
+    <!-- 用dubbo协议在20880端口暴露服务 -->
+    <dubbo:protocol name="dubbo" port="21880"  host="127.0.0.1"/>
+    <dubbo:service interface="com.zw.miaofuspd.facade.myset.service.IAppMessageService" timeout="30000"
+                   ref="appMessageServiceImpl"/>
+    <dubbo:service interface="com.zw.miaofuspd.facade.myset.service.IAppEditPswService" timeout="30000"
+                   ref="appEditPswServiceImpl"/>
+    <dubbo:service interface="com.zw.miaofuspd.facade.myset.service.EmployeeModifyPswService" timeout="30000"
+                   ref="employeeModifyPswServiceImpl"/>
+    <dubbo:service interface="com.zw.miaofuspd.facade.personal.service.AppUserService" timeout="30000"
+                   ref="appUserServiceImpl"/>
+    <dubbo:service interface="com.zw.miaofuspd.facade.myset.service.FeedBackService" timeout="30000"
+                   ref="feedBackServiceImpl"/>
+    <dubbo:service interface="com.zw.miaofuspd.facade.user.service.IUserService" timeout="30000"
+                   ref="userServiceImpl"/>
+    <dubbo:service interface="com.zw.miaofuspd.facade.user.service.ILoginService" timeout="30000"
+                   ref="loginServiceImpl"/>
+    <dubbo:service interface="com.zw.miaofuspd.facade.user.service.ILogoutService" timeout="30000"
+                   ref="logoutServiceImpl"/>
+    <dubbo:service interface="com.zw.miaofuspd.facade.user.service.ISmsService" timeout="30000"
+                   ref="smsServiceImpl"/>
+    <dubbo:service interface="com.zw.miaofuspd.facade.user.service.IMsgService" timeout="30000"
+                   ref="msgServiceImpl"/>
+    <dubbo:service interface="com.zw.miaofuspd.facade.user.service.IRegisteredService" timeout="30000"
+                   ref="registeredServiceImpl"/>
+    <dubbo:service interface="com.zw.miaofuspd.facade.user.service.IAppIdentityService" timeout="30000"
+                   ref="appIdentityServiceImpl"/>
+    <dubbo:service interface="com.zw.miaofuspd.facade.user.service.IAppResetPwService" timeout="30000"
+                   ref="appResetPwServiceImpl"/>
+    <dubbo:service interface="com.zw.miaofuspd.facade.home.service.HomeService" timeout="30000"
+                   ref="homeServiceImpl"/>
+</beans>

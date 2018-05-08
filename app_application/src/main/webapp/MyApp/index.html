@@ -1,0 +1,265 @@
+<!DOCTYPE HTML>
+<html manifest="" lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>MyApp</title>
+    <link rel="stylesheet" href="resources/mui/css/mui.min.css">
+    <!-- <link rel="stylesheet" href="resources/mui/css/mui.picker.css">
+     <link rel="stylesheet" href="resources/mui/css/mui.poppicker.css">-->
+    <style type="text/css">
+        /**
+        * Example of an initial loading indicator.
+        * It is recommended to keep this as minimal as possible to provide instant feedback
+        * while other resources are still being loaded for the first time
+        */
+        html, body {
+            height: 100%;
+            background-color: #fff
+        }
+
+        #appLoadingIndicator {
+            position: absolute;
+            top: 50%;
+            margin-top: -15px;
+            text-align: center;
+            width: 100%;
+            height: 30px;
+            -webkit-animation-name: appLoadingIndicator;
+            -webkit-animation-duration: 0.5s;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-direction: linear;
+        }
+
+        #appLoadingIndicator > * {
+            background-color: #f6f6f6;
+            display: inline-block;
+            height: 30px;
+            -webkit-border-radius: 15px;
+            margin: 0 5px;
+            width: 30px;
+            opacity: 0.8;
+        }
+
+        @-webkit-keyframes appLoadingIndicator {
+            0% {
+                opacity: 0.8
+            }
+            50% {
+                opacity: 0
+            }
+            100% {
+                opacity: 0.8
+            }
+        }
+    </style>
+    <!-- The line below must be kept intact for Sencha Command to build your application -->
+    <script id="microloader" type="text/javascript" src=".sencha/app/microloader/development.js"></script>
+    <link rel="stylesheet" href="resources/css/style.css">
+    <link rel="stylesheet" href="resources/mui/css/mui.picker.css">
+    <link rel="stylesheet" href="resources/mui/css/mui.poppicker.css">
+    <link rel="stylesheet" href="resources/layer_mobile/need/layer.css">
+    <link rel="stylesheet" href="resources/css/myapp.css">
+    <script src="resources/fastclick/fastclick.js"></script>
+    <script src="resources/mui/js/mui.min.js"></script>
+    <script src="resources/mui/js/mui.picker.min.js"></script>
+    <script src="resources/mui/js/mui.poppicker.js"></script>
+    <script src="resources/mui/js/city.data-3.js"></script>
+    <script src="resources/mui/js/mui.zoom.js"></script>
+    <script src="resources/mui/js/mui.previewimage.js"></script>
+    <script src="resources/layer_mobile/layer.js"></script>
+    <script src="resources/artTemplate/artTemplate.js"></script>
+    <script src="common.js"></script>
+</head>
+<body>
+<iframe id="iframCtx" src="context.jsp" style="display: none"></iframe>
+<div id="appLoadingIndicator">
+    <div></div>
+    <div></div>
+    <div></div>
+</div>
+<input type="hidden" id="userAgent">
+<script id="test" type="text/html" charset="utf-8">
+    {{if list.length!=0}}
+    {{each list as value}}
+    <div class="merch-list" onclick="viewLoginThis.toHomeView(this)" data-id="{{value.id}}">{{value.merchantName}}</div>
+    {{/each}}
+    {{else}}
+    <div class="no-merchan">没有相关结果~</div>
+    {{/if}}
+</script>
+<script id="merchanList" type="text/html" charset="utf-8">
+    {{if merchanList.length !=0}}
+    {{each merchanList as value}}
+    <div class="data-item">
+        <div class="img"><img data-echo="{{value.merchandiseImgUrl}}" src="resources/images/60x60.gif" alt=""></div>
+        <div class="content">
+            <div class="title">{{value.merchandiseBrandName + value.merchandiseName}}</div>
+            <div class="desc"><span class="capacity">{{value.merchandiseModelName}}</span><span class="color">{{value.merchandiseVersionName}}</span>
+            </div>
+            <p><span data-productId="{{value.merchandiseVersionId}}" class="codeBtn" onclick="proThis.toMakeCode(this)">生成二维码</span>
+            </p>
+        </div>
+    </div>
+    {{/each}}
+    {{else}}
+    <div class="no-merchan">没有相关结果~</div>
+    {{/if}}
+</script>
+<script id="order" type="text/html" charset="utf-8">
+    {{if orderList.length != 0}}
+    {{each orderList as value}}
+    <div class="order-item">
+        <div class="title"><span class="time">{{value.alterTime}}</span></div>
+        <div class="content" data-id="{{value.id}}" onclick="allOrderThis.toOrderDeatil(this)">
+            {{if value.sexName=='男'}}
+            <div class="person-name man">{{value.customerName}}</div>
+            {{else if value.sexName=='女'}}
+            <div class="person-name">{{value.customerName}}</div>
+            {{else}}
+            <div class="person-name gay">?</div>
+            {{/if}}
+            <div class="desc">
+                <div class="pro-name">{{value.merchandiseBrand}}</div>
+                <div class="pro-capacity">
+                    <span>{{value.merchandiseModel}}</span><span>{{value.merchandiseVersion}}</span></div>
+                <div class="money-desc"><span>￥{{value.monthPay}}</span><span>×</span><span>{{value.periods}}期</span>
+                </div>
+            </div>
+        </div>
+        {{if value.state == '0'}}
+        {{if value.commodityState=='15'}}
+        {{if value.isSign == '0' || value.isSign == ''}}
+        <div class="item-examine"><span data-id="{{value.id}}" onclick="allOrderThis.toOrderBack(this)"
+                                        style="float:right;width:60px;text-align:center;font-size:14px;color:#FD6D52;padding:1px 5px;border:1px solid #FD6D52;border-radius:20px;margin-top:8px;"> 撤回</span><span
+                class="mark-status">已提交等待客户确认</span></div>
+        {{else if value.isSign == '1'}}
+        <div class="item-examine">
+            <div class="mark-content"><span class="active icon-activeMark"></span><span data-flag="true"
+                                                                                        class="active mark-text">已标记用户</span>
+            </div>
+            <span data-id="{{value.id}}" onclick="allOrderThis.toOrderBack(this)"
+                  style="float:right;width:60px;text-align:center;font-size:14px;color:#FD6D52;padding:1px 5px;border:1px solid #FD6D52;border-radius:20px;margin-top:8px;"> 撤回</span><span
+                class="mark-status">已提交等待客户确认</span></div>
+        {{/if}}
+        {{else if value.commodityState=='14'}}
+        <div class="no-submit">
+            <div class="mark-content"><span class="icon-activeMark"></span><span onclick="allOrderThis.toMarkUser(this)"
+                                                                                 data-flag="true"
+                                                                                 class="mark-text">标记用户</span></div>
+            <div class="edit-content"><span data-isSign="0" data-id="{{value.id}}" onclick="allOrderThis.toSubmit(this)"
+                                            class="submit-order">提交</span></div>
+        </div>
+        {{else if value.commodityState=='11'}}
+        <div class="item-refuse"><span data-id="{{value.id}}" onclick="allOrderThis.toCompleteInfo(this)">完善客户信息</span>
+        </div>
+        {{else if value.commodityState=='12'}}
+        <div class="item-refuse"><span onclick="allOrderThis.toImageData(this)" data-id="{{value.id}}">补充影像资料</span>
+        </div>
+        {{else if value.commodityState=='13'}}
+        <div class="item-refuse"><span onclick="allOrderThis.toSign(this)" data-custId="{{value.customerId}}"
+                                       data-id="{{value.id}}">手签</span></div>
+        {{else}}
+        <div></div>
+        {{/if}}
+        {{else if value.state=='1'||value.state=='2'}}
+        {{if value.isSign == '0' || value.isSign == ''}}
+        <div class="item-examine"><span class="mark-status">审核中</span></div>
+        {{else if value.isSign == '1'}}
+        <div class="item-examine">
+            <div class="mark-content"><span class="active icon-activeMark"></span><span data-flag="true"
+                                                                                        class="active mark-text">已标记用户</span>
+            </div>
+            <span class="mark-status">审核中</span></div>
+        {{/if}}
+        {{else if value.state=='3'||value.state=='6'}}
+        <div class="item-examine"><span class="mark-status">未通过</span></div>
+        {{/if}}
+    </div>
+    {{/each}}
+    {{else}}
+    <div class="no-merchan">没有相关结果~</div>
+    {{/if}}
+</script>
+<script id="lala" type="text/html" charset="utf-8">
+    {{if orderMaList.length != 0}}
+    {{each orderMaList as value}}
+    <div class="order-item">
+        <div class="title"><span class="time">{{value.alterTime}}</span></div>
+        <div class="content" data-id="{{value.id}}" onclick="orderMaThis.toOrderDetail(this)">
+            {{if value.sexName=='男'}}
+            <div class="person-name man">{{value.customerName}}</div>
+            {{else if value.sexName=='女'}}
+            <div class="person-name">{{value.customerName}}</div>
+            {{else}}
+            <div class="person-name gay">?</div>
+            {{/if}}
+            <div class="desc">
+                <div class="pro-name">{{value.merchandiseBrand}}</div>
+                <div class="pro-capacity">
+                    <span>{{value.merchandiseModel}}</span><span>{{value.merchandiseVersion}}</span></div>
+                <div class="money-desc"><span>￥{{value.monthPay}}</span><span>×</span><span>{{value.periods}}期</span>
+                </div>
+            </div>
+        </div>
+        {{if value.state == '5'}}
+        {{if value.commodityState=='16'}}
+        <div class="complete-order">
+            <button data-id="{{value.id}}" onclick="orderMaThis.toOpenAccount(this)" class="mui-btn">绑定银行卡</button>
+        </div>
+        {{else if value.commodityState=='16.5'}}
+        <div style="height:42px;line-height:42px;text-align:right;padding-right:15px;font-size:14px;color:#ff6600;"
+             class="payment-wrapper"><span class="desc">等待客户确认合同</span></div>
+        {{else if value.commodityState=='16.7'}}
+        <div style="height:42px;line-height:42px;text-align:right;padding-right:15px;font-size:14px;color:#ff6600;"
+             class="payment-wrapper"><span class="desc">等待客户支付前置服务包</span></div>
+        {{else if value.commodityState=='17'}}
+        <div class="complete-order"><p class="desc-wrapper"><span class="complete-order-desc">待收预付款</span><span
+                class="complete-order-money">￥{{value.predictPrice}}</span></p>
+            <button data-id="{{value.id}}" data-money="{{value.predictPrice}}" data-name="{{value.customerName}}"
+                    onclick="orderMaThis.toCollectMoney(this)" class="mui-btn">收取预付款
+            </button>
+        </div>
+        {{else if value.commodityState=='18'}}
+        <div class="complete-order spec">
+            <div class="payment-wrapper"><span class="desc">预付款已收取</span><span
+                    class="pay-money">￥{{value.predictPrice}}</span></div>
+            <div class="btn-wrapper">
+                <button onclick="orderMaThis.toDeliveGoods(this)" data-id="{{value.id}}" class="mui-btn">上传发货照片</button>
+            </div>
+        </div>
+        {{else if value.commodityState=='19'}}
+        <div class="complete-order">
+            <button data-id="{{value.id}}" onclick="orderMaThis.toNumGoods(this)" class="mui-btn">提交串号码</button>
+        </div>
+        {{/if}}
+        {{/if}}
+    </div>
+    {{/each}}
+    {{else}}
+    <div class="no-merchan">没有相关结果~</div>
+    {{/if}}
+</script>
+<script>
+    var ua = navigator.userAgent.toLowerCase();
+    quality = 20, qualitys = 10;
+    if (/iphone|ipad|ipod/.test(ua)) {
+        document.getElementById("userAgent").setAttribute("value", "IOS");
+        document.write('<script src="www/js/cordova/ios/cordova.js"><\/script>');
+        document.write("<script src='www/js/cordova/ios/cordova_plugins.js'><\/script>");
+        quality = 20;
+        qualitys = 10;
+    } else if (/android/.test(ua)) {
+        document.getElementById("userAgent").setAttribute("value", "Android");
+        document.write("<script src='www/js/cordova/android/cordova.js'><\/script>");
+        document.write("<script src='www/js/cordova/android/cordova_plugins.js'><\/script>");
+        document.write("<script type='text/javascript' src='www/js/index.js'><\/script>");
+        quality = 40;
+        qualitys = 30;
+    }
+</script>
+<script src="resources/ajaxLoading/spin.js"></script>
+<script src="resources/ajaxLoading/loading.js"></script>
+<script src="resources/mui/js/picker.min.js"></script>
+<script src="resources/lazyload/echo.min.js"></script>
+</body>
+</html>

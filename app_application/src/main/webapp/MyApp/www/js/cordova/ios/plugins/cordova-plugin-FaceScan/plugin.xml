@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--    id需要和文件夹名称保持一致 (插件的id)-->
+<plugin xmlns="http://phonegap.com/ns/plugins/1.0"
+    id="cordova-plugin-FaceScan"
+    version="1.0.0">    
+    <name>FaceRecognition</name>
+    <description>Cordova FaceRecognition Plugin</description>
+    
+ <!--    对应js映射文件的地址及名称-->
+    <js-module src="www/faceScan.js" name="faceRecognition">
+        
+        <!--    js调用时的对象名称-->
+        <clobbers target="faceRecognition" />
+    </js-module>
+    
+    <!--    ios所有文件的存放地址-->
+    <!--如果有图片的话也需要在这里配置,前缀是source-file-->
+    <platform name="ios">
+        <source-file src="src/ios/CDVFaceRecognition.m" />
+        <header-file src="src/ios/CDVFaceRecognition.h" />
+                
+        <config-file target="config.xml" parent="/widget">
+            
+            <!--            插件映射至ios的类名-->
+            <feature name="ocFaceModel">
+                <param name="ios-package" value="CDVFaceRecognition" />
+            </feature>
+        </config-file>
+    </platform>
+</plugin>

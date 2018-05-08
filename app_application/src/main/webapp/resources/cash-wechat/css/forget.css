@@ -1,0 +1,19 @@
+
+#userforget{ font-size: 17px;  color: #000;  text-align: center;  line-height:80px;  }
+#usernewpwd{  width:100%;  height:40px;  margin-top: 20px;  border-bottom: 1px solid #afafaf;  }
+#usernewpwd label{  font-family: MicrosoftYaHei;  font-size: 14px;  padding-left: 30px;  line-height: 40px;  }
+#newpwd{  border: none;  padding-left: 54px;  outline: none;  line-height: 38px;  }
+#usersurepwd{  width:100%;  height:40px;  margin-top: 20px;  border-bottom: 1px solid #afafaf;  }
+#usersurepwd label{  font-family: MicrosoftYaHei;  font-size: 14px;  padding-left: 30px;  line-height: 40px;  }
+#surepwd{  border: none;  padding-left: 40px;  outline: none;  line-height: 38px;  }
+#sure{  width:70%;  height:39.5px;  background-color:#ffda44 ;  margin: 0 auto;  margin-top:60px;  border:1px solid #ffda44;  border-radius: 20px;  }
+#sure a{  text-decoration: none;  font-family: MicrosoftYaHei;  font-size: 17px;  color: #1a1a1d;  width:34px;  height:15px;  line-height: 39.5px;  padding-left: 40%;  }
+#forgetContainerOne{margin-top: 50px;  background: #fff;font-size: 14px;}
+#forgetContainerTwo{margin-top: 6px;  font-size: 14px;  background: #fff;}
+#forgetContainerTwo .getCodeBtn{border: none;  padding: 4px 10px;  border-radius: 4px;  outline: none;}
+.btnContainer{margin: 30px auto;text-align: center}
+.btnContainer button{ width: 80%;  border: none;  height: 40px;  border-radius: 30px;  background: #FFDA44;outline: none}
+#forgetContainerNext{margin-top: 50px;font-size: 14px;}
+
+
+

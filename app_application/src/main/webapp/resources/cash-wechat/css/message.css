@@ -1,0 +1,80 @@
+.fixedSysMsg{
+    position: fixed;
+    top:44px;
+    background: #fff;
+    width: 100%;
+
+}
+.sysMsgContainer{
+    display: flex;
+    font-size: 14px;
+    padding: 10px 15px;
+
+}
+.sysMsgContainer div:first-child{
+    flex: .2;
+    position: relative;
+}
+.sysMsgContainer div:first-child img{
+    width: 60%;
+    margin-top: 5px;
+}
+.sysMsgContainer div:last-child{
+    flex: .8;
+}
+.sysMsgTitle{
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+.sysMsg{
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color:#989898;
+    line-height: 15px;
+}
+.orderMsgContainer{
+    margin: 140px 15px 0 15px;
+}
+.orderMsgContainer .orderMsgContent{
+    padding: 15px 10px;
+    background: #fff;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 10px auto;
+}
+.orderMsgContainer .orderMsgContent .orderMsgTitle{
+    font-weight: bold;
+}
+.orderMsgContainer .orderMsgContent .orderMsgTime{
+    margin: 10px auto;
+    color: #9A9A9A;
+}
+.orderMsgContainer .orderMsgContent .orderMsg{
+
+}
+.orderMsgContainer .orderMsgContent .right{float: right;margin-top: 5px;}
+.orderMsgContainer .orderMsgContent .orderBtn{
+    padding: 10px 0 0 15px;
+    border-top: 1px solid #ddd;
+    margin-top: 10px;
+}
+.unread{
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: #f00;
+    border-radius: 50%;
+    margin-right: 4px;
+}
+.unreadMsg{
+    position: absolute;
+    top: 3px;
+    right: 26px;
+    width: 10px;
+    height: 10px;
+    background: #f00;
+    border-radius: 50%;
+}

@@ -1,0 +1,125 @@
+
+.public-content{
+    font-size: 17px;
+    color: #000;
+    text-align: center;
+    line-height:80px;
+}
+.content{
+    padding-top: 50px;
+    background-color: #fff;
+    padding-bottom: 15px;
+}
+.content-header{
+    text-align: center;
+    color:#9F9F9F;
+    margin: 20px auto;
+}
+.content-footer{
+    font-size: 30px;
+    text-align: center;
+    color: #000000;
+    margin-bottom: 20px;
+}
+.content-wrapper{
+    margin-top: 8px;
+    background-color: #fff;
+}
+.payWay{
+    padding: 10px 15px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+    height: 30px;
+    line-height: 30px;
+}
+.payWay span.icon-bank{
+    font-size: 30px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+.payWay .payWayIcon{
+    font-size: 24px;
+    float: right;
+    margin-top: 5px;
+}
+.payWay span.icon-circle{
+    font-size: 18px;
+    margin-right: 3px;
+    margin-top: 7px;
+}
+
+.footerBtn{
+    text-align: center;
+    margin: 30px auto;
+}
+.footerBtn button{
+    width: 70%;
+    height: 40px;
+    line-height: 40px;
+    border: none;
+    border-radius: 30px;
+    background: #FDE300;
+    outline: none;
+}
+#middle-content{
+    background-color:#fff ;
+}
+.content-logo{
+    text-align: center;
+    padding-top: 40px;
+}
+.middle-logo{
+    width:58px;
+    height:58px;
+}
+.container{
+    text-align: center;
+    padding-bottom: 25px;
+}
+.container1{
+    font-size: 16px;
+    color: #333;
+}
+.container2{
+    font-size: 14px;
+    color:#7c7c7c;
+}
+.public-footer{
+    text-align: center;
+    margin: 30px auto;
+}
+.public-footer button{
+    width: 60%;
+    height: 40px;
+    line-height: 40px;
+    border: none;
+    border-radius: 30px;
+    background: #FDE300;
+    outline: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

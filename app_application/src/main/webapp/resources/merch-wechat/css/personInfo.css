@@ -1,0 +1,69 @@
+/*身份认证*/
+/*信息标题*/
+.infoTitle{  display: flex;  margin-top: 50px;  text-align: center;  font-size: 14px;  background: #fff;  }
+.infoTitle .infoContent{  flex: 1;  position: relative;  }
+.infoTitle .infoContent .infoImg{  width: 30px;  height: 30px;  margin: 2px auto;  }
+.infoTitle .infoContent .infoImgActive{  width: 34px;  height: 34px;  margin: 0 auto;  }
+.infoTitle .infoContent .infoLine{  position: absolute;  width: 80%;  height: 1px;  background: #ddd;  top: 16px;  right: -50px;  }
+.infoTitle .infoContent .infoLineActive{  background: #FFCF13;  }
+.infoTitle .infoContent:last-child .infoLine{  height: 0;  }
+
+/*身份认证*/
+.infoPhoto{  margin: 44px 0 0 0;  background: #FFCC00;  padding: 10px 15px;  font-weight: bold;  text-align: center;  }
+.infoPhoto .infoPhotoContent{  display: flex;  }
+.infoPhoto .infoPhotoContent .infoPhotoImg{  flex: 1;  padding: 10px;  height:120px  }
+.infoPhoto .infoPhotoContent .infoPhotoImg img{  height: 100%;  width: 100%;  }
+.infoMsg{  font-size: 14px;  margin-left: 15px;  height: 30px;  line-height: 30px; color:#C5C5C5 }
+.weui-cells{  margin-top: 0;  font-size: 14px;  }
+.weui-cell:before{  left: 0;  border-top: 1px dashed #F0F0F0;  }
+.weui-cell span{  margin-right: 10px;  }
+/**个人信息home页**/
+.personInfoContainer{margin-top: 44px;}
+.personInfoContainer .weui-navbar{position: fixed;top: 0px;background: #fff;height: 36px;line-height: 36px;}
+.personInfoContainer .weui-navbar__item:after{border: none;}
+.personInfoContainer .weui-navbar__item{padding: 0;font-size: 14px;}
+.personInfoContainer .weui-navbar__item b{display: block;width: 70px;height: 2px;margin: -2px auto;background: transparent}
+.personInfoContainer .weui-navbar__item.weui-bar__item--on{background: #fff;color:#938F88}
+.personInfoContainer .weui-navbar__item.weui-bar__item--on b{background: #F59215}
+.personInfoContainer .weui-navbar:after{border-bottom: none;}
+.personInfoContainer .weui-navbar+.weui-tab__bd{padding-top: 0px;}
+.contacts{background: #F6F6F6;font-size: 14px;padding-left: 15px;height: 30px;line-height: 30px;}
+/**基本信息**/
+.identityCategory{font-size: 14px;}
+.identityCategory p:first-child{padding: 0 15px 5px 15px;}
+.identityCategory .category{display: flex;background: #fff;padding: 10px 15%}
+.identityCategory .category .categoryItems{flex: 1;text-align: center}
+.identityCategory .category .categoryItems img{width: 60%}
+.basicInfoContainer .weui-cells:before{border-top:none}
+.basicInfoContainer .weui-cells{margin-top: 10px;}
+
+/**信任认证 认证中心**/
+.creditContainer{padding-top: 44px;}
+.creditState{text-align: center;font-size: 14px;background: #FEEA94;height: 30px;line-height: 30px;color:#C9AC37}
+.creditItems{display: flex;font-size: 14px;padding: 10px 15px;background: #fff;position: relative}
+.creditItems .items:first-child{flex: .1}
+.creditItems .items:last-child{flex: .9;margin-left: 10px;}
+.creditItems .itemsTitle{color:#000;font-weight: bold}
+.creditItems .itemsContent span:first-child{color:#C4C4C4;}
+.rightWord{float: right}
+.creditItems .itemsContent{padding-bottom: 10px;border-bottom: 1px solid #ddd;}
+.creditContainer .icon-renzheng,.icon-face,.icon-lianxiren{font-size: 30px;position: relative;top: 6px;}
+.marginTop{margin-top: 10px;}
+.marginTop .itemsContent{border-bottom: none;padding-bottom: 0}
+.noBorderBottom{padding-top: 0}
+.noBorderBottom .itemsContent{border-bottom: none;padding-bottom: 0;}
+.infoForm .weui-label{color:#C1C1C1}
+
+/**联系人**/
+.contactsContainer{padding-top: 44px;font-size: 14px;}
+.contactsContainer .contactsItems{margin-bottom: 10px;}
+.contactsContainer .weui-label{text-align: right;padding-right: 20px;}
+.contactsContainer .contactsItems .contactsNum{height: 30px;line-height: 30px;margin-left: 15px;}
+.weui-cells{font-size: 14px;}
+#contactsPage .commBtn{margin: 20px auto}
+/**授权信息**/
+.accreditInfoContainer{background: #fff;font-size: 14px;}
+.accreditInfoContainer .accreditItems{margin-left: 15px;border-bottom: 1px solid #EBEBEB;padding: 10px 15px 10px 0}
+.accreditInfoContainer .accreditImg{}
+.accreditInfoContainer .accreditTitle{color:#343434}
+.accreditInfoContainer .accreditState{color:#E0E0E0}
