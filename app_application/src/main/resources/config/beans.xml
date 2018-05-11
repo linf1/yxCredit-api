@@ -25,6 +25,12 @@
     <import resource="spring-quartz.xml"/>
     <context:annotation-config/>
 
+    <!-- 读入配置属性文件 -->
+    <context:property-placeholder
+            ignore-unresolvable="true"
+            file-encoding="UTF-8"
+            location="classpath*:/properties/*.properties"/>
+
     <!--<bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration">-->
         <!--<property name="maxInactiveIntervalInSeconds" value="600"></property>-->
     <!--</bean>-->
@@ -62,6 +68,17 @@
         <property name="cookiePath" value="/"></property>
         &lt;!&ndash;<property name="domainNamePattern" value="^.+?\.(\w+\.[a-z]+)$"></property>&ndash;&gt;
     </bean>-->
+
+
+    <!-- 同盾配置BEAN create by 陈清玉-->
+    <bean id="tongDunSettings" class="com.zw.model.tongdun.TongDunSettings">
+        <property name="reportIdUrl" value="${tongdun.reportIdUrl}"/>
+        <property name="reportInfoUrl" value="${tongdun.reportInfoUrl}"/>
+        <property name="partnerCode" value="${tongdun.partnerCode}"/>
+        <property name="partnerKey" value="${tongdun.partnerKey}"/>
+        <property name="appName" value="${tongdun.appName}"/>
+    </bean>
+
     <bean class="org.springframework.session.web.http.SessionEventHttpSessionListenerAdapter">
         <constructor-arg name="listeners">
             <list>
