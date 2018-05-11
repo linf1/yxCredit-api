@@ -25,10 +25,12 @@ import java.util.Map;
  */
 public interface IRegisteredService {
     boolean selectByTel(String tel) throws Exception;//判断手机是否已经注册
-    void register(Map map) throws Exception;//秒付注册用户
+    String register(Map map) throws Exception;//秒付注册用户
     boolean selectByOnlyCode(String onlyCode);
     Map getRegClause(String type) throws Exception;//注册条款
     boolean selectByTelError(String tel) throws Exception;//判断是否是三次注册失败手机号码
-
     void updateTelError(String phone);
+
+
+    String insertUser(Map<String,Object> map);
 }
