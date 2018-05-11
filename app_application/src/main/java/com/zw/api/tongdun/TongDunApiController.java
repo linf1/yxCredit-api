@@ -21,9 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/tongDun")
 public class TongDunApiController {
 
-
-
-
     private static final Logger LOGGER = LoggerFactory.getLogger(TongDunApiController.class);
 
     @Autowired
