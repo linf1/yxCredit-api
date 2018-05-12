@@ -89,4 +89,46 @@ public class LoginController extends AbsBaseController {
         }
         return getRequest().getHeader("x-forwarded-for");
     }
+
+
+    /**
+     * 秒付登录
+     * @param phone 登录电话
+     * @param type 电话类型
+     * @param deviceCode 设备唯一吗
+     * @return 用户信息
+     * @throws Exception
+     */
+    @RequestMapping("/loginEntry")
+    @ResponseBody
+    public ResultVO loginEntry(@RequestParam String phone,@RequestParam String type, @RequestParam String deviceCode) throws Exception {
+        //获取客户端的Ip地址
+        String ipAddress = getRemortIP();
+        ResultVO resultVO = this.createResultVO(null);
+        Map map = loginService.login(phone,type,ipAddress,deviceCode);
+        boolean flag = (boolean) map.get("success");
+        String msg = (String) map.get("msg");
+        Map returnmap = new HashMap(3);
+        if (flag) {
+            AppUserInfo user = new AppUserInfo();
+            user.setId(map.get("phone") + "");
+            user.setTel(map.get("id") + "");
+            user.setImg_url(map.get("img_url") + "");
+            Map map2 = new HashMap(4);
+            String token = map.get("token")+"";
+            map2.put ("token",token);
+            map2.put("tel",phone);
+            map2.put("token_time",map.get("token_time"));
+            map2.put(AppConstant.APP_USER_INFO,user);
+            getRequest().getSession().setAttribute(AppConstant.APP_USER_INFO, user);
+            returnmap.put("userId",map.get("id"));
+            returnmap.put("token",map2);
+            returnmap.put("sessionId",getRequest().getSession().getId());
+            resultVO.setRetData(returnmap);
+        } else {
+            resultVO.setErrorMsg(VOConst.FAIL, msg);
+            resultVO.setRetData(map);
+        }
+        return resultVO;
+    }
 }

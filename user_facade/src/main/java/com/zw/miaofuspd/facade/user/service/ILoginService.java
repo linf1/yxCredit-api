@@ -41,4 +41,17 @@ public interface ILoginService {
      * @throws Exception
      */
     void logOut(String user_id) throws Exception;
+
+
+    /**
+     * 碧友信
+     * @param phone 电话
+     * @param type 手机类型
+     * @param ipAddress IP地址
+     * @param deviceCode 手机唯一标识
+     * @return 返回的用户信息
+     * @throws Exception
+     */
+    Map login(String phone, String type, String ipAddress, String deviceCode) throws Exception;
+
 }

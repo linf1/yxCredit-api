@@ -3,6 +3,7 @@ package com.zw.miaofuspd.user.service;
 import com.base.util.DateUtils;
 import com.base.util.MD5Utils;
 import com.base.util.TokenUtil;
+import com.jwt.Jwt;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
 import com.zw.miaofuspd.facade.user.service.ILoginService;
 import com.zw.service.base.AbsServiceBase;
@@ -25,7 +26,7 @@ import java.util.Map;
  * <p>
  *
  * @author department:技术开发部 <br>
- *         username:wangmin <br>
+ *         phone:wangmin <br>
  *         email: <br>
  * @version <strong>zw有限公司-运营平台</strong><br>
  *          <br>
@@ -40,13 +41,15 @@ public class LoginServiceImpl extends AbsServiceBase implements ILoginService {
 
     @Autowired
     private IDictService dictServiceImpl;
+    @Autowired
+    private RegisteredServiceImpl registeredService;
 
     @Override
-    public Map login(String username, String password, String registration_id,String black_box,String type,String ip_address,String deviceCode) throws Exception {
+    public Map login(String phone, String password, String registration_id,String black_box,String type,String ip_address,String deviceCode) throws Exception {
         Map returnMap = new HashMap();
         password = MD5Utils.GetMD5Code(password);
         String issql = "select id,tel,head_img as img_url,error_num,alter_time,state,passwd,registration_id,is_black,only_code_spd " +
-                "from app_user where tel='"+username+"'";
+                "from app_user where tel='"+phone+"'";
         List list = sunbmpDaoSupport.findForList(issql);
         if(list.isEmpty()){
             returnMap.put("success",false);
@@ -71,7 +74,7 @@ public class LoginServiceImpl extends AbsServiceBase implements ILoginService {
                 returnMap.put("msg","密码超过"+errorNum+"次，请在"+logTime+"分钟后登录");
                 return returnMap;
             }
-            StringBuffer upsql = new StringBuffer("update app_user set error_num ='0' where tel='"+username+"'");//将解锁的用户重置密码输入错误次数
+            StringBuffer upsql = new StringBuffer("update app_user set error_num ='0' where tel='"+phone+"'");//将解锁的用户重置密码输入错误次数
             sunbmpDaoSupport.exeSql(upsql.toString());
             errorNumBase = 0;
         }
@@ -80,7 +83,7 @@ public class LoginServiceImpl extends AbsServiceBase implements ILoginService {
         String alterTime = DateUtils.getDateString(new Date());
         if (!savePassword.equals(password)) {
             errorNumBase = errorNumBase+1;
-            StringBuffer unsql = new StringBuffer("update app_user set error_num = '"+errorNumBase+"',alter_time ='"+alterTime+"'where tel ='"+username+"'");
+            StringBuffer unsql = new StringBuffer("update app_user set error_num = '"+errorNumBase+"',alter_time ='"+alterTime+"'where tel ='"+phone+"'");
             sunbmpDaoSupport.exeSql(unsql.toString());//更新密码错误次数及密码输入错误时间
             if(errorNumBase >=errorNum){
                 int logTime = Integer.parseInt(limitime)/60;
@@ -97,7 +100,7 @@ public class LoginServiceImpl extends AbsServiceBase implements ILoginService {
             }
             return returnMap;
         }else{
-            StringBuffer unsql = new StringBuffer("update app_user set error_num = '0',alter_time ='"+alterTime+"',state='0',registration_id='"+registration_id+"' where tel ='"+username+"'");
+            StringBuffer unsql = new StringBuffer("update app_user set error_num = '0',alter_time ='"+alterTime+"',state='0',registration_id='"+registration_id+"' where tel ='"+phone+"'");
             sunbmpDaoSupport.exeSql(unsql.toString());//成功登陆后将密码错误次数重置并更新登录时间
         }
         String id=map.get("id").toString();
@@ -132,7 +135,7 @@ public class LoginServiceImpl extends AbsServiceBase implements ILoginService {
             //获取token，并将token更新到数据库中
             String token = TokenUtil.getToken(map.get("tel")+"");
             String tokenTime = (new Date()).getTime()+"";
-            StringBuffer unsql = new StringBuffer("update app_user set  only_code_spd = '"+deviceCode+"', token = '"+token+"',token_time ='"+tokenTime+"' where tel ='"+username+"'");
+            StringBuffer unsql = new StringBuffer("update app_user set  only_code_spd = '"+deviceCode+"', token = '"+token+"',token_time ='"+tokenTime+"' where tel ='"+phone+"'");
             sunbmpDaoSupport.exeSql(unsql.toString());
             returnMap.put("token",token);
             returnMap.put("token_time",tokenTime);
@@ -202,11 +205,11 @@ public class LoginServiceImpl extends AbsServiceBase implements ILoginService {
     }
 
     @Override
-    public Map wechatLogin(String username, String password) throws Exception {
+    public Map wechatLogin(String phone, String password) throws Exception {
         Map returnMap = new HashMap();
         password = MD5Utils.GetMD5Code(password);
         String issql = "select id,tel,head_img as img_url,error_num,alter_time,state,passwd,registration_id,is_black,only_code_spd " +
-                "from app_user where tel='"+username+"'";
+                "from app_user where tel='"+phone+"'";
         List list = sunbmpDaoSupport.findForList(issql);
         if(list.isEmpty()){
             returnMap.put("success",false);
@@ -228,7 +231,7 @@ public class LoginServiceImpl extends AbsServiceBase implements ILoginService {
                 returnMap.put("msg","密码超过"+errorNum+"次，请在"+logTime+"分钟后登录");
                 return returnMap;
             }
-            StringBuffer upsql = new StringBuffer("update app_user set error_num ='0' where tel='"+username+"'");//将解锁的用户重置密码输入错误次数
+            StringBuffer upsql = new StringBuffer("update app_user set error_num ='0' where tel='"+phone+"'");//将解锁的用户重置密码输入错误次数
             sunbmpDaoSupport.exeSql(upsql.toString());
             errorNumBase = 0;
         }
@@ -236,7 +239,7 @@ public class LoginServiceImpl extends AbsServiceBase implements ILoginService {
         String savePassword=map.get("passwd").toString();
         String alterTime = DateUtils.getDateString(new Date());
         if (!savePassword.equals(password)) {
-            StringBuffer unsql = new StringBuffer("update app_user set error_num = '"+(errorNumBase+1)+"',alter_time ='"+alterTime+"'where tel ='"+username+"'");
+            StringBuffer unsql = new StringBuffer("update app_user set error_num = '"+(errorNumBase+1)+"',alter_time ='"+alterTime+"'where tel ='"+phone+"'");
             sunbmpDaoSupport.exeSql(unsql.toString());//更新密码错误次数及密码输入错误时间
             if(errorNumBase >=errorNum){
                 int logTime = Integer.parseInt(limitime)/60;
@@ -254,7 +257,7 @@ public class LoginServiceImpl extends AbsServiceBase implements ILoginService {
 
             return returnMap;
         }else{
-            StringBuffer unsql = new StringBuffer("update app_user set error_num = '0',alter_time ='"+alterTime+"',state='0' where tel ='"+username+"'");
+            StringBuffer unsql = new StringBuffer("update app_user set error_num = '0',alter_time ='"+alterTime+"',state='0' where tel ='"+phone+"'");
             sunbmpDaoSupport.exeSql(unsql.toString());//成功登陆后将密码错误次数重置并更新登录时间
         }
         String id=map.get("id").toString();
@@ -288,7 +291,7 @@ public class LoginServiceImpl extends AbsServiceBase implements ILoginService {
             //获取token，并将token更新到数据库中
             String token = TokenUtil.getToken(map.get("tel")+"");
             String tokenTime = (new Date()).getTime()+"";
-            StringBuffer unsql = new StringBuffer("update app_user set token = '"+token+"',token_time ='"+tokenTime+"' where tel ='"+username+"'");
+            StringBuffer unsql = new StringBuffer("update app_user set token = '"+token+"',token_time ='"+tokenTime+"' where tel ='"+phone+"'");
             sunbmpDaoSupport.exeSql(unsql.toString());
             returnMap.put("token",token);
             returnMap.put("token_time",tokenTime);
@@ -327,4 +330,51 @@ public class LoginServiceImpl extends AbsServiceBase implements ILoginService {
 //        map1.put("idcard",umap.get("CARD"));
 //        return fraudApiServiceImpl.validationLogin(type,map,map1);
 //    }
+
+
+    @Override
+    public Map login(String phone, String type, String ipAddress, String deviceCode) throws Exception {
+        Map<String,Object> returnMap = new HashMap<>(10);
+        String issql = "select id,tel,head_img as img_url,error_num,alter_time,state,passwd,registration_id,is_black,only_code_spd " +
+                "from app_user where tel='"+phone+"'";
+        List list = sunbmpDaoSupport.findForList(issql);
+        String id = null;
+        //如果数据没有查到 证明没有注册进行注册
+        if(list.isEmpty()){
+            //执行插入到用户表操作
+            Map<String,Object> inMap = new HashMap<>(6);
+            inMap.put("tel", phone);
+            inMap.put("password", "");
+            inMap.put("registration_id", "");
+            inMap.put("onlyCode", "");
+            inMap.put("type", type);
+            id = registeredService.insertUser(inMap);
+        }else{
+            Map appUser =  (Map)list.get(0);
+            if(appUser ==null ){
+                id = (String)appUser.get("id");
+                returnMap.put("img_url",appUser.get("img_url"));
+            }
+        }
+        //获取token，并将token更新到数据库中
+       // String token = TokenUtil.getToken(phone);
+        Map<String, Object> payload = new HashMap<>(3);
+        Date date = new Date();
+        // 用户id
+        payload.put("uid", "id");
+        // 生成时间:当前
+        payload.put("iat", date.getTime());
+        // 过期时间30天
+        payload.put("ext", date.getTime() + Jwt.OUT_TIME);
+        String token = Jwt.createToken(payload);
+        String tokenTime = (new Date()).getTime()+"";
+        StringBuffer unsql = new StringBuffer("update app_user set token = '"+token+"',token_time ='"+tokenTime+"' where tel ='"+phone+"'");
+        sunbmpDaoSupport.exeSql(unsql.toString());
+        returnMap.put("token",token);
+        returnMap.put("token_time",tokenTime);
+        returnMap.put("success",true);
+        returnMap.put("phone",phone);
+        returnMap.put("id",id);
+        return returnMap;
+    }
 }

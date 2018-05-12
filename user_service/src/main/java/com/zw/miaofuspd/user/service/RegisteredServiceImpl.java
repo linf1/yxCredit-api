@@ -1,6 +1,7 @@
 package com.zw.miaofuspd.user.service;
 
 import com.base.util.DateUtils;
+import com.base.util.GeneratePrimaryKeyUtils;
 import com.base.util.MD5Utils;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
 import com.zw.miaofuspd.facade.user.service.IMsgService;
@@ -43,7 +44,7 @@ public class RegisteredServiceImpl extends AbsServiceBase implements IRegistered
      * @throws Exception
      */
     @Override
-    public void register(Map map) throws Exception {
+    public String register(Map map) throws Exception {
         String id = UUID.randomUUID().toString();
         String customerId = UUID.randomUUID().toString();
         String personId = UUID.randomUUID().toString();
@@ -72,14 +73,15 @@ public class RegisteredServiceImpl extends AbsServiceBase implements IRegistered
         sunbmpDaoSupport.exeSql(UserLogToSqlUtils.userLog(id, tel, "用户注册", tel, "用户注册", creatTime, creatTime));
         //注册成功发送一条站内信
         String title = "注册成功";
-        String content = "恭喜您，您已经成功注册成为秒付金服会员，感谢您使用秒付金服。全国服务热线：4001020975。";//iDictService.getDictInfo("消息内容","zccg");
+        String content = "恭喜您，您已经成功注册。";//iDictService.getDictInfo("消息内容","zccg");
         Map msgMap = new HashMap();
         msgMap.put("user_id", id);
         msgMap.put("title", title);
         msgMap.put("content", content);
         msgMap.put("registration_id", registration_id);
         msgMap.put("msg_type","0");//消息类型。0系统消息
-        iMsgService.insertMsg(msgMap);//调用发送消息接口
+        iMsgService.insertMsg(msgMap);//调用发送消息接口'
+        return id;
     }
 
     /**
@@ -136,5 +138,26 @@ public class RegisteredServiceImpl extends AbsServiceBase implements IRegistered
         }else{
             sunbmpDaoSupport.exeSql("UPDATE reg_error_phone SET error_count = (error_count + 1) WHERE phone = '"+phone+"'");
         }
+    }
+
+    @Override
+    public String insertUser(Map<String, Object> map) {
+        String id = GeneratePrimaryKeyUtils.getUUIDKey();
+        //手机号
+        String tel = (String) map.get("tel");
+        String registrationId = (String) map.get("registrationId");
+        //将时间格式化
+        String creatTime =map.get("createTime") == null ? (String)map.get("createTime") : DateUtils.getDateString(new Date()) ;
+        String onlyCodeSpd = map.get("onlyCode") == null ? "" : map.get("onlyCode").toString();
+        String blackBox = "";
+        String password = "";
+        //注册渠道
+        String type = map.get("type") == null ? "" : map.get("type").toString();
+        //插入app_user表
+        StringBuffer insql = new StringBuffer("INSERT INTO app_user (id,tel,black_box,type,passwd,state,creat_time,alter_time,registration_id,only_code_spd) VALUES('");
+        insql.append(id + "','" + tel + "','" + blackBox + "','" + type + "','" + password + "','" + 1 + "','" + creatTime + "','" + creatTime + "','"+registrationId+"','"+onlyCodeSpd+"')");
+        //插入mag_customer_person表
+        sunbmpDaoSupport.exeSql(insql.toString());
+        return id;
     }
 }
