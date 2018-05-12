@@ -19,6 +19,7 @@ import com.zw.web.base.vo.VOConst;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -32,7 +33,7 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("/order")
-public class OrderController extends AbsBaseController {
+public class  OrderController extends AbsBaseController {
     @Autowired
     private AppOrderService appOrderService;
     @Autowired
@@ -435,6 +436,75 @@ public class OrderController extends AbsBaseController {
         String state=appOrderService.checkNowMonthPay(orderId);
 //        resultVO.setRetCode(state);
         resultVO.setRetData(state);
+        return resultVO;
+    }
+
+    /****************************************************碧友信**********************************************/
+
+    /**
+     * 根据用户ID和操作状态获取订单信息列表
+     * @param userId
+     * @return
+     */
+    @RequestMapping("/getOrderListByUserIdAndOperationState/{userId}")
+    @ResponseBody
+    public ResultVO getOrderListByUserIdAndOperationState(@PathVariable String userId){
+        ResultVO resultVO = new ResultVO();
+        //根据userId获取该用户下所有订单信息
+        Map map  = appOrderService.getOrderListByUserIdAndOperationState(userId);
+        resultVO.setRetData(map);
+
+        return resultVO;
+    }
+
+    /**
+     * 根据订单ID获取订单审核信息
+     * @param orderId
+     * @return
+     */
+    @RequestMapping("/getAuditInforOrderInfoByOrderId")
+    @ResponseBody
+    public ResultVO getAuditInforOrderInfoByOrderId(String orderId ){
+        ResultVO resultVO = new ResultVO();
+        //根据orderId获取订单信息
+        Map map  = appOrderService.getAuditInforOrderInfoByOrderId(orderId);
+        resultVO.setRetData(map);
+
+        return resultVO;
+    }
+
+
+    /**
+     * 根据订单ID获取订单待签约信息
+     * @param orderId
+     * @return
+     */
+    @RequestMapping("/getPendingContractOrderInfoByOrderId")
+    @ResponseBody
+    public ResultVO getPendingContractOrderInfoByOrderId(String orderId ){
+        ResultVO resultVO = new ResultVO();
+
+        //根据orderId获取订单信息
+        Map map  = appOrderService.getPendingContractOrderInfoByOrderId(orderId);
+        resultVO.setRetData(map);
+
+        return resultVO;
+    }
+
+    /**
+     * 根据订单ID完成签约
+     * @param orderId
+     * @return
+     */
+    @RequestMapping("/contractForSubmissionByOrderId")
+    @ResponseBody
+    public ResultVO contractForSubmissionByOrderId(String orderId ,String userId){
+        ResultVO resultVO = new ResultVO();
+
+        //根据orderId获取订单信息
+        Map map  = appOrderService.contractForSubmissionByOrderId(orderId,userId);
+        resultVO.setRetData(map);
+
         return resultVO;
     }
 

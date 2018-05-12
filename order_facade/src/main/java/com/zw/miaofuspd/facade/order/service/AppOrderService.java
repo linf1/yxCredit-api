@@ -155,4 +155,36 @@ public interface AppOrderService {
 
     Map calculationRepayment(Map orderMap);
 
+
+    /****************************************************碧友信**********************************************/
+
+    /**
+     * 根据用户ID和操作状态获取订单信息列表
+     * @param userId
+     * @return
+     */
+    Map getOrderListByUserIdAndOperationState(String userId);
+
+    /**
+     * 根据订单ID获取订单审核信息
+     * @param orderId
+     * @return
+     */
+    Map getAuditInforOrderInfoByOrderId(String orderId);
+
+
+    /**
+     * 根据订单ID获取订单签约信息
+     * @param orderId
+     * @return
+     */
+    Map getPendingContractOrderInfoByOrderId(String orderId);
+
+    /**
+     * 根据订单ID提交签约信息
+     * @param orderId
+     * @return
+     */
+    Map contractForSubmissionByOrderId(String orderId,String userId);
+
 }
