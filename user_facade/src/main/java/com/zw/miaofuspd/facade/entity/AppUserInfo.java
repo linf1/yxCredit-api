@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * <strong>Title : <br>
  * </strong> <strong>Description : </strong>@类注释说明写在此处@<br>
- * <strong>Create on : 2017年02月20日<br>
+ * <strong>Create on : 2018年05月10日<br>
  * </strong>
  * <p>
  * <strong>Copyright (C) Vbill Co.,Ltd.<br>
@@ -13,7 +13,7 @@ import java.io.Serializable;
  * <p>
  *
  * @author department:技术开发部 <br>
- *         username:wangmin <br>
+ *         username:hanmeisheng <br>
  *         email: <br>
  * @version <strong>zw有限公司-运营平台</strong><br>
  *          <br>
@@ -24,8 +24,65 @@ import java.io.Serializable;
  *          <br>
  */
 public class AppUserInfo implements Serializable {
+
+    //申请金额
+    private String applayMoney;
+
+    //申请期限
+    private String periods;
+
+    //试算合同金额
+    private String budgetContractAmount;
+
+    //剩余合同金额
+    private String surplusContractAmount;
+
+    //借款用途
+    private String loanPurpose;
+
+
+    public String getApplayMoney() {
+        return applayMoney;
+    }
+
+    public void setApplayMoney(String applayMoney) {
+        this.applayMoney = applayMoney;
+    }
+
+    public String getPeriods() {
+        return periods;
+    }
+
+    public void setPeriods(String periods) {
+        this.periods = periods;
+    }
+
+    public String getBudgetContractAmount() {
+        return budgetContractAmount;
+    }
+
+    public void setBudgetContractAmount(String budgetContractAmount) {
+        this.budgetContractAmount = budgetContractAmount;
+    }
+
+    public String getSurplusContractAmount() {
+        return surplusContractAmount;
+    }
+
+    public void setSurplusContractAmount(String surplusContractAmount) {
+        this.surplusContractAmount = surplusContractAmount;
+    }
+
+    public String getLoanPurpose() {
+        return loanPurpose;
+    }
+
+    public void setLoanPurpose(String loanPurpose) {
+        this.loanPurpose = loanPurpose;
+    }
+
     private String tel;//手机号
-    //app_user表主键id
+    //主键id
     private String id;
     private String card_type;//身份证的类型
     private String card_type_id;//从数据字典中读取
