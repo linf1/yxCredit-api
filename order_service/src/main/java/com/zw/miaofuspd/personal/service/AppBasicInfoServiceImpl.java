@@ -136,15 +136,15 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         String applayMoney = paramMap.get("applayMoney");
         //申请期限
         String periods = paramMap.get("periods");
-        //试算合同金额
-        String budgetContractAmount = paramMap.get("budgetContractAmount");
+        //合同金额
+        String ContractAmount = paramMap.get("ContractAmount");
         //剩余合同金额
         String surplusContractAmount = paramMap.get("surplusContractAmount");
         //借款用途
         String loanPurpose = paramMap.get("loanPurpose");
 
-        String sql = "update mag_order set applay_money = '" + applayMoney + "'," + "PERIODS = '" + periods + "',budget_contract_amount = '" +
-                "" + budgetContractAmount + "'," + "surplus_contract_amount = '" + surplusContractAmount + "',loan_purpose = '" + loanPurpose + "'," +
+        String sql = "update mag_order set applay_money = '" + applayMoney + "'," + "PERIODS = '" + periods + "',contract_amount = '" +
+                "" + ContractAmount + "'," + "surplus_contract_amount = '" + surplusContractAmount + "',loan_purpose = '" + loanPurpose + "'," +
                 "complete = '100' where order_id = '" + orderId + "'  ";
         int count = sunbmpDaoSupport.getCount(sql);
         //sunbmpDaoSupport.exeSql(sql);
@@ -167,7 +167,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     @Override
     public Map getApplyInfo(String orderId) {
         //根据订单id获取客户基本信息
-        String customerSql = "select applay_money,PERIODS,budget_contract_amount,surplus_contract_amount," +
+        String customerSql = "select applay_money,PERIODS,contract_amount,surplus_contract_amount," +
                 "loan_purpose from mag_order where order_no = '" + orderId + "'";
         Map resutMap = sunbmpDaoSupport.findForMap(customerSql);
         return resutMap;
@@ -216,6 +216,23 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         return null;
     }
 
+    /**
+     * @author:hanmeisheng
+     * @Description 获取用户的个人信息
+     * @Date 18:59 2018/5/12
+     * @param
+     * @return
+     */
+    public Map getBasicInfo(String customerId){
+        String  sql="select t1.marital_status as marital_status,t1.children_status as children_status,t1.Hometown_house_property as Hometown_house_property" +
+                ",t2.province_name as jobProvince_name,t2.city_name as jobCity_name,t2.district_name as jobDistrict_name,t2.address as jobDetailAddress," +
+                "t3.provinces as cardProvinces,t3.city as cardCity,t3.distric as cardDistric,t3.address_detail as cardDetailAddress from mag_customer t1" +
+                " left join mag_customer_job t2 on t1.id = t2.customer_id" +
+                " left join mag_customer_live t3 on t1.id = t3.customer_id where t1.id = '"+customerId+"'";
+        Map map = sunbmpDaoSupport.findForMap(sql);
+        return map;
+
+    }
 
 
     /**
@@ -227,6 +244,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
      */
     @Override
     public Map addBasicInfo(Map<String, String> paramMap) {
+        Map resturnMap = new HashMap();
         String customerId = paramMap.get("customerId");
 
         String alterTime = DateUtils.getDateString(new Date());
@@ -248,6 +266,10 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         String jobAddress = paramMap.get("jobAddress");
         //工作省市区id
         String jobAddressCode = paramMap.get("jobAddressCode");
+
+        //客户信息表更新个人信息
+        String  cusSql = "update mag_customer set marital_status ='"+maritalSstatus+"',children_status='"+childrenStatus+"',Hometown_house_property='"+hometownHouseProperty+"'";
+        sunbmpDaoSupport.exeSql(cusSql);
         Map<String, String> jmap = getAdress(jobAddress, jobAddressCode, jodDetailAddress);
         Map<String, String> cmap = getAdress(cardRegisterAddress, cardRegisterAddressCode, cardRegisterDetailAddress);
         String id = null;
@@ -313,8 +335,13 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             }
         } catch (Exception e) {
             TraceLoggerUtil.error("保存客户职业表出错！", e);
+            resturnMap.put("msg", "保存客户基本信息失败");
+            resturnMap.put("flag", false);
         }
-        return null;
+
+        resturnMap.put("msg", "保存客户基本信息成功");
+        resturnMap.put("flag", true);
+        return resturnMap;
 
     }
 

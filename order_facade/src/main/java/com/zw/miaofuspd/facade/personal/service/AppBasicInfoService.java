@@ -44,6 +44,14 @@ public interface AppBasicInfoService {
      * @return
      */
     Map addBasicInfo(Map<String, String> paramMap) throws Exception;
+    /**
+     * @author:hanmeisheng
+     * @Description 获取用户的个人信息
+     * @Date 14:10 2018/5/12
+     * @param
+     * @return
+     */
+    Map getBasicInfo(String customerId) throws Exception;
 
 
     /**

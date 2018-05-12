@@ -8,10 +8,8 @@ import com.zw.web.base.AbsBaseController;
 import com.zw.web.base.vo.ResultVO;
 import com.zw.web.base.vo.VOConst;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -90,10 +88,9 @@ public class BasicInfoController extends AbsBaseController {
      * @return
      */
     @RequestMapping("/getBasicInfo")
-    public ResultVO getBasicInfo(String orderId) throws Exception{
-        //TODO
+    public ResultVO getBasicInfo(String customerId) throws Exception{
         ResultVO resultVO = new ResultVO();
-        Map map = appBasicInfoService.getApplyInfo(orderId);
+        Map map = appBasicInfoService.getBasicInfo(customerId);
         resultVO.setRetData(map);
         return resultVO;
     }
