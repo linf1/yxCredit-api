@@ -1,4 +1,4 @@
-package com.zw.model.common;
+package com.api.model.common;
 
 import java.io.Serializable;
 
@@ -12,12 +12,12 @@ public class ApiCommonResponse implements Serializable {
     /**
      *  接口返回码[0：操作成功,1:操作失败,100001:系统错误,100002:数据源访问出错,100003:数据源连接超时,100004:数据源输入参数验证失败,100005:数据源内部错误,100006:验签失败,100007:输入参数错误,100008:短信验证码输入错误或超时,请重新输入,100009:未查询到数据]",required=true
      */
-    private String responseCode = ApiCrmConstants.STATUS_SUCCESS;
+    private String responseCode = ApiConstants.STATUS_SUCCESS;
 
     /**
      * 接口返回信息",required=true
      */
-    private String responseMsg = ApiCrmConstants.statusMap.get(ApiCrmConstants.STATUS_SUCCESS);
+    private String responseMsg = ApiConstants.statusMap.get(ApiConstants.STATUS_SUCCESS);
 
 
     /**

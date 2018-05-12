@@ -56,6 +56,39 @@ public class ResultVO<T> implements Serializable {
         this.retData = retData;
     }
 
+
+    /**
+     * 扩展异常方法===============================================================
+     * create by 陈清玉
+     */
+    public static ResultVO error() {
+        return error("500", "未知异常，请联系管理员");
+    }
+
+    public static ResultVO error(String msg) {
+        return error("500", msg);
+    }
+
+    public static ResultVO error(String code, String msg) {
+        ResultVO r = new ResultVO();
+        r.setRetCode(code);
+        r.setRetMsg(msg);
+        return r;
+    }
+
+    public static ResultVO ok(Object data) {
+        ResultVO r = new ResultVO();
+        r.setRetData(data);
+        return r;
+    }
+
+    public static ResultVO ok(String msg ,Object  data) {
+        ResultVO r = new ResultVO();
+        r.setRetData(data);
+        r.setRetMsg(msg);
+        return r;
+    }
+
     @Override
     public String toString() {
         JSONObject toJsonString = new JSONObject();

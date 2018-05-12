@@ -1,18 +1,16 @@
-package com.zw.api.tongdun;
+package com.zw.miaofuspd.api.tongdun;
 
 import com.alibaba.fastjson.JSONObject;
+import com.api.model.tongdun.ReportAO;
+import com.api.model.tongdun.TongDunRequest;
+import com.api.model.tongdun.TongDunSettings;
+import com.api.service.tongdun.ITongDunApiService;
 import com.zw.api.HttpUtil;
-import com.zw.model.tongdun.ReportAO;
-import com.zw.model.tongdun.TongDunRequest;
-import com.zw.model.tongdun.TongDunSettings;
-import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

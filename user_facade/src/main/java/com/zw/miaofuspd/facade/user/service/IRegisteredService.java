@@ -31,6 +31,10 @@ public interface IRegisteredService {
     boolean selectByTelError(String tel) throws Exception;//判断是否是三次注册失败手机号码
     void updateTelError(String phone);
 
-
+    /**
+     * 新增用戶
+     * @param map 用戶map
+     * @return
+     */
     String insertUser(Map<String,Object> map);
 }
