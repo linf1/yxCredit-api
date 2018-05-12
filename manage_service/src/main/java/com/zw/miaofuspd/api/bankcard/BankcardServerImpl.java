@@ -52,4 +52,29 @@ public class BankcardServerImpl implements IBankcardServer{
         //发起请求
         return HttpUtil.sendHttpPostByJson(bankcardSettings.getRequestUrl(),byxRequestJson,headRequestMap);
     }
+
+    @Override
+    public String getBankList() throws IOException {
+        return HttpUtil.doPost(bankcardSettings.getBankListUrl());
+    }
+
+    @Override
+    public String getSubBankList(String regionId,String bankCode) throws IOException {
+        Map<String,Object> paramMap = new HashMap<>(1);
+        paramMap.put("regionId",regionId);
+        paramMap.put("bankCode",bankCode);
+        return HttpUtil.doPost(bankcardSettings.getBankListUrl(),paramMap);
+    }
+
+    @Override
+    public String getCityList(String provinceId) throws IOException {
+        Map<String,Object> paramMap = new HashMap<>(1);
+        paramMap.put("provinceId",provinceId);
+        return  HttpUtil.doPost(bankcardSettings.getBankListUrl(),paramMap);
+    }
+
+    @Override
+    public String getProvinceList() throws IOException {
+        return HttpUtil.doPost(bankcardSettings.getProvinceListUrl());
+    }
 }

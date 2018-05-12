@@ -8,6 +8,22 @@ import com.api.model.common.BaseSettings;
  */
 public class BankcardSettings extends BaseSettings {
     private String  merchantNumber;
+    /**
+     * 银行列表url
+     */
+    private String  bankListUrl;
+    /**
+     * 支行列表url
+     */
+    private String  subBankListUrl;
+    /**
+     * 市列表url
+     */
+    private String  cityListUrl;
+    /**
+     * 省列表url
+     */
+    private String  provinceListUrl;
 
     public String getMerchantNumber() {
         return merchantNumber;
@@ -15,5 +31,37 @@ public class BankcardSettings extends BaseSettings {
 
     public void setMerchantNumber(String merchantNumber) {
         this.merchantNumber = merchantNumber;
+    }
+
+    public String getBankListUrl() {
+        return bankListUrl;
+    }
+
+    public void setBankListUrl(String bankListUrl) {
+        this.bankListUrl = bankListUrl;
+    }
+
+    public String getSubBankListUrl() {
+        return subBankListUrl;
+    }
+
+    public void setSubBankListUrl(String subBankListUrl) {
+        this.subBankListUrl = subBankListUrl;
+    }
+
+    public String getCityListUrl() {
+        return cityListUrl;
+    }
+
+    public void setCityListUrl(String cityListUrl) {
+        this.cityListUrl = cityListUrl;
+    }
+
+    public String getProvinceListUrl() {
+        return provinceListUrl;
+    }
+
+    public void setProvinceListUrl(String provinceListUrl) {
+        this.provinceListUrl = provinceListUrl;
     }
 }
