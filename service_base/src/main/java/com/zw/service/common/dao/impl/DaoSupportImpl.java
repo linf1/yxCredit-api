@@ -49,13 +49,12 @@ public class DaoSupportImpl implements IDaoSupport {
      */
     @Override
     public void exeSql(String sql) throws DAOException {
-        try {
-            TraceLoggerUtil.info("执行SQL:" + sql);
-            sqlSessionTemplate.update("DaoSupportMapper.dynamicSql", sql);
-        } catch (Exception ex) {
-            TraceLoggerUtil.error("执行sql出现异常", ex);
-            throw new DAOException(ex);
-        }
+        dynamicSql(sql);
+    }
+
+    @Override
+    public int executeSql(String sql) throws DAOException {
+        return dynamicSql(sql);
     }
 
 
@@ -147,6 +146,7 @@ public class DaoSupportImpl implements IDaoSupport {
      * @return
      * @throws Exception
      */
+    @Override
     public <T, K> List<K> findForList(String mapperid, T entity) throws DAOException {
         try {
             TraceLoggerUtil.info("执行SQL:" + mapperid + "参数:" + JSON.toJSONString(entity));
@@ -230,4 +230,16 @@ public class DaoSupportImpl implements IDaoSupport {
             throw new DAOException(ex);
         }
     }
+
+    private int dynamicSql(String sql) {
+        try {
+            TraceLoggerUtil.info("执行SQL:" + sql);
+            return  sqlSessionTemplate.update("DaoSupportMapper.dynamicSql", sql);
+        } catch (Exception ex) {
+            TraceLoggerUtil.error("执行sql出现异常", ex);
+            throw new DAOException(ex);
+        }
+    }
+
+
 }
