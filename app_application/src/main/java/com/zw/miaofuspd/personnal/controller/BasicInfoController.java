@@ -8,39 +8,67 @@ import com.zw.web.base.AbsBaseController;
 import com.zw.web.base.vo.ResultVO;
 import com.zw.web.base.vo.VOConst;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Administrator on 2017/11/28 0028.
+ * Created by hanmeisheng on 2018/05/09 0028.
  */
-@Controller
+@RestController
 @RequestMapping("/basic")
 public class BasicInfoController extends AbsBaseController {
     @Autowired
     AppBasicInfoService appBasicInfoService;
     @Autowired
     private IUserService userService;
+
     /**
-     * 办单员端，信息完善中的-保存用户基本信息
+     * @author 韩梅生
+     * 保存用户申请的基本信息
      * @param data
      * @return
      */
+    @RequestMapping("/addApplyInfo")
+    public ResultVO addApplyInfo(String data) throws Exception{
+        Map map = JSONObject.parseObject(data);
+        ResultVO resultVO = new ResultVO();
+        Map resultMap = appBasicInfoService.addApplyInfo(map);
+        if(!(Boolean)(resultMap.get("flag"))){
+            resultVO.setErrorMsg(VOConst.FAIL,(String)(resultMap.get("msg")));
+        }
+        resultVO.setRetData(resultMap);
+        return resultVO;
+    }
+
+    /**
+     * @author hanmeisheng
+     * 获取用户申请的基本信息
+     * @param
+     * @return
+     */
+    @RequestMapping("/getApplyInfo")
+    public ResultVO getApplyInfo(String orderId) throws Exception{
+        ResultVO resultVO = new ResultVO();
+        Map map = appBasicInfoService.getApplyInfo(orderId);
+        resultVO.setRetData(map);
+        return resultVO;
+    }
+
+    /**
+     * @author:hanmeisheng
+     * @Description  保存用户的个人信息
+     * @Date 14:07 2018/5/12
+     * @param
+     * @return
+     */
     @RequestMapping("/addBasicInfo")
-    @ResponseBody
     public ResultVO addBasicInfo(String data) throws Exception{
         Map map = JSONObject.parseObject(data);
         ResultVO resultVO = new ResultVO();
-        String orderId = map.get("orderId").toString();
-        AppUserInfo userInfo = userService.getUserByOrderId(orderId);
-        map.put("customerId",userInfo.getCustomer_id());
-        map.put("tel",userInfo.getTel());
-        map.put("card",userInfo.getCard());
-        map.put("realname",userInfo.getName());
-        map.put("userId",userInfo.getId());
         Map resultMap = appBasicInfoService.addBasicInfo(map);
         if(!(Boolean)(resultMap.get("flag"))){
             resultVO.setErrorMsg(VOConst.FAIL,(String)(resultMap.get("msg")));
@@ -48,17 +76,71 @@ public class BasicInfoController extends AbsBaseController {
         resultVO.setRetData(resultMap);
         return resultVO;
     }
+
+
+
+
     /**
-     * 办单员端，信息完善中的-获取用户基本信息
+     * @author:hanmeisheng
+     * @Description
+     * @Date 14:06 2018/5/12
      * @param
      * @return
      */
     @RequestMapping("/getBasicInfo")
-    @ResponseBody
-    public ResultVO getBasicInfo(String orderId) throws Exception{
+    public ResultVO getBasicInfo(String customerId) throws Exception{
         ResultVO resultVO = new ResultVO();
-        Map map = appBasicInfoService.getBasicInfo(orderId);
+        Map map = appBasicInfoService.getBasicInfo(customerId);
         resultVO.setRetData(map);
         return resultVO;
     }
+
+
+
+
+    /**
+     * @author:hanmeisheng
+     * @Description  获取省份信息
+     * @Date 13:40 2018/5/12
+     * @param
+     * @return com.zw.web.base.vo.ResultVO
+     */
+    @RequestMapping("/getProvinceList")
+    public ResultVO getProvinceList() throws Exception{
+        ResultVO resultVO = new ResultVO();
+        List list = appBasicInfoService.getProvinceList();
+        resultVO.setRetData(list);
+        return resultVO;
+    }
+
+    /**
+     * @author:hanmeisheng
+     * @Description  获取市的信息
+     * @Date 13:54 2018/5/12
+     * @param  provinceId 省id
+     * @return
+     */
+    @RequestMapping("/getCityList/{provinceId}")
+    public ResultVO getCityList(@PathVariable String provinceId) throws Exception{
+        ResultVO resultVO = new ResultVO();
+        List list = appBasicInfoService.getCityList(provinceId);
+        resultVO.setRetData(list);
+        return resultVO;
+    }
+
+    /**
+     * @author:hanmeisheng
+     * @Description  获取区的信息
+     * @Date 13:54 2018/5/12
+     * @param  cityId 市的id
+     * @return
+     */
+    @RequestMapping("/getDistrictList")
+    public ResultVO getDistrictList(String cityId) throws Exception{
+        ResultVO resultVO = new ResultVO();
+        List list = appBasicInfoService.getDistrictList(cityId);
+        resultVO.setRetData(list);
+        return resultVO;
+    }
+
 }
