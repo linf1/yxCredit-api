@@ -41,7 +41,7 @@ public class SmsApiController {
         parameters.put("smsCode",smsCode);
         request.getSession().setAttribute(AppConstant.SMS_KEY,smsCode);
         try {
-            final String result = messageServer.sendSms(msgRequest,parameters);
+            final String result =  messageServer.sendSms(msgRequest,parameters);
             if (result != null) {
                 LOGGER.info("接口发送成功",result);
             }
