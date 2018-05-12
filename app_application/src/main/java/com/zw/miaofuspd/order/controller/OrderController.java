@@ -442,16 +442,16 @@ public class  OrderController extends AbsBaseController {
     /****************************************************碧友信**********************************************/
 
     /**
-     * 根据用户ID和操作状态获取订单信息列表
+     * 根据用户ID和订单状态获取订单信息列表(2.审核中、3.待签约、4.待放款)
      * @param userId
      * @return
      */
-    @RequestMapping("/getOrderListByUserIdAndOperationState/{userId}")
+    @RequestMapping("/getOrderListByUserId/{userId}")
     @ResponseBody
-    public ResultVO getOrderListByUserIdAndOperationState(@PathVariable String userId){
+    public ResultVO getOrderListByUserId(@PathVariable String userId){
         ResultVO resultVO = new ResultVO();
         //根据userId获取该用户下所有订单信息
-        Map map  = appOrderService.getOrderListByUserIdAndOperationState(userId);
+        Map map  = appOrderService.getOrderListByUserId(userId);
         resultVO.setRetData(map);
 
         return resultVO;
@@ -462,12 +462,12 @@ public class  OrderController extends AbsBaseController {
      * @param orderId
      * @return
      */
-    @RequestMapping("/getAuditInforOrderInfoByOrderId")
+    @RequestMapping("/getOrderInfoByOrderId")
     @ResponseBody
-    public ResultVO getAuditInforOrderInfoByOrderId(String orderId ){
+    public ResultVO getOrderInfoByOrderId(String orderId ){
         ResultVO resultVO = new ResultVO();
-        //根据orderId获取订单信息
-        Map map  = appOrderService.getAuditInforOrderInfoByOrderId(orderId);
+        //根据orderId获取订单审核信息
+        Map map  = appOrderService.getOrderInfoByOrderId(orderId);
         resultVO.setRetData(map);
 
         return resultVO;
@@ -484,7 +484,7 @@ public class  OrderController extends AbsBaseController {
     public ResultVO getPendingContractOrderInfoByOrderId(String orderId ){
         ResultVO resultVO = new ResultVO();
 
-        //根据orderId获取订单信息
+        //根据orderId获取待签约订单信息
         Map map  = appOrderService.getPendingContractOrderInfoByOrderId(orderId);
         resultVO.setRetData(map);
 
@@ -498,11 +498,46 @@ public class  OrderController extends AbsBaseController {
      */
     @RequestMapping("/contractForSubmissionByOrderId")
     @ResponseBody
-    public ResultVO contractForSubmissionByOrderId(String orderId ,String userId){
+    public ResultVO contractForSubmissionByOrderId(String orderId ,String userId) throws Exception{
         ResultVO resultVO = new ResultVO();
 
-        //根据orderId获取订单信息
+        //根据orderId，userId完成签约提交
         Map map  = appOrderService.contractForSubmissionByOrderId(orderId,userId);
+        resultVO.setRetData(map);
+
+        return resultVO;
+    }
+
+    /**
+     * 根据UserId获取全部订单
+     * @param userId
+     * @return
+     */
+    @RequestMapping("/getAllOrderByUserId")
+    @ResponseBody
+    public ResultVO getAllOrderByUserId(String userId) {
+        ResultVO resultVO = new ResultVO();
+
+        //根据userId获取全部订单
+        Map map  = appOrderService.getAllOrderByUserId(userId);
+        resultVO.setRetData(map);
+
+        return resultVO;
+    }
+
+
+    /**
+     * 根据OrderId获取待放款订单信息
+     * @param orderId
+     * @return
+     */
+    @RequestMapping("/getPendingMoneyInfoByOrderId")
+    @ResponseBody
+    public ResultVO getPendingMoneyInfoByOrderId(String orderId) {
+        ResultVO resultVO = new ResultVO();
+
+        //根据userId获取全部订单
+        Map map  = appOrderService.getPendingMoneyInfoByOrderId(orderId);
         resultVO.setRetData(map);
 
         return resultVO;

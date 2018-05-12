@@ -159,18 +159,18 @@ public interface AppOrderService {
     /****************************************************碧友信**********************************************/
 
     /**
-     * 根据用户ID和操作状态获取订单信息列表
+     * 根据用户ID和订单状态获取订单信息列表(2.审核中、3.待签约、4.待放款)
      * @param userId
      * @return
      */
-    Map getOrderListByUserIdAndOperationState(String userId);
+    Map getOrderListByUserId(String userId) ;
 
     /**
-     * 根据订单ID获取订单审核信息
+     * 根据订单ID获取订单信息
      * @param orderId
      * @return
      */
-    Map getAuditInforOrderInfoByOrderId(String orderId);
+    Map getOrderInfoByOrderId(String orderId);
 
 
     /**
@@ -185,6 +185,20 @@ public interface AppOrderService {
      * @param orderId
      * @return
      */
-    Map contractForSubmissionByOrderId(String orderId,String userId);
+    Map contractForSubmissionByOrderId(String orderId,String userId) throws Exception;
+
+    /**
+     *根据UserId 获取所有订单信息
+     * @param userId
+     * @return
+     */
+    Map getAllOrderByUserId(String userId);
+
+    /**
+     * 根据orderId获取待放款订单信息
+     * @param orderId
+     * @return
+     */
+    Map getPendingMoneyInfoByOrderId(String orderId);
 
 }

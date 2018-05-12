@@ -19,7 +19,7 @@ public enum OrderStateEnum {
     /**
      * 待签约
      */
-    PENDING_CONTRACT (3),
+    PENDING_CONTRACT(3),
 
     /**
      * 待放款
