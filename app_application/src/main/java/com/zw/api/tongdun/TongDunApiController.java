@@ -1,10 +1,12 @@
 package com.zw.api.tongdun;
 
-import com.zw.model.common.ApiCommonResponse;
-import com.zw.model.common.ApiCrmConstants;
-import com.zw.model.common.ResultModel;
-import com.zw.model.common.ResultModelUtil;
-import com.zw.model.tongdun.TongDunRequest;
+import com.api.model.common.ApiCommonResponse;
+import com.api.model.common.ApiConstants;
+import com.api.model.common.ResultModel;
+import com.api.model.common.ResultModelUtil;
+import com.api.model.tongdun.TongDunRequest;
+import com.api.service.tongdun.ITongDunApiService;
+import com.api.service.tongdun.TongDunProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +41,7 @@ public class TongDunApiController {
         }
         TongDunProxy tongDunProxy = new TongDunProxy(tongDunApiService);
         final ApiCommonResponse apiCommonResponse = tongDunProxy.invokeTongDunApi(request);
-        return ResultModelUtil.formatResult(apiCommonResponse, ApiCrmConstants.API_TONGDUN_TITLE,"贷前审核");
+        return ResultModelUtil.formatResult(apiCommonResponse, ApiConstants.API_TONGDUN_TITLE,"贷前审核");
     }
 
 }

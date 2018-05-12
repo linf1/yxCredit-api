@@ -27,6 +27,11 @@ public class AppConstant {
      */
     public static final String APP_USER_INFO = "app_user_info";
 
+    /**
+     * 短信验证码KEY
+     */
+    public static final String SMS_KEY  = "sms_code";
+
     public static final String APP_SYS_ID_VALUE = "DAI_WO_ZOU";
     public static final String APP_SYS_ID_KEY = "APP_SYS_ID";
 }

@@ -1,8 +1,8 @@
-package com.zw.api.tongdun;
+package com.api.service.tongdun;
 
 
-import com.zw.model.tongdun.ReportAO;
-import com.zw.model.tongdun.TongDunRequest;
+import com.api.model.tongdun.ReportAO;
+import com.api.model.tongdun.TongDunRequest;
 
 import java.io.IOException;
 

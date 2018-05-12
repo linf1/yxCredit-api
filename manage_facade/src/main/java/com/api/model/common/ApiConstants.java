@@ -1,4 +1,4 @@
-package com.zw.model.common;
+package com.api.model.common;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +7,7 @@ import java.util.Map;
  * API常量
  * @author  陈清玉
  */
-public class ApiCrmConstants {
+public class ApiConstants {
 
     public static Map<String, String> statusMap = new HashMap<String, String>();
 

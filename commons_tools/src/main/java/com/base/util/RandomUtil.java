@@ -94,6 +94,21 @@ public class RandomUtil {
 		return sb.toString();
 	}
 
+
+	/**
+	 * 随机生成n位随机验证码
+	 * 方法说明
+	 * @param length 位数
+	 * @return String
+	 */
+	public static String createRandomVcode(int length){
+		//验证码
+		String vcode = "";
+		for (int i = 0; i < length; i++) {
+			vcode = vcode + (int)(Math.random() * 9);
+		}
+		return vcode;
+	}
 	public static void main(String[] args) {
 		for(int i =0 ;i<4;i++){
 			

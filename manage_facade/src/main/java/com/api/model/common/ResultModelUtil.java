@@ -1,4 +1,4 @@
-package com.zw.model.common;
+package com.api.model.common;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -15,17 +15,17 @@ public class ResultModelUtil {
 	
 	public static ResultModel formatResult(ApiCommonResponse response, String apiName, String interfaceName){
 		try {
-			if(StringUtils.equals(response.getResponseCode(),ApiCrmConstants.STATUS_SUCCESS)
-					|| StringUtils.equals(response.getResponseCode(),ApiCrmConstants.STATUS_INFO_NOT_FOUND)
+			if(StringUtils.equals(response.getResponseCode(),ApiConstants.STATUS_SUCCESS)
+					|| StringUtils.equals(response.getResponseCode(),ApiConstants.STATUS_INFO_NOT_FOUND)
 							||StringUtils.equals(response.getResponseCode(),"2000")){
 				return new ResultModel(ResultModel.R.SUCCESS.getCode(), apiName + "--" + interfaceName + "接口正常", response, apiName);
-			}else if (StringUtils.equals(response.getResponseCode(),ApiCrmConstants.STATUS_DATASOURCE_TIME_OUT)
-					|| StringUtils.equals(response.getResponseCode(),ApiCrmConstants.STATUS_DATASOURCE_ERROR)){
+			}else if (StringUtils.equals(response.getResponseCode(),ApiConstants.STATUS_DATASOURCE_TIME_OUT)
+					|| StringUtils.equals(response.getResponseCode(),ApiConstants.STATUS_DATASOURCE_ERROR)){
 				return new ResultModel(ResultModel.R.FAIL.getCode(), apiName + "--" + interfaceName + "接口异常", response, apiName);
 			}
 		} catch (Exception e) {
 			LOGGER.error("数据源集成平台处理返回结果出错:"+e.getMessage());
-			return new ResultModel(ResultModel.R.FAIL.getCode(), apiName + "--" + interfaceName + "接口出错", ApiCrmConstants.STATUS_ERROR_MSG, apiName);
+			return new ResultModel(ResultModel.R.FAIL.getCode(), apiName + "--" + interfaceName + "接口出错", ApiConstants.STATUS_ERROR_MSG, apiName);
 		}
 		
 		return new ResultModel(ResultModel.R.FAIL.getCode(), apiName + "--" + interfaceName + ":"+ response.getResponseMsg(), response, apiName);
