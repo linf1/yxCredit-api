@@ -1,10 +1,10 @@
 package com.zhiwang.zwfinance.app.jiguang.util.api.util;
 
 /**
- * 操作状态（1.待申请，2.审核中，3.已审核，4.待签约，5.待放款，6.已放款，7.已拒绝，8.取消）
+ * 订单状态【1.待申请、2.审核中、3.待签约、4.待放款、5.待还款、6.已结清、7.已取消、8.申请失败（拒绝）】
  * @author 仙海峰
  */
-public enum OperationStateEnum {
+public enum OrderStateEnum {
 
     /**
      * 待申请
@@ -14,46 +14,44 @@ public enum OperationStateEnum {
     /**
      * 审核中
      */
-    AUDITING(2),
-
-    /**
-     * 已审核
-     */
-    AUDITED(3),
+    AUDIT(2),
 
     /**
      * 待签约
      */
-    PENDING_CONTRACT(4),
+    PENDING_CONTRACT (3),
 
     /**
      * 待放款
      */
-    PENDING_MONEY(5),
+    PENDING_LOAN(4),
 
     /**
-     * 已放款
+     * 待还款
      */
-    SEND_MONEY(6),
+    PENDING_REPAYMENT(5),
 
     /**
-     * 已拒绝
+     * 已结清
      */
-    REFUSE(7),
+    ALREADY_SETTLED(6),
 
     /**
-     * 取消
+     * 已取消
      */
-    CANCEL(8);
+    CANCEL(7),
 
 
-
+    /**
+     * 申请失败（拒绝）
+     */
+    REFUSE(8);
 
 
 
 
     private int code;
-    OperationStateEnum(int code){
+    OrderStateEnum(int code){
         this.code = code;
     }
     public int getCode() {
