@@ -203,6 +203,51 @@ public class HttpUtil {
         return httpStr;
     }
 
+
+    /**
+     * 发送 按json参数 post请求
+     *
+     * @param apiUrl
+     *            地址
+     * @param json
+     *            参数
+     * @param headMap
+     *             请求头信息MAP
+     */
+    public static String sendHttpPostByJson(String apiUrl, Object json,Map<String, Object> headMap) throws IOException{
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        String httpStr = null;
+        HttpPost httpPost = new HttpPost(apiUrl);
+        CloseableHttpResponse response = null;
+        try {
+            httpPost.setConfig(requestConfig);
+            //解决中文乱码问题
+            StringEntity stringEntity = new StringEntity(json.toString(),"UTF-8");
+            stringEntity.setContentEncoding("UTF-8");
+            stringEntity.setContentType("application/json");
+            httpPost.setEntity(stringEntity);
+            for (Map.Entry<String, Object> entry : headMap.entrySet()) {
+                httpPost.setHeader(entry.getKey(),entry.getKey());
+            }
+            response = httpClient.execute(httpPost);
+            HttpEntity entity = response.getEntity();
+            System.out.println("http请求返回码："+response.getStatusLine().getStatusCode());
+            httpStr = EntityUtils.toString(entity, "UTF-8");
+        } catch (IOException e) {
+            throw e;
+        } finally {
+            if (response != null) {
+                try {
+                    EntityUtils.consume(response.getEntity());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return httpStr;
+    }
+
+
     /**
      * 发送 SSL POST 请求（HTTPS），K-V形式
      * @param apiUrl API接口URL

@@ -90,7 +90,6 @@ public class BankcardRequest {
         this.userId = userId;
     }
 
-
     @Override
     public String toString() {
         return "BankcardRequest{" +
