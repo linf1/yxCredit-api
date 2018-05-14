@@ -1,5 +1,6 @@
 package com.zw.miaofuspd.personnal.controller;
 
+import com.base.util.AppRouterSettings;
 import com.zw.app.util.AppConstant;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
 import com.zw.miaofuspd.facade.entity.AppUserInfo;
@@ -21,7 +22,7 @@ import java.util.Map;
  * Created by Administrator on 2017/12/13 0013.
  */
 @Controller
-@RequestMapping("/linkMan")
+@RequestMapping(AppRouterSettings.LINKMAN_MODUAL)
 public class LinkManController extends AbsBaseController {
     @Autowired
     AppBasicInfoService appBasicInfoService;
@@ -103,7 +104,7 @@ public class LinkManController extends AbsBaseController {
     }
     /**
      * 获取联系人
-     * @param
+     * @author 韩梅生
      * @return
      */
     @RequestMapping("/getLinkMan")
@@ -117,7 +118,7 @@ public class LinkManController extends AbsBaseController {
     }
     /**
      * 保存通讯录信息
-     * @param
+     * @author 韩梅生
      * @return
      */
     @RequestMapping("/saveTongXunLu")

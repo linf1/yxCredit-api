@@ -10,4 +10,12 @@ public interface AppRouterSettings {
 
     String API_MODULE = "/api";
 
+    String APPLY_MODULE = "/apply";
+
+    String BASIC_MODUAL = "/basic";
+
+    String LINKMAN_MODUAL = "/linkMan";
+
+
+
 }

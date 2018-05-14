@@ -1,6 +1,7 @@
 package com.zw.miaofuspd.personnal.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.base.util.AppRouterSettings;
 import com.zw.miaofuspd.facade.entity.AppUserInfo;
 import com.zw.miaofuspd.facade.personal.service.AppBasicInfoService;
 import com.zw.miaofuspd.facade.user.service.IUserService;
@@ -16,10 +17,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by hanmeisheng on 2018/05/09 0028.
+ * Created by 韩梅生 on 2018/05/09 0028.
  */
 @RestController
-@RequestMapping("/basic")
+@RequestMapping(AppRouterSettings.BASIC_MODUAL)
 public class BasicInfoController extends AbsBaseController {
     @Autowired
     AppBasicInfoService appBasicInfoService;
@@ -45,7 +46,7 @@ public class BasicInfoController extends AbsBaseController {
     }
 
     /**
-     * @author hanmeisheng
+     * @author 韩梅生
      * 获取用户申请的基本信息
      * @param
      * @return
@@ -59,7 +60,7 @@ public class BasicInfoController extends AbsBaseController {
     }
 
     /**
-     * @author:hanmeisheng
+     * @author:韩梅生
      * @Description  保存用户的个人信息
      * @Date 14:07 2018/5/12
      * @param
@@ -81,7 +82,7 @@ public class BasicInfoController extends AbsBaseController {
 
 
     /**
-     * @author:hanmeisheng
+     * @author:韩梅生
      * @Description 获取用户的个人信息
      * @Date 14:06 2018/5/12
      * @param
@@ -99,7 +100,7 @@ public class BasicInfoController extends AbsBaseController {
 
 
     /**
-     * @author:hanmeisheng
+     * @author:韩梅生
      * @Description  获取省份信息
      * @Date 13:40 2018/5/12
      * @param
@@ -114,7 +115,7 @@ public class BasicInfoController extends AbsBaseController {
     }
 
     /**
-     * @author:hanmeisheng
+     * @author:韩梅生
      * @Description  获取市的信息
      * @Date 13:54 2018/5/12
      * @param  provinceId 省id
@@ -129,7 +130,7 @@ public class BasicInfoController extends AbsBaseController {
     }
 
     /**
-     * @author:hanmeisheng
+     * @author:韩梅生
      * @Description  获取区的信息
      * @Date 13:54 2018/5/12
      * @param  cityId 市的id

@@ -1,6 +1,7 @@
 package com.zw.miaofuspd.personnal.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.base.util.AppRouterSettings;
 import com.zw.app.util.AppConstant;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
 import com.zw.miaofuspd.facade.entity.AppUserInfo;
@@ -11,6 +12,7 @@ import com.zw.web.base.vo.ResultVO;
 import com.zw.web.base.vo.VOConst;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -18,10 +20,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Administrator on 2017/12/23 0023.
+ * Created by 韩梅生
  */
 @Controller
-@RequestMapping("/apply")
+@RequestMapping(AppRouterSettings.APPLY_MODULE)
 public class ApplyInfoController extends AbsBaseController {
     @Autowired
     AppBasicInfoService appBasicInfoService;
@@ -38,16 +40,14 @@ public class ApplyInfoController extends AbsBaseController {
     @RequestMapping("/getApplyInfo")
     @ResponseBody
     public ResultVO getApplyInfo(String id,String productName) throws Exception {
-        //AppUserInfo userInfo = (AppUserInfo) this.getHttpSession().getAttribute(AppConstant.APP_USER_INFO);
         ResultVO resultVO = new ResultVO();
-        Map returnMap = new HashMap();
         //获取申请时的用户信息
         Map personMap = appBasicInfoService.getPersonInfo(id);
-        if (personMap == null) {
+        if (CollectionUtils.isEmpty(personMap)) {
             //说明尚未填写申请信息
             resultVO.setRetCode("2");
         } else {
-            if (personMap.get("is_identity") == "1") {
+            if (("1").equals(personMap.get("is_identity")) ) {
                 //说明已完成身份认证
                 Map homeApplyMap = appBasicInfoService.getHomeApplyInfo(id,productName);
                 resultVO.setRetCode("1");
@@ -67,7 +67,7 @@ public class ApplyInfoController extends AbsBaseController {
 
     /**
      * 保存三要素
-     *
+     * @author 韩梅生
      * @return
      */
     @RequestMapping("/addBasicInfo")
@@ -83,7 +83,7 @@ public class ApplyInfoController extends AbsBaseController {
 
     /**
      * 业务端-客户认证状态
-     *
+     * @author 韩梅生
      * @return
      */
     @RequestMapping("/getCustomerIdentityState")
@@ -97,7 +97,7 @@ public class ApplyInfoController extends AbsBaseController {
     }
 
     /**
-     * @author:hanmeisheng
+     * @author:韩梅生
      * @Description  一键申请
      * @Date 15:59 2018/5/12
      * @param
