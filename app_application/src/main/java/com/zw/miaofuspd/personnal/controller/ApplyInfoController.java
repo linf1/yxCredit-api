@@ -8,6 +8,7 @@ import com.zw.miaofuspd.facade.personal.service.AppBasicInfoService;
 import com.zw.miaofuspd.facade.user.service.IAppIdentityService;
 import com.zw.web.base.AbsBaseController;
 import com.zw.web.base.vo.ResultVO;
+import com.zw.web.base.vo.VOConst;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -107,8 +108,11 @@ public class ApplyInfoController extends AbsBaseController {
     @ResponseBody
     public ResultVO oneClickApply(String orderId) throws Exception {
         ResultVO resultVO = new ResultVO();
-        appBasicInfoService.oneClickApply(orderId);
-        resultVO.setRetData(null);
+        Map map = appBasicInfoService.oneClickApply(orderId);
+        if(!(Boolean)(map.get("flag"))){
+            resultVO.setErrorMsg(VOConst.FAIL,(String)(map.get("msg")));
+        }
+        resultVO.setRetMsg((String)map.get("msg"));
         return resultVO;
     }
 

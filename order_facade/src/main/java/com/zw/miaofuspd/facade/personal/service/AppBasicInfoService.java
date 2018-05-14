@@ -119,7 +119,7 @@ public interface AppBasicInfoService {
      * @return java.util.Map
      */
 
-   void oneClickApply(String userId) throws Exception;
+   Map oneClickApply(String userId) throws Exception;
 
 
 }
