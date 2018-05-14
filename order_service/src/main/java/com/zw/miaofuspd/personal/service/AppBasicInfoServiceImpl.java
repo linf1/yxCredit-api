@@ -18,6 +18,7 @@ import com.zw.service.base.AbsServiceBase;
 import com.zw.service.exception.DAOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -440,7 +441,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         Map resMap = new HashMap();
         String sql = "select is_identity,person_name,tel,card from mag_customer where USER_ID = '" + id + "'";
         List list = sunbmpDaoSupport.findForList(sql);
-        if (list.size() > 0 && list != null) {
+        if (CollectionUtils.isEmpty(list)) {
             return (Map) list.get(0);
         }
         return null;

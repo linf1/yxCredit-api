@@ -12,6 +12,7 @@ import com.zw.web.base.vo.ResultVO;
 import com.zw.web.base.vo.VOConst;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -19,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Administrator on 2017/12/23 0023.
+ * Created by 韩梅生
  */
 @Controller
 @RequestMapping(AppRouterSettings.APPLY_MODULE)
@@ -39,16 +40,14 @@ public class ApplyInfoController extends AbsBaseController {
     @RequestMapping("/getApplyInfo")
     @ResponseBody
     public ResultVO getApplyInfo(String id,String productName) throws Exception {
-        //AppUserInfo userInfo = (AppUserInfo) this.getHttpSession().getAttribute(AppConstant.APP_USER_INFO);
         ResultVO resultVO = new ResultVO();
-        Map returnMap = new HashMap();
         //获取申请时的用户信息
         Map personMap = appBasicInfoService.getPersonInfo(id);
-        if (personMap == null) {
+        if (CollectionUtils.isEmpty(personMap)) {
             //说明尚未填写申请信息
             resultVO.setRetCode("2");
         } else {
-            if (personMap.get("is_identity") == "1") {
+            if (("1").equals(personMap.get("is_identity")) ) {
                 //说明已完成身份认证
                 Map homeApplyMap = appBasicInfoService.getHomeApplyInfo(id,productName);
                 resultVO.setRetCode("1");
