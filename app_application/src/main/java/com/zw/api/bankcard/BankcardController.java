@@ -2,6 +2,7 @@ package com.zw.api.bankcard;
 
 import com.api.model.bankcard.BankcardRequest;
 import com.api.service.bankcard.IBankcardServer;
+import com.base.util.AppRouterSettings;
 import com.zw.web.base.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +18,7 @@ import java.io.IOException;
  * @author 陈清玉
  */
 @RestController
-@RequestMapping("/api/bankcard")
+@RequestMapping(AppRouterSettings.VERSION +AppRouterSettings.API_MODULE + "/bankcard")
 public class BankcardController {
     @Autowired
     private IBankcardServer bankcardServer;

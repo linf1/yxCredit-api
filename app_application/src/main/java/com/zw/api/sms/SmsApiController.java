@@ -1,6 +1,7 @@
 package com.zw.api.sms;
 
 import com.api.service.sortmsg.IMessageServer;
+import com.base.util.AppRouterSettings;
 import com.base.util.RandomUtil;
 import com.base.util.StringUtils;
 import com.zw.app.util.AppConstant;
@@ -24,7 +25,7 @@ import java.util.Map;
  * @author 陈清玉
  */
 @RestController
-@RequestMapping("/api/sms")
+@RequestMapping(AppRouterSettings.VERSION +AppRouterSettings.API_MODULE + "/sms")
 public class SmsApiController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(SmsApiController.class);

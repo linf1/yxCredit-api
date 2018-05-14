@@ -7,6 +7,7 @@ import com.api.model.common.ResultModelUtil;
 import com.api.model.tongdun.TongDunRequest;
 import com.api.service.tongdun.ITongDunApiService;
 import com.api.service.tongdun.TongDunProxy;
+import com.base.util.AppRouterSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 陈清玉
  */
 @RestController
-@RequestMapping(value = "/api/tongDun")
+@RequestMapping(value = AppRouterSettings.VERSION +AppRouterSettings.API_MODULE + "/tongDun")
 public class TongDunApiController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TongDunApiController.class);
