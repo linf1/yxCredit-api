@@ -806,25 +806,29 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     public void oneClickApply(String orderId) {
 
         //查询订单相关的列表信息
-        String sql = "select t2.customer_id as customer_id,t2.CUSTOMER_NAME as CUSTOMER_NAME,t2.product_name_name as product_name_name,t1.person_name as person_name,t1.card as card,t1.tel as tel,t1.marital_status as marital_status,t1.children_status as children_status," +
+        String sql = "select t2.customer_id as customer_id,t1.user_id as user_id,t2.CUSTOMER_NAME as CUSTOMER_NAME,t2.product_name_name as product_name_name,t1.person_name as person_name,t1.card as card,t1.tel as tel,t1.marital_status as marital_status,t1.children_status as children_status," +
                 "  t1.hometown_house_property as hometown_house_property,t1.residence_address as residence_address,t1.card_register_address as card_register_address," +
                 "  t2.product_name as product_name,t2.applay_money as applay_money,t2.periods as periods,t2.contract_amount as contract_amount," +
                 "  t2.loan_purpose as loan_purpose from mag_customer t1  left join mag_order t2 on t1.id = t2.CUSTOMER_ID" +
                 "  where t2.order_no='"+orderId+"'";
         Map forMap = sunbmpDaoSupport.findForMap(sql);
+        //查询联系人信息
+        String linkSql = "select link_name,contact,relationship_name from mag_customer_linkman where customer_id='"+forMap.get("customer_id")+"'";
+        List<Map> list = sunbmpDaoSupport.findForList(linkSql);
+        Object linkjson = JSONObject.toJSON(list);
         //保存订单信息到订单进件信息表
         String id = GeneratePrimaryKeyUtils.getUUIDKey();
         String sql2 = "insert into mag_order_entry values ('"+id+"','"+orderId+"','"+forMap.get("customer_id")+"','"+forMap.get("person_name")+"'" +
                 ",'"+forMap.get("card")+"','"+forMap.get("tel")+"','"+forMap.get("marital_status")+"','"+forMap.get("children_status")+"','"+forMap.get("hometown_house_property")+"'" +
                 ",'"+forMap.get("residence_address")+"','"+forMap.get("card_register_address")+"','"+forMap.get("product_name")+"','"+forMap.get("applay_money")+"'" +
-                ",'"+forMap.get("periods")+"','"+forMap.get("contract_amount")+"','"+forMap.get("loan_purpose")+"','0','"+DateUtils.getDateString(new Date())+"')";
+                ",'"+forMap.get("periods")+"','"+forMap.get("contract_amount")+"','"+forMap.get("loan_purpose")+"','"+linkjson+"','"+DateUtils.getDateString(new Date())+"')";
         sunbmpDaoSupport.exeSql(sql2);
         //修改订单状态为已提交
         String sql3 = "update mag_order set state = '2' where order_no = '"+orderId+"'";
         sunbmpDaoSupport.exeSql(sql3);
         //新增操作表订单信息
-        String sql4 = "insert into order_operation_record (id,status,order_id,emp_id,emp_name) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"'," +
-                "'1','"+orderId+"','"+id+"','"+forMap.get("CUSTOMER_NAME")+"')";
+        String sql4 = "insert into order_operation_record (id,operation_node,operation_result,order_id,operation_time,emp_id,emp_name,description) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"'," +
+                "1,1,'"+orderId+"','"+DateUtils.getDateString(new Date())+"','"+forMap.get("user_id")+"','"+forMap.get("CUSTOMER_NAME")+"','已申请')";
         sunbmpDaoSupport.exeSql(sql4);
 
     }
