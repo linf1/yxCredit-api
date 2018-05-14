@@ -203,7 +203,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         } else {
             //新增客户信息
             String uuidKey = GeneratePrimaryKeyUtils.getUUIDKey();
-            String sql3 = "insert into mag_customer (ID,USER_ID,PERSON_NAME,TEL,CARD) values ('" + uuidKey + "','" + id + "','" + personName + "','" + tel + "','" + card + "')";
+            String sql3 = "insert into mag_customer (ID,USER_ID,PERSON_NAME,TEL,CARD,surplus_contract_amount) values ('" + uuidKey + "','" + id + "','" + personName + "','" + tel + "','" + card + "',200000)";
             sunbmpDaoSupport.exeSql(sql3);
             String orderid = String.valueOf(GeneratePrimaryKeyUtils.getOrderNum());
             //新增订单信息
