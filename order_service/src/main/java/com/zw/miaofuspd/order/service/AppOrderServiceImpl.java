@@ -1904,7 +1904,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
     @Override
     public Map getAllOrderByUserId(String userId) {
         Map returnMap = new HashMap();
-        String sql ="SELECT ID AS orderId ,  product_name_name AS productName , applay_money AS applayMoney , PERIODS AS periods , CREAT_TIME AS creatTime , Order_state AS orderState  " +
+        String sql ="SELECT ID AS orderId ,  product_name_name AS productName , applay_money AS applayMoney , PERIODS AS periods , applay_time AS applayTime , Order_state AS orderState  " +
                 "FROM mag_order WHERE USER_ID='"+userId+"'";
         List allOrderList = sunbmpDaoSupport.findForList(sql);
         returnMap.put("allOrderList",allOrderList);

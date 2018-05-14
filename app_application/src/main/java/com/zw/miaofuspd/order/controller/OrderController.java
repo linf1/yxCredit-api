@@ -518,9 +518,9 @@ public class  OrderController extends AbsBaseController {
      * @param userId
      * @return
      */
-    @RequestMapping("/getAllOrderByUserId")
+    @RequestMapping("/getAllOrder")
     @ResponseBody
-    public ResultVO getAllOrderByUserId(String userId) {
+    public ResultVO getAllOrder(String userId) {
         ResultVO resultVO = new ResultVO();
 
         //根据userId获取全部订单
