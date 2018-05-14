@@ -15,7 +15,7 @@ public class BYXResponse {
      */
     private String res_msg;
 
-    private String res_data;
+    private Object res_data;
 
     public String getRes_code() {
         return res_code;
@@ -24,7 +24,6 @@ public class BYXResponse {
     public void setRes_code(String res_code) {
         this.res_code = res_code;
     }
-
     public String getRes_msg() {
         return res_msg;
     }
@@ -33,13 +32,36 @@ public class BYXResponse {
         this.res_msg = res_msg;
     }
 
-    public String getRes_data() {
+    public Object getRes_data() {
         return res_data;
     }
 
-    public void setRes_data(String res_data) {
+    public void setRes_data(Object res_data) {
         this.res_data = res_data;
     }
 
+    public static BYXResponse ok(Object res_data){
+        BYXResponse response = new BYXResponse();
+        response.setRes_code("1");
+        response.setRes_data(res_data);
+        return response;
+    }
+    public static BYXResponse ok(){
+        BYXResponse response = new BYXResponse();
+        response.setRes_code("1");
+        return response;
+    }
+    public static BYXResponse error(String res_msg){
+        BYXResponse response = new BYXResponse();
+        response.setRes_code("0");
+        response.setRes_msg(res_msg);
+        return response;
+    }
+    public static BYXResponse error(){
+        BYXResponse response = new BYXResponse();
+        response.setRes_code("0");
+        response.setRes_msg("系统异常，请联系系统管理员！");
+        return response;
+    }
 
 }

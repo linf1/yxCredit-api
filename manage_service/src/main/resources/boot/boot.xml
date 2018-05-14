@@ -36,4 +36,11 @@
         <property name="partnerKey" value="${tongdun.partnerKey}"/>
         <property name="appName" value="${tongdun.appName}"/>
     </bean>
+    <!-- 手机短信配置BEAN create by 陈清玉-->
+    <bean id="msgSettings" class="com.api.model.sortmsg.MsgSettings">
+        <property name="type" value="${sms.type}"/>
+        <property name="channelUniqId" value="${sms.channelUniqId}"/>
+        <property name="requestType" value="${sms.requestType}"/>
+        <property name="requestUrl" value="${sms.url}"/>
+    </bean>
 </beans>

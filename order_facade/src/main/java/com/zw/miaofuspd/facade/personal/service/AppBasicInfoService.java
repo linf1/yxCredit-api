@@ -37,7 +37,7 @@ public interface AppBasicInfoService {
     Map getApplyInfo(String orderId) throws Exception;
 
     /**
-     * @author:hanmeisheng
+     * @author:韩梅生
      * @Description 保存用户的个人信息
      * @Date 14:10 2018/5/12
      * @param
@@ -45,11 +45,10 @@ public interface AppBasicInfoService {
      */
     Map addBasicInfo(Map<String, String> paramMap) throws Exception;
     /**
-     * @author:hanmeisheng
+     * @author:韩梅生
      * @Description 获取用户的个人信息
      * @Date 14:10 2018/5/12
      * @param
-     * @return
      */
     Map getBasicInfo(String customerId) throws Exception;
 
@@ -67,6 +66,7 @@ public interface AppBasicInfoService {
 
     /**
      * 判断是否实名认证
+     * @author 韩梅生
      * @param id
      * @return
      * @throws Exception
@@ -75,6 +75,7 @@ public interface AppBasicInfoService {
 
     /**
      * 获取申请信息主页面信息
+     * @author 韩梅生
      * @param id
      * @return
      * @throws Exception
@@ -82,7 +83,7 @@ public interface AppBasicInfoService {
     Map getHomeApplyInfo(String id,String productName) throws Exception;
 
     /**
-     * @author:hanmeisheng
+     * @author:韩梅生
      * @Description 获取省份信息
      * @Date 13:27 2018/5/12
      * @param
@@ -93,7 +94,7 @@ public interface AppBasicInfoService {
 
 
     /**
-     * @author:hanmeisheng
+     * @author:韩梅生
      * @Description 获取市信息
      * @Date 13:27 2018/5/12
      * @param provinceId 省id
@@ -103,7 +104,7 @@ public interface AppBasicInfoService {
     List<Map> getCityList(String provinceId) throws Exception;
 
     /**
-     * @author:hanmeisheng
+     * @author:韩梅生
      * @Description 获取市信息
      * @Date 13:27 2018/5/12
      * @param cityId 市id
@@ -112,7 +113,7 @@ public interface AppBasicInfoService {
 
     List<Map> getDistrictList(String cityId) throws Exception;
     /**
-     * @author:hanmeisheng
+     * @author:韩梅生
      * @Description 一键申请
      * @Date 13:27 2018/5/12
      * @param userId 用户id
