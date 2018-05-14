@@ -32,6 +32,15 @@ public class AppConstant {
      */
     public static final String SMS_KEY  = "sms_code";
 
+    /**
+     * 请求订单号
+     */
+    public static final String MERCHANT_ORDER  = "merchant_order";
+    /**
+     * 请求流水号，每次请求唯一
+     */
+    public static final String MERCHANT_NEQNO  = "merchant_neqno";
+
     public static final String APP_SYS_ID_VALUE = "DAI_WO_ZOU";
     public static final String APP_SYS_ID_KEY = "APP_SYS_ID";
 }
