@@ -1797,7 +1797,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
     public Map getOrderListByUserId(String userId) {
         Map returnMap = new HashMap();
         String  states = OrderStateEnum.AUDIT.getCode() +","+OrderStateEnum.PENDING_CONTRACT.getCode()+","+OrderStateEnum.PENDING_LOAN.getCode();
-        String sql ="SELECT product_name_name AS productName , applay_money AS applayMoney , PERIODS AS periods , CREAT_TIME AS creatTime , Order_state AS orderState " +
+        String sql ="SELECT ID AS orderId , product_name_name AS productName , applay_money AS applayMoney , PERIODS AS periods , CREAT_TIME AS creatTime , Order_state AS orderState " +
                     "FROM mag_order WHERE USER_ID='"+userId+"' AND Order_state IN("+states+")";
         List list =sunbmpDaoSupport.findForList(sql);
         if(userId.isEmpty()){
@@ -1823,7 +1823,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
     public Map getOrderInfoByOrderId(String orderId){
 
         Map returnMap = new HashMap();
-        String sql ="SELECT product_name_name AS productName , applay_money AS applayMoney , PERIODS AS periods , CREAT_TIME AS creatTime , Order_state AS orderState  " +
+        String sql ="SELECT ID AS orderId , product_name_name AS productName , applay_money AS applayMoney , PERIODS AS periods , CREAT_TIME AS creatTime , Order_state AS orderState  " +
                     "FROM mag_order WHERE ID='"+orderId+"'";
         Map map =sunbmpDaoSupport.findForMap(sql);
         returnMap.put("orderInfo",map);
@@ -1861,12 +1861,13 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
         Map returnMap = new HashMap();
         String operationTime = DateUtils.getDateString(new Date());
 
-        String checkSql="SELECT o.`CUSTOMER_NAME` AS customerName  ,o.loan_amount AS loanAmount " +
+        String checkSql="SELECT o.ID AS orderId , o.`CUSTOMER_NAME` AS customerName  ,o.loan_amount AS loanAmount " +
                     "FROM mag_order o WHERE o.`ID`='"+orderId+"' ";
         Map map =sunbmpDaoSupport.findForMap(checkSql);
 
         //获取批复金额
-        BigDecimal amount = (BigDecimal) map.get("loanAmount");
+        String StringAmount = map.get("loanAmount").toString();
+        BigDecimal amount=new BigDecimal(StringAmount);
 
         //获取用户姓名
         String customerName= map.get("customerName").toString();
@@ -1875,13 +1876,18 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
         String insertSql="INSERT INTO order_operation_record (id,operation_node,operation_result,amount,order_id,operation_time,emp_id,emp_name,description) " +
                     "VALUES ('"+ GeneratePrimaryKeyUtils.getUUIDKey()+"',4,5,'"+amount+"',"+orderId+",'"+operationTime+"',"+userId+",'"+customerName+"','客户已签约完成')";
 
+        String updateSql="UPDATE mag_order SET Order_state=4 WHERE ID='"+orderId+"'";
 
         if(!map.isEmpty()){
             int count = sunbmpDaoSupport.executeSql(insertSql);
             if(count !=0 ){
-                returnMap.put("res_code", "1");
-                returnMap.put("res_msg", "信息已提交，签约成功！");
-                return  returnMap;
+                int count2= sunbmpDaoSupport.executeSql(updateSql);
+                if(count2 !=0){
+                    returnMap.put("res_code", "1");
+                    returnMap.put("res_msg", "信息已提交，签约成功！");
+                    return  returnMap;
+                }
+
             }
         }
 
@@ -1907,6 +1913,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
 
     /**
      * 根据orderId获取待放款订单信息
+     * @author 仙海峰
      * @param orderId
      * @return
      */
@@ -1914,10 +1921,10 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
     public Map getPendingMoneyInfoByOrderId(String orderId) {
         Map returnMap = new HashMap();
 
-        String orderSql="SELECT o.`product_name_name` AS productName , o.`applay_money` AS applayMoney , o.`PERIODS` AS periods , o.`Order_state` AS orderStatus " +
+        String orderSql="SELECT o.ID AS orderId , o.`product_name_name` AS productName , o.`applay_money` AS applayMoney , o.`PERIODS` AS periods , o.`Order_state` AS orderStatus " +
                     "FROM mag_order o WHERE  o.`ID`='"+orderId+"' ";
         Map orderMap = sunbmpDaoSupport.findForMap(orderSql);
-        String operationSql="SELECT operation_time AS operationTime , amount , operation_node AS operationNode  " +
+        String operationSql="SELECT operation_time AS operationTime , amount AS amount , operation_node AS operationNode  " +
                 "FROM order_operation_record " +
                 "WHERE  order_id='"+orderId+"' AND operation_node IN(1,4,5) ";
 

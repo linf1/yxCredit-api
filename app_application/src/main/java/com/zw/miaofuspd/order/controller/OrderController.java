@@ -443,6 +443,7 @@ public class  OrderController extends AbsBaseController {
 
     /**
      * 根据用户ID和订单状态获取订单信息列表(2.审核中、3.待签约、4.待放款)
+     * @author 仙海峰
      * @param userId
      * @return
      */
@@ -459,6 +460,7 @@ public class  OrderController extends AbsBaseController {
 
     /**
      * 根据订单ID获取订单审核信息
+     * @author 仙海峰
      * @param orderId
      * @return
      */
@@ -476,6 +478,7 @@ public class  OrderController extends AbsBaseController {
 
     /**
      * 根据订单ID获取订单待签约信息
+     * @author 仙海峰
      * @param orderId
      * @return
      */
@@ -493,6 +496,7 @@ public class  OrderController extends AbsBaseController {
 
     /**
      * 根据订单ID完成签约
+     * @author 仙海峰
      * @param orderId
      * @return
      */
@@ -510,6 +514,7 @@ public class  OrderController extends AbsBaseController {
 
     /**
      * 根据UserId获取全部订单
+     * @author 仙海峰
      * @param userId
      * @return
      */
@@ -528,6 +533,7 @@ public class  OrderController extends AbsBaseController {
 
     /**
      * 根据OrderId获取待放款订单信息
+     * @author 仙海峰
      * @param orderId
      * @return
      */
