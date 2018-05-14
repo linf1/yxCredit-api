@@ -1,6 +1,7 @@
 package com.zw.miaofuspd.personnal.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.base.util.AppRouterSettings;
 import com.zw.app.util.AppConstant;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
 import com.zw.miaofuspd.facade.entity.AppUserInfo;
@@ -21,7 +22,7 @@ import java.util.Map;
  * Created by Administrator on 2017/12/23 0023.
  */
 @Controller
-@RequestMapping("/apply")
+@RequestMapping(AppRouterSettings.APPLY_MODULE)
 public class ApplyInfoController extends AbsBaseController {
     @Autowired
     AppBasicInfoService appBasicInfoService;
@@ -67,7 +68,7 @@ public class ApplyInfoController extends AbsBaseController {
 
     /**
      * 保存三要素
-     *
+     * @author 韩梅生
      * @return
      */
     @RequestMapping("/addBasicInfo")
@@ -83,7 +84,7 @@ public class ApplyInfoController extends AbsBaseController {
 
     /**
      * 业务端-客户认证状态
-     *
+     * @author 韩梅生
      * @return
      */
     @RequestMapping("/getCustomerIdentityState")
@@ -97,7 +98,7 @@ public class ApplyInfoController extends AbsBaseController {
     }
 
     /**
-     * @author:hanmeisheng
+     * @author:韩梅生
      * @Description  一键申请
      * @Date 15:59 2018/5/12
      * @param

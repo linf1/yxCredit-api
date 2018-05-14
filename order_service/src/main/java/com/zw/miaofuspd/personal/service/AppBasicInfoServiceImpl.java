@@ -19,6 +19,7 @@ import com.zw.service.exception.DAOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 
@@ -226,12 +227,15 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
      * @param
      * @return
      */
+    @Override
     public Map getBasicInfo(String customerId){
-        String  sql="select t1.marital_status as marital_status,t1.children_status as children_status,t1.Hometown_house_property as Hometown_house_property" +
+        String  sql="select t5.contractor_name as contractor_name,t1.marital_status as marital_status,t1.children_status as children_status,t1.Hometown_house_property as Hometown_house_property" +
                 ",t2.province_name as jobProvince_name,t2.city_name as jobCity_name,t2.district_name as jobDistrict_name,t2.address as jobDetailAddress," +
                 "t3.provinces as cardProvinces,t3.city as cardCity,t3.distric as cardDistric,t3.address_detail as cardDetailAddress from mag_customer t1" +
                 " left join mag_customer_job t2 on t1.id = t2.customer_id" +
-                " left join mag_customer_live t3 on t1.id = t3.customer_id where t1.id = '"+customerId+"'";
+                " left join mag_customer_live t3 on t1.id = t3.customer_id" +
+                " left join byx_white_list t4 on t1.person_name = t4.real_name and t1.card = t4.card" +
+                " left join byx_contractor t5 on t5.id = t4.contractor_id where t1.id = '"+customerId+"'";
         Map map = sunbmpDaoSupport.findForMap(sql);
         return map;
 
@@ -822,10 +826,12 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             Object linkjson = JSONObject.toJSON(list);
             //保存订单信息到订单进件信息表
             String id = GeneratePrimaryKeyUtils.getUUIDKey();
+            BigDecimal applayMoney = new BigDecimal((String) forMap.get("applay_money"));
+            BigDecimal contractAmount = new BigDecimal((String) forMap.get("contract_amount"));
             String sql2 = "insert into mag_order_entry values ('"+id+"','"+orderId+"','"+forMap.get("customer_id")+"','"+forMap.get("person_name")+"'" +
                     ",'"+forMap.get("card")+"','"+forMap.get("tel")+"','"+forMap.get("marital_status")+"','"+forMap.get("children_status")+"','"+forMap.get("hometown_house_property")+"'" +
-                    ",'"+forMap.get("residence_address")+"','"+forMap.get("card_register_address")+"','"+forMap.get("product_name")+"','"+forMap.get("applay_money")+"'" +
-                    ",'"+forMap.get("periods")+"','"+forMap.get("contract_amount")+"','"+forMap.get("loan_purpose")+"','"+linkjson+"','"+DateUtils.getDateString(new Date())+"')";
+                    ",'"+forMap.get("residence_address")+"','"+forMap.get("card_register_address")+"','"+forMap.get("product_name")+"','"+applayMoney+"'" +
+                    ",'"+forMap.get("periods")+"','"+contractAmount+"','"+forMap.get("loan_purpose")+"','"+linkjson+"','"+DateUtils.getDateString(new Date())+"')";
             sunbmpDaoSupport.exeSql(sql2);
             //修改订单状态为已提交
             String sql3 = "update mag_order set state = '2' where order_no = '"+orderId+"'";
