@@ -168,8 +168,10 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     @Override
     public Map getApplyInfo(String orderId) {
         //根据订单id获取客户基本信息
-        String customerSql = "select applay_money,PERIODS,contract_amount,surplus_contract_amount," +
-                "loan_purpose from mag_order where order_no = '" + orderId + "'";
+        String customerSql = "select t1.applay_money as applay_money,t1.PERIODS as PERIODS,t1.contract_amount as contract_amount," +
+                "t2.surplus_contract_amount as surplus_contract_amount," +
+                "t1.loan_purpose as loan_purpose from mag_order t1 left join mag_customer t2 on t1.CUSTOMER_ID = t2.id" +
+                " where t1.order_no = '" + orderId + "'";
         Map resutMap = sunbmpDaoSupport.findForMap(customerSql);
         return resutMap;
     }

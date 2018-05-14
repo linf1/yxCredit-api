@@ -82,7 +82,7 @@ public class BasicInfoController extends AbsBaseController {
 
     /**
      * @author:hanmeisheng
-     * @Description
+     * @Description 获取用户的个人信息
      * @Date 14:06 2018/5/12
      * @param
      * @return
