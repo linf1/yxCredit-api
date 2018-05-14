@@ -25,6 +25,14 @@ public class GeneratePrimaryKeyUtils {
     }
 
     /**
+     * 订单编号生成
+     * @return
+     */
+    public static long getOrderNum(){
+        return new SnowflakeIdWorker(0, 0).nextId();
+    }
+
+    /**
      * Twitter_Snowflake 雪花主键
      * @param workerId  工作ID (0~31)
      * @param datacenterId 数据中心ID (0~31)

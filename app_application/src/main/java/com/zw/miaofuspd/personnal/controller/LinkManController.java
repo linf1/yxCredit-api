@@ -36,49 +36,62 @@ public class LinkManController extends AbsBaseController {
      */
     @RequestMapping("/updateLinkManInfo")
     @ResponseBody
-    public ResultVO updateLinkManInfo(String orderId, String linkId1, String relationship1, String relationshipname1, String contact1, String linkId2, String relationship2, String relationshipname2, String contact2, String linkName1, String linkName2,
-                                      String main_sign1, String main_sign2, String linkId3, String relationship3, String relationshipname3, String contact3, String linkId4, String relationship4, String relationshipname4, String contact4, String linkName3, String linkName4, String main_sign3, String main_sign4
+    public ResultVO updateLinkManInfo(String customerId, String linkId1, String relationship1,String relationshipName1, String linkName1, String contact1, String linkId2, String relationship2,String relationshipName2, String linkName2, String contact2, String linkId3, String relationship3,
+                                      String relationshipName3, String linkName3, String contact3, String linkId4, String relationship4,String relationshipName4, String linkName4, String contact4, String linkId5, String relationship5,String relationshipName5, String linkName5, String contact5, String linkId6, String relationship6,String relationshipName6, String linkName6, String contact6
     ) throws Exception{
         ResultVO resultVO = new ResultVO();
-        AppUserInfo userInfo = (AppUserInfo) this.getHttpSession().getAttribute(AppConstant.APP_USER_INFO);
+        //AppUserInfo userInfo = (AppUserInfo) this.getHttpSession().getAttribute(AppConstant.APP_USER_INFO);
         CustomerLinkmanBean customerLinkmanBean = new CustomerLinkmanBean();
         customerLinkmanBean.setId(linkId1);
         customerLinkmanBean.setRelationShip(relationship1);
         customerLinkmanBean.setContact(contact1);
-        customerLinkmanBean.setRelationshipName(relationshipname1);
         customerLinkmanBean.setLinkName(linkName1);
-        customerLinkmanBean.setMainSign(main_sign1);
+        customerLinkmanBean.setRelationshipName(relationshipName1);
 
         CustomerLinkmanBean customerLinkmanBean2 = new CustomerLinkmanBean();
         customerLinkmanBean2.setId(linkId2);
         customerLinkmanBean2.setRelationShip(relationship2);
         customerLinkmanBean2.setContact(contact2);
-        customerLinkmanBean2.setRelationshipName(relationshipname2);
         customerLinkmanBean2.setLinkName(linkName2);
-        customerLinkmanBean2.setMainSign(main_sign2);
+        customerLinkmanBean2.setRelationshipName(relationshipName2);
 
         CustomerLinkmanBean customerLinkmanBean3 = new CustomerLinkmanBean();
         customerLinkmanBean3.setId(linkId3);
         customerLinkmanBean3.setRelationShip(relationship3);
         customerLinkmanBean3.setContact(contact3);
-        customerLinkmanBean3.setRelationshipName(relationshipname3);
         customerLinkmanBean3.setLinkName(linkName3);
-        customerLinkmanBean3.setMainSign(main_sign3);
+        customerLinkmanBean3.setRelationshipName(relationshipName3);
 
         CustomerLinkmanBean customerLinkmanBean4 = new CustomerLinkmanBean();
         customerLinkmanBean4.setId(linkId4);
         customerLinkmanBean4.setRelationShip(relationship4);
         customerLinkmanBean4.setContact(contact4);
-        customerLinkmanBean4.setRelationshipName(relationshipname4);
         customerLinkmanBean4.setLinkName(linkName4);
-        customerLinkmanBean4.setMainSign(main_sign4);
+        customerLinkmanBean4.setRelationshipName(relationshipName4);
+
+        CustomerLinkmanBean customerLinkmanBean5 = new CustomerLinkmanBean();
+        customerLinkmanBean5.setId(linkId5);
+        customerLinkmanBean5.setRelationShip(relationship5);
+        customerLinkmanBean5.setContact(contact5);
+        customerLinkmanBean5.setLinkName(linkName5);
+        customerLinkmanBean5.setRelationshipName(relationshipName5);
+
+        CustomerLinkmanBean customerLinkmanBean6 = new CustomerLinkmanBean();
+        customerLinkmanBean6.setId(linkId6);
+        customerLinkmanBean6.setRelationShip(relationship6);
+        customerLinkmanBean6.setContact(contact6);
+        customerLinkmanBean6.setLinkName(linkName6);
+        customerLinkmanBean6.setRelationshipName(relationshipName6);
+
 
         Map map1 = new HashMap();
         map1.put("customerLinkmanBean",customerLinkmanBean);
         map1.put("customerLinkmanBean2",customerLinkmanBean2);
         map1.put("customerLinkmanBean3",customerLinkmanBean3);
         map1.put("customerLinkmanBean4",customerLinkmanBean4);
-        Map map = appBasicInfoService.updateLinkManInfo(orderId, userInfo.getCustomer_id(), map1);
+        map1.put("customerLinkmanBean5",customerLinkmanBean5);
+        map1.put("customerLinkmanBean6",customerLinkmanBean6);
+        Map map = appBasicInfoService.updateLinkManInfo(customerId, map1);
         boolean flag = (boolean) map.get("success");
         String msg = map.get("msg").toString();
         if(!flag){

@@ -155,4 +155,56 @@ public interface AppOrderService {
 
     Map calculationRepayment(Map orderMap);
 
+
+    /****************************************************碧友信**********************************************/
+
+    /**
+     * 根据用户ID和订单状态获取订单信息列表(2.审核中、3.待签约、4.待放款)
+     * @author 仙海峰
+     * @param userId
+     * @return
+     */
+    Map getOrderListByUserId(String userId) ;
+
+    /**
+     * 根据订单ID获取订单信息
+     * @author 仙海峰
+     * @param orderId
+     * @return
+     */
+    Map getOrderInfoByOrderId(String orderId);
+
+
+    /**
+     * 根据订单ID获取订单签约信息
+     * @author 仙海峰
+     * @param orderId
+     * @return
+     */
+    Map getPendingContractOrderInfoByOrderId(String orderId);
+
+    /**
+     * 根据订单ID提交签约信息
+     * @author 仙海峰
+     * @param orderId
+     * @return
+     */
+    Map contractForSubmissionByOrderId(String orderId,String userId) throws Exception;
+
+    /**
+     *根据UserId 获取所有订单信息
+     * @author 仙海峰
+     * @param userId
+     * @return
+     */
+    Map getAllOrderByUserId(String userId);
+
+    /**
+     * 根据orderId获取待放款订单信息
+     * @author 仙海峰
+     * @param orderId
+     * @return
+     */
+    Map getPendingMoneyInfoByOrderId(String orderId);
+
 }

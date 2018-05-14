@@ -11,6 +11,14 @@ public interface IDaoSupport {
 
     void exeSql(String sql) throws DAOException;
 
+    /**
+     * 执行添加，修改，删除操作
+     * @param sql sql语句
+     * @return 返回影响行数
+     * @throws DAOException sql异常
+     */
+    int executeSql(String sql) throws DAOException;
+
     <T> void exeSql(String mapperid, T entity) throws DAOException;
 
     void exeSql(List<String> sql) throws DAOException;

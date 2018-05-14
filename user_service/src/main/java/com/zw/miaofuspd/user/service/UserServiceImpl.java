@@ -79,9 +79,9 @@ public class UserServiceImpl extends AbsServiceBase implements IUserService {
      */
     @Override
     public AppUserInfo getUserByOrderId(String orderId) {
-        String sql = " SELECT app.id as userId, app.registration_id as registrationId, cus.ID as customerId, cus.PERSON_NAME as CustomerName, cus.tel as tel, cus.card as card " +
-                "FROM mag_order ord LEFT JOIN mag_customer cus ON cus.ID = ord.CUSTOMER_ID LEFT JOIN app_user app " +
-                "on app.id = ord.USER_ID WHERE ord.id = '"+orderId+"'";
+        String sql = " SELECT Contract_amount as budgetContractAmount,Surplus_Contract_amount as surplusContractAmount from mag_order " +
+                "WHERE order_no='"+orderId+"'";
+
         Map map = sunbmpDaoSupport.findForMap(sql);
         AppUserInfo appUserInfo = new AppUserInfo();
         appUserInfo.setId(map.get("userId").toString());
