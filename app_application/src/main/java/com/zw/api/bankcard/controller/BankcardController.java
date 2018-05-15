@@ -1,8 +1,10 @@
-package com.zw.api.bankcard;
+package com.zw.api.bankcard.controller;
 
 import com.api.model.bankcard.BankcardRequest;
 import com.api.service.bankcard.IBankcardServer;
 import com.base.util.AppRouterSettings;
+import com.base.util.GeneratePrimaryKeyUtils;
+import com.zw.app.util.AppConstant;
 import com.zw.web.base.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 
@@ -18,7 +21,7 @@ import java.io.IOException;
  * @author 陈清玉
  */
 @RestController
-@RequestMapping(AppRouterSettings.VERSION +AppRouterSettings.API_MODULE + "/bankcard")
+@RequestMapping("/bankcard")
 public class BankcardController {
     @Autowired
     private IBankcardServer bankcardServer;
@@ -38,12 +41,13 @@ public class BankcardController {
     }
 
     @PostMapping("/authconfirm")
-    public ResultVO authconfirm(BankcardRequest bankcardRequest) {
+    public ResultVO authconfirm(HttpServletRequest request, BankcardRequest bankcardRequest) {
         try {
                 if (bankcardRequest == null) {
                     return ResultVO.error("参数异常");
                 }
-
+                bankcardRequest.setMerchantNumber((String)request.getSession().getAttribute(AppConstant.MERCHANT_ORDER));
+                bankcardRequest.setMerchantNeqNo((String)request.getSession().getAttribute(AppConstant.MERCHANT_NEQNO));
                 final String authconfirm = bankcardServer.authconfirm(bankcardRequest);
                 return ResultVO.ok(authconfirm);
             } catch (Exception e) {

@@ -10,11 +10,13 @@ import java.util.Map;
  * @author 陈清玉
  */
 public interface IMessageServer {
+
+    String  BEAN_KEY = "messageServerImpl";
     /**
      * 短信发送
      * @param request 短信请求参数
      * @return json 字符串
      * @throws IOException 短信发送异常
      */
-    String  sendSms(MsgRequest request, Map<String, String> smsParam) throws IOException;
+    String  sendSms(MsgRequest request, Map<String, String> smsParam) throws Exception;
 }

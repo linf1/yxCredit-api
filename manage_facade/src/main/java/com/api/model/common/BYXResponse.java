@@ -64,4 +64,25 @@ public class BYXResponse {
         return response;
     }
 
+   public  enum  resCode{
+       /**
+        * 失败
+        */
+       fail("0"),
+       /**
+        * 成功
+        */
+       success("1");
+       private String code;
+       resCode(String code){
+           this.code = code;
+       }
+       public String getCode() {
+           return code;
+       }
+       public void setCode(String code) {
+           this.code = code;
+       }
+   }
+
 }

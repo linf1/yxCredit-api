@@ -124,4 +124,9 @@
                      id="contractConfirmationServiceImpl"  check="false"/>
     <dubbo:reference interface="com.junziqian.service.JunziqianService"
                      id="junziqianServiceImpl" check="false"/>
+
+    <dubbo:reference interface="com.api.service.sortmsg.IMessageServer"
+                     id="messageServerImpl" check="false"/>
+    <dubbo:reference interface="com.api.service.bankcard.IBankcardServer"
+                     id="bankcardServerImpl" check="false"/>
 </beans>

@@ -1,4 +1,4 @@
-package com.zw.api.sms;
+package com.zw.api.sms.controller;
 
 /**
  * Created by Administrator on 2017/11/20 0020.

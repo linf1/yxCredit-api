@@ -26,4 +26,9 @@
                    ref="appOrderLogServiceImpl"/>
     <dubbo:service interface="com.junziqian.service.JunziqianService" timeout="30000"
                    ref="junziqianServiceImpl"/>
+
+    <dubbo:service interface="com.api.service.sortmsg.IMessageServer" timeout="30000"
+                   ref="messageServerImpl"/>
+    <dubbo:service interface="com.api.service.bankcard.IBankcardServer" timeout="30000"
+                   ref="bankcardServerImpl"/>
 </beans>

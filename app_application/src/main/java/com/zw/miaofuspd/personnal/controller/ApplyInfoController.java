@@ -16,7 +16,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -45,20 +44,17 @@ public class ApplyInfoController extends AbsBaseController {
         Map personMap = appBasicInfoService.getPersonInfo(id);
         if (CollectionUtils.isEmpty(personMap)) {
             //说明尚未填写申请信息
-            resultVO.setRetCode("2");
+            resultVO.setRetCode("1");
         } else {
-            if (("1").equals(personMap.get("is_identity")) ) {
-                //说明已完成身份认证
                 Map homeApplyMap = appBasicInfoService.getHomeApplyInfo(id,productName);
-                resultVO.setRetCode("1");
+                resultVO.setRetCode("2");
                 resultVO.setRetData(homeApplyMap);
-            } else {
-                //填写过申请信息
-                Map basInfoMap = appBasicInfoService.getPersonInfo(id);
-                resultVO.setRetCode("3");
-                resultVO.setRetData(basInfoMap);
-
-            }
+//            } else {
+//                //填写过申请信息
+//                Map basInfoMap = appBasicInfoService.getPersonInfo(id);
+//                resultVO.setRetCode("3");
+//                resultVO.setRetData(basInfoMap);
+//            }
 
         }
         return resultVO;
@@ -72,12 +68,14 @@ public class ApplyInfoController extends AbsBaseController {
      */
     @RequestMapping("/addBasicInfo")
     @ResponseBody
-    public ResultVO getBasicInfo(String data) throws Exception {
+    public ResultVO addBasicInfo(String data) throws Exception {
         Map map = JSONObject.parseObject(data);
         ResultVO resultVO = new ResultVO();
-        appBasicInfoService.getBasicCustomerInfo(map);
-        Map homeApplyMap = appBasicInfoService.getHomeApplyInfo((String) map.get("id"),(String) map.get("productName"));
-        resultVO.setRetData(homeApplyMap);
+        Map resultMap = appBasicInfoService.addBasicCustomerInfo(map);
+        if(!(Boolean)(resultMap.get("flag"))){
+            resultVO.setErrorMsg(VOConst.FAIL,(String)(map.get("msg")));
+        }
+        resultVO.setRetMsg((String)map.get("msg"));
         return resultVO;
     }
 
@@ -115,6 +113,27 @@ public class ApplyInfoController extends AbsBaseController {
         resultVO.setRetMsg((String)map.get("msg"));
         return resultVO;
     }
+
+    /**
+     * @author:韩梅生
+     * @Description 用户信息强规则
+     * @Date 20:09 2018/5/14
+     * @param
+     */
+    @RequestMapping("/checkCustomerInfo")
+    @ResponseBody
+    public ResultVO checkCustomerInfo(String data) throws Exception {
+        Map map = JSONObject.parseObject(data);
+        ResultVO resultVO = new ResultVO();
+        Map resultMap = appBasicInfoService.checkCustomerInfo((String) map.get("userId"),(String) map.get("card"));
+        if(!(Boolean)(resultMap.get("flag"))){
+            resultVO.setErrorMsg(VOConst.FAIL,(String)(resultMap.get("msg")));
+        }
+        resultVO.setRetMsg((String)resultMap.get("msg"));
+        return resultVO;
+    }
+
+
 
 
 }

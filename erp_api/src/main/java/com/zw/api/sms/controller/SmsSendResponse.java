@@ -1,4 +1,4 @@
-package com.zw.api.sms;
+package com.zw.api.sms.controller;
 /**
  * 
  * @author tianyh 

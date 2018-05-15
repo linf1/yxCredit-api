@@ -1,10 +1,13 @@
 package com.api.model.bankcard;
 
+import java.io.Serializable;
+
 /**
  * 银行卡四要素请求实体
  * @author 陈清玉
  */
-public class BankcardRequest {
+public class BankcardRequest implements Serializable {
+    private static final long serialVersionUID = 6644558143229491994L;
     /**
      * merchantNumber	必要	string	商户号，碧有信分配
      */
@@ -13,6 +16,10 @@ public class BankcardRequest {
      * merchantOrder	必要	string	请求订单号
      */
     private String merchantOrder;
+    /**
+     * merchantNeqNo	必要	string	请求流水号，每次请求唯一
+     */
+    private String merchantNeqNo;
     /**
      * cardId	必要	string	身份证号
      */
@@ -33,6 +40,10 @@ public class BankcardRequest {
      * userId	非必要	string	用户ID，有则传
      */
     private String userId;
+    /**
+     * smsCode	必要	string	短信验证码
+     */
+    private String smsCode;
 
     public String getMerchantNumber() {
         return merchantNumber;
@@ -90,17 +101,34 @@ public class BankcardRequest {
         this.userId = userId;
     }
 
+    public String getMerchantNeqNo() {
+        return merchantNeqNo;
+    }
+
+    public void setMerchantNeqNo(String merchantNeqNo) {
+        this.merchantNeqNo = merchantNeqNo;
+    }
+
+    public String getSmsCode() {
+        return smsCode;
+    }
+
+    public void setSmsCode(String smsCode) {
+        this.smsCode = smsCode;
+    }
+
     @Override
     public String toString() {
         return "BankcardRequest{" +
                 "merchantNumber='" + merchantNumber + '\'' +
                 ", merchantOrder='" + merchantOrder + '\'' +
+                ", merchantNeqNo='" + merchantNeqNo + '\'' +
                 ", cardId='" + cardId + '\'' +
                 ", realName='" + realName + '\'' +
                 ", bankCardNo='" + bankCardNo + '\'' +
                 ", reservePhone='" + reservePhone + '\'' +
                 ", userId='" + userId + '\'' +
+                ", smsCode='" + smsCode + '\'' +
                 '}';
     }
-
 }

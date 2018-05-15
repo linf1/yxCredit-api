@@ -59,7 +59,7 @@ public interface AppBasicInfoService {
      * @return
      * @throws Exception
      */
-    void getBasicCustomerInfo(Map<String, String> map) throws Exception;
+    Map addBasicCustomerInfo(Map<String, String> map) throws Exception;
 
     Map getLinkMan(String customerId) throws Exception;
     void saveTongXunLu(String customerId,String data) throws Exception;
@@ -121,6 +121,14 @@ public interface AppBasicInfoService {
      */
 
    Map oneClickApply(String userId) throws Exception;
+
+   /**
+    * @author:韩梅生
+    * @Description  用户信息强规则
+    * @Date 20:14 2018/5/14
+    * @param
+    */
+   Map checkCustomerInfo(String userId,String card) throws Exception;
 
 
 }

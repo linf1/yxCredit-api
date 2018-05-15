@@ -1,10 +1,10 @@
 package com.api.model;
 
-import com.base.util.MD5Utils;
+import com.base.util.MD5Util;
+import org.apache.http.Header;
+import org.apache.http.message.BasicHeader;
 
-import javax.print.attribute.HashAttributeSet;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 碧友信权限配置项
@@ -13,7 +13,7 @@ import java.util.Map;
 public class BYXSettings {
 
     private String  appKey;
-    private Long ts = System.currentTimeMillis();
+    private Long ts;
     private String  signa;
     private String vi;
     private String appSecrect;
@@ -35,7 +35,7 @@ public class BYXSettings {
     }
 
     public String getSigna() {
-        return signa();
+        return signa(System.currentTimeMillis());
     }
 
     public void setSigna(String signa) {
@@ -58,23 +58,25 @@ public class BYXSettings {
         this.vi = vi;
     }
 
-    public String key(){
-       return MD5Utils.sign (getAppSecrect() ,getTs().toString(), "utf-8");
+    public String key(Long ts){
+       return MD5Util.MD5Encode(getAppSecrect()+ String.valueOf(ts), "utf-8");
     }
 
-    public String signa(){
-        return MD5Utils.sign (key() ,getAppKey(), "utf-8").toUpperCase();
+    public String signa(Long ts){
+        return MD5Util.MD5Encode (key(ts)+ getAppKey(), "utf-8").toUpperCase();
     }
 
     /**
      * 获取碧友信请求头
      * @return 请求头map
      */
-    public  Map<String,Object> getHeadRequest(){
-        Map<String,Object> headRequestMap = new HashMap<>();
-        headRequestMap.put("appKey",getAppKey());
-        headRequestMap.put("ts",System.currentTimeMillis());
-        headRequestMap.put("signa",signa);
-        return headRequestMap;
+    public  List<Header> getHeadRequest(){
+        final long millis = System.currentTimeMillis();
+        List<Header> headers = new ArrayList<>();
+        headers.add(new BasicHeader("appKey",getAppKey()));
+        headers.add(new BasicHeader("ts",String.valueOf(millis)));
+        headers.add(new BasicHeader("signa",signa(millis)));
+        System.out.println("appKey:" + getAppKey()+",ts:"+ millis +",signa:" + signa(millis));
+        return headers;
     }
 }

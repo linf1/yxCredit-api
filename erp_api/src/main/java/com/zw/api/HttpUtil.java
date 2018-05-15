@@ -168,6 +168,50 @@ public class HttpUtil {
     }
 
     /**
+     * 发送 POST 请求（HTTP），K-V形式
+     * @param apiUrl API接口URL
+     * @param params 参数map
+     * @param headMap 请求头参数map
+     * @return
+     * @throws IOException
+     */
+    public static String doPost(String apiUrl, Map<String, Object> params,Map<String, Object> headMap) throws IOException {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        String httpStr = null;
+        HttpPost httpPost = new HttpPost(apiUrl);
+        CloseableHttpResponse response = null;
+
+        try {
+            httpPost.setConfig(requestConfig);
+            List<NameValuePair> pairList = new ArrayList<>(params.size());
+            for (Map.Entry<String, Object> entry : params.entrySet()) {
+                NameValuePair pair = new BasicNameValuePair(entry.getKey(), entry
+                        .getValue().toString());
+                pairList.add(pair);
+            }
+            httpPost.setEntity(new UrlEncodedFormEntity(pairList, Charset.forName("UTF-8")));
+            for (Map.Entry<String, Object> entry : headMap.entrySet()) {
+                httpPost.addHeader(entry.getKey(),entry.getValue().toString());
+            }
+            response = httpClient.execute(httpPost);
+            System.out.println(response.toString());
+            HttpEntity entity = response.getEntity();
+            httpStr = EntityUtils.toString(entity, "UTF-8");
+        } catch (IOException e) {
+            throw e;
+        } finally {
+            if (response != null) {
+                try {
+                    EntityUtils.consume(response.getEntity());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return httpStr;
+    }
+
+    /**
      * 发送 POST 请求（HTTP），JSON形式
      * @param apiUrl
      * @param json json对象
@@ -227,7 +271,7 @@ public class HttpUtil {
             stringEntity.setContentType("application/json");
             httpPost.setEntity(stringEntity);
             for (Map.Entry<String, Object> entry : headMap.entrySet()) {
-                httpPost.setHeader(entry.getKey(),entry.getKey());
+                httpPost.setHeader(entry.getKey(),(String)entry.getValue());
             }
             response = httpClient.execute(httpPost);
             HttpEntity entity = response.getEntity();

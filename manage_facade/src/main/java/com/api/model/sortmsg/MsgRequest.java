@@ -1,10 +1,14 @@
 package com.api.model.sortmsg;
 
+import java.io.Serializable;
+
 /**
  * 短信服务请求实体
  * @author 陈清玉
  */
-public class MsgRequest {
+public class MsgRequest implements Serializable {
+
+    private static final long serialVersionUID = 5502226723331101223L;
     /**
      * 手机号码
      */

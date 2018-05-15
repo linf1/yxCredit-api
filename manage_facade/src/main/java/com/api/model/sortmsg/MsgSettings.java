@@ -14,7 +14,7 @@ public class MsgSettings extends BaseSettings {
      */
     private String  type;
 
-    private String content = "【${company}】尊敬的用户，您的验证码为:${smsCode}";
+    private String content = "尊敬的用户，您的验证码为:${smsCode}";
     /**
      * 渠道唯一标识
      */
