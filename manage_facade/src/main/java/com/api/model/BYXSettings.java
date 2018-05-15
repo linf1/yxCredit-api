@@ -13,6 +13,7 @@ import java.util.*;
 public class BYXSettings {
 
     private String  appKey;
+    private String desKey = "QEI1LQBXXAA1TWX72FUI7L5H";
     private Long ts;
     private String  signa;
     private String vi;
@@ -24,6 +25,14 @@ public class BYXSettings {
 
     public void setAppKey(String appKey) {
         this.appKey = appKey;
+    }
+
+    public String getDesKey() {
+        return desKey;
+    }
+
+    public void setDesKey(String desKey) {
+        this.desKey = desKey;
     }
 
     public Long getTs() {

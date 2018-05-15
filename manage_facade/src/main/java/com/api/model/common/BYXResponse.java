@@ -1,10 +1,19 @@
 package com.api.model.common;
 
+import com.alibaba.fastjson.JSONObject;
+import com.api.model.BYXSettings;
+import com.base.util.StringUtils;
+import com.zhiwang.zwfinance.app.jiguang.util.api.CryptoTools;
+
+import java.io.Serializable;
+
 /**
  * 碧友信对接接口返回对象
  * @author  陈清玉
  */
-public class BYXResponse {
+public class BYXResponse implements Serializable {
+
+    private static final long serialVersionUID = 7135534959627078004L;
     /**
      * 1成功，0失败
      */
@@ -85,4 +94,30 @@ public class BYXResponse {
        }
    }
 
+    /**
+     * 解析内容返回结果
+     * @param byxResponseJson 远程调用接口返回结果字符串
+     * @return BYXResponse
+     */
+
+    public static BYXResponse getBYXResponse(String byxResponseJson,BYXSettings byxSettings) throws Exception {
+        if(StringUtils.isEmpty(byxResponseJson)){return error();}
+        CryptoTools cryptoTools = new CryptoTools(byxSettings.getDesKey(),byxSettings.getVi());
+        final BYXResponse response = JSONObject.parseObject(byxResponseJson, BYXResponse.class);
+        if(BYXResponse.resCode.success.getCode().equals(response.getRes_code())) {
+            response.setRes_data(cryptoTools.decode(response.getRes_data().toString()));
+        }
+        return response;
+    }
+
+    /**
+     * 解析内容返回结果
+     * @param byxResponseJson 远程调用接口返回结果字符串
+     * @return BYXResponse
+     */
+
+    public static BYXResponse getBYXResponse(String byxResponseJson) throws Exception {
+        if(StringUtils.isEmpty(byxResponseJson)){return error();}
+        return JSONObject.parseObject(byxResponseJson, BYXResponse.class);
+    }
 }
