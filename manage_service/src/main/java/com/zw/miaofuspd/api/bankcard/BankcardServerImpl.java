@@ -7,16 +7,13 @@ import com.api.model.bankcard.BankcardSettings;
 import com.api.model.common.BYXRequest;
 import com.api.model.common.BYXResponse;
 import com.api.service.bankcard.IBankcardServer;
-import com.base.util.GeneratePrimaryKeyUtils;
 import com.base.util.StringUtils;
 import com.zw.api.HttpClientUtil;
-import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 /**
@@ -65,7 +62,7 @@ public class BankcardServerImpl implements IBankcardServer{
 
     @Override
     public BYXResponse getBankList() throws Exception {
-        final String result = HttpClientUtil.post(bankcardSettings.getBankListUrl(),"",byxSettings.getHeadRequest());
+        final String result = HttpClientUtil.post(bankcardSettings.getBankListUrl(),BYXRequest.getBYXRequest(new HashMap<>(), byxSettings),byxSettings.getHeadRequest());
         return BYXResponse.getBYXResponse(result,byxSettings);
     }
 
