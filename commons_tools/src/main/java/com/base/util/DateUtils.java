@@ -395,5 +395,15 @@ public class DateUtils {
 		Date date = s.parse(str);
 		return s1.format(date);
 	}
-	
+
+	/**
+	 * @author:韩梅生
+	 * @Description 将两个日期相减得到天数
+	 * @Date 21:16 2018/5/14
+	 * @param
+	 */
+	public static int getDifferenceDays(Date date1,Date date2){
+		long betweenTime = date1.getTime() - date2.getTime();
+		return  (int)betweenTime/(1000*60*60*24);
+	}
 }
