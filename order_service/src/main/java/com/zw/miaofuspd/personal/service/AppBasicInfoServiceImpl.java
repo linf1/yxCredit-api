@@ -2,10 +2,10 @@ package com.zw.miaofuspd.personal.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.parser.deserializer.AbstractDateDeserializer;
 import com.base.util.DateUtils;
 import com.base.util.GeneratePrimaryKeyUtils;
 import com.base.util.TraceLoggerUtil;
+import com.constants.CommonConstant;
 import com.zw.api.HttpUtil;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
 import com.zw.miaofuspd.facade.dict.service.ISystemDictService;
@@ -16,6 +16,7 @@ import com.zw.miaofuspd.facade.order.service.IAppInsapplicationService;
 import com.zw.miaofuspd.facade.personal.service.AppBasicInfoService;
 import com.zw.service.base.AbsServiceBase;
 import com.zw.service.exception.DAOException;
+import jdk.internal.org.objectweb.asm.tree.TryCatchBlockNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -185,34 +186,34 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
      * @return
      */
     @Override
-    public void getBasicCustomerInfo(Map<String, String> map) {
+    public Map addBasicCustomerInfo(Map<String, String> map) {
+        String createTime = DateUtils.formatDate(new Date(),DateUtils.STYLE_7);
+        Map<String,Object> resultMap = new HashMap<String,Object>(3);
         String id = map.get("id");
         String tel = map.get("tel");
         String card = map.get("card");
         String personName = map.get("personName");
         String productName = map.get("productName");
-        //判断是新增还是更新
-        String sql = "select ID from mag_customer where USER_ID = '" + id + "'";
-        List<Map> list = sunbmpDaoSupport.findForList(sql);
-        if (list.size() > 0) {
-            //更新三要素
-            String sql2 = "update mag_customer set TEL = '" + tel + "',PERSON_NAME = '" + personName + "',CARD = '" + card + "' where USER_ID = '" + id + "'";
-            sunbmpDaoSupport.exeSql(sql2);
-            //更新订单表中的三要素信息
-            String sql6 = "update mag_order set TEL = '" + tel + "',CUSTOMER_NAME = '" + personName + "',CARD = '" + card + "' where USER_ID = '" + id + "'";
-            sunbmpDaoSupport.exeSql(sql6);
-        } else {
+        try {
             //新增客户信息
             String uuidKey = GeneratePrimaryKeyUtils.getUUIDKey();
-            String sql3 = "insert into mag_customer (ID,USER_ID,PERSON_NAME,TEL,CARD,surplus_contract_amount) values ('" + uuidKey + "','" + id + "','" + personName + "','" + tel + "','" + card + "',200000)";
-            sunbmpDaoSupport.exeSql(sql3);
+            String sql1 = "insert into mag_customer (ID,USER_ID,PERSON_NAME,TEL,CARD,surplus_contract_amount) values ('" + uuidKey + "','" + id + "','" + personName + "','" + tel + "','" + card + "',200000)";
+            sunbmpDaoSupport.exeSql(sql1);
             String orderid = String.valueOf(GeneratePrimaryKeyUtils.getOrderNum());
             //新增订单信息
-            String sql4 = "insert into mag_order (ID,order_no,CUSTOMER_ID,state,product_name_name,CUSTOMER_NAME,TEL,CARD) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"'," +
-                    "'"+orderid+"','"+uuidKey+"','0','"+productName+"','"+personName+"','"+tel+"','"+card+"')";
-            sunbmpDaoSupport.exeSql(sql4);
-
+            String sql2 = "insert into mag_order (ID,order_no,CUSTOMER_ID,state,product_name,CUSTOMER_NAME,TEL,CARD,CREAT_TIME) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"'," +
+                        "'"+orderid+"','"+uuidKey+"','0','"+productName+"','"+personName+"','"+tel+"','"+card+"','"+createTime+"')";
+            sunbmpDaoSupport.exeSql(sql2);
+        } catch (DAOException e) {
+            e.printStackTrace();
+            resultMap.put("flag",false);
+            resultMap.put("msg","创建用户或订单信息失败！");
+            return resultMap;
         }
+        resultMap.put("flag",true);
+        resultMap.put("msg","创建用户和订单信息成功！");
+        return resultMap;
+
     }
 
     //保存客户职业信息
@@ -849,6 +850,46 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         }
         resultMap.put("flag",true);
         resultMap.put("msg","一键申请提交成功");
+        return  resultMap;
+    }
+
+    /**
+     * @author:韩梅生
+     * @Description 用户信息强规则
+     * @Date 20:16 2018/5/14
+     * @param
+     */
+    @Override
+    public Map checkCustomerInfo(String userId,String card)  {
+        Map resultMap = new HashMap(3);
+        //验证用户年龄
+        Date age = DateUtils.strConvertToDate(card.substring(6,14));
+        Date now =  new Date();
+        int  days = DateUtils.getDifferenceDays(now,age);
+        int year = days/365;
+        if(year < CommonConstant.MIN_AGE || year > CommonConstant.MAX_AGE){
+            resultMap.put("flag",false);
+            resultMap.put("msg","您的年龄不在范围内");
+            return  resultMap;
+        }
+        //验证工作时间是否满一个月
+        String sql = "select t2.contract_start_date as contract_start_date,t2.job as job from mag_customer t1 " +
+                "left join byx_white_list t2 on t1.PERSON_NAME = t2.real_name and t1.card = t2.card where t1.USER_ID = '"+userId+"'";
+        Map workMap = sunbmpDaoSupport.findForMap(sql);
+        Date workTime = DateUtils.strConvertToDate((String) workMap.get("contract_start_date"));
+        int workTimeDiff = DateUtils.getDifferenceDays(now,workTime);
+        if(workTimeDiff < 30){
+            resultMap.put("flag",false);
+            resultMap.put("msg","您的工作时间未满一个月");
+            return  resultMap;
+        }
+        if(workMap.get("job")=="3"){
+            resultMap.put("flag",false);
+            resultMap.put("msg","临时工无法申请贷款");
+            return  resultMap;
+        }
+        resultMap.put("flag",true);
+        resultMap.put("msg","信息验证通过");
         return  resultMap;
     }
 }
