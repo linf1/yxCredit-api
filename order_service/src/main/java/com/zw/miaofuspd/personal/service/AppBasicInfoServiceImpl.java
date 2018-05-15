@@ -835,12 +835,14 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
                     ",'"+forMap.get("residence_address")+"','"+forMap.get("card_register_address")+"','"+forMap.get("product_name")+"','"+applayMoney+"'" +
                     ",'"+forMap.get("periods")+"','"+contractAmount+"','"+forMap.get("loan_purpose")+"','"+linkjson+"','"+DateUtils.getDateString(new Date())+"')";
             sunbmpDaoSupport.exeSql(sql2);
+            //申请时间
+            String applyTime = DateUtils.formatDate(new Date(),DateUtils.STYLE_7);
             //修改订单状态为已提交
-            String sql3 = "update mag_order set state = '2' where order_no = '"+orderId+"'";
+            String sql3 = "update mag_order set state = '2',applay_time = '"+applyTime+"' where order_no = '"+orderId+"'";
             sunbmpDaoSupport.exeSql(sql3);
             //新增操作表订单信息
             String sql4 = "insert into order_operation_record (id,operation_node,operation_result,order_id,operation_time,emp_id,emp_name,description) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"'," +
-                    "1,1,'"+orderId+"','"+DateUtils.getDateString(new Date())+"','"+forMap.get("user_id")+"','"+forMap.get("CUSTOMER_NAME")+"','已申请')";
+                    "1,1,'"+orderId+"','"+applyTime+"','"+forMap.get("user_id")+"','"+forMap.get("CUSTOMER_NAME")+"','已申请')";
             sunbmpDaoSupport.exeSql(sql4);
         } catch (DAOException e) {
             e.printStackTrace();
@@ -863,10 +865,10 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     public Map checkCustomerInfo(String userId,String card)  {
         Map resultMap = new HashMap(3);
         //验证用户年龄
-        Date age = DateUtils.strConvertToDate(card.substring(6,14));
+        Date age = DateUtils.strConvertToDateByType(card.substring(6,14));
         Date now =  new Date();
-        int  days = DateUtils.getDifferenceDays(now,age);
-        int year = days/365;
+        long  days = DateUtils.getDifferenceDays(now,age);
+        long year = days/365;
         if(year < CommonConstant.MIN_AGE || year > CommonConstant.MAX_AGE){
             resultMap.put("flag",false);
             resultMap.put("msg","您的年龄不在范围内");
@@ -876,8 +878,8 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         String sql = "select t2.contract_start_date as contract_start_date,t2.job as job from mag_customer t1 " +
                 "left join byx_white_list t2 on t1.PERSON_NAME = t2.real_name and t1.card = t2.card where t1.USER_ID = '"+userId+"'";
         Map workMap = sunbmpDaoSupport.findForMap(sql);
-        Date workTime = DateUtils.strConvertToDate((String) workMap.get("contract_start_date"));
-        int workTimeDiff = DateUtils.getDifferenceDays(now,workTime);
+        Date workTime = DateUtils.strConvertToDateByType((String) workMap.get("contract_start_date"));
+        long workTimeDiff = DateUtils.getDifferenceDays(now,workTime);
         if(workTimeDiff < 30){
             resultMap.put("flag",false);
             resultMap.put("msg","您的工作时间未满一个月");
