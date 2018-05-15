@@ -14,6 +14,7 @@ import com.zw.miaofuspd.facade.order.service.AppOrderService;
 import com.zw.miaofuspd.facade.order.service.IAppInsapplicationService;
 import com.zw.miaofuspd.facade.user.service.IMsgService;
 import com.zw.service.base.AbsServiceBase;
+import jdk.internal.org.objectweb.asm.tree.TryCatchBlockNode;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -1859,7 +1860,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
     @Override
     public Map contractForSubmissionByOrderId(String orderId ,String userId) throws Exception {
         Map returnMap = new HashMap();
-        String operationTime = DateUtils.getDateString(new Date());
+        String operationTime = DateUtils.getNowDateString(new Date());
 
         String checkSql="SELECT o.ID AS orderId , o.`CUSTOMER_NAME` AS customerName  ,o.loan_amount AS loanAmount " +
                     "FROM mag_order o WHERE o.`ID`='"+orderId+"' ";
@@ -1975,7 +1976,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
     @Override
     public Map updateOrderStatusByOrderId(String orderId,String state) throws Exception {
         Map returnMap = new HashMap();
-        String updateSql="UPDATE ma g_order SET Order_state="+state+" WHERE ID='"+orderId+"'";
+        String updateSql="UPDATE mag_order SET Order_state='"+state+"'  WHERE ID='"+orderId+"'";
         int count= sunbmpDaoSupport.executeSql(updateSql);
         if(count != 0){
             returnMap.put("res_code",1);
@@ -1986,5 +1987,6 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
         }
 
         return returnMap;
+
     }
 }

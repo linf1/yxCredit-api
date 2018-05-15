@@ -70,6 +70,16 @@ public class DateUtils {
 	public static String getNowDate(){
 		return sdf.format(new Date());
 	}
+
+	/**
+	 * 获取当前时间 年-月-日 时：分
+	 * @param date
+	 * @return
+	 */
+	public static String getNowDateString(Date date){
+		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		return s.format(date);
+	}
 	
 	/**
 	 * 字符串类型转化为日期类型
