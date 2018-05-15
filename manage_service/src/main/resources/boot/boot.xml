@@ -58,6 +58,7 @@
     <bean id="byxSettings" class="com.api.model.BYXSettings">
         <property name="appKey" value="${byx.appKey}"/>
         <property name="appSecrect" value="${byx.appSecrect}"/>
+        <property name="desKey" value="${byx.desKey}"/>
         <property name="vi" value="${byx.iv}"/>
     </bean>
 </beans>

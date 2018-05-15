@@ -66,7 +66,7 @@ public class BankcardServerImpl implements IBankcardServer{
     @Override
     public BYXResponse getBankList() throws Exception {
         final String result = HttpClientUtil.post(bankcardSettings.getBankListUrl(),"",byxSettings.getHeadRequest());
-        return BYXResponse.getBYXResponse(result);
+        return BYXResponse.getBYXResponse(result,byxSettings);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class BankcardServerImpl implements IBankcardServer{
         paramMap.put("regionId",regionId);
         paramMap.put("bankCode",bankCode);
         final String result = HttpClientUtil.post(bankcardSettings.getSubBankListUrl(), BYXRequest.getBYXRequest(paramMap, byxSettings),byxSettings.getHeadRequest());
-        return BYXResponse.getBYXResponse(result);
+        return BYXResponse.getBYXResponse(result,byxSettings);
     }
 
     @Override
@@ -83,12 +83,12 @@ public class BankcardServerImpl implements IBankcardServer{
         Map<String,Object> paramMap = new HashMap<>(1);
         paramMap.put("provinceId",provinceId);
         final String result = HttpClientUtil.post(bankcardSettings.getCityListUrl(),BYXRequest.getBYXRequest(paramMap, byxSettings),byxSettings.getHeadRequest());
-        return BYXResponse.getBYXResponse(result);
+        return BYXResponse.getBYXResponse(result,byxSettings);
     }
 
     @Override
     public BYXResponse getProvinceList() throws Exception {
         final String result = HttpClientUtil.post(bankcardSettings.getProvinceListUrl(),"",byxSettings.getHeadRequest());
-        return BYXResponse.getBYXResponse(result);
+        return BYXResponse.getBYXResponse(result,byxSettings);
     }
 }
