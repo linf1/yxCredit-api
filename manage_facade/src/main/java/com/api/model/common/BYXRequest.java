@@ -3,6 +3,8 @@ package com.api.model.common;
 import com.alibaba.fastjson.JSONObject;
 import com.api.model.BYXSettings;
 import com.zhiwang.zwfinance.app.jiguang.util.api.CryptoTools;
+import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * 碧友信请求实体
@@ -37,7 +39,7 @@ public class BYXRequest {
      * @throws Exception 加密异常
      */
     public static String getBYXRequest(Object param,BYXSettings byxSettings) throws Exception {
-        CryptoTools cryptoTools = new CryptoTools(byxSettings.getAppKey(),byxSettings.getVi());
+       CryptoTools cryptoTools = new CryptoTools(byxSettings.getDesKey(),byxSettings.getVi());
         //参数转化JSON
         final String paramJson = JSONObject.toJSONString(param);
         //碧友信参数加密
@@ -47,4 +49,7 @@ public class BYXRequest {
         byxRequest.setRequestTime(System.currentTimeMillis());
         return JSONObject.toJSONString(byxRequest);
     }
+
+
+
 }

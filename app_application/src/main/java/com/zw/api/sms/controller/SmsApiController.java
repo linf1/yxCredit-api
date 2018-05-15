@@ -35,6 +35,7 @@ public class SmsApiController {
     @Autowired
     private IMessageServer messageServer;
 
+
     @RequestMapping("/sendMsg")
     public ResultVO sendMsg(HttpServletRequest request, MsgRequest msgRequest){
         //生成6位数随机数
@@ -43,13 +44,10 @@ public class SmsApiController {
         parameters.put("smsCode",smsCode);
         request.getSession().setAttribute(AppConstant.SMS_KEY,smsCode);
         try {
-            final String result =  messageServer.sendSms(msgRequest,parameters);
-            if (result != null) {
-                final BYXResponse byxResponse = JSONObject.parseObject(result, BYXResponse.class);
-                if(BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())){
-                    LOGGER.info("接口发送成功",result);
-                    return ResultVO.ok("接口发送");
-                }
+            final BYXResponse byxResponse = messageServer.sendSms(msgRequest, parameters);
+            if (byxResponse != null) {
+                LOGGER.info("接口发送成功",byxResponse.toString());
+                return ResultVO.ok("接口发送");
             }
         } catch (Exception e) {
             e.printStackTrace();

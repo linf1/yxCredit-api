@@ -47,6 +47,7 @@
     <bean id="bankcardSettings" class="com.api.model.bankcard.BankcardSettings">
         <property name="requestType" value="${bankcard.requestType}"/>
         <property name="requestUrl" value="${bankcard.requestUrl}"/>
+        <property name="authConfirmUrl" value="${bankcard.authconfirmUrl}"/>
         <property name="bankListUrl" value="${bankcard.bankListUrl}"/>
         <property name="cityListUrl" value="${bankcard.cityListUrl}"/>
         <property name="provinceListUrl" value="${bankcard.provinceListUrl}"/>

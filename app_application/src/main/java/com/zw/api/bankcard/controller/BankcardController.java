@@ -1,18 +1,19 @@
 package com.zw.api.bankcard.controller;
 
 import com.api.model.bankcard.BankcardRequest;
+import com.api.model.common.BYXResponse;
 import com.api.service.bankcard.IBankcardServer;
-import com.base.util.AppRouterSettings;
 import com.base.util.GeneratePrimaryKeyUtils;
+import com.base.util.StringUtils;
 import com.zw.app.util.AppConstant;
 import com.zw.web.base.vo.ResultVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 
@@ -26,30 +27,52 @@ public class BankcardController {
     @Autowired
     private IBankcardServer bankcardServer;
 
+    private final Logger LOGGER = LoggerFactory.getLogger(BankcardController.class);
+
+    /**
+     * 银行卡四要素认证发送短信
+     * @param bankcardRequest 银行四要素请求参数
+     * @return 成功失败
+     */
     @PostMapping("/authsms")
-    public ResultVO authsms(BankcardRequest bankcardRequest) {
+    public ResultVO authsms(HttpServletRequest request,BankcardRequest bankcardRequest) {
         if(bankcardRequest == null){
             return ResultVO.error("参数异常");
         }
+        final String orderNum = "O" + GeneratePrimaryKeyUtils.getSnowflakeKey();
+        final String orderNo = "N" + GeneratePrimaryKeyUtils.getSnowflakeKey();
+        bankcardRequest.setMerchantNeqNo(orderNo);
+        bankcardRequest.setMerchantOrder(orderNum);
+        request.getSession().setAttribute(AppConstant.MERCHANT_ORDER,orderNum);
+        request.getSession().setAttribute(AppConstant.MERCHANT_NEQNO,orderNo);
         try {
-            final String authsms = bankcardServer.authsms(bankcardRequest);
-            return ResultVO.ok(authsms);
+            final BYXResponse authsms = bankcardServer.authsms(bankcardRequest);
+            if (BYXResponse.resCode.success.getCode().equals(authsms.getRes_code())) {
+                return  ResultVO.ok(authsms.getRes_data());
+            }
+            return ResultVO.error(authsms.getRes_msg());
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVO.error(e.getMessage());
         }
     }
 
-    @PostMapping("/authconfirm")
-    public ResultVO authconfirm(HttpServletRequest request, BankcardRequest bankcardRequest) {
+    @GetMapping("/authconfirm/{smsCode}")
+    public ResultVO authconfirm(HttpServletRequest request,@PathVariable String smsCode) {
         try {
-                if (bankcardRequest == null) {
+                if (StringUtils.isEmpty(smsCode)) {
                     return ResultVO.error("参数异常");
                 }
-                bankcardRequest.setMerchantNumber((String)request.getSession().getAttribute(AppConstant.MERCHANT_ORDER));
-                bankcardRequest.setMerchantNeqNo((String)request.getSession().getAttribute(AppConstant.MERCHANT_NEQNO));
-                final String authconfirm = bankcardServer.authconfirm(bankcardRequest);
-                return ResultVO.ok(authconfirm);
+                BankcardRequest bankcardRequest  = new BankcardRequest();
+                bankcardRequest.setSmsCode(smsCode);
+                final HttpSession session = request.getSession();
+                bankcardRequest.setMerchantOrder((String)session.getAttribute(AppConstant.MERCHANT_ORDER));
+                bankcardRequest.setMerchantNeqNo((String)session.getAttribute(AppConstant.MERCHANT_NEQNO));
+                final BYXResponse authsms = bankcardServer.authconfirm(bankcardRequest);
+                if (BYXResponse.resCode.success.getCode().equals(authsms.getRes_code())) {
+                    return ResultVO.ok(authsms.getRes_data());
+                }
+                return ResultVO.error(authsms.getRes_msg());
             } catch (Exception e) {
                 e.printStackTrace();
                 return ResultVO.error(e.getMessage());
@@ -64,8 +87,12 @@ public class BankcardController {
     @PostMapping("/getBankList")
     public ResultVO getBankList() {
         try {
-            return ResultVO.ok(bankcardServer.getBankList());
-        } catch (IOException e) {
+            final BYXResponse byxResponse = bankcardServer.getBankList();
+            if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
+                return ResultVO.ok(byxResponse.getRes_data());
+            }
+            return ResultVO.error(byxResponse.getRes_msg());
+        } catch (Exception e) {
             e.printStackTrace();
             return ResultVO.error(e.getMessage());
         }
@@ -79,8 +106,12 @@ public class BankcardController {
     @PostMapping("/getSubBankList/{regionId}/{bankCode}")
     public ResultVO getSubBankList(@PathVariable String regionId,@PathVariable String bankCode) {
         try {
-            return ResultVO.ok(bankcardServer.getSubBankList(regionId,bankCode));
-        } catch (IOException e) {
+            final BYXResponse subBankList = bankcardServer.getSubBankList(regionId, bankCode);
+            if (BYXResponse.resCode.success.getCode().equals(subBankList.getRes_code())) {
+                return ResultVO.ok(subBankList.getRes_data());
+            }
+            return ResultVO.error(subBankList.getRes_msg());
+        } catch (Exception e) {
             e.printStackTrace();
             return ResultVO.error(e.getMessage());
         }
@@ -91,11 +122,15 @@ public class BankcardController {
      * @return 城市列表json字符串
      * @exception  IOException 请求异常
      */
-    @PostMapping("/getCityList")
+    @PostMapping("/getCityList/{provinceId}")
     public ResultVO getCityList(@PathVariable String provinceId) {
         try {
-            return ResultVO.ok(bankcardServer.getCityList(provinceId));
-        } catch (IOException e) {
+            final BYXResponse cityList = bankcardServer.getCityList(provinceId);
+            if (BYXResponse.resCode.success.getCode().equals(cityList.getRes_code())) {
+                return ResultVO.ok(cityList.getRes_data());
+            }
+            return ResultVO.error(cityList.getRes_msg());
+        } catch (Exception e) {
             e.printStackTrace();
             return ResultVO.error(e.getMessage());
         }
@@ -107,8 +142,12 @@ public class BankcardController {
     @PostMapping("/getProvinceList")
     public ResultVO getProvinceList(){
         try {
-            return ResultVO.ok(bankcardServer.getProvinceList());
-        } catch (IOException e) {
+            final BYXResponse provinceList = bankcardServer.getProvinceList();
+            if (BYXResponse.resCode.success.getCode().equals(provinceList.getRes_code())) {
+                return ResultVO.ok(provinceList.getRes_data());
+            }
+            return ResultVO.error(provinceList.getRes_msg());
+        } catch (Exception e) {
             e.printStackTrace();
             return ResultVO.error(e.getMessage());
         }

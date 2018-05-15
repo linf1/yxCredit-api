@@ -2,6 +2,7 @@ package com.zw.miaofuspd.api.sortmsg;
 
 import com.alibaba.fastjson.JSONObject;
 import com.api.model.BYXSettings;
+import com.api.model.common.BYXResponse;
 import com.api.model.sortmsg.MsgRequest;
 import com.api.model.sortmsg.MsgSettings;
 import com.api.service.sortmsg.IMessageServer;
@@ -27,14 +28,15 @@ public class MessageServerImpl implements IMessageServer {
     private BYXSettings byxSettings;
 
     @Override
-    public String sendSms(MsgRequest request, Map<String,String> smsParam) throws Exception {
+    public BYXResponse sendSms(MsgRequest request, Map<String,String> smsParam) throws Exception {
         Map<String,Object> parameter = new HashMap<>(5);
         parameter.put("phone",request.getPhone());
         parameter.put("type",msgSettings.getType());
         parameter.put("channelUniqId",msgSettings.getChannelUniqId());
         final String content = TemplateUtils.getContent(msgSettings.getContent(), smsParam);
         parameter.put("content",content);
-        return HttpClientUtil.post(msgSettings.getRequestUrl(),JSONObject.toJSONString(parameter),byxSettings.getHeadRequest());
+        final String result = HttpClientUtil.post(msgSettings.getRequestUrl(),JSONObject.toJSONString(parameter), byxSettings.getHeadRequest());
+        return  BYXResponse.getBYXResponse(result,byxSettings);
 
     }
 

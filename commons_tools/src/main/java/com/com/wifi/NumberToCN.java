@@ -29,6 +29,7 @@ public class NumberToCN {
      */
     private static final String[] CN_UPPER_NUMBER = { "零", "壹", "贰", "叁", "肆",
             "伍", "陆", "柒", "捌", "玖" };
+			
     /**
      * 汉语中货币单位大写，这样的设计类似于占位符
      */

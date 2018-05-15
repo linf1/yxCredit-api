@@ -25,6 +25,8 @@ public class BankcardSettings extends BaseSettings {
      */
     private String  provinceListUrl;
 
+    private String authConfirmUrl;
+
     public String getMerchantNumber() {
         return merchantNumber;
     }
@@ -63,5 +65,13 @@ public class BankcardSettings extends BaseSettings {
 
     public void setProvinceListUrl(String provinceListUrl) {
         this.provinceListUrl = provinceListUrl;
+    }
+
+    public String getAuthConfirmUrl() {
+        return authConfirmUrl;
+    }
+
+    public void setAuthConfirmUrl(String authConfirmUrl) {
+        this.authConfirmUrl = authConfirmUrl;
     }
 }

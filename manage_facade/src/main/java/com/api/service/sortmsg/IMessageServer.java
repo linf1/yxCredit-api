@@ -1,5 +1,6 @@
 package com.api.service.sortmsg;
 
+import com.api.model.common.BYXResponse;
 import com.api.model.sortmsg.MsgRequest;
 
 import java.io.IOException;
@@ -18,5 +19,5 @@ public interface IMessageServer {
      * @return json 字符串
      * @throws IOException 短信发送异常
      */
-    String  sendSms(MsgRequest request, Map<String, String> smsParam) throws Exception;
+    BYXResponse sendSms(MsgRequest request, Map<String, String> smsParam) throws Exception;
 }
