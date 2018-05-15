@@ -1964,4 +1964,27 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
         returnMap.put("operationInfo",operationList);
         return  returnMap;
     }
+
+
+    /**
+     * 根据订单ID修改订单状态
+     * @author 仙海峰
+     * @param orderId
+     * @return
+     */
+    @Override
+    public Map updateOrderStatusByOrderId(String orderId,String state) throws Exception {
+        Map returnMap = new HashMap();
+        String updateSql="UPDATE ma g_order SET Order_state="+state+" WHERE ID='"+orderId+"'";
+        int count= sunbmpDaoSupport.executeSql(updateSql);
+        if(count != 0){
+            returnMap.put("res_code",1);
+            returnMap.put("res_msg","订单状态修改成功！");
+        }else {
+            returnMap.put("res_code",0);
+            returnMap.put("res_msg","订单状态修改失败！");
+        }
+
+        return returnMap;
+    }
 }

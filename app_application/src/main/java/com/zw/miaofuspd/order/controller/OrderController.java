@@ -443,25 +443,6 @@ public class  OrderController extends AbsBaseController {
 
 
 
-
-    /**
-     * 根据订单ID完成签约
-     * @author 仙海峰
-     * @param orderId
-     * @return
-     */
-    @RequestMapping("/contractForSubmission")
-    @ResponseBody
-    public ResultVO contractForSubmissionByOrderId(String orderId ,String userId) throws Exception{
-        ResultVO resultVO = new ResultVO();
-
-        //根据orderId，userId完成签约提交
-        Map map  = appOrderService.contractForSubmissionByOrderId(orderId,userId);
-        resultVO.setRetData(map);
-
-        return resultVO;
-    }
-
     /**
      * 获取该用户下全部订单
      * @author 仙海峰
@@ -498,6 +479,43 @@ public class  OrderController extends AbsBaseController {
         return resultVO;
     }
 
+    /**
+     * 根据订单ID修改订单状态
+     * @author 仙海峰
+     * @param orderId
+     * @param state
+     * @return
+     */
+    @RequestMapping("/updateOrderStatus")
+    @ResponseBody
+    public ResultVO updateOrderStatus(String orderId,String state) throws Exception {
+        ResultVO resultVO = new ResultVO();
+
+        //根据订单ID修改订单状态
+        Map map  = appOrderService.updateOrderStatusByOrderId(orderId,state);
+        resultVO.setRetData(map);
+
+        return resultVO;
+    }
+
+
+    /**
+     * 根据订单ID完成签约
+     * @author 仙海峰
+     * @param orderId
+     * @return
+     */
+    @RequestMapping("/contractForSubmission")
+    @ResponseBody
+    public ResultVO contractForSubmission(String orderId ,String userId) throws Exception{
+        ResultVO resultVO = new ResultVO();
+
+        //根据orderId，userId完成签约提交
+        Map map  = appOrderService.contractForSubmissionByOrderId(orderId,userId);
+        resultVO.setRetData(map);
+
+        return resultVO;
+    }
 
 
 

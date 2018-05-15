@@ -216,4 +216,12 @@ public interface AppOrderService {
      */
     Map getOrderAllInFoByOrderId(String orderId);
 
+    /**
+     * 根据订单ID修改订单状态
+     * @author 仙海峰
+     * @param orderId
+     * @return
+     */
+    Map updateOrderStatusByOrderId(String orderId,String state) throws Exception;
+
 }
