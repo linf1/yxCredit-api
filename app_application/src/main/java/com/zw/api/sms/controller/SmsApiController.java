@@ -1,5 +1,8 @@
-package com.zw.api.sms;
+package com.zw.api.sms.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.api.model.BYXSettings;
+import com.api.model.common.BYXResponse;
 import com.api.service.sortmsg.IMessageServer;
 import com.base.util.AppRouterSettings;
 import com.base.util.RandomUtil;
@@ -16,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +27,7 @@ import java.util.Map;
  * @author 陈清玉
  */
 @RestController
-@RequestMapping(AppRouterSettings.VERSION +AppRouterSettings.API_MODULE + "/sms")
+@RequestMapping(AppRouterSettings.VERSION + AppRouterSettings.API_MODULE + "/sms")
 public class SmsApiController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(SmsApiController.class);
@@ -34,21 +36,26 @@ public class SmsApiController {
     private IMessageServer messageServer;
 
     @RequestMapping("/sendMsg")
-    public void sendMsg(HttpServletRequest request, MsgRequest msgRequest){
+    public ResultVO sendMsg(HttpServletRequest request, MsgRequest msgRequest){
         //生成6位数随机数
-        final String smsCode = RandomUtil.createRandomCharData(6);
+        final String smsCode = RandomUtil.createRandomVcode(6);
         Map<String,String> parameters = new HashMap<>(2);
-        parameters.put("company","碧友信");
         parameters.put("smsCode",smsCode);
         request.getSession().setAttribute(AppConstant.SMS_KEY,smsCode);
         try {
             final String result =  messageServer.sendSms(msgRequest,parameters);
             if (result != null) {
-                LOGGER.info("接口发送成功",result);
+                final BYXResponse byxResponse = JSONObject.parseObject(result, BYXResponse.class);
+                if(BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())){
+                    LOGGER.info("接口发送成功",result);
+                    return ResultVO.ok("接口发送");
+                }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            ResultVO.error(e.getMessage());
         }
+       return ResultVO.error();
     }
 
     @GetMapping("/checkMsg/{smsCode}")

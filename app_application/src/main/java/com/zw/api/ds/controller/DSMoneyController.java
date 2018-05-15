@@ -1,4 +1,4 @@
-package com.zw.api.ds;
+package com.zw.api.ds.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.api.model.common.BYXResponse;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(AppRouterSettings.VERSION +AppRouterSettings.API_MODULE + "/ds")
 public class DSMoneyController {
 
-    @Autowired
     private IDSMoneyServer idsMoneyServer;
 
     @PostMapping("/synchroBorrowerAndAccountCard")

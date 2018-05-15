@@ -1,4 +1,4 @@
-package com.zw.api.tongdun;
+package com.zw.api.tongdun.controller;
 
 import com.api.model.common.ApiCommonResponse;
 import com.api.model.common.ApiConstants;
@@ -26,7 +26,6 @@ public class TongDunApiController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TongDunApiController.class);
 
-    @Autowired
     private ITongDunApiService tongDunApiService;
 
     /**

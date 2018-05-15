@@ -43,4 +43,20 @@
         <property name="requestType" value="${sms.requestType}"/>
         <property name="requestUrl" value="${sms.url}"/>
     </bean>
+    <!-- 银行卡四要素BEAN create by 陈清玉-->
+    <bean id="bankcardSettings" class="com.api.model.bankcard.BankcardSettings">
+        <property name="requestType" value="${bankcard.requestType}"/>
+        <property name="requestUrl" value="${bankcard.requestUrl}"/>
+        <property name="bankListUrl" value="${bankcard.bankListUrl}"/>
+        <property name="cityListUrl" value="${bankcard.cityListUrl}"/>
+        <property name="provinceListUrl" value="${bankcard.provinceListUrl}"/>
+        <property name="subBankListUrl" value="${bankcard.subBankListUrl}"/>
+        <property name="merchantNumber" value="${bankcard.merchantNumber}"/>
+    </bean>
+    <!-- 碧友信加密BEAN create by 陈清玉-->
+    <bean id="byxSettings" class="com.api.model.BYXSettings">
+        <property name="appKey" value="${byx.appKey}"/>
+        <property name="appSecrect" value="${byx.appSecrect}"/>
+        <property name="vi" value="${byx.iv}"/>
+    </bean>
 </beans>

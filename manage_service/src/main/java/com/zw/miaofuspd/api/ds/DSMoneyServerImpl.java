@@ -1,7 +1,6 @@
 package com.zw.miaofuspd.api.ds;
 
 import com.alibaba.fastjson.JSONObject;
-import com.api.model.common.BYXResponse;
 import com.api.model.ds.DSMoneyRequest;
 import com.api.model.ds.DSMoneySettings;
 import com.api.service.ds.IDSMoneyServer;
@@ -18,16 +17,16 @@ import java.io.IOException;
 @Service(IDSMoneyServer.BEAN_KEY)
 public class DSMoneyServerImpl implements IDSMoneyServer {
 
-    @Autowired
-    private DSMoneySettings dsMoneySettings;
+    //private DSMoneySettings dsMoneySettings;
+
     @Override
     public String saveBorrowerAndAccountCard(DSMoneyRequest request) {
-        try {
-          return HttpUtil.doPost(dsMoneySettings.getRequestUrl(), JSONObject.toJSONString(request));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+////          return HttpUtil.doPost(dsMoneySettings.getRequestUrl(), JSONObject.toJSONString(request));
+////
+////        } catch (IOException e) {
+////            e.printStackTrace();
+////        }
         return null;
     }
 }

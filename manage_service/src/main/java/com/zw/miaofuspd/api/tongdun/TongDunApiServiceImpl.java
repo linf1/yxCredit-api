@@ -20,7 +20,6 @@ import java.util.Map;
 @Service(ITongDunApiService.BEAN_ID)
 public class TongDunApiServiceImpl implements ITongDunApiService {
 
-    @Autowired
     private TongDunSettings tongDunSettings;
 
     @Override

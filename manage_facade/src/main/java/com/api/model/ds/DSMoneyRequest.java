@@ -1,10 +1,13 @@
 package com.api.model.ds;
 
+import java.io.Serializable;
+
 /**
  * 借款人及放款账户数据同步实体
  * @author 陈青玉
  */
-public class DSMoneyRequest {
+public class DSMoneyRequest implements Serializable {
+    private static final long serialVersionUID = -2021848220657721076L;
     /**
      * Y	string	借款人用户名
      */

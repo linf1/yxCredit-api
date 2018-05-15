@@ -1,11 +1,14 @@
 package com.api.model.common;
 
+import java.io.Serializable;
+
 /**
  * 基础settings
  * @author 陈清玉
  */
-public class BaseSettings {
+public class BaseSettings implements Serializable {
 
+    private static final long serialVersionUID = 5030594775406641718L;
     /**
      * 请求url
      */
