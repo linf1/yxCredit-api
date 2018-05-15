@@ -40,6 +40,13 @@ public class DateUtils {
 
 	public final static String STYLE_9 = "hhmmss";
 	public final static String STYLE_10 = "yyyyMMddhhmmss";
+	/**
+	 * create 仙海峰 start
+	 */
+	public final static String STYLE_11 = "yyyy-MM-dd HH:mm";
+	/**
+	 * create 仙海峰 end
+	 */
 
 	private static Map<String, SimpleDateFormat> sdfMap=new HashMap<String, SimpleDateFormat>();
 
@@ -54,6 +61,7 @@ public class DateUtils {
 		sdfMap.put(STYLE_8, new SimpleDateFormat(STYLE_8));
 		sdfMap.put(STYLE_9, new SimpleDateFormat(STYLE_9));
 		sdfMap.put(STYLE_10, new SimpleDateFormat(STYLE_10));
+		sdfMap.put(STYLE_11, new SimpleDateFormat(STYLE_11));
 	}
 
 	public static String getCurrentTime() {

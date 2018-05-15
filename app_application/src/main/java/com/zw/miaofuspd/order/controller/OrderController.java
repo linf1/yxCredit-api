@@ -441,86 +441,17 @@ public class  OrderController extends AbsBaseController {
 
     /****************************************************碧友信**********************************************/
 
+
+
     /**
-     * 根据用户ID和订单状态获取订单信息列表(2.审核中、3.待签约、4.待放款)
+     * 获取该用户下全部订单
      * @author 仙海峰
      * @param userId
      * @return
      */
-    @RequestMapping("/getOrderListByUserId/{userId}")
+    @RequestMapping("/getAllOrder")
     @ResponseBody
-    public ResultVO getOrderListByUserId(@PathVariable String userId){
-        ResultVO resultVO = new ResultVO();
-        //根据userId获取该用户下所有订单信息
-        Map map  = appOrderService.getOrderListByUserId(userId);
-        resultVO.setRetData(map);
-
-        return resultVO;
-    }
-
-    /**
-     * 根据订单ID获取订单审核信息
-     * @author 仙海峰
-     * @param orderId
-     * @return
-     */
-    @RequestMapping("/getOrderInfoByOrderId")
-    @ResponseBody
-    public ResultVO getOrderInfoByOrderId(String orderId ){
-        ResultVO resultVO = new ResultVO();
-        //根据orderId获取订单审核信息
-        Map map  = appOrderService.getOrderInfoByOrderId(orderId);
-        resultVO.setRetData(map);
-
-        return resultVO;
-    }
-
-
-    /**
-     * 根据订单ID获取订单待签约信息
-     * @author 仙海峰
-     * @param orderId
-     * @return
-     */
-    @RequestMapping("/getPendingContractOrderInfoByOrderId")
-    @ResponseBody
-    public ResultVO getPendingContractOrderInfoByOrderId(String orderId ){
-        ResultVO resultVO = new ResultVO();
-
-        //根据orderId获取待签约订单信息
-        Map map  = appOrderService.getPendingContractOrderInfoByOrderId(orderId);
-        resultVO.setRetData(map);
-
-        return resultVO;
-    }
-
-    /**
-     * 根据订单ID完成签约
-     * @author 仙海峰
-     * @param orderId
-     * @return
-     */
-    @RequestMapping("/contractForSubmissionByOrderId")
-    @ResponseBody
-    public ResultVO contractForSubmissionByOrderId(String orderId ,String userId) throws Exception{
-        ResultVO resultVO = new ResultVO();
-
-        //根据orderId，userId完成签约提交
-        Map map  = appOrderService.contractForSubmissionByOrderId(orderId,userId);
-        resultVO.setRetData(map);
-
-        return resultVO;
-    }
-
-    /**
-     * 根据UserId获取全部订单
-     * @author 仙海峰
-     * @param userId
-     * @return
-     */
-    @RequestMapping("/getAllOrderByUserId")
-    @ResponseBody
-    public ResultVO getAllOrderByUserId(String userId) {
+    public ResultVO getAllOrder(String userId) {
         ResultVO resultVO = new ResultVO();
 
         //根据userId获取全部订单
@@ -530,23 +461,62 @@ public class  OrderController extends AbsBaseController {
         return resultVO;
     }
 
-
     /**
-     * 根据OrderId获取待放款订单信息
+     * 获取订单所有信息详情
      * @author 仙海峰
      * @param orderId
      * @return
      */
-    @RequestMapping("/getPendingMoneyInfoByOrderId")
+    @RequestMapping("/getOrderInFo")
     @ResponseBody
-    public ResultVO getPendingMoneyInfoByOrderId(String orderId) {
+    public ResultVO getOrderInFo(String orderId) {
         ResultVO resultVO = new ResultVO();
 
-        //根据userId获取全部订单
-        Map map  = appOrderService.getPendingMoneyInfoByOrderId(orderId);
+        //获取此订单全部信息记录
+        Map map  = appOrderService.getOrderAllInFoByOrderId(orderId);
         resultVO.setRetData(map);
 
         return resultVO;
     }
+
+    /**
+     * 根据订单ID修改订单状态
+     * @author 仙海峰
+     * @param orderId
+     * @param state
+     * @return
+     */
+    @RequestMapping("/updateOrderStatus")
+    @ResponseBody
+    public ResultVO updateOrderStatus(String orderId,String state) throws Exception {
+        ResultVO resultVO = new ResultVO();
+
+        //根据订单ID修改订单状态
+        Map map  = appOrderService.updateOrderStatusByOrderId(orderId,state);
+        resultVO.setRetData(map);
+
+        return resultVO;
+    }
+
+
+    /**
+     * 根据订单ID完成签约
+     * @author 仙海峰
+     * @param orderId
+     * @return
+     */
+    @RequestMapping("/contractForSubmission")
+    @ResponseBody
+    public ResultVO contractForSubmission(String orderId ,String userId) throws Exception{
+        ResultVO resultVO = new ResultVO();
+
+        //根据orderId，userId完成签约提交
+        Map map  = appOrderService.contractForSubmissionByOrderId(orderId,userId);
+        resultVO.setRetData(map);
+
+        return resultVO;
+    }
+
+
 
 }

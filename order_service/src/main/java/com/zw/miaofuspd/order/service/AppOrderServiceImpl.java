@@ -1859,7 +1859,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
     @Override
     public Map contractForSubmissionByOrderId(String orderId ,String userId) throws Exception {
         Map returnMap = new HashMap();
-        String operationTime = DateUtils.getDateString(new Date());
+        String operationTime = DateUtils.getCurrentTime(DateUtils.STYLE_11);
 
         String checkSql="SELECT o.ID AS orderId , o.`CUSTOMER_NAME` AS customerName  ,o.loan_amount AS loanAmount " +
                     "FROM mag_order o WHERE o.`ID`='"+orderId+"' ";
@@ -1883,16 +1883,19 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
             if(count !=0 ){
                 int count2= sunbmpDaoSupport.executeSql(updateSql);
                 if(count2 !=0){
-                    returnMap.put("res_code", "1");
+                    returnMap.put("res_code",1);
                     returnMap.put("res_msg", "信息已提交，签约成功！");
                     return  returnMap;
+                }else {
+                    returnMap.put("res_code",0);
+                    returnMap.put("res_msg", "签约失败！");
                 }
 
             }
         }
 
 
-        return null;
+        return returnMap;
     }
 
     /**
@@ -1904,7 +1907,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
     @Override
     public Map getAllOrderByUserId(String userId) {
         Map returnMap = new HashMap();
-        String sql ="SELECT ID AS orderId ,  product_name_name AS productName , applay_money AS applayMoney , PERIODS AS periods , CREAT_TIME AS creatTime , Order_state AS orderState  " +
+        String sql ="SELECT ID AS orderId ,  product_name_name AS productName , applay_money AS applayMoney , PERIODS AS periods , applay_time AS applayTime , Order_state AS orderState  " +
                 "FROM mag_order WHERE USER_ID='"+userId+"'";
         List allOrderList = sunbmpDaoSupport.findForList(sql);
         returnMap.put("allOrderList",allOrderList);
@@ -1932,6 +1935,60 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
         returnMap.put("orderInfo",orderMap);
         returnMap.put("operationInfo",operationList);
         return  returnMap;
+
+    }
+
+
+    /**
+     * 根据订单ID获取订单全部信息（包括订单操作流程信息）
+     * @author 仙海峰
+     * @param orderId
+     * @return
+     */
+    @Override
+    public Map getOrderAllInFoByOrderId(String orderId) {
+        Map returnMap = new HashMap();
+        String orderSql = "SELECT  ID AS orderId , CUSTOMER_NAME AS customerName , TEL AS tel , CARD AS card , " +
+                                    "product_name_name AS productName , applay_money AS applayMoney , applay_time AS applayTime , " +
+                                    "loan_amount AS loanAmount , Examine_time AS examineTime , contract_amount AS contractAmount , " +
+                                    "repay_type AS repayType , Job AS job , Service_fee AS serviceFee , loan_purpose AS loanPurpose , " +
+                                    "PERIODS AS periods , Order_state AS orderStatus  " +
+                            "FROM mag_order  WHERE  ID='"+orderId+"' ";
+        Map orderMap = sunbmpDaoSupport.findForMap(orderSql);
+
+        String operationSql="SELECT id AS operationId , order_id AS orderId , emp_id AS empId , emp_name AS empName, " +
+                                    "operation_time AS operationTime , amount AS amount , STATUS AS STATUS , operation_node AS operationNode , " +
+                                    "operation_result AS operationResult , description AS description " +
+                            "FROM order_operation_record " +
+                            "WHERE order_id='"+orderId+"'";
+        List operationList = sunbmpDaoSupport.findForList(operationSql);
+
+        returnMap.put("orderInfo",orderMap);
+        returnMap.put("operationInfo",operationList);
+        return  returnMap;
+    }
+
+
+    /**
+     * 根据订单ID修改订单状态
+     * @author 仙海峰
+     * @param orderId
+     * @return
+     */
+    @Override
+    public Map updateOrderStatusByOrderId(String orderId,String state) throws Exception {
+        Map returnMap = new HashMap();
+        String updateSql="UPDATE mag_order SET Order_state='"+state+"'  WHERE ID='"+orderId+"'";
+        int count= sunbmpDaoSupport.executeSql(updateSql);
+        if(count != 0){
+            returnMap.put("res_code",1);
+            returnMap.put("res_msg","订单状态修改成功！");
+        }else {
+            returnMap.put("res_code",0);
+            returnMap.put("res_msg","订单状态修改失败！");
+        }
+
+        return returnMap;
 
     }
 }

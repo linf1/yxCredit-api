@@ -207,4 +207,21 @@ public interface AppOrderService {
      */
     Map getPendingMoneyInfoByOrderId(String orderId);
 
+
+    /**
+     * 根据订单ID获取订单全部信息（包括订单操作流程信息）
+     * @author 仙海峰
+     * @param orderId
+     * @return
+     */
+    Map getOrderAllInFoByOrderId(String orderId);
+
+    /**
+     * 根据订单ID修改订单状态
+     * @author 仙海峰
+     * @param orderId
+     * @return
+     */
+    Map updateOrderStatusByOrderId(String orderId,String state) throws Exception;
+
 }
