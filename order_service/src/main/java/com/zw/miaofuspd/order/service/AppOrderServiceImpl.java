@@ -14,7 +14,6 @@ import com.zw.miaofuspd.facade.order.service.AppOrderService;
 import com.zw.miaofuspd.facade.order.service.IAppInsapplicationService;
 import com.zw.miaofuspd.facade.user.service.IMsgService;
 import com.zw.service.base.AbsServiceBase;
-import jdk.internal.org.objectweb.asm.tree.TryCatchBlockNode;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -1860,7 +1859,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
     @Override
     public Map contractForSubmissionByOrderId(String orderId ,String userId) throws Exception {
         Map returnMap = new HashMap();
-        String operationTime = DateUtils.getNowDateString(new Date());
+        String operationTime = DateUtils.getCurrentTime(DateUtils.STYLE_11);
 
         String checkSql="SELECT o.ID AS orderId , o.`CUSTOMER_NAME` AS customerName  ,o.loan_amount AS loanAmount " +
                     "FROM mag_order o WHERE o.`ID`='"+orderId+"' ";
@@ -1884,16 +1883,19 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
             if(count !=0 ){
                 int count2= sunbmpDaoSupport.executeSql(updateSql);
                 if(count2 !=0){
-                    returnMap.put("res_code", "1");
+                    returnMap.put("res_code",1);
                     returnMap.put("res_msg", "信息已提交，签约成功！");
                     return  returnMap;
+                }else {
+                    returnMap.put("res_code",0);
+                    returnMap.put("res_msg", "签约失败！");
                 }
 
             }
         }
 
 
-        return null;
+        return returnMap;
     }
 
     /**

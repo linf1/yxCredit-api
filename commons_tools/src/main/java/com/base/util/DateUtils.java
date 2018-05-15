@@ -1,6 +1,7 @@
 package com.base.util;
 
 import org.apache.commons.lang.StringUtils;
+import sun.applet.Main;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -39,6 +40,13 @@ public class DateUtils {
 
 	public final static String STYLE_9 = "hhmmss";
 	public final static String STYLE_10 = "yyyyMMddhhmmss";
+	/**
+	 * create 仙海峰 start
+	 */
+	public final static String STYLE_11 = "yyyy-MM-dd HH:mm";
+	/**
+	 * create 仙海峰 end
+	 */
 
 	private static Map<String, SimpleDateFormat> sdfMap=new HashMap<String, SimpleDateFormat>();
 
@@ -53,6 +61,7 @@ public class DateUtils {
 		sdfMap.put(STYLE_8, new SimpleDateFormat(STYLE_8));
 		sdfMap.put(STYLE_9, new SimpleDateFormat(STYLE_9));
 		sdfMap.put(STYLE_10, new SimpleDateFormat(STYLE_10));
+		sdfMap.put(STYLE_11, new SimpleDateFormat(STYLE_11));
 	}
 
 	public static String getCurrentTime() {
@@ -61,7 +70,7 @@ public class DateUtils {
 	public static String getCurrentTime(String str) {
 		return sdfMap.get(str).format(new Date());
 	}
-	
+
 	/**
 	 * 获取当前时间
 	 * 方法描述
@@ -70,7 +79,7 @@ public class DateUtils {
 	public static String getNowDate(){
 		return sdf.format(new Date());
 	}
-	
+
 	/**
 	 * 字符串类型转化为日期类型
 	 * @param str
@@ -87,7 +96,22 @@ public class DateUtils {
 		}
 		return null;
 	}
-	
+	/**
+	 * 字符串类型转化为日期类型
+	 * @param str
+	 * @return
+	 */
+	public static Date strConvertToDateByType(String str){
+		if(StringUtils.isNotEmpty(str)){
+			try {
+				return sdfMap.get(STYLE_3).parse(str);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * 日期类型转化为制定的日期格式
 	 * @param date
@@ -105,7 +129,7 @@ public class DateUtils {
 	}
 	/**
 	 * 比较时间大小
-	 * 
+	 *
 	 * @param beginDate 开始时间
 	 * @param endDate   结束时间
 	 * @return true begin大于end
@@ -118,7 +142,7 @@ public class DateUtils {
 			if(beginDate.getTime()>=endDate.getTime()){
 				return true;
 			}
-			
+
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -127,7 +151,7 @@ public class DateUtils {
 	/**
 	 * 判断number是不是在两者之间
 	 * @author wu.yy
-	 * 
+	 *
 	 * @param number
 	 * @param start
 	 * @param end
@@ -266,7 +290,7 @@ public class DateUtils {
 			return "30";
 		}
 	}
-	
+
 	/**
 	 * 获取当前日期前一天
 	 * @return date
@@ -276,8 +300,8 @@ public class DateUtils {
 		calendar.add(Calendar.DATE, -1);    //得到前一天
 		Date date = calendar.getTime();
 		return date;
-	} 
-	
+	}
+
 	/**
 	 * 获取当前日期前两天
 	 * @return date
@@ -287,8 +311,8 @@ public class DateUtils {
 		calendar.add(Calendar.DATE, -2);    //得到前一天
 		Date date = calendar.getTime();
 		return date;
-	} 
-	
+	}
+
 	/**
 	 * 格式化日期
 	 * @param format
@@ -298,7 +322,7 @@ public class DateUtils {
 		SimpleDateFormat sFormat = new SimpleDateFormat(format);
 		return sFormat.format(new Date());
 	}
-	
+
 	/**
 	 * 格式化日期
 	 * @param format
@@ -322,7 +346,7 @@ public class DateUtils {
 	 * @param date1 ： 数据库中的时间
 	 * @param code：数据字典中的子健code
 	 * @return false 失效  true 未失效
-	 * @throws HsException 
+	 * @throws HsException
 	 */
 	public static Boolean isDateBig(String date1,String errortime) throws Exception{
 		SimpleDateFormat s = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -341,7 +365,7 @@ public class DateUtils {
 	 * 将yyyy年MM月dd天格式的时间字符串转为yyyymmdd格式
 	 * @param date
 	 * @return 返回已格式化的字符串
-	 * @throws HsException 
+	 * @throws HsException
 	 */
 	public static String changeDate(String str) throws Exception{
 		SimpleDateFormat s = new SimpleDateFormat("yyyy年MM月dd日");
@@ -352,7 +376,7 @@ public class DateUtils {
 	 * 将yyyy年MM月dd天格式的时间字符串转为yyyymmdd格式
 	 * @param date
 	 * @return 返回已格式化的字符串
-	 * @throws HsException 
+	 * @throws HsException
 	 */
 	public static String changeDates(String str) throws Exception{
 		SimpleDateFormat s = new SimpleDateFormat("yyyyMMdd");
@@ -366,7 +390,7 @@ public class DateUtils {
 	 * @param date1 ： 数据库中用户密码输入错误时间
 	 * @param code：数据字典中的子健code
 	 * @return false 锁定时间内 true 锁定时间外
-	 * @throws HsException 
+	 * @throws HsException
 	 */
 	public static Boolean isErrorTime(String date1,String code,String limtime) throws Exception{
 		SimpleDateFormat s = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -402,8 +426,9 @@ public class DateUtils {
 	 * @Date 21:16 2018/5/14
 	 * @param
 	 */
-	public static int getDifferenceDays(Date date1,Date date2){
+	public static long getDifferenceDays(Date date1,Date date2){
 		long betweenTime = date1.getTime() - date2.getTime();
-		return  (int)betweenTime/(1000*60*60*24);
+		return  betweenTime/(1000*60*60*24);
 	}
+
 }
