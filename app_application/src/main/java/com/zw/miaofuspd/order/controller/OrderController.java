@@ -511,6 +511,7 @@ public class  OrderController extends AbsBaseController {
         ResultVO resultVO = new ResultVO();
 
         //根据orderId，userId完成签约提交
+        //测试
         Map map  = appOrderService.contractForSubmissionByOrderId(orderId,userId);
         resultVO.setRetData(map);
 
