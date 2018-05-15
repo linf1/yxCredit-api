@@ -47,7 +47,7 @@ public class SmsApiController {
             final BYXResponse byxResponse = messageServer.sendSms(msgRequest, parameters);
             if (byxResponse != null) {
                 LOGGER.info("接口发送成功",byxResponse.toString());
-                return ResultVO.ok("接口发送");
+                return ResultVO.ok("接口发送成功",null);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,7 +65,7 @@ public class SmsApiController {
         if(!smsCode.equals(smsKey)){
             return ResultVO.error("手机验证码发送失败或超时间");
         }
-        return ResultVO.ok("验证通过");
+        return ResultVO.ok("验证通过",null);
     }
 
 
