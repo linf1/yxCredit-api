@@ -62,11 +62,11 @@ public class ResultVO<T> implements Serializable {
      * create by 陈清玉
      */
     public static ResultVO error() {
-        return error("500", "未知异常，请联系管理员");
+        return error(VOConst.FAIL, "未知异常，请联系管理员");
     }
 
     public static ResultVO error(String msg) {
-        return error("500", msg);
+        return error(VOConst.FAIL, msg);
     }
 
     public static ResultVO error(String code, String msg) {

@@ -351,20 +351,19 @@ public class LoginServiceImpl extends AbsServiceBase implements ILoginService {
             id = registeredService.insertUser(inMap);
         }else{
             Map appUser =  (Map)list.get(0);
-            if(appUser ==null ){
+            if(appUser != null ){
                 id = (String)appUser.get("id");
                 returnMap.put("img_url",appUser.get("img_url"));
             }
         }
         //获取token，并将token更新到数据库中
-       // String token = TokenUtil.getToken(phone);
         Map<String, Object> payload = new HashMap<>(3);
         Date date = new Date();
         // 用户id
         payload.put("uid", "id");
         // 生成时间:当前
         payload.put("iat", date.getTime());
-        // 过期时间30天
+        // 过期时间15天
         payload.put("ext", date.getTime() + Jwt.OUT_TIME);
         String token = Jwt.createToken(payload);
         String tokenTime = (new Date()).getTime()+"";

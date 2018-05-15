@@ -41,7 +41,7 @@ public class LoginController extends AbsBaseController {
         Map map = loginService.login(phone, password, registration_id,black_box,type,ip_address,deviceCode);
         boolean flag = (boolean) map.get("success");
         String msg = (String) map.get("msg");
-        Map returnmap = new HashMap();
+        Map returnMap = new HashMap();
         if (flag) {
             AppUserInfo user = new AppUserInfo();
             user.setId(map.get("id") + "");
@@ -71,12 +71,12 @@ public class LoginController extends AbsBaseController {
             map2.put("token_time",map.get("token_time"));
             map2.put(AppConstant.APP_USER_INFO,user);
             getRequest().getSession().setAttribute(AppConstant.APP_USER_INFO, user);
-            returnmap.put("userId",map.get("id"));
-            returnmap.put("isBlack",map.get("is_black"));
-            returnmap.put("token",token);
-            returnmap.put("referenceId",map.get("id"));
-            returnmap.put("sessionId",getRequest().getSession().getId());
-            resultVO.setRetData(returnmap);
+            returnMap.put("userId",map.get("id"));
+            returnMap.put("isBlack",map.get("is_black"));
+            returnMap.put("token",token);
+            returnMap.put("referenceId",map.get("id"));
+            returnMap.put("sessionId",getRequest().getSession().getId());
+            resultVO.setRetData(returnMap);
         } else {
             resultVO.setErrorMsg(VOConst.FAIL, msg);
             resultVO.setRetData(map);
@@ -108,7 +108,7 @@ public class LoginController extends AbsBaseController {
         Map map = loginService.login(phone,type,ipAddress,deviceCode);
         boolean flag = (boolean) map.get("success");
         String msg = (String) map.get("msg");
-        Map returnmap = new HashMap(3);
+        Map returnMap = new HashMap(3);
         if (flag) {
             AppUserInfo user = new AppUserInfo();
             user.setId(map.get("phone") + "");
@@ -117,14 +117,14 @@ public class LoginController extends AbsBaseController {
             Map map2 = new HashMap(4);
             String token = map.get("token")+"";
             map2.put ("token",token);
-            map2.put("tel",phone);
             map2.put("token_time",map.get("token_time"));
-            map2.put(AppConstant.APP_USER_INFO,user);
             getRequest().getSession().setAttribute(AppConstant.APP_USER_INFO, user);
-            returnmap.put("userId",map.get("id"));
-            returnmap.put("token",map2);
-            returnmap.put("sessionId",getRequest().getSession().getId());
-            resultVO.setRetData(returnmap);
+            returnMap.put("userId",map.get("id"));
+            returnMap.put("phone",phone);
+            returnMap.put("imgUrl",map.get("img_url"));
+            returnMap.put("token",token);
+            returnMap.put("sessionId",getRequest().getSession().getId());
+            resultVO.setRetData(returnMap);
         } else {
             resultVO.setErrorMsg(VOConst.FAIL, msg);
             resultVO.setRetData(map);
