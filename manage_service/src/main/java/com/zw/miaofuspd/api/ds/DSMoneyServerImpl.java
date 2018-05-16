@@ -23,7 +23,6 @@ public class DSMoneyServerImpl implements IDSMoneyServer {
     @Autowired
     private DSMoneySettings dsMoneySettings;
 
-    @Autowired
     private AppBasicInfoService appBasicInfoService;
 
     @Autowired

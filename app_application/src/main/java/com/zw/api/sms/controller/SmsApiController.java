@@ -1,13 +1,10 @@
 package com.zw.api.sms.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.api.model.BYXSettings;
 import com.api.model.common.BYXResponse;
 import com.api.service.sortmsg.IMessageServer;
 import com.base.util.AppRouterSettings;
 import com.base.util.RandomUtil;
 import com.base.util.StringUtils;
-import com.zw.app.util.AppConstant;
 import com.api.model.sortmsg.MsgRequest;
 import com.zw.miaofuspd.facade.user.service.ISmsService;
 import com.zw.web.base.vo.ResultVO;
@@ -16,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,13 +32,14 @@ public class SmsApiController  {
     @Autowired
     private ISmsService smsService;
 
-//
-//    @Autowired
-//    private Producer producer;
 
-
-    @RequestMapping("/sendMsg")
-    public ResultVO sendMsg(MsgRequest msgRequest){
+    /**
+     * 短信发送接口
+     * @param msgRequest 请求参数
+     * @return
+     */
+    @PostMapping("/sendMsg")
+    public ResultVO sendMsg (MsgRequest msgRequest){
         //生成6位数随机数
         final String smsCode = RandomUtil.createRandomVcode(6);
         Map<String,String> parameters = new HashMap<>(2);
@@ -52,8 +49,8 @@ public class SmsApiController  {
             final BYXResponse byxResponse = messageServer.sendSms(msgRequest, parameters);
             if (byxResponse != null) {
                 smsService.saveSms(msgRequest);
-                LOGGER.info("接口发送成功",byxResponse.toString());
-                return ResultVO.ok("接口发送成功",null);
+                LOGGER.info("短信发送成功",byxResponse.toString());
+                return ResultVO.ok(byxResponse.getRes_msg(),null);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,6 +59,11 @@ public class SmsApiController  {
        return ResultVO.error();
     }
 
+    /**
+     * 验证手机验证码
+     * @param msgRequest
+     * @return
+     */
     @PostMapping("/checkMsg")
     public ResultVO checkMsg(MsgRequest msgRequest){
         try {

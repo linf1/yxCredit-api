@@ -1,5 +1,6 @@
 package com.zw.miaofuspd.login.controller;
 
+import com.base.util.AppRouterSettings;
 import com.zw.app.util.AppConstant;
 import com.zw.miaofuspd.facade.entity.AppUserInfo;
 import com.zw.miaofuspd.facade.user.service.ILoginService;
@@ -18,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/login")
+@RequestMapping(AppRouterSettings.VERSION + AppRouterSettings.API_MODULE + "/login")
 public class LoginController extends AbsBaseController {
     @Autowired
     ILoginService loginService;
