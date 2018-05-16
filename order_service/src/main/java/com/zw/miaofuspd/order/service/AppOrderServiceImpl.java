@@ -1957,7 +1957,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
         Map orderMap = sunbmpDaoSupport.findForMap(orderSql);
 
         String operationSql="SELECT id AS operationId , order_id AS orderId , emp_id AS empId , emp_name AS empName, " +
-                                    "operation_time AS operationTime , amount AS amount , STATUS AS STATUS , operation_node AS operationNode , " +
+                                    "operation_time AS operationTime , amount AS amount , STATUS AS status , operation_node AS operationNode , " +
                                     "operation_result AS operationResult , description AS description " +
                             "FROM order_operation_record " +
                             "WHERE order_id='"+orderId+"'";
