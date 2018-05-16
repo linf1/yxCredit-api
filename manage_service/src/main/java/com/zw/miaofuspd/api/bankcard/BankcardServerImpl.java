@@ -7,21 +7,25 @@ import com.api.model.bankcard.BankcardSettings;
 import com.api.model.common.BYXRequest;
 import com.api.model.common.BYXResponse;
 import com.api.service.bankcard.IBankcardServer;
+import com.base.util.DateUtils;
+import com.base.util.GeneratePrimaryKeyUtils;
 import com.base.util.StringUtils;
 import com.zw.api.HttpClientUtil;
+import com.zw.service.base.AbsServiceBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 /**
  * 银行卡四要素
  * @author  陈清玉
  */
 @Service(IBankcardServer.BEAN_KEY)
-public class BankcardServerImpl implements IBankcardServer{
+public class BankcardServerImpl extends AbsServiceBase implements IBankcardServer{
     private final Logger LOGGER = LoggerFactory.getLogger(BankcardServerImpl.class);
     @Autowired
     private BankcardSettings bankcardSettings;
@@ -87,5 +91,36 @@ public class BankcardServerImpl implements IBankcardServer{
     public BYXResponse getProvinceList() throws Exception {
         final String result = HttpClientUtil.post(bankcardSettings.getProvinceListUrl(),"",byxSettings.getHeadRequest());
         return BYXResponse.getBYXResponse(result,byxSettings);
+    }
+
+
+
+    @Override
+    public Integer saveBankcard(BankcardRequest bankcardRequest) {
+        String id = GeneratePrimaryKeyUtils.getUUIDKey();
+        StringBuilder  sql  = new StringBuilder("INSERT INTO app_bank_card (id,card_id,bank_card_no,merchant_order,merchant_neq_no) ");
+        sql.append(" VALUES ( '");
+        sql.append(id).append("','").append(bankcardRequest.getCardId()).append("','")
+                .append(bankcardRequest.getBankCardNo()).append("','")
+                .append(bankcardRequest.getMerchantOrder()).append("','")
+                .append(bankcardRequest.getMerchantNeqNo()).append("')");
+       return sunbmpDaoSupport.executeSql(sql.toString());
+    }
+
+    @Override
+    public List findBankcard(BankcardRequest bankcardRequest) {
+        StringBuilder sql   = new StringBuilder("select merchant_order,merchant_neq_no,create_time from app_bank_card where");
+        sql.append(" card_id = '").append(bankcardRequest.getCardId())
+                .append("' and bank_card_no = '") .append(bankcardRequest.getBankCardNo())
+                .append("' and state ='0' ORDER BY create_time DESC LIMIT 1");
+        return sunbmpDaoSupport.findForList(sql.toString());
+    }
+
+    @Override
+    public Integer updateState(BankcardRequest bankcardRequest) {
+        StringBuilder sql = new StringBuilder("update app_bank_card set state ='1' where ");
+        sql.append(" merchant_neq_no = '").append(bankcardRequest.getMerchantNeqNo())
+        .append("' and merchant_order = '").append(bankcardRequest.getMerchantOrder()).append("' ");
+        return  sunbmpDaoSupport.executeSql(sql.toString());
     }
 }

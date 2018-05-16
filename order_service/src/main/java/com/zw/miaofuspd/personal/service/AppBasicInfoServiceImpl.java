@@ -16,7 +16,6 @@ import com.zw.miaofuspd.facade.order.service.IAppInsapplicationService;
 import com.zw.miaofuspd.facade.personal.service.AppBasicInfoService;
 import com.zw.service.base.AbsServiceBase;
 import com.zw.service.exception.DAOException;
-import jdk.internal.org.objectweb.asm.tree.TryCatchBlockNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -893,5 +892,13 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         resultMap.put("flag",true);
         resultMap.put("msg","信息验证通过");
         return  resultMap;
+    }
+
+    @Override
+    public Map findById(String id)  {
+       StringBuilder sql = new StringBuilder("select cust.id,cust.PERSON_NAME,cust.TEL,cust.CARD,job.company_address ");
+       sql.append("from mag_customer cust INNER JOIN mag_customer_job job on cust.id = job.customer_id ")
+               .append("where cust.id = '").append(id).append("'");
+       return sunbmpDaoSupport.findForMap(sql.toString());
     }
 }

@@ -131,4 +131,10 @@ public interface AppBasicInfoService {
    Map checkCustomerInfo(String userId,String card) throws Exception;
 
 
+    /**
+     *  按id获取用户信息 create by 陈清玉 2018-05-16
+     * @param id 用户ID
+     */
+    Map findById(String id);
+
 }

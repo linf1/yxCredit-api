@@ -18,6 +18,10 @@ public class MsgRequest implements Serializable {
      */
     private String  content;
 
+    private String smsCode;
+
+    private Long timeOut;
+
     public String getPhone() {
         return phone;
     }
@@ -32,6 +36,22 @@ public class MsgRequest implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getSmsCode() {
+        return smsCode;
+    }
+
+    public Long getTimeOut() {
+        return timeOut;
+    }
+
+    public void setTimeOut(Long timeOut) {
+        this.timeOut = timeOut;
+    }
+
+    public void setSmsCode(String smsCode) {
+        this.smsCode = smsCode;
     }
 
     @Override

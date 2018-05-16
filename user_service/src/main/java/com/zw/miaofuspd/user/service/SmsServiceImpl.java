@@ -1,6 +1,8 @@
 package com.zw.miaofuspd.user.service;
 
+import com.api.model.sortmsg.MsgRequest;
 import com.base.util.DateUtils;
+import com.base.util.GeneratePrimaryKeyUtils;
 import com.zw.api.SendSmsApi;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
 import com.zw.miaofuspd.facade.dict.service.ISystemDictService;
@@ -63,6 +65,18 @@ public class SmsServiceImpl extends AbsServiceBase implements ISmsService {
         sunbmpDaoSupport.exeSql(sql.toString());
         return true;
     }
+
+    @Override
+    public boolean saveSms(MsgRequest msgRequest) {
+        String phone = msgRequest.getPhone();
+        String varCode = msgRequest.getSmsCode();
+        String date = DateUtils.getDateString(new Date());
+        StringBuffer sql = new StringBuffer("INSERT INTO app_sms (id,type,tel,var_code,creat_time,alter_time) VALUES('");
+        sql.append(GeneratePrimaryKeyUtils.getUUIDKey() + "','" + 0 + "','" + phone + "','" + varCode + "','" + date + "','" + date + "')");
+        sunbmpDaoSupport.exeSql(sql.toString());
+        return true;
+    }
+
     /**
      * 检查验证码是否正确
      */

@@ -4,6 +4,8 @@ import com.api.model.bankcard.BankcardRequest;
 import com.api.model.common.BYXResponse;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 银行卡四要素
@@ -51,4 +53,29 @@ public interface IBankcardServer {
      * @exception  IOException 请求异常
      */
     BYXResponse getProvinceList() throws Exception;
+
+    /**
+     * 保存银行卡四要素信息
+     * @param bankcardRequest 保存数据
+     * @return 影响行数
+     */
+    Integer  saveBankcard(BankcardRequest bankcardRequest);
+
+    /**
+     * 查询银行卡四要素信息
+     * @param bankcardRequest BankcardRequest 查询参数 ,
+     *                           cardId - 身份证号码,
+     *                           bankCardNo - 身份证号码,
+     * @return 影响行数
+     */
+    List findBankcard(BankcardRequest bankcardRequest);
+    /**
+     * 更新银行卡四要素信息
+     * @param bankcardRequest BankcardRequest 查询参数 ,
+     *                           merchantOrder - 请求订单号,
+     *                           merchantNeqNo - 请求流水号，每次请求唯一,
+     * @return 影响行数
+     */
+    Integer updateState(BankcardRequest bankcardRequest);
+
 }

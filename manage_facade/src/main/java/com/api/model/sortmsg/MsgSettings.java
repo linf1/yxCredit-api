@@ -24,6 +24,10 @@ public class MsgSettings extends BaseSettings {
      */
     private String  templateCode;
     /**
+     * 短信超时时间
+     */
+    private Long timeOut;
+    /**
      * 短信模板自定义的参数放在名称为”data”的Map中（使用短信模板，有需要替换的参数则必须有，没有参数则不需要）
      */
     private Map<String,Object> data;
@@ -66,6 +70,14 @@ public class MsgSettings extends BaseSettings {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Long getTimeOut() {
+        return timeOut;
+    }
+
+    public void setTimeOut(Long timeOut) {
+        this.timeOut = timeOut;
     }
 
     @Override
