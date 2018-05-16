@@ -38,7 +38,7 @@ public class BankcardController {
      * @return 成功失败
      */
     @PostMapping("/authsms")
-    public ResultVO authsms(HttpServletRequest request,BankcardRequest bankcardRequest) {
+    public ResultVO authsms(BankcardRequest bankcardRequest) {
         if(bankcardRequest == null){
             return ResultVO.error("参数异常");
         }

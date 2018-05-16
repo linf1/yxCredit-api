@@ -129,4 +129,6 @@
                      id="messageServerImpl" check="false"/>
     <dubbo:reference interface="com.api.service.bankcard.IBankcardServer"
                      id="bankcardServerImpl" check="false"/>
+    <dubbo:reference interface="com.api.service.ds.IDSMoneyServer"
+                     id="dSMoneyServerImpl" check="false"/>
 </beans>
