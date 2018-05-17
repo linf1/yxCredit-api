@@ -31,4 +31,6 @@
                    ref="messageServerImpl"/>
     <dubbo:service interface="com.api.service.bankcard.IBankcardServer" timeout="30000"
                    ref="bankcardServerImpl"/>
+    <dubbo:service interface="com.api.service.credit.ICreditApiService" timeout="30000"
+                   ref="creditApiServiceImpl"/>
 </beans>

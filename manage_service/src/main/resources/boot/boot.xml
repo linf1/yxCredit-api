@@ -60,4 +60,16 @@
         <property name="appSecrect" value="${byx.appSecrect}"/>
         <property name="vi" value="${byx.iv}"/>
     </bean>
+
+    <!-- 征信配置BEAN create by luochaofang-->
+    <bean id="creditSettings" class="com.api.model.credit.CreditSettings">
+        <property name="callbackUrl" value="${credit.callbackUrl}"/>
+        <property name="creditUrlPath" value="${credit.creditUrlPath}"/>
+        <property name="requestType" value="${credit.requestType}"/>
+        <property name="ak" value="${credit.ak}"/>
+        <property name="sk" value="${credit.sk}"/>
+        <property name="appKey" value="${credit.appKey}"/>
+        <property name="creditUrl" value="${credit.creditUrl}"/>
+        <property name="taskType" value="${credit.taskType}"/>
+    </bean>
 </beans>
