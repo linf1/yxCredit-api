@@ -130,6 +130,22 @@ public interface AppBasicInfoService {
     */
    Map checkCustomerInfo(String userId,String card) throws Exception;
 
+   /**
+    * @author:韩梅生
+    * @Description 获取实名认证信息
+    * @Date 18:17 2018/5/16
+    * @param
+    */
+
+   Map getRealName(String userId) throws  Exception;
+
+   /**
+    * @author:韩梅生
+    * @Description
+    * @Date 19:35 2018/5/16
+    * @param
+    */
+   Map saveRealName(Map map) throws  Exception;
 
     /**
      *  按id获取用户信息 create by 陈清玉 2018-05-16

@@ -41,7 +41,6 @@ public class LinkManController extends AbsBaseController {
                                       String relationshipName3, String linkName3, String contact3, String linkId4, String relationship4,String relationshipName4, String linkName4, String contact4, String linkId5, String relationship5,String relationshipName5, String linkName5, String contact5, String linkId6, String relationship6,String relationshipName6, String linkName6, String contact6
     ) throws Exception{
         ResultVO resultVO = new ResultVO();
-        //AppUserInfo userInfo = (AppUserInfo) this.getHttpSession().getAttribute(AppConstant.APP_USER_INFO);
         CustomerLinkmanBean customerLinkmanBean = new CustomerLinkmanBean();
         customerLinkmanBean.setId(linkId1);
         customerLinkmanBean.setRelationShip(relationship1);

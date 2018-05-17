@@ -144,4 +144,35 @@ public class BasicInfoController extends AbsBaseController {
         return resultVO;
     }
 
+    /**
+     * @author:韩梅生
+     * @Description 获取实名认证信息
+     * @Date 17:58 2018/5/16
+     * @param
+     */
+    @RequestMapping("/getRealName")
+    public ResultVO getRealName(String userId) throws Exception{
+        ResultVO resultVO = new ResultVO();
+        Map map = appBasicInfoService.getRealName(userId);
+        resultVO.setRetData(map);
+        return resultVO;
+    }
+
+
+    /**
+     * @author:韩梅生
+     * @Description 获取实名认证信息
+     * @Date 17:58 2018/5/16
+     * @param
+     */
+    @RequestMapping("/savaRealName")
+    public ResultVO savaRealName(String data) throws Exception{
+        ResultVO resultVO = new ResultVO();
+        Map map = JSONObject.parseObject(data);
+        Map resMap = appBasicInfoService.saveRealName(map);
+        resultVO.setRetData(resMap);
+        return resultVO;
+    }
+
+
 }
