@@ -14,6 +14,12 @@ public interface ISmsService {
      * @return
      */
     boolean saveSms(MsgRequest request);
+    /**
+     * 更新验证码信息到数据库 便于验证
+     * @param request
+     * @return
+     */
+    boolean updateSms(MsgRequest request);
 
 
 

@@ -22,6 +22,12 @@ public class MsgRequest implements Serializable {
 
     private Long timeOut;
 
+    private String t;
+    /**
+     * 类型 0 ： 手机短信验证码，1：图片验证码
+     */
+    private String type;
+
     public String getPhone() {
         return phone;
     }
@@ -52,6 +58,22 @@ public class MsgRequest implements Serializable {
 
     public void setSmsCode(String smsCode) {
         this.smsCode = smsCode;
+    }
+
+    public String getT() {
+        return t;
+    }
+
+    public void setT(String t) {
+        this.t = t;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override

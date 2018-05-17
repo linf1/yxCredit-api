@@ -57,4 +57,5 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.+'
     compile 'com.itextpdf:itextpdf:5.5.10'
     compile 'com.itextpdf:itext-asian:5.2.0'
+    compile 'com.github.axet:kaptcha:0.0.9'
 }
