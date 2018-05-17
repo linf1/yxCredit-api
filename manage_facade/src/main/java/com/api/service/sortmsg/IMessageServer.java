@@ -20,4 +20,5 @@ public interface IMessageServer {
      * @throws IOException 短信发送异常
      */
     BYXResponse sendSms(MsgRequest request, Map<String, String> smsParam) throws Exception;
+
 }

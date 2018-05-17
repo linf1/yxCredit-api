@@ -1,24 +1,24 @@
 package com.zw.api.sms.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.api.model.BYXSettings;
 import com.api.model.common.BYXResponse;
 import com.api.service.sortmsg.IMessageServer;
 import com.base.util.AppRouterSettings;
 import com.base.util.RandomUtil;
 import com.base.util.StringUtils;
-import com.zw.app.util.AppConstant;
 import com.api.model.sortmsg.MsgRequest;
+import com.google.code.kaptcha.Producer;
+import com.zw.miaofuspd.facade.user.service.ISmsService;
 import com.zw.web.base.vo.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,26 +28,39 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping(AppRouterSettings.VERSION + AppRouterSettings.API_MODULE + "/sms")
-public class SmsApiController {
+public class SmsApiController  {
 
     private final Logger LOGGER = LoggerFactory.getLogger(SmsApiController.class);
 
     @Autowired
     private IMessageServer messageServer;
 
+    @Autowired
+    private ISmsService smsService;
 
-    @RequestMapping("/sendMsg")
-    public ResultVO sendMsg(HttpServletRequest request, MsgRequest msgRequest){
+    @Autowired
+    private Producer captchaProducer;
+
+    /**
+     * 短信发送接口
+     * @param msgRequest 请求参数
+     * @return
+     */
+    @PostMapping("/sendMsg")
+    public ResultVO sendMsg (MsgRequest msgRequest){
         //生成6位数随机数
         final String smsCode = RandomUtil.createRandomVcode(6);
         Map<String,String> parameters = new HashMap<>(2);
         parameters.put("smsCode",smsCode);
-        request.getSession().setAttribute(AppConstant.SMS_KEY,smsCode);
+        msgRequest.setSmsCode(smsCode);
+        //设置为短信验证
+        msgRequest.setType("0");
         try {
             final BYXResponse byxResponse = messageServer.sendSms(msgRequest, parameters);
             if (byxResponse != null) {
-                LOGGER.info("接口发送成功",byxResponse.toString());
-                return ResultVO.ok("接口发送成功",null);
+                smsService.saveSms(msgRequest);
+                LOGGER.info("短信发送成功",byxResponse.toString());
+                return ResultVO.ok(byxResponse.getRes_msg(),null);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -56,17 +69,65 @@ public class SmsApiController {
        return ResultVO.error();
     }
 
-    @GetMapping("/checkMsg/{smsCode}")
-    public ResultVO checkMsg(HttpServletRequest request,@PathVariable String smsCode){
-        final Object smsKey = request.getSession().getAttribute(AppConstant.SMS_KEY);
-        if(StringUtils.isEmpty(smsCode)) {
-            return ResultVO.error("参数为空");
+    /**
+     * 验证验证码
+     * @param msgRequest type 0 手机验证码 1 图片验证码 ，
+     *                   phone 手机号，
+     *                   smsCode 验证码
+     * @return
+     */
+    @PostMapping("/checkMsg")
+        public ResultVO checkMsg(MsgRequest msgRequest){
+        try {
+            if(msgRequest == null || StringUtils.isEmpty(msgRequest.getSmsCode())) {
+                return ResultVO.error("参数为空");
+            }
+            //先查询验证码和用户是否正确
+            Map inMap=new HashMap();
+            inMap.put("tel",msgRequest.getPhone());
+            inMap.put("smsCode",msgRequest.getSmsCode().toLowerCase());
+            //设置
+            inMap.put("errortime","600");
+            inMap.put("type",msgRequest.getType());
+            final Map resData  = smsService.checkSms(inMap);
+            if(resData != null){
+                if((Boolean) resData.get("flag")){
+                    return   ResultVO.ok("验证成功",null);
+                }else{
+                    return   ResultVO.error(resData.get("msg").toString());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVO.error(e.getMessage(),null);
         }
-        if(!smsCode.equals(smsKey)){
-            return ResultVO.error("手机验证码发送失败或超时间");
-        }
-        return ResultVO.ok("验证通过",null);
+        return ResultVO.error("验证失败");
     }
 
+    /**
+     * 图片验证码生成控制器
+     * @param response HttpServletResponse
+     * @throws IOException io异常
+     */
+    @RequestMapping("captcha.jpg")
+    public void captcha(HttpServletResponse response,MsgRequest msgRequest)throws IOException {
+        response.setHeader("Cache-Control", "no-store, no-cache");
+        response.setContentType("image/jpeg");
+        //生成文字验证码
+        String text = captchaProducer.createText();
+        msgRequest.setSmsCode(text.toLowerCase());
+        //设置为图片验证码
+        msgRequest.setType("1");
+        //如果更新不成功就添加一条
+        if (!smsService.updateSms(msgRequest)) {
+            smsService.saveSms(msgRequest);
+        }
+        //生成图片验证码
+        BufferedImage image = captchaProducer.createImage(text);
+        //保存到到数据库 便于验证
+        ServletOutputStream out = response.getOutputStream();
+        ImageIO.write(image, "jpg", out);
+        out.flush();
+    }
 
 }

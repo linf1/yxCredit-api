@@ -132,4 +132,7 @@
     <!-- 征信接口-->
     <dubbo:reference interface="com.api.service.credit.ICreditApiService"
                      id="creditApiServiceImpl"  check="false"/>
+    <dubbo:reference interface="com.api.service.ds.IDSMoneyServer"
+                     id="dSMoneyServerImpl" check="false"/>
+
 </beans>

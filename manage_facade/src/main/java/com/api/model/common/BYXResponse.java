@@ -105,7 +105,11 @@ public class BYXResponse implements Serializable {
         CryptoTools cryptoTools = new CryptoTools(byxSettings.getDesKey(),byxSettings.getVi());
         final BYXResponse response = JSONObject.parseObject(byxResponseJson, BYXResponse.class);
         if(BYXResponse.resCode.success.getCode().equals(response.getRes_code())) {
-            response.setRes_data(cryptoTools.decode(response.getRes_data().toString()));
+            if(response.getRes_data() != null){
+                final String decode = cryptoTools.decode(response.getRes_data().toString());
+                response.setRes_data(JSONObject.parseObject(decode));
+            }
+
         }
         return response;
     }

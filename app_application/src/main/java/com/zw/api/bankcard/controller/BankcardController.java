@@ -10,11 +10,14 @@ import com.zw.web.base.vo.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -35,7 +38,7 @@ public class BankcardController {
      * @return 成功失败
      */
     @PostMapping("/authsms")
-    public ResultVO authsms(HttpServletRequest request,BankcardRequest bankcardRequest) {
+    public ResultVO authsms(BankcardRequest bankcardRequest) {
         if(bankcardRequest == null){
             return ResultVO.error("参数异常");
         }
@@ -43,11 +46,10 @@ public class BankcardController {
         final String orderNo = "N" + GeneratePrimaryKeyUtils.getSnowflakeKey();
         bankcardRequest.setMerchantNeqNo(orderNo);
         bankcardRequest.setMerchantOrder(orderNum);
-        request.getSession().setAttribute(AppConstant.MERCHANT_ORDER,orderNum);
-        request.getSession().setAttribute(AppConstant.MERCHANT_NEQNO,orderNo);
         try {
             final BYXResponse authsms = bankcardServer.authsms(bankcardRequest);
             if (BYXResponse.resCode.success.getCode().equals(authsms.getRes_code())) {
+                bankcardServer.saveBankcard(bankcardRequest);
                 return  ResultVO.ok(authsms.getRes_data());
             }
             return ResultVO.error(authsms.getRes_msg());
@@ -57,19 +59,22 @@ public class BankcardController {
         }
     }
 
-    @GetMapping("/authconfirm/{smsCode}")
-    public ResultVO authconfirm(HttpServletRequest request,@PathVariable String smsCode) {
+    @GetMapping("/authconfirm")
+    public ResultVO authconfirm(BankcardRequest bankcardRequest) {
         try {
-                if (StringUtils.isEmpty(smsCode)) {
-                    return ResultVO.error("参数异常");
-                }
-                BankcardRequest bankcardRequest  = new BankcardRequest();
-                bankcardRequest.setSmsCode(smsCode);
-                final HttpSession session = request.getSession();
-                bankcardRequest.setMerchantOrder((String)session.getAttribute(AppConstant.MERCHANT_ORDER));
-                bankcardRequest.setMerchantNeqNo((String)session.getAttribute(AppConstant.MERCHANT_NEQNO));
-                final BYXResponse authsms = bankcardServer.authconfirm(bankcardRequest);
+            if (bankcardRequest == null) {
+                return ResultVO.error("参数异常");
+            }
+            final List bankcardList = bankcardServer.findBankcard(bankcardRequest);
+            if(CollectionUtils.isEmpty(bankcardList)){
+                return ResultVO.error("验证码过期");
+            }
+            final Map o = (Map)bankcardList.get(0);
+            bankcardRequest.setMerchantOrder(o.get("merchant_order").toString());
+            bankcardRequest.setMerchantNeqNo(o.get("merchant_neq_no").toString());
+            final BYXResponse authsms = bankcardServer.authconfirm(bankcardRequest);
                 if (BYXResponse.resCode.success.getCode().equals(authsms.getRes_code())) {
+                    bankcardServer.updateState(bankcardRequest);
                     return ResultVO.ok(authsms.getRes_data());
                 }
                 return ResultVO.error(authsms.getRes_msg());

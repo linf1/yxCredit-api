@@ -1,14 +1,17 @@
 package com.zw.miaofuspd.api.ds;
 
-import com.alibaba.fastjson.JSONObject;
+import com.api.model.BYXSettings;
+import com.api.model.common.BYXRequest;
+import com.api.model.common.BYXResponse;
 import com.api.model.ds.DSMoneyRequest;
 import com.api.model.ds.DSMoneySettings;
 import com.api.service.ds.IDSMoneyServer;
-import com.zw.api.HttpUtil;
+import com.zw.api.HttpClientUtil;
+import com.zw.miaofuspd.facade.personal.service.AppBasicInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import java.util.Map;
 
 /**
  * 借款人及放款账户数据同步服务实现
@@ -17,16 +20,20 @@ import java.io.IOException;
 @Service(IDSMoneyServer.BEAN_KEY)
 public class DSMoneyServerImpl implements IDSMoneyServer {
 
-    //private DSMoneySettings dsMoneySettings;
+    @Autowired
+    private DSMoneySettings dsMoneySettings;
+
+
+    @Autowired
+    private BYXSettings byxSettings;
 
     @Override
-    public String saveBorrowerAndAccountCard(DSMoneyRequest request) {
-//        try {
-////          return HttpUtil.doPost(dsMoneySettings.getRequestUrl(), JSONObject.toJSONString(request));
-////
-////        } catch (IOException e) {
-////            e.printStackTrace();
-////        }
-        return null;
+    public BYXResponse saveBorrowerAndAccountCard(DSMoneyRequest request ) throws Exception {
+        if (request != null){
+            final String result = HttpClientUtil.post(dsMoneySettings.getRequestUrl(), BYXRequest.getBYXRequest(request, byxSettings), byxSettings.getHeadRequest());
+            return BYXResponse.getBYXResponse(result, byxSettings);
+        }
+        return  BYXResponse.error();
     }
+
 }

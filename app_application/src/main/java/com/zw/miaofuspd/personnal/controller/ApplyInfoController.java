@@ -48,13 +48,8 @@ public class ApplyInfoController extends AbsBaseController {
         } else {
                 Map homeApplyMap = appBasicInfoService.getHomeApplyInfo(id,productName);
                 resultVO.setRetCode("2");
-                resultVO.setRetData(homeApplyMap);
-//            } else {
-//                //填写过申请信息
-//                Map basInfoMap = appBasicInfoService.getPersonInfo(id);
-//                resultVO.setRetCode("3");
-//                resultVO.setRetData(basInfoMap);
-//            }
+                resultVO.setRetMsg((String) homeApplyMap.get("msg"));
+                resultVO.setRetData(homeApplyMap.get("resMap"));
 
         }
         return resultVO;

@@ -42,6 +42,7 @@
         <property name="channelUniqId" value="${sms.channelUniqId}"/>
         <property name="requestType" value="${sms.requestType}"/>
         <property name="requestUrl" value="${sms.url}"/>
+        <property name="timeOut" value="${sms.timeOut}"/>
     </bean>
     <!-- 银行卡四要素BEAN create by 陈清玉-->
     <bean id="bankcardSettings" class="com.api.model.bankcard.BankcardSettings">
@@ -58,6 +59,7 @@
     <bean id="byxSettings" class="com.api.model.BYXSettings">
         <property name="appKey" value="${byx.appKey}"/>
         <property name="appSecrect" value="${byx.appSecrect}"/>
+        <property name="desKey" value="${byx.desKey}"/>
         <property name="vi" value="${byx.iv}"/>
     </bean>
 
@@ -72,4 +74,10 @@
         <property name="creditUrl" value="${credit.creditUrl}"/>
         <property name="taskType" value="${credit.taskType}"/>
     </bean>
+    <!-- 数据同步BEAN create by 陈清玉-->
+    <bean id="dsMoneySettings" class="com.api.model.ds.DSMoneySettings">
+        <property name="requestType" value="${ds.requestType}"/>
+        <property name="requestUrl" value="${ds.requestUrl}"/>
+    </bean>
+</beans>
 </beans>

@@ -197,12 +197,12 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         try {
             //新增客户信息
             String uuidKey = GeneratePrimaryKeyUtils.getUUIDKey();
-            String sql1 = "insert into mag_customer (ID,USER_ID,PERSON_NAME,TEL,CARD,surplus_contract_amount) values ('" + uuidKey + "','" + id + "','" + personName + "','" + tel + "','" + card + "',200000)";
+            String sql1 = "insert into mag_customer (ID,USER_ID,PERSON_NAME,TEL,CARD,surplus_contract_amount,CREAT_TIME) values ('" + uuidKey + "','" + id + "','" + personName + "','" + tel + "','" + card + "',200000,'"+createTime+"')";
             sunbmpDaoSupport.exeSql(sql1);
             String orderid = String.valueOf(GeneratePrimaryKeyUtils.getOrderNum());
             //新增订单信息
             String sql2 = "insert into mag_order (ID,order_no,CUSTOMER_ID,state,product_name,CUSTOMER_NAME,TEL,CARD,CREAT_TIME) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"'," +
-                        "'"+orderid+"','"+uuidKey+"','0','"+productName+"','"+personName+"','"+tel+"','"+card+"','"+createTime+"')";
+                        "'"+orderid+"','"+uuidKey+"','1','"+productName+"','"+personName+"','"+tel+"','"+card+"','"+createTime+"')";
             sunbmpDaoSupport.exeSql(sql2);
         } catch (DAOException e) {
             e.printStackTrace();
@@ -442,7 +442,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         Map resMap = new HashMap();
         String sql = "select is_identity,person_name,tel,card from mag_customer where USER_ID = '" + id + "'";
         List list = sunbmpDaoSupport.findForList(sql);
-        if (CollectionUtils.isEmpty(list)) {
+        if (!CollectionUtils.isEmpty(list)) {
             return (Map) list.get(0);
         }
         return null;
@@ -458,16 +458,44 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     @Override
     public Map getHomeApplyInfo(String id,String productName) throws Exception {
         Map resMap = new HashMap();
-
+        Map resultMap = new HashMap(4);
         //根据登录用户id获取客户信息表id
-        String sql1 = "select id from mag_customer where USER_ID = '" + id + "'";
-        Map map = sunbmpDaoSupport.findForMap(sql1);
-        //获取申请主页面的基本信息及资料的完成状态
-        String sql2 = "select t1.card as card,t1.tel as tel,t1.PERSON_NAME as personName,t1.Baseinfo_complete as baseinfoComplete" +
-                ",t2.complete as applyComplete,t2.order_no as orderId,t3.complete as linkComplete  from mag_customer t1 left join  mag_order t2 on t1.id = t2.CUSTOMER_ID left join " +
-                "mag_customer_linkman t3 on t1.id = t3.CUSTOMER_ID where t1.id = '" + map.get("id") + "'and t2.product_name_name= '"+productName+"'and t2.state='1'";
-        resMap = sunbmpDaoSupport.findForMap(sql2);
-        return resMap;
+        String sql1 = "select id,PERSON_NAME,TEL,CARD from mag_customer where USER_ID = '" + id + "'";
+        Map cusmap = sunbmpDaoSupport.findForMap(sql1);
+        //获取当前用户的所有订单状态
+        String  sql2 = "select state from mag_order where user_id = '"+id+"' and product_name = '"+productName+"'";
+        List<Map> staList = sunbmpDaoSupport.findForList(sql2);
+        //申请主页面的相关信息
+        String sql3 = "select t1.card as card,t1.tel as tel,t1.PERSON_NAME as personName,t1.Baseinfo_complete as baseinfoComplete" +
+                ",t2.complete as applyComplete,t2.order_no as orderId,t1.link_man_complete as link_man_complete  from mag_customer t1 left join  mag_order t2 on t1.id = t2.CUSTOMER_ID " +
+                " where t1.user_id = '" +id+ "'and t2.product_name_name= '"+productName+"'and t2.state='1'";
+        for(Map map:staList){
+            //未完成订单
+            if( "1".equals(map.get("state"))){
+                //获取申请主页面的未完成订单的基本信息及资料的完成状态
+                resMap = sunbmpDaoSupport.findForMap(sql3);
+                resultMap.put("code","1");
+                resultMap.put("resMap",resMap);
+                resultMap.put("msg","成功获取未完成订单！");
+                return resultMap;
+
+            }else if("2".equals(map.get("state") ) || "3".equals(map.get("state") ) || "4".equals(map.get("state") ) || "5".equals(map.get("state") ) ){
+                //当有未结清订单，不允许访问申请主页面
+                resultMap.put("code","2");
+                resultMap.put("msg","您有未结清的订单!");
+                return resultMap;
+
+            }
+        }
+        //新增订单信息
+        String sql4 = "insert into mag_order (ID,USER_ID,order_no,CUSTOMER_ID,state,product_name,CUSTOMER_NAME,TEL,CARD,CREAT_TIME) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+id+"'," +
+                "'"+GeneratePrimaryKeyUtils.getOrderNum()+"','"+cusmap.get("id")+"','1','"+productName+"','"+cusmap.get("CUSTOMER_NAME")+"','"+cusmap.get("TEL")+"','"+cusmap.get("CARD")+"','"+DateUtils.getCurrentTime()+"')";
+        sunbmpDaoSupport.exeSql(sql4);
+        resMap = sunbmpDaoSupport.findForMap(sql3);
+        resultMap.put("code","3");
+        resultMap.put("msg","新增订单!");
+        resultMap.put("resMap",resMap);
+        return resultMap;
     }
 
     @Override
@@ -894,4 +922,67 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         resultMap.put("msg","信息验证通过");
         return  resultMap;
     }
+
+    /**
+     * @author:韩梅生
+     * @Description 获取用户的实名信息
+     * @Date 18:18 2018/5/16
+     * @param
+     */
+    @Override
+    public Map getRealName(String userId){
+        Map resultMap = new HashMap();
+        String sql = "select t1.PERSON_NAME as personName,t1.card as card,t1.tel as tel,t2.bank_name as bank_name,t2.bank_number as bank_number," +
+                "t2.bank_subbranch as bank_subbranch,t2.card_number as card_number,t2.prov_id as prov_id,t2.prov_name as prov_name,t2.city_id as city_id," +
+                "t2.city_name as city_name from mag_customer t1 left join sys_bank_card t2 on t1.id = t2.cust_id where t1.id = '"+userId+"'";
+        resultMap =  sunbmpDaoSupport.findForMap(sql);
+        return resultMap;
+    }
+
+    /**
+     * @author:韩梅生
+     * @Description 保存用户的实名信息
+     * @Date 18:48 2018/5/16
+     * @param
+     */
+    @Override
+    public  Map saveRealName(Map map){
+        Map resulMap = new HashMap(3);
+        //新增或修改银行卡信息
+        String sql1 = "select count(1) from sys_bank_card where cust_id = '"+map.get("id")+"'";
+        List<Map> list = sunbmpDaoSupport.findForList(sql1);
+        try {
+            if(list.size()==0){
+                //新增银行卡信息
+                String sql2 = "insert into sys_bank_card values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+map.get("bank_name")+"'," +
+                        "'"+map.get("bank_number")+"','"+map.get("bank_subbranch")+"','"+map.get("card_number")+"','"+map.get("cust_id")+"','"+map.get("cust_name")+"'," +
+                        "'"+map.get("prov_id")+"','"+map.get("prov_name")+"','"+map.get("city_id")+"','"+map.get("city_name")+"','"+DateUtils.getNowDate()+"','"+DateUtils.getNowDate()+"')";
+                sunbmpDaoSupport.exeSql(sql2);
+            }else {
+                String sql3 = "update sys_bank_card set bank_name = '"+map.get("bank_name")+"',bank_number = '"+map.get("bank_number")+"',bank_subbranch = '"+map.get("bank_subbranch")+"',card_number = '"+map.get("card_number")+"'," +
+                        "cust_name = '"+map.get("cust_name")+"',prov_id = '"+map.get("prov_id")+"',prov_name = '"+map.get("prov_name")+"',city_id = '"+map.get("city_id")+"'," +
+                        "city_name = '"+map.get("city_name")+"',update_time = '"+DateUtils.getNowDate()+"' where cust_id = '"+map.get("id")+"'";
+                sunbmpDaoSupport.exeSql(sql3);
+            }
+            String sql4 = "update mag_customer set PERSON_NAME='"+map.get("cust_name")+"',tel = '"+map.get("tel")+"',card = '"+map.get("card")+"',is_identity = '1' where id = '"+map.get("id")+"'";
+            sunbmpDaoSupport.exeSql(sql4);
+        } catch (DAOException e) {
+            e.printStackTrace();
+            resulMap.put("flag",false);
+            resulMap.put("msg","保存失败");
+            return resulMap;
+        }
+        resulMap.put("flag",true);
+        resulMap.put("msg","保存成功");
+        return resulMap;
+    }
+
+    @Override
+    public Map findById(String id)  {
+        StringBuilder sql = new StringBuilder("select cust.id,cust.PERSON_NAME,cust.TEL,cust.CARD,job.company_address ");
+        sql.append("from mag_customer cust INNER JOIN mag_customer_job job on cust.id = job.customer_id ")
+                .append("where cust.id = '").append(id).append("'");
+        return sunbmpDaoSupport.findForMap(sql.toString());
+    }
+
 }

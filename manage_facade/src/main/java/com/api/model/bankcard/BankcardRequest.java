@@ -1,6 +1,7 @@
 package com.api.model.bankcard;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 银行卡四要素请求实体
@@ -44,6 +45,8 @@ public class BankcardRequest implements Serializable {
      * smsCode	必要	string	短信验证码
      */
     private String smsCode;
+
+    private Date createTime;
 
     public String getMerchantNumber() {
         return merchantNumber;
@@ -115,6 +118,14 @@ public class BankcardRequest implements Serializable {
 
     public void setSmsCode(String smsCode) {
         this.smsCode = smsCode;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     @Override

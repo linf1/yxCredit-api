@@ -15,12 +15,12 @@ public class DSMoneyRequest implements Serializable {
     /**
      * Y	Integer	借款人类型（0：个人；1：企业）
      */
-    private Integer borrowerType;
+    private Integer borrowerType = 0;
     /**
      *Y	String	借款人证件类型0（1、身份证，2、户口簿，3、军人身份证件，4、武装警察身份证件，5、台湾居民往来内地通行证，6、外国人永久居留证，7、外国护照，9、港澳居民往来大陆通行证，a、中国护照，b、边民出入境通行证，c、其他个人证件）
      *1（1、统一社会信用码；2、营业执照）
      */
-    private String borrowerCardType;
+    private String borrowerCardType = "1";
     /**
      * Y	String	借款人名称
      */
@@ -44,11 +44,11 @@ public class DSMoneyRequest implements Serializable {
     /**
      *Y	String	第三方存储借款人的主键
      */
-    private String thirdId;
+    private String borrowerThirdId;
     /**
      *Y	String	0：个人；1：企业
      */
-    private String accountType;
+    private String accountType  = "0";
     /**
      *Y	String	放款人户名
      */
@@ -104,7 +104,7 @@ public class DSMoneyRequest implements Serializable {
     /**
      *Y	String	第三方存储放款账户的主键
      */
-    private String thirdId2;
+    private String accountThirdId;
 
     public String getBorrowerUserName() {
         return borrowerUserName;
@@ -170,12 +170,12 @@ public class DSMoneyRequest implements Serializable {
         this.borrowerChannel = borrowerChannel;
     }
 
-    public String getThirdId() {
-        return thirdId;
+    public String getBorrowerThirdId() {
+        return borrowerThirdId;
     }
 
-    public void setThirdId(String thirdId) {
-        this.thirdId = thirdId;
+    public void setBorrowerThirdId(String borrowerThirdId) {
+        this.borrowerThirdId = borrowerThirdId;
     }
 
     public String getAccountType() {
@@ -290,11 +290,11 @@ public class DSMoneyRequest implements Serializable {
         this.accountChannel = accountChannel;
     }
 
-    public String getThirdId2() {
-        return thirdId2;
+    public String getAccountThirdId() {
+        return accountThirdId;
     }
 
-    public void setThirdId2(String thirdId2) {
-        this.thirdId2 = thirdId2;
+    public void setAccountThirdId(String accountThirdId) {
+        this.accountThirdId = accountThirdId;
     }
 }
