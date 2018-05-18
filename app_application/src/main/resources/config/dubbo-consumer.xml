@@ -135,4 +135,7 @@
     <dubbo:reference interface="com.api.service.ds.IDSMoneyServer"
                      id="dSMoneyServerImpl" check="false"/>
 
+    <dubbo:reference interface="com.api.service.shujumohe.IShujumoheServer"
+                     id="shujumoheServerImpl" check="false"/>
+
 </beans>

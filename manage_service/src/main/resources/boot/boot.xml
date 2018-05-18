@@ -71,6 +71,16 @@
         <property name="requestUrl" value="${ds.requestUrl}"/>
     </bean>
 
+    <!-- 魔盒BEAN create by 陈清玉-->
+    <bean id="shujumoheSettings" class="com.api.model.shujumohe.ShujumoheSettings">
+        <property name="requestUrl" value="${shujumohe.requestUrl}"/>
+        <property name="requestType" value="${shujumohe.requestType}"/>
+        <property name="boxToken" value="${shujumohe.boxToken}"/>
+        <property name="partnerCode" value="${shujumohe.partnerCode}"/>
+        <property name="partnerKey" value="${shujumohe.partnerKey}"/>
+        <property name="operatorApi" value="${shujumohe.operatorApi}"/>
+    </bean>
+
     <!-- 征信配置BEAN create by luochaofang-->
     <bean id="creditSettings" class="com.api.model.credit.CreditSettings">
         <property name="callbackUrl" value="${credit.callbackUrl}"/>
