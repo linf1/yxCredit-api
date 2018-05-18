@@ -46,7 +46,7 @@ public class CreditApiServiceImpl implements ICreditApiService {
     }
 
     @Override
-    public void saveCreditInfo(CreditResultRequest request) throws Exception {
+    public void saveCreditInfo(Map map) throws Exception {
 
     }
 }
