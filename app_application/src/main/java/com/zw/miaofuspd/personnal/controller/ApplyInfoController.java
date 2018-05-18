@@ -42,7 +42,7 @@ public class ApplyInfoController extends AbsBaseController {
         ResultVO resultVO = new ResultVO();
         //获取申请时的用户信息
         Map personMap = appBasicInfoService.getPersonInfo(id);
-        if (CollectionUtils.isEmpty(personMap)) {
+        if (personMap.get("code").equals("1")) {
             //说明尚未填写申请信息
             resultVO.setRetCode("1");
         } else {
@@ -71,6 +71,7 @@ public class ApplyInfoController extends AbsBaseController {
             resultVO.setErrorMsg(VOConst.FAIL,(String)(map.get("msg")));
         }
         resultVO.setRetMsg((String)map.get("msg"));
+        resultVO.setRetData(resultMap);
         return resultVO;
     }
 
