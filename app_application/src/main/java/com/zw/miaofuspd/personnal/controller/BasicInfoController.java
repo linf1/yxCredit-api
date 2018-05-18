@@ -121,8 +121,8 @@ public class BasicInfoController extends AbsBaseController {
      * @param  provinceId 省id
      * @return
      */
-    @RequestMapping("/getCityList/{provinceId}")
-    public ResultVO getCityList(@PathVariable String provinceId) throws Exception{
+    @RequestMapping("/getCityList")
+    public ResultVO getCityList(String provinceId) throws Exception{
         ResultVO resultVO = new ResultVO();
         List list = appBasicInfoService.getCityList(provinceId);
         resultVO.setRetData(list);
