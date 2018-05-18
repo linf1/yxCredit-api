@@ -58,7 +58,6 @@ public class DsMoneyController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return ResultVO.error();
         }
         return ResultVO.error();
     }
