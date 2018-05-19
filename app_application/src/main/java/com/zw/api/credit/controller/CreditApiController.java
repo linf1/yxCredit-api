@@ -1,12 +1,11 @@
 package com.zw.api.credit.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.api.model.common.ApiConstants;
-import com.api.model.common.ResultModel;
 import com.api.model.credit.CreditRequest;
 import com.api.model.credit.CreditResultAO;
 import com.api.service.credit.ICreditApiService;
 import com.base.util.AppRouterSettings;
+import com.constants.ApiConstants;
 import com.zw.web.base.vo.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,15 +38,13 @@ public class CreditApiController {
     @PostMapping("/validateCreditApi")
     @ResponseBody
     public ResultVO validateCreditApi(@RequestBody CreditRequest request) throws IOException {
-        ResultVO resultVO = new  ResultVO();
         if (request == null) {
             LOGGER.info("请求参数异常或不存在");
-            return resultVO.error("请求参数异常或不存在");
+            return ResultVO.error("请求参数异常或不存在");
         }
 
-
         CreditResultAO creditResultAO = creditApiService.validateAccount(request);
-        return resultVO.error(creditResultAO.getCode(), creditResultAO.getTaskStatus());
+        return ResultVO.error(creditResultAO.getCode(), creditResultAO.getTaskStatus());
     }
 
     /**
