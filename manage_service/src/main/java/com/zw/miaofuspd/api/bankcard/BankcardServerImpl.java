@@ -1,13 +1,11 @@
 package com.zw.miaofuspd.api.bankcard;
 
-import com.alibaba.fastjson.JSONObject;
 import com.api.model.BYXSettings;
 import com.api.model.bankcard.BankcardRequest;
 import com.api.model.bankcard.BankcardSettings;
 import com.api.model.common.BYXRequest;
 import com.api.model.common.BYXResponse;
 import com.api.service.bankcard.IBankcardServer;
-import com.base.util.DateUtils;
 import com.base.util.GeneratePrimaryKeyUtils;
 import com.base.util.StringUtils;
 import com.zw.api.HttpClientUtil;
