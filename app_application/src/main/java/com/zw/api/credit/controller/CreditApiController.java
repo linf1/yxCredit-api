@@ -22,7 +22,7 @@ import java.util.Map;
  * @author luochaofang
  */
 @RestController
-@RequestMapping(value = AppRouterSettings.VERSION +AppRouterSettings.API_MODULE + "/credit")
+@RequestMapping(value = AppRouterSettings.VERSION  + "/credit")
 public class CreditApiController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CreditApiController.class);

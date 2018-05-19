@@ -22,7 +22,7 @@ import java.util.Map;
  * @author 陈清玉
  */
 @RestController
-@RequestMapping(AppRouterSettings.VERSION + AppRouterSettings.API_MODULE + "/bankcard")
+@RequestMapping(AppRouterSettings.VERSION + "/bankcard")
 public class BankcardController {
     @Autowired
     private IBankcardServer bankcardServer;

@@ -27,7 +27,7 @@ import java.util.Map;
  * @author 陈清玉
  */
 @RestController
-@RequestMapping(AppRouterSettings.VERSION + AppRouterSettings.API_MODULE + "/sms")
+@RequestMapping(AppRouterSettings.VERSION + "/sms")
 public class SmsApiController  {
 
     private final Logger LOGGER = LoggerFactory.getLogger(SmsApiController.class);

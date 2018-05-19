@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 陈清玉
  */
 @RestController
-@RequestMapping(value = AppRouterSettings.VERSION +AppRouterSettings.API_MODULE + "/tongDun")
+@RequestMapping(value = AppRouterSettings.VERSION + "/tongDun")
 public class TongDunApiController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TongDunApiController.class);

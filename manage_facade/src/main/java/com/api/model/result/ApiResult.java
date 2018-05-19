@@ -10,6 +10,7 @@ import java.util.Date;
 public class ApiResult implements Serializable {
 
     private static final long serialVersionUID = 1483849209037994531L;
+
     private String id;
     /**
      * 接口返回码

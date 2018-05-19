@@ -39,11 +39,13 @@ public class ApiResultServerImpl extends AbsServiceBase implements IApiResultSer
     }
 
     @Override
-    public List<ApiResult> selectApiResult(ApiResult result) throws Exception {
+    public List<Map> selectApiResult(ApiResult result) throws Exception {
         StringBuilder sql = new StringBuilder("SELECT * FROM zw_api_result WHERE 1=1 ");
         final Map<String, Object> objectMap = BeanMapperUtil.converMap(result);
         for (Map.Entry<String, Object> entry : objectMap.entrySet()) {
-            sql.append("AND ").append(BeanHump.camelToUnderline(entry.getKey())).append("='").append(entry.getValue()).append("' ");
+            if(entry.getValue() != null  &&  !"serialVersionUID".equals(entry.getKey())){
+                sql.append("AND ").append(BeanHump.camelToUnderline(entry.getKey())).append("='").append(entry.getValue()).append("' ");
+            }
         }
         return sunbmpDaoSupport.findForList(sql.toString(), ApiResult.class);
 

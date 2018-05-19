@@ -3,6 +3,7 @@ package com.api.service.result;
 import com.api.model.result.ApiResult;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 远程调用API结果服务
@@ -23,5 +24,5 @@ public interface IApiResultServer {
      * @param result 参数实体
      * @return 影响行数
      */
-    List<ApiResult> selectApiResult(ApiResult result) throws Exception;
+    List<Map>  selectApiResult(ApiResult result) throws Exception;
 }
