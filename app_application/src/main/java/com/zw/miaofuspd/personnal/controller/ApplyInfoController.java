@@ -22,7 +22,7 @@ import java.util.Map;
  * Created by 韩梅生
  */
 @Controller
-@RequestMapping(AppRouterSettings.APPLY_MODULE)
+@RequestMapping(AppRouterSettings.VERSION+AppRouterSettings.APPLY_MODULE)
 public class ApplyInfoController extends AbsBaseController {
     @Autowired
     AppBasicInfoService appBasicInfoService;

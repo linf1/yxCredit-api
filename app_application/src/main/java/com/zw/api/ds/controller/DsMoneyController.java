@@ -19,7 +19,7 @@ import java.util.Map;
  * @author 陈清玉
  */
 @RestController
-@RequestMapping(AppRouterSettings.VERSION +AppRouterSettings.API_MODULE + "/ds")
+@RequestMapping(AppRouterSettings.VERSION + "/ds")
 public class DsMoneyController {
 
     @Autowired

@@ -8,4 +8,12 @@ import com.api.model.common.ApiCommonRequest;
  * @author 陈清玉
  */
 public class TongDunRequest extends ApiCommonRequest {
+    private String  orderId;
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 }

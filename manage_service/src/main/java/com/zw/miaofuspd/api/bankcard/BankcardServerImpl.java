@@ -1,13 +1,11 @@
 package com.zw.miaofuspd.api.bankcard;
 
-import com.alibaba.fastjson.JSONObject;
 import com.api.model.BYXSettings;
 import com.api.model.bankcard.BankcardRequest;
 import com.api.model.bankcard.BankcardSettings;
 import com.api.model.common.BYXRequest;
 import com.api.model.common.BYXResponse;
 import com.api.service.bankcard.IBankcardServer;
-import com.base.util.DateUtils;
 import com.base.util.GeneratePrimaryKeyUtils;
 import com.base.util.StringUtils;
 import com.zw.api.HttpClientUtil;
@@ -66,7 +64,7 @@ public class BankcardServerImpl extends AbsServiceBase implements IBankcardServe
 
     @Override
     public BYXResponse getBankList() throws Exception {
-        final String result = HttpClientUtil.post(bankcardSettings.getBankListUrl(),BYXRequest.getBYXRequest(new HashMap<>(), byxSettings),byxSettings.getHeadRequest());
+        final String result = HttpClientUtil.post(bankcardSettings.getBankListUrl(),BYXRequest.getBYXRequest(null, byxSettings),byxSettings.getHeadRequest());
         return BYXResponse.getBYXResponse(result,byxSettings);
     }
 
@@ -89,7 +87,7 @@ public class BankcardServerImpl extends AbsServiceBase implements IBankcardServe
 
     @Override
     public BYXResponse getProvinceList() throws Exception {
-        final String result = HttpClientUtil.post(bankcardSettings.getProvinceListUrl(),"",byxSettings.getHeadRequest());
+        final String result = HttpClientUtil.post(bankcardSettings.getProvinceListUrl(),BYXRequest.getBYXRequest(null, byxSettings),byxSettings.getHeadRequest());
         return BYXResponse.getBYXResponse(result,byxSettings);
     }
 

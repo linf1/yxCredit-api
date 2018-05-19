@@ -39,6 +39,10 @@
                    ref="dSMoneyServerImpl"/>
     <dubbo:service interface="com.api.service.shujumohe.IShujumoheServer" timeout="30000"
                    ref="shujumoheServerImpl"/>
+    <dubbo:service interface="com.api.service.result.IApiResultServer" timeout="30000"
+                   ref="apiResultServerImpl"/>
+    <dubbo:service interface="com.api.service.tongdun.ITongDunApiService" timeout="30000"
+                   ref="tongDunApiServiceImpl"/>
     <dubbo:service interface="com.api.service.contractsign.IContractSignService" timeout="30000"
                    ref="contractSignServiceImpl"/>
 

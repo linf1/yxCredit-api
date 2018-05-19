@@ -1,5 +1,7 @@
 package com.api.model.common;
 
+import com.constants.ApiConstants;
+
 import java.io.Serializable;
 
 /**

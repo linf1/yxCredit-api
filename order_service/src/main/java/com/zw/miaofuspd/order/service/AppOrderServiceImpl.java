@@ -1905,10 +1905,10 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
      * @return
      */
     @Override
-    public Map getAllOrderByUserId(String userId) {
+    public Map getAllOrderByUserId(String userId ,String pageNumber,String pageSize) {
         Map returnMap = new HashMap();
         String sql ="SELECT ID AS orderId ,  product_name_name AS productName , applay_money AS applayMoney , PERIODS AS periods , applay_time AS applayTime , Order_state AS orderState  " +
-                "FROM mag_order WHERE USER_ID='"+userId+"'";
+                "FROM mag_order WHERE USER_ID='"+userId+"' limit "+pageNumber+","+pageSize;
         List allOrderList = sunbmpDaoSupport.findForList(sql);
         returnMap.put("allOrderList",allOrderList);
         return returnMap;

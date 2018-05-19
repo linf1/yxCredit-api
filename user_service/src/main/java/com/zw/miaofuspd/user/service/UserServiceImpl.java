@@ -79,7 +79,7 @@ public class UserServiceImpl extends AbsServiceBase implements IUserService {
      */
     @Override
     public AppUserInfo getUserByOrderId(String orderId) {
-        String sql = " SELECT Contract_amount as budgetContractAmount,Surplus_Contract_amount as surplusContractAmount from mag_order " +
+        String sql = " SELECT Contract_amount as budgetContractAmount  from mag_order " +
                 "WHERE order_no='"+orderId+"'";
 
         Map map = sunbmpDaoSupport.findForMap(sql);

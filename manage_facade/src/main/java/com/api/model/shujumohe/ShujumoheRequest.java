@@ -13,6 +13,8 @@ public class ShujumoheRequest implements Serializable {
 
     private String all_submit;
 
+    private String userName;
+
     public String getTask_id() {
         return task_id;
     }
@@ -28,6 +30,15 @@ public class ShujumoheRequest implements Serializable {
     public void setAll_submit(String all_submit) {
         this.all_submit = all_submit;
     }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
 
     @Override
     public String toString() {

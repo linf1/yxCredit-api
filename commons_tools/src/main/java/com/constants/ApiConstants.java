@@ -1,4 +1,4 @@
-package com.api.model.common;
+package com.constants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,6 +69,13 @@ public class ApiConstants {
     public static final String API_TONGDUN_KEY = "tongdun";
     public static final String API_TONGDUN_TITLE = "同盾";
 
+
+    /**
+     * API常量
+     */
+    public static final String API_MOHE_KEY = "mohe";
+    public static final String API_MOHE_TITLE = "魔盒";
+    public static final String API_MOHE_YYS = "运营商";
 
 
 

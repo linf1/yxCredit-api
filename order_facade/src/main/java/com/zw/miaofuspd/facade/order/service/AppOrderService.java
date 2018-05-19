@@ -192,12 +192,12 @@ public interface AppOrderService {
     Map contractForSubmissionByOrderId(String orderId,String userId) throws Exception;
 
     /**
-     *根据UserId 获取所有订单信息
+     *根据UserId 获取所有订单列表
      * @author 仙海峰
      * @param userId
      * @return
      */
-    Map getAllOrderByUserId(String userId);
+    Map getAllOrderByUserId(String userId,String pageNumber,String pageSize);
 
     /**
      * 根据orderId获取待放款订单信息

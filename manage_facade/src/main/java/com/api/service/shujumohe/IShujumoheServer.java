@@ -14,4 +14,6 @@ public interface IShujumoheServer {
      * @return
      */
    String callbackShujumohe(ShujumoheRequest request);
+
+
 }

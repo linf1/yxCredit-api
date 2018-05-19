@@ -13,7 +13,7 @@ import java.util.*;
 public class BYXSettings {
 
     private String  appKey;
-    private String desKey = "QEI1LQBXXAA1TWX72FUI7L5H";
+    private String desKey;
     private Long ts;
     private String  signa;
     private String vi;

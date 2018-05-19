@@ -26,7 +26,7 @@ public interface AppBasicInfoService {
      * @return
      * @throws Exception
      */
-    Map addApplyInfo(Map<String, String> paramMap) throws Exception;
+    Map addApplyInfo(Map<String, Object> paramMap) throws Exception;
 
     /**
      * 获取用户基本信息
@@ -65,7 +65,7 @@ public interface AppBasicInfoService {
     void saveTongXunLu(String customerId,String data) throws Exception;
 
     /**
-     * 判断是否实名认证
+     * 判断是否填写过草稿信息
      * @author 韩梅生
      * @param id
      * @return
@@ -153,4 +153,11 @@ public interface AppBasicInfoService {
      */
     Map findById(String id);
 
+    /**
+     * 数据同步完成后更新个人信息
+     * @param userID 同步接口返回userId
+     * @param accountId 同步接口返回accountId
+     * @return 影响行数
+     */
+    int updateSynById(String userID,String accountId,String custId);
 }

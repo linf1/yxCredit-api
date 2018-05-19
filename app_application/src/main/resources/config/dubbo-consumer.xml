@@ -141,4 +141,8 @@
     <dubbo:reference interface="com.api.service.contractsign.IContractSignService"
                      id="contractSignServiceImpl" check="false"/>
 
+    <dubbo:reference interface="com.api.service.result.IApiResultServer"
+                     id="apiResultServerImpl" check="false"/>
+    <dubbo:reference interface="com.api.service.tongdun.ITongDunApiService" check="false"
+                   id="tongDunApiServiceImpl"/>
 </beans>

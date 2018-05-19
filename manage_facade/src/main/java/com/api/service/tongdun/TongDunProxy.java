@@ -2,13 +2,20 @@ package com.api.service.tongdun;
 
 import com.alibaba.fastjson.JSONObject;
 import com.api.model.common.ApiCommonResponse;
-import com.api.model.common.ApiConstants;
+import com.api.model.result.ApiResult;
+import com.api.service.result.IApiResultServer;
+import com.base.util.GeneratePrimaryKeyUtils;
+import com.constants.ApiConstants;
 import com.api.model.tongdun.ReportAO;
 import com.api.model.tongdun.TongDunRequest;
+import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 同盾代理层
@@ -20,11 +27,11 @@ public class TongDunProxy implements ITongDunApiService {
 
     private ITongDunApiService tongDunApiService;
 
-    //private CrMagicDataResultServiceImpl crMagicDataResultService;
+    private IApiResultServer apiResultServerImpl;
 
-    public TongDunProxy(ITongDunApiService tongDunApiService) {
+    public TongDunProxy(ITongDunApiService tongDunApiService,IApiResultServer apiResultServerImpl) {
         this.tongDunApiService = tongDunApiService;
-       // this.crMagicDataResultService = crMagicDataResultService;
+        this.apiResultServerImpl = apiResultServerImpl;
     }
 
     @Override
@@ -37,16 +44,17 @@ public class TongDunProxy implements ITongDunApiService {
         return tongDunApiService.queryReportInfo(reportId);
     }
 
-    public ApiCommonResponse invokeTongDunApi(TongDunRequest request) {
+    public  ApiCommonResponse invokeTongDunApi(TongDunRequest request) throws Exception {
         LOGGER.info("同盾--获取报告信息 API调用开始.");
         long startTime = System.currentTimeMillis();
         long costTime = 0;
-        ApiCommonResponse response;
+        ApiCommonResponse response = new ApiCommonResponse();
       //TODO 根据  去数据库查询 如果有数据就不进行API调用（可加上时间期限）
-        //response = crMagicDataResultService.getByDataResult(new CrMagicDataResult(ApiConstants.API_TONGDUN_KEY,request.getIdNo()));
-        response = null;
-        if (response == null) {
-            response = new ApiCommonResponse();
+        ApiResult resultParameter = new ApiResult();
+        resultParameter.setSourceCode(EApiSourceEnum.TODONG.getCode());
+        resultParameter.setIdentityCode(request.getIdNo());
+        final List<Map> mapList = apiResultServerImpl.selectApiResult(resultParameter);
+        if (CollectionUtils.isEmpty(mapList)) {
             try {
                 //获取报告ID
                 final ReportAO reportAO = queryReportId(request);
@@ -68,10 +76,21 @@ public class TongDunProxy implements ITongDunApiService {
                     response.setResponseMsg(ApiConstants.STATUS_SUCCESS_MSG);
                     response.setOriginalData(jsonObject);
                     //保存数据到数据库
-//                    final int rowNum = saveResultData(request, result);
-//                    if(!(rowNum > 0)){
-//                        LOGGER.info("同盾-报告信息----持久化失败");
-//                    }
+                    ApiResult apiResult = new ApiResult();
+                    apiResult.setId(GeneratePrimaryKeyUtils.getUUIDKey());
+                    apiResult.setCode(ApiConstants.STATUS_SUCCESS);
+                    apiResult.setIdentityCode(request.getIdNo());
+                    apiResult.setMessage("成功");
+                    apiResult.setSourceChildName(EApiSourceEnum.TODONG.getName());
+                    apiResult.setSourceChildCode(EApiSourceEnum.TODONG.getCode());
+                    apiResult.setOnlyKey(request.getOrderId());
+                    apiResult.setRealName(request.getName());
+                    apiResult.setSourceName(EApiSourceEnum.TODONG.getName());
+                    apiResult.setSourceCode(EApiSourceEnum.TODONG.getCode());
+                    apiResult.setUserMobile(request.getPhone());
+                    apiResult.setUserName(request.getName());
+                    apiResult.setResultData(jsonObject.toJSONString());
+                    apiResultServerImpl.insertApiResult(apiResult);
                 } else {
                     response.setResponseCode(jsonObject.getString(ApiConstants.REASON_CODE_KEY));
                     response.setResponseMsg(jsonObject.getString(ApiConstants.REASON_DESC_KEY));
