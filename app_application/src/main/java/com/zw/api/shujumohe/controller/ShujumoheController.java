@@ -41,6 +41,8 @@ public class ShujumoheController {
     /**
      * 数据魔盒回调接口
      * @param request 数据
+     * @param orderId 订单id
+     * @param phone 登录手机号码
      * @return
      */
     @RequestMapping("callBackShujumohe/{orderId}/{phone}")
