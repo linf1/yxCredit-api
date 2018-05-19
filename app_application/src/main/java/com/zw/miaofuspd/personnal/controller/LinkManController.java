@@ -22,7 +22,7 @@ import java.util.Map;
  * Created by Administrator on 2017/12/13 0013.
  */
 @Controller
-@RequestMapping(AppRouterSettings.LINKMAN_MODUAL)
+@RequestMapping(AppRouterSettings.VERSION+AppRouterSettings.LINKMAN_MODUAL)
 public class LinkManController extends AbsBaseController {
     @Autowired
     AppBasicInfoService appBasicInfoService;
@@ -106,12 +106,11 @@ public class LinkManController extends AbsBaseController {
      * @author 韩梅生
      * @return
      */
-    @RequestMapping("/getLinkMan")
+    @RequestMapping("/getLinkManInfo")
     @ResponseBody
-    public ResultVO getLinkMan() throws Exception {
+    public ResultVO getLinkMan(String customerId) throws Exception {
         ResultVO resultVO = new ResultVO();
-        AppUserInfo userInfo = (AppUserInfo) this.getHttpSession().getAttribute(AppConstant.APP_USER_INFO);
-        Map map = appBasicInfoService.getLinkMan(userInfo.getCustomer_id());
+        Map map = appBasicInfoService.getLinkMan(customerId);
         resultVO.setRetData(map);
         return resultVO;
     }

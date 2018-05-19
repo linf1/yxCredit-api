@@ -26,7 +26,7 @@ public interface AppBasicInfoService {
      * @return
      * @throws Exception
      */
-    Map addApplyInfo(Map<String, String> paramMap) throws Exception;
+    Map addApplyInfo(Map<String, Object> paramMap) throws Exception;
 
     /**
      * 获取用户基本信息
@@ -65,7 +65,7 @@ public interface AppBasicInfoService {
     void saveTongXunLu(String customerId,String data) throws Exception;
 
     /**
-     * 判断是否实名认证
+     * 判断是否填写过草稿信息
      * @author 韩梅生
      * @param id
      * @return

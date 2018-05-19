@@ -65,7 +65,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
                 sunbmpDaoSupport.exeSql(sql);
             } else {
 
-                id = GeneratePrimaryKeyUtils.getUUIDKey();;
+                id = GeneratePrimaryKeyUtils.getUUIDKey();
                 if (!("").equals(customerLinkmanBean.getRelationShip()) && !("").equals(customerLinkmanBean.getContact())) {
                     String sql = "insert into mag_customer_linkman(ID,relationship,contact,CREAT_TIME,complete,CUSTOMER_ID,relationship_name,link_name) " +
                             "values('" + id + "','" + customerLinkmanBean.getRelationShip() + "','" + customerLinkmanBean.getContact() + "','" + DateUtils.getDateString(new Date()) + "','" + complete + "','" + customerId + "','" + customerLinkmanBean.getRelationshipName() + "','" + customerLinkmanBean.getLinkName() + "') ";
@@ -130,18 +130,19 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     */
 
     @Override
-    public Map addApplyInfo(Map<String, String> paramMap) {
+    public Map addApplyInfo(Map<String, Object> paramMap) {
         Map resturnMap = new HashMap();
 
-        String orderId = paramMap.get("orderId");
+        String orderId = (String) paramMap.get("orderId");
         //申请金额
-        String applayMoney = paramMap.get("applyMoney");
+        //BigDecimal applayMoney = new BigDecimal( String.valueOf(paramMap.get("applyMoney")));
+        Object applayMoney = paramMap.get("applyMoney");
         //申请期限
-        String periods = paramMap.get("periods");
+        String periods = (String) paramMap.get("periods");
         //借款用途
-        String loanPurpose = paramMap.get("loanPurpose");
+        String loanPurpose = (String) paramMap.get("loanPurpose");
 
-        String sql = "update mag_order set applay_money = '" + applayMoney + "'," + "PERIODS = '" + periods + "'," +
+        String sql = "update mag_order set applay_money = " + applayMoney + "," + "PERIODS = '" + periods + "'," +
                 "loan_purpose = '" + loanPurpose + "'," +
                 "complete = '100' where order_no = '" + orderId + "'  ";
         int count = sunbmpDaoSupport.executeSql(sql);
@@ -189,9 +190,10 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         String personName = map.get("personName");
         String productName = map.get("productName");
         String orderid;
+        String uuidKey;
         try {
             //新增客户信息
-            String uuidKey = GeneratePrimaryKeyUtils.getUUIDKey();
+            uuidKey = GeneratePrimaryKeyUtils.getUUIDKey();
             String sql1 = "insert into mag_customer (ID,USER_ID,PERSON_NAME,TEL,CARD,surplus_contract_amount,CREAT_TIME) values ('" + uuidKey + "','" + id + "','" + personName + "','" + tel + "','" + card + "',200000,'"+createTime+"')";
             sunbmpDaoSupport.exeSql(sql1);
             orderid = String.valueOf(GeneratePrimaryKeyUtils.getOrderNum());
@@ -207,7 +209,8 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         }
         resultMap.put("flag",true);
         resultMap.put("msg","创建用户和订单信息成功！");
-        resultMap.put("orderid",orderid);
+        resultMap.put("orderId",orderid);
+        resultMap.put("customerId",uuidKey);
         return resultMap;
 
     }
@@ -227,15 +230,25 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
      */
     @Override
     public Map getBasicInfo(String customerId){
-        String  sql="select t5.contractor_name as contractor_name,t1.marital_status as marital_status,t1.children_status as children_status,t1.Hometown_house_property as Hometown_house_property" +
-                ",t2.province_name as jobProvince_name,t2.city_name as jobCity_name,t2.district_name as jobDistrict_name,t2.address as jobDetailAddress," +
-                "t3.provinces as cardProvinces,t3.city as cardCity,t3.distric as cardDistric,t3.address_detail as cardDetailAddress from mag_customer t1" +
+        Map resultMap = new HashMap();
+        String  sql="select t5.contractor_name as contractor_name,t1.marital_status as marital_status,t1.children_status as children_status" +
+                ",t2.province_name as jobProvince_name,t2.province_id as jobProvince_id,t2.city_name as jobCity_name,t2.city_id as jobCity_id,t2.district_name as jobDistrict_name,t2.district_id as jobDistrict_id,t2.address as jobDetailAddress," +
+                "t3.provinces as cardProvinces,t3.provinces_id as cardProvinces_id,t3.city as cardCity,t3.city_id as cardCity_id,t3.distric as cardDistric,t3.distric_id as cardDistric_id,t3.address_detail as cardDetailAddress from mag_customer t1" +
                 " left join mag_customer_job t2 on t1.id = t2.customer_id" +
                 " left join mag_customer_live t3 on t1.id = t3.customer_id" +
                 " left join byx_white_list t4 on t1.person_name = t4.real_name and t1.card = t4.card" +
                 " left join byx_contractor t5 on t5.id = t4.contractor_id where t1.id = '"+customerId+"'";
-        Map map = sunbmpDaoSupport.findForMap(sql);
-        return map;
+
+        List<Map> list = sunbmpDaoSupport.findForList(sql);
+        if(list.size()==0){
+            resultMap.put("flag",false);
+            resultMap.put("msg","查询失败，没有该用户的信息");
+            return  resultMap;
+        }
+        resultMap.put("flag",true);
+        resultMap.put("msg","查询成功！");
+        resultMap.put("data",list.get(0));
+        return resultMap;
 
     }
 
@@ -257,8 +270,6 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         String maritalSstatus =  paramMap.get("maritalSstatus");
         //子女状况
         String  childrenStatus = paramMap.get("childrenStatus");
-        //老家住房性质
-        String hometownHouseProperty = paramMap.get("hometownHouseProperty");
         //籍贯居住详细地址
         String cardRegisterDetailAddress = paramMap.get("cardRegisterDetailAddress");
         //籍贯省市区
@@ -273,7 +284,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         String jobAddressCode = paramMap.get("jobAddressCode");
 
         //客户信息表更新个人信息
-        String  cusSql = "update mag_customer set marital_status ='"+maritalSstatus+"',children_status='"+childrenStatus+"',Hometown_house_property='"+hometownHouseProperty+"'";
+        String  cusSql = "update mag_customer set marital_status ='"+maritalSstatus+"',children_status='"+childrenStatus+"'";
         sunbmpDaoSupport.exeSql(cusSql);
         Map<String, String> jmap = getAdress(jobAddress, jobAddressCode, jodDetailAddress);
         Map<String, String> cmap = getAdress(cardRegisterAddress, cardRegisterAddressCode, cardRegisterDetailAddress);
@@ -415,19 +426,19 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     @Override
     public Map getLinkMan(String customerId) throws Exception {
         Map retMap = new HashMap();
-        //查询linkman表中的直系亲属前两个人
-        String sql = "select id,relationship,relationship_name AS relationshipname,contact,link_name AS linkName from mag_customer_linkman where type='1' and customer_id = '" + customerId + "' and main_sign =0 order by CREAT_TIME LIMIT 0,2";
+        //查询linkman表
+        String sql = "select id,relationship,relationship_name AS relationshipname,contact,link_name AS linkName from mag_customer_linkman where customer_id = '" + customerId + "' ";
         List list = sunbmpDaoSupport.findForList(sql);
         retMap.put("linkmanlist", list);
         //查询linkman表中的其他亲属前两个人
-        String sql2 = "select id,relationship,relationship_name AS relationshipname,contact,link_name AS linkName from mag_customer_linkman where type='1' and customer_id = '" + customerId + "' and main_sign =1 order by CREAT_TIME LIMIT 0,2";
-        List list2 = sunbmpDaoSupport.findForList(sql2);
-        retMap.put("olinkmanlist", list2);
+//        String sql2 = "select id,relationship,relationship_name AS relationshipname,contact,link_name AS linkName from mag_customer_linkman where type='1' and customer_id = '" + customerId + "' and main_sign =1 order by CREAT_TIME LIMIT 0,2";
+//        List list2 = sunbmpDaoSupport.findForList(sql2);
+//        retMap.put("olinkmanlist", list2);
         return retMap;
     }
 
     /**
-     * 在申请前判断是否实名认证
+     * 在申请前判断是否填过草稿信息
      *
      * @param id
      * @return
@@ -464,7 +475,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         String  sql2 = "select state from mag_order where user_id = '"+id+"' and product_name = '"+productName+"'";
         List<Map> staList = sunbmpDaoSupport.findForList(sql2);
         //申请主页面的相关信息
-        String sql3 = "select t1.card as card,t1.tel as tel,t1.PERSON_NAME as personName,t1.Baseinfo_complete as baseinfoComplete" +
+        String sql3 = "select t1.id as customerId,t1.card as card,t1.tel as tel,t1.PERSON_NAME as personName,t1.Baseinfo_complete as baseinfoComplete" +
                 ",t2.complete as applyComplete,t2.order_no as orderId,t1.link_man_complete as link_man_complete  from mag_customer t1 left join  mag_order t2 on t1.id = t2.CUSTOMER_ID " +
                 " where t1.user_id = '" +id+ "'and t2.product_name= '"+productName+"'and t2.state='1'";
         for(Map map:staList){
@@ -930,7 +941,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     @Override
     public Map getRealName(String userId){
         Map resultMap = new HashMap();
-        String sql = "select t1.PERSON_NAME as personName,t1.card as card,t1.tel as tel,t2.bank_name as bank_name,t2.bank_number as bank_number," +
+        String sql = "select t1.PERSON_NAME as cust_name,t1.card as card,t1.tel as tel,t2.bank_name as bank_name,t2.bank_number as bank_number," +
                 "t2.bank_subbranch as bank_subbranch,t2.card_number as card_number,t2.prov_id as prov_id,t2.prov_name as prov_name,t2.city_id as city_id," +
                 "t2.city_name as city_name from mag_customer t1 left join sys_bank_card t2 on t1.id = t2.cust_id where t1.id = '"+userId+"'";
         resultMap =  sunbmpDaoSupport.findForMap(sql);
@@ -953,7 +964,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             if(list.size()==0){
                 //新增银行卡信息
                 String sql2 = "insert into sys_bank_card values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+map.get("bank_name")+"'," +
-                        "'"+map.get("bank_number")+"','"+map.get("bank_subbranch")+"','"+map.get("card_number")+"','"+map.get("cust_id")+"','"+map.get("cust_name")+"'," +
+                        "'"+map.get("bank_number")+"','"+map.get("bank_subbranch")+"','"+map.get("card_number")+"','"+map.get("customerId")+"','"+map.get("cust_name")+"'," +
                         "'"+map.get("prov_id")+"','"+map.get("prov_name")+"','"+map.get("city_id")+"','"+map.get("city_name")+"','"+DateUtils.getNowDate()+"','"+DateUtils.getNowDate()+"')";
                 sunbmpDaoSupport.exeSql(sql2);
             }else {
