@@ -39,6 +39,7 @@ public class ShujumoheRequest implements Serializable {
         this.userName = userName;
     }
 
+
     @Override
     public String toString() {
         return "ShujumoheRequest{" +

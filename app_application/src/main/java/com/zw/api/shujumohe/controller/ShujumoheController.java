@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,13 +43,13 @@ public class ShujumoheController {
      * @param request 数据
      * @return
      */
-    @RequestMapping("callBackShujumohe")
-    public ResultVO callBackShujumohe(ShujumoheRequest request){
+    @RequestMapping("callBackShujumohe/{orderId}/{phone}")
+    public ResultVO callBackShujumohe(ShujumoheRequest request, @PathVariable String  orderId,@PathVariable String phone){
         LOGGER.info("========request:{}",request.toString());
         String result = null;
         try {
             ApiResult resultParameter = new ApiResult();
-            resultParameter.setUserName(request.getUserName());
+            resultParameter.setUserName(phone);
             resultParameter.setSourceCode(EApiSourceEnum.MOHE.getCode());
             //查询是否有报告
             final List<Map> mapList = apiResultServerImpl.selectApiResult(resultParameter);
@@ -69,7 +70,7 @@ public class ShujumoheController {
                             apiResult.setMessage((String) jsonObject.get("message"));
                             apiResult.setSourceChildName(ApiConstants.API_MOHE_YYS);
                             apiResult.setSourceChildCode((String)data.get("channel_type"));
-                            apiResult.setOnlyKey((String)data.get("identity_code"));
+                            apiResult.setOnlyKey(orderId);
                             apiResult.setRealName((String)data.get("real_name"));
                             apiResult.setSourceName(EApiSourceEnum.MOHE.getName());
                             apiResult.setSourceCode(EApiSourceEnum.MOHE.getCode());
