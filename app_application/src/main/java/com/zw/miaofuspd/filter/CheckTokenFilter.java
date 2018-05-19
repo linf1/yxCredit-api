@@ -63,7 +63,7 @@ public class CheckTokenFilter implements Filter {
 			LOGGER.info("无效token");
 			//token过期或者无效，则输出错误信息返回给ajax
 			JSONObject outputMSg=new JSONObject();
-			outputMSg.put("retCode", "FAIL");
+			outputMSg.put("retCode", "no_token");
 			outputMSg.put("retMsg", "您的token不合法或者过期了，请重新登陆");
 			output(outputMSg.toJSONString(), response);
 			break;

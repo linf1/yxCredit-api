@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping(AppRouterSettings.VERSION + AppRouterSettings.API_MODULE + "/login")
+@RequestMapping(AppRouterSettings.VERSION + "/login")
 public class LoginController extends AbsBaseController {
     @Autowired
     ILoginService loginService;

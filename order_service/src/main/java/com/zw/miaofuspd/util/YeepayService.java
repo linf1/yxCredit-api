@@ -58,4 +58,8 @@ public class YeepayService {
         logger.info("将结果yopresponse转化为map格式之后: "+jsonMap);
         return jsonMap;
     }
+
+    public static void main(String[] args) {
+        System.out.println(666);
+    }
 }

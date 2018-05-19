@@ -93,4 +93,10 @@
         <property name="taskType" value="${credit.taskType}"/>
     </bean>
 
+    <!-- 合同签章BEAN create by hanwannan-->
+    <bean id="contractSignSettings" class="com.api.model.contractsign.ContractSignSettings">
+        <property name="requestUrl" value="${contractsign.requestUrl}"/>
+        <property name="requestType" value="${contractsign.requestType}"/>
+    </bean>
+
 </beans>

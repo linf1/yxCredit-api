@@ -1,6 +1,10 @@
 
 package com.zw.miaofuspd.contractConfirmation.controller;
 
+import com.api.model.common.BYXResponse;
+import com.api.model.contractsign.ContractSignRequest;
+import com.api.model.contractsign.ByxUserModel;
+import com.api.service.contractsign.IContractSignService;
 import com.junziqian.service.JunziqianService;
 import com.zw.app.util.AppConstant;
 import com.zw.miaofuspd.facade.contractConfirmation.service.ContractConfirmationService;
@@ -13,6 +17,8 @@ import com.zw.util.ContextToPdf;
 import com.zw.util.UploadFileUtil;
 import com.zw.web.base.AbsBaseController;
 import com.zw.web.base.vo.ResultVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-
+import java.util.*;
 /**
  * <strong>Title : <br>
  * </strong> <strong>Description : </strong>@类注释说明写在此处@<br>
@@ -53,6 +54,9 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/contractConfirmation")
 public class ContractConfirmationController extends AbsBaseController {
+    private static Logger logger = LoggerFactory.getLogger(ContractConfirmationController.class);
+    public static final String TOP_TYPE = "ThirdPartner:ContractConfirmationController:";
+
     @Autowired
     private ContractConfirmationService contractConfirmationService;
 
@@ -69,7 +73,10 @@ public class ContractConfirmationController extends AbsBaseController {
     @Autowired
     private AppOrderService appOrderService;
 
-/**
+    @Autowired
+    private IContractSignService iContractSignService;
+
+    /**
      * 获取未签订合同
      *
      * @param request
@@ -365,6 +372,173 @@ public class ContractConfirmationController extends AbsBaseController {
     public String goToContract() throws Exception {
         return "cash-wechat/centerMsg/contract";
     }
+
+
+    /*****************************碧有信合同模块开始***************************/
+
+    /**
+     * 生成未签订合同
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping("/generateContract")
+    @ResponseBody
+    public ResultVO generateContract(HttpServletRequest request) throws Exception {
+        ResultVO resultVO = new ResultVO();
+        String orderId=request.getParameter("orderId");
+        Map map = contractConfirmationService.getContractInfo(orderId);
+        try {
+            String cjName = iDictService.getDictInfo("出借人", "cjrxm");
+            String cjCard = iDictService.getDictInfo("出借人", "cjsfz");
+            //防止合同底部签名变形
+            while (cjName.length() < 8) {
+                cjName += " ";
+            }
+            map.put("cjName", cjName);
+            map.put("cjCard", cjCard);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //获取合同内容并将对应信息填入合同中
+        Map loanMap = contractConfirmationService.getContractAgreement(map);
+        //获取根目录
+        String root = request.getSession().getServletContext().getRealPath("/loan_agreement");
+        //文件名
+        String filename = UUID.randomUUID().toString() + ".pdf";
+        String url = "/" + "loan_agreement_pdf" + "/" + filename;
+        //先创建文件夹，避免fileOutputStream报错
+        File file = new File(root + File.separator + "loan_agreement_pdf");
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        loanMap.put("url", root + url);
+        Map mapPdf = new HashMap();
+        mapPdf.put("pdfUrl", "/loan_agreement" + url);
+        mapPdf.put("orderId", map.get("orderId").toString());
+       /* String host = iSystemDictService.getInfo("contract.host");
+        mapPdf.put("host", host);*/
+        try {
+            //转换成pdf
+            ContextToPdf.insertPDF(loanMap);
+            resultVO.setRetData(mapPdf);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        map.put("pdfUrl","/loan_agreement" + url);
+//        String value=loanMap.get("value").toString();
+//        map.put("value",value);
+//
+       /* modelAndView.addObject("info",map);*/
+        contractConfirmationService.insertContract(map);
+
+        return resultVO;
+    }
+
+    /**
+     * 通过orderId 获取合同
+     *
+     * @param orderId
+     * @param request
+     * @return
+     */
+
+    @RequestMapping("/getContract")
+    @ResponseBody
+    public ResultVO getContract(String orderId, HttpServletRequest request) throws Exception {
+     /*  orderId="80d8949a-ac68-4c7b-a65e-0bdb5672f50d";*/
+        ResultVO resultVO = new ResultVO();
+        //获取根目录
+        String contractSrc = contractConfirmationService.getContractByOrderId(orderId);
+        String host = iSystemDictService.getInfo("contract.host");
+        Map map = new HashMap();
+        map.put("pdfUrl", contractSrc);
+        map.put("host", host);
+        resultVO.setRetData(map);
+        return resultVO;
+    }
+
+
+    /**
+     * 生成签订合同
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping("/signContract")
+    @ResponseBody
+    public ResultVO signContract() throws Exception{
+        ResultVO resultVO = new ResultVO();
+
+        //电子签章需要参数
+        ContractSignRequest contractSignRequest = new ContractSignRequest();
+        contractSignRequest.setIsOutSign(0);//外部系统调用
+        contractSignRequest.setRealTemplateId("666666");
+        contractSignRequest.setContractTitle("20180428测试合同模板");
+
+        List<ByxUserModel> userModelList = new ArrayList<ByxUserModel>();
+        contractSignRequest.setUserModelList(userModelList);
+
+        ByxUserModel byxUserModel = new ByxUserModel();
+        byxUserModel.setPersonArea(0);
+        byxUserModel.setPersonIdType(ByxUserModel.IDTYPE_ID);
+        byxUserModel.setPersonIdValue("410622198211180181");
+        byxUserModel.setPersonName("张乐");
+        //甲方
+        byxUserModel.setSignatory(0);
+        //个人
+        byxUserModel.setUserType(ByxUserModel.USERTYPE_PERSON);
+        //关键字定位
+        byxUserModel.setPosType(ByxUserModel.POS_TYPE_KEY);
+        userModelList.add(byxUserModel);
+
+        String pdfPath = "/Users/van/work/zwkj/byx/test.pdf";//此路径为test.pdf文件本地存放的路径。
+        contractSignRequest.setUnsignPath(pdfPath);
+
+        BYXResponse response=iContractSignService.signContract(contractSignRequest);
+
+        System.out.println("$$$$$doElecSign:code:"+response.getRes_code()+";msg:"+response.getRes_msg());
+
+        String res_code=response.getRes_code();
+        String res_msg=response.getRes_msg();
+        /**签署成功**/
+        if("1".equals(res_code)){
+//            try {
+//                response.getRes_data();
+//                ResData resData = gson.fromJson(jsonEncodeString, ResData.class);
+//                /**解密后的文件流**/
+//                byte[] signedStream = resData.getSignedStream();
+//                String orderNo = resData.getOrderNo();
+//                /**订单编号**/
+//                logger.info(TOP_TYPE + "签署成功:orderNo:"+orderNo);
+//                /**测试输出文件是否成功**/
+//                String pathname = "e:"+File.separator+"elecsign4out"+File.separator+"signedDir"+File.separator+"sign06.pdf";
+//                File signFile = new File(pathname );
+//                FileUtils.writeByteArrayToFile(signFile , signedStream);
+//            } catch (Exception e) {
+//                /**解析结果异常**/
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//                logger.error(TOP_TYPE+":解析结果异常:",e);
+//            }
+        }else{
+            /**签署失败**/
+            logger.info(TOP_TYPE + "失败编码:res_code:"+res_code);
+            logger.info(TOP_TYPE + "失败的原因:res_msg:"+res_msg);
+
+//            if(StringUtils.isNotBlank(jsonEncodeString)){
+//                ResData resData = gson.fromJson(jsonEncodeString, ResData.class);
+//                String orderNo = resData.getOrderNo();
+//                logger.info(TOP_TYPE + "失败订单编号为:orderNo:"+orderNo);
+//            }
+        }
+        resultVO.setRetCode(res_code);
+        resultVO.setRetMsg(res_msg);
+        return resultVO;
+    }
+
 }
 
 
