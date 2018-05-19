@@ -153,4 +153,11 @@ public interface AppBasicInfoService {
      */
     Map findById(String id);
 
+    /**
+     * 数据同步完成后更新个人信息
+     * @param userID 同步接口返回userId
+     * @param accountId 同步接口返回accountId
+     * @return 影响行数
+     */
+    int updateSynById(String userID,String accountId,String custId);
 }

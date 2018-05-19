@@ -47,7 +47,7 @@ public class ApiResultServerImpl extends AbsServiceBase implements IApiResultSer
                 sql.append("AND ").append(BeanHump.camelToUnderline(entry.getKey())).append("='").append(entry.getValue()).append("' ");
             }
         }
-        return sunbmpDaoSupport.findForList(sql.toString(), ApiResult.class);
+        return sunbmpDaoSupport.findForList(sql.toString());
 
     }
 }

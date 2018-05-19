@@ -994,4 +994,9 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         return sunbmpDaoSupport.findForMap(sql.toString());
     }
 
+    @Override
+    public int updateSynById(String userID, String accountId,String custId) {
+        StringBuilder sql = new StringBuilder("update mag_customer  sync_user_id = '"+custId+"', sync_account_id ='"+accountId+"'  WHERE ID = '"+ custId +"'");
+        return sunbmpDaoSupport.executeSql(sql.toString());
+    }
 }

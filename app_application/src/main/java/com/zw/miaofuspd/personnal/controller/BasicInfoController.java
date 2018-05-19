@@ -181,35 +181,44 @@ public class BasicInfoController extends AbsBaseController {
         ResultVO resultVO = new ResultVO();
         Map map = JSONObject.parseObject(data);
         DSMoneyRequest request = new DSMoneyRequest();
-        final Map customer = appBasicInfoServiceImpl.findById((String) map.get("customerId"));
-        if (customer != null) {
-            request.setBorrowerType(0);
-            request.setBorrowerCardType("1");
-            request.setBorrowerName(customer.get("PERSON_NAME").toString());
-            request.setBorrowerMobilePhone(customer.get("TEL").toString());
-            request.setBorrowerChannel("yxd");
-            request.setBorrowerCardNo(customer.get("CARD").toString());
-            request.setAddress(customer.get("company_address").toString());
-            request.setAccountType("0");
-            request.setAccountName(customer.get("PERSON_NAME").toString());
-            request.setAccountIdCard(customer.get("CARD").toString());
-            request.setOtherFlag("1");
-            request.setAccountChannel("yxd");
-            request.setAccountThirdId(request.getBorrowerThirdId());
-            request.setProvinceCode((String) map.get("prov_id"));
-            request.setProvinceName((String)map.get("prov_name"));
-            request.setCityCode((String) map.get("city_id"));
-            request.setCityName((String)map.get("city_name"));
-            request.setBankCode((String)map.get("bank_number"));
-            request.setBankName((String)map.get("bank_name"));
-            try {
+        try {
+            final Map customer = appBasicInfoServiceImpl.findById((String) map.get("customerId"));
+            if (customer != null) {
+                request.setBorrowerType(0);
+                request.setBorrowerCardType("1");
+                //app登录手机号码
+                request.setBorrowerUserName((String) map.get("phone"));
+                request.setBorrowerName(customer.get("PERSON_NAME").toString());
+                request.setBorrowerMobilePhone(customer.get("TEL").toString());
+                request.setBorrowerChannel("yxd");
+                request.setBorrowerCardNo(customer.get("CARD").toString());
+                request.setAddress(customer.get("company_address").toString());
+                request.setAccountType("0");
+                request.setAccountName(customer.get("PERSON_NAME").toString());
+                request.setAccountIdCard(customer.get("CARD").toString());
+                request.setOtherFlag("1");
+                request.setAccountChannel("yxd");
+                request.setAccountThirdId(request.getBorrowerThirdId());
+                request.setProvinceCode((String) map.get("prov_id"));
+                request.setProvinceName((String)map.get("prov_name"));
+                request.setCityCode((String) map.get("city_id"));
+                request.setCityName((String)map.get("city_name"));
+                request.setBankCode((String)map.get("bank_number"));
+                request.setBankName((String)map.get("bank_name"));
                 BYXResponse byxResponse = idsMoneyServer.saveBorrowerAndAccountCard(request);
                 if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
-                    return ResultVO.ok(byxResponse.getRes_data());
+                    final Map resData = (Map) byxResponse.getRes_data();
+                    //数据同步更新个人信息到数据库
+                    appBasicInfoService.updateSynById(
+                            (String)map.get("customerId"),
+                            (String)resData.get("userId"),
+                            (String)resData.get("accountId")
+                            );
+
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         Map resMap = appBasicInfoService.saveRealName(map);
         resultVO.setRetData(resMap);
