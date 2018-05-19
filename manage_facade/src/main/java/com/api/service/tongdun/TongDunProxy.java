@@ -2,7 +2,7 @@ package com.api.service.tongdun;
 
 import com.alibaba.fastjson.JSONObject;
 import com.api.model.common.ApiCommonResponse;
-import com.api.model.common.ApiConstants;
+import com.constants.ApiConstants;
 import com.api.model.tongdun.ReportAO;
 import com.api.model.tongdun.TongDunRequest;
 import org.slf4j.Logger;

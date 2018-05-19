@@ -3,9 +3,8 @@ package com.zw.api.bankcard.controller;
 import com.api.model.bankcard.BankcardRequest;
 import com.api.model.common.BYXResponse;
 import com.api.service.bankcard.IBankcardServer;
+import com.base.util.AppRouterSettings;
 import com.base.util.GeneratePrimaryKeyUtils;
-import com.base.util.StringUtils;
-import com.zw.app.util.AppConstant;
 import com.zw.web.base.vo.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +22,7 @@ import java.util.Map;
  * @author 陈清玉
  */
 @RestController
-@RequestMapping("/bankcard")
+@RequestMapping(AppRouterSettings.VERSION + AppRouterSettings.API_MODULE + "/bankcard")
 public class BankcardController {
     @Autowired
     private IBankcardServer bankcardServer;
@@ -59,7 +56,7 @@ public class BankcardController {
         }
     }
 
-    @GetMapping("/authconfirm")
+        @PostMapping("/authconfirm")
     public ResultVO authconfirm(BankcardRequest bankcardRequest) {
         try {
             if (bankcardRequest == null) {

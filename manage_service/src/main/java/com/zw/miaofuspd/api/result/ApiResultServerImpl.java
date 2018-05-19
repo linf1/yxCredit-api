@@ -1,0 +1,51 @@
+package com.zw.miaofuspd.api.result;
+
+import com.api.model.result.ApiResult;
+import com.api.service.result.IApiResultServer;
+import com.base.util.BeanHump;
+import com.base.util.BeanMapperUtil;
+import com.zw.service.base.AbsServiceBase;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 接口结果服务实现
+ * @author 陈清玉
+ */
+@Service(IApiResultServer.BEAN_KEY)
+public class ApiResultServerImpl extends AbsServiceBase implements IApiResultServer {
+    @Override
+    public int insertApiResult(ApiResult result) throws Exception {
+        StringBuilder sql = new StringBuilder("INSERT INTO zw_api_result");
+        sql.append(" (id,code,message,source_child_name,source_child_code,source_code,source_name,real_name,identity_code,user_mobile,user_name,only_key,result_data)");
+        sql.append(" VALUES(");
+        sql.append("'").append(result.getId()).append("',");
+        sql.append("'").append(result.getCode()).append("',");
+        sql.append("'").append(result.getMessage()).append("',");
+        sql.append("'").append(result.getSourceChildName()).append("',");
+        sql.append("'").append(result.getSourceChildCode()).append("',");
+        sql.append("'").append(result.getSourceCode()).append("',");
+        sql.append("'").append(result.getSourceChildName()).append("',");
+        sql.append("'").append(result.getRealName()).append("',");
+        sql.append("'").append(result.getIdentityCode()).append("',");
+        sql.append("'").append(result.getUserMobile()).append("',");
+        sql.append("'").append(result.getUserName()).append("',");
+        sql.append("'").append(result.getOnlyKey()).append("',");
+        sql.append("'").append(result.getResultData()).append("'");
+        sql.append(")");
+        return sunbmpDaoSupport.executeSql(sql.toString());
+    }
+
+    @Override
+    public List<ApiResult> selectApiResult(ApiResult result) throws Exception {
+        StringBuilder sql = new StringBuilder("SELECT * FROM zw_api_result WHERE 1=1 ");
+        final Map<String, Object> objectMap = BeanMapperUtil.converMap(result);
+        for (Map.Entry<String, Object> entry : objectMap.entrySet()) {
+            sql.append("AND ").append(BeanHump.camelToUnderline(entry.getKey())).append("='").append(entry.getValue()).append("' ");
+        }
+        return sunbmpDaoSupport.findForList(sql.toString(), ApiResult.class);
+
+    }
+}

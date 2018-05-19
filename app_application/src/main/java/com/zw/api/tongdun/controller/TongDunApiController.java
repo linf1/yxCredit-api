@@ -1,7 +1,7 @@
 package com.zw.api.tongdun.controller;
 
 import com.api.model.common.ApiCommonResponse;
-import com.api.model.common.ApiConstants;
+import com.constants.ApiConstants;
 import com.api.model.common.ResultModel;
 import com.api.model.common.ResultModelUtil;
 import com.api.model.tongdun.TongDunRequest;
@@ -10,7 +10,6 @@ import com.api.service.tongdun.TongDunProxy;
 import com.base.util.AppRouterSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

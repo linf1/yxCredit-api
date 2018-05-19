@@ -31,4 +31,5 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.+'
     compile 'com.thetransactioncompany:cors-filter:2.5'
     compile 'com.thetransactioncompany:java-property-utils:1.10'
+    compile 'net.sf.dozer:dozer:5.5.1'
 }

@@ -6,6 +6,12 @@ import com.zhiwang.zwfinance.app.jiguang.util.api.CryptoTools;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import javax.xml.ws.soap.Addressing;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * 碧友信请求实体
  * @author 陈清玉
@@ -40,16 +46,17 @@ public class BYXRequest {
      */
     public static String getBYXRequest(Object param,BYXSettings byxSettings) throws Exception {
        CryptoTools cryptoTools = new CryptoTools(byxSettings.getDesKey(),byxSettings.getVi());
-        //参数转化JSON
-        final String paramJson = JSONObject.toJSONString(param);
-        //碧友信参数加密
-        final String encodesStr = cryptoTools.encode(paramJson);
         BYXRequest byxRequest  = new BYXRequest();
-        byxRequest.setData(encodesStr);
+       if(param == null){
+           byxRequest.setData("");
+       }else{
+           //参数转化JSON
+           final String paramJson = JSONObject.toJSONString(param);
+           //碧友信参数加密
+           final String encodesStr = cryptoTools.encode(paramJson);
+           byxRequest.setData(encodesStr);
+       }
         byxRequest.setRequestTime(System.currentTimeMillis());
         return JSONObject.toJSONString(byxRequest);
     }
-
-
-
 }

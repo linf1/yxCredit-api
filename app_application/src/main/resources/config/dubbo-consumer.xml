@@ -138,4 +138,7 @@
     <dubbo:reference interface="com.api.service.shujumohe.IShujumoheServer"
                      id="shujumoheServerImpl" check="false"/>
 
+    <dubbo:reference interface="com.api.service.result.IApiResultServer"
+                     id="apiResultServerImpl" check="false"/>
+
 </beans>

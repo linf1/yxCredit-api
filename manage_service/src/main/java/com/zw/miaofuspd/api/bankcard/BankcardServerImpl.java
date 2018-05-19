@@ -66,7 +66,7 @@ public class BankcardServerImpl extends AbsServiceBase implements IBankcardServe
 
     @Override
     public BYXResponse getBankList() throws Exception {
-        final String result = HttpClientUtil.post(bankcardSettings.getBankListUrl(),BYXRequest.getBYXRequest(new HashMap<>(), byxSettings),byxSettings.getHeadRequest());
+        final String result = HttpClientUtil.post(bankcardSettings.getBankListUrl(),BYXRequest.getBYXRequest(null, byxSettings),byxSettings.getHeadRequest());
         return BYXResponse.getBYXResponse(result,byxSettings);
     }
 
@@ -89,7 +89,7 @@ public class BankcardServerImpl extends AbsServiceBase implements IBankcardServe
 
     @Override
     public BYXResponse getProvinceList() throws Exception {
-        final String result = HttpClientUtil.post(bankcardSettings.getProvinceListUrl(),"",byxSettings.getHeadRequest());
+        final String result = HttpClientUtil.post(bankcardSettings.getProvinceListUrl(),BYXRequest.getBYXRequest(null, byxSettings),byxSettings.getHeadRequest());
         return BYXResponse.getBYXResponse(result,byxSettings);
     }
 
