@@ -53,4 +53,25 @@ public interface ContractConfirmationService {
     String getAlreadyContractAgreement(String orderId);
 
     Map getOrderInfo(String orderId);//获取订单信息
+
+    /******************************碧有信*****************************/
+    /**
+     * 合同信息获取
+     * @param orderId
+     * @return
+     */
+    Map getContractInfo(String orderId);
+    /**
+     * 添加合同
+     * @param map
+     * @return
+     */
+    int insertContract(Map map);
+    /**
+     * 获取合同
+     * @param orderId
+     * @return
+     */
+    String getContractByOrderId(String orderId);
+
 }

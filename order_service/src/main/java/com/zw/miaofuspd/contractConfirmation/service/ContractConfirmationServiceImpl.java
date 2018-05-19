@@ -4,6 +4,7 @@ import com.base.util.AverageCapitalPlusInterestUtils;
 import com.base.util.DateUtils;
 import com.zw.miaofuspd.facade.contractConfirmation.service.ContractConfirmationService;
 import com.zw.miaofuspd.facade.order.service.AppOrderService;
+import com.zw.miaofuspd.util.ChineseCharToEnUtil;
 import com.zw.miaofuspd.util.NumberToChnUtil;
 import com.zw.service.base.AbsServiceBase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -193,7 +194,7 @@ private AppOrderService appOrderService;
     @Override
     public Map getContractAgreement(Map mapInfo) {
         Map map = new HashMap();
-        String sql = "SELECT content_no_bq as context from mag_template t where t.template_type = '0'and platform_type='1'";
+        String sql = "SELECT content_no_bq as context from mag_template t where t.template_type = '0'and platform_type='1' and state='1'";
         Map mapContext = sunbmpDaoSupport.findForMap(sql);
         Iterator<Map.Entry> it = mapInfo.entrySet().iterator();
         String context = mapContext.get("context").toString();
@@ -254,4 +255,106 @@ private AppOrderService appOrderService;
     }
 
 
+    /******************************碧有信*****************************/
+    /**
+     * 合同信息获取
+     * @param orderId
+     * @return
+     */
+    @Override
+    public Map getContractInfo(String orderId) {
+        Map map = new HashMap();
+        //查询订单
+        String orderSql="select id as orderId, customer_id as customerId, amount, fee, periods as deadline, loan_purpose as useOfLoans from mag_order where id='"+orderId+"'";
+        Map orderMap = sunbmpDaoSupport.findForMap(orderSql);
+        map.putAll(orderMap);
+        //查询客户
+        String customerId=map.get("customerId").toString();
+        String customerSql = "SELECT id as customerId  , user_id as userId, person_name as cusName , card as cusCard ,tel as cusTel , card_register_address as cusReceiveAddress FROM  mag_customer where id = '"+customerId+"'";
+        Map customerMap = sunbmpDaoSupport.findForMap(customerSql);
+        map.putAll(customerMap);
+        //查询银行卡信息
+        String bankSql="select cust_name as cusAccountName, bank_name as cusAccountBank, card_number as cusBankCard from sys_bank_card where cust_id='"+customerId+"'";
+        Map bankMap = sunbmpDaoSupport.findForMap(bankSql);
+        map.putAll(customerMap);
+
+        //查询该客户在今年的借款次数
+        String currentDateStr=DateUtils.getCurrentTime(DateUtils.STYLE_3);
+        String countSql="select count(*) as count from mag_order_contract where customer_id='"+customerId+"' and creat_time like '"+currentDateStr+"%'";
+        Map countMap = sunbmpDaoSupport.findForMap(countSql);
+        String subYear=currentDateStr.substring(2,4);
+        int jkCount=Integer.parseInt(countMap.get("count").toString());
+        String jkCountStr=jkCount+"";
+        if(jkCount/100==0){
+            if(jkCount/10>0){
+                jkCountStr="0"+jkCount;
+            }else{
+                jkCountStr="00"+jkCount;
+            }
+        }
+        String cusName=map.get("cusName").toString();
+        ChineseCharToEnUtil cte = new ChineseCharToEnUtil();
+        String pinyinCustName=cte.getAllFirstLetter(cusName).toUpperCase();
+        System.out.println("获取拼音首字母："+ cte.getAllFirstLetter(pinyinCustName));
+
+        String contractNo=pinyinCustName+"-"+subYear+jkCountStr;
+        map.put("contractNo",contractNo);
+
+        Calendar now = Calendar.getInstance();
+        String year=String.valueOf(now.get(Calendar.YEAR));
+        String month=String.valueOf(now.get(Calendar.MONTH)+1);
+        String day=String.valueOf(now.get(Calendar.DAY_OF_MONTH));
+        map.put("year",year);
+        map.put("month",month);
+        map.put("day",day);
+        if(month.length()==1){
+            month='0'+month;
+        }
+        if(day.length()==1){
+            day="0"+day;
+        }
+        String time=year+month+day;
+        String updateSql="update mag_order set contract_time='"+time+"' where id='"+orderId+"'";
+        sunbmpDaoSupport.exeSql(updateSql);
+
+        return map;
+    }
+
+    /**
+     * 添加合同
+     * @param map
+     * @return
+     */
+    @Override
+    public int insertContract(Map map){
+        String uuId = UUID.randomUUID().toString();
+        String createTime = DateUtils.getDateString(new Date());
+        String customerId=map.get("customerId").toString();
+        String orderId=map.get("orderId").toString();
+        String customerName=map.get("cusName").toString();
+        String card=map.get("cusCard").toString();
+        String userId=map.get("userId").toString();
+        String amount=map.get("amount").toString();
+        String contractSrc=map.get("pdfUrl").toString();
+        String contract_no="";
+
+        String insertContractSql = "insert into mag_order_contract  (id,CUSTOMER_ID,customer_name,custID,user_id,contract_amount,order_no,contract_no,contract_name," +
+                "order_id,contract_src,CREAT_TIME, status) values " +
+                "('"+uuId+"','"+customerId+"','"+customerName+"','"+card+"','"+userId+"','"+amount+"','"+orderId+"','"+contract_no+"','申购协议','"+orderId+"','"+contractSrc+"'" +
+                ",'"+createTime+"','0')";
+
+        sunbmpDaoSupport.exeSql(insertContractSql);
+        return 1;
+    }
+
+    @Override
+    public String getContractByOrderId(String orderId) {
+        String sql = "select contract_src from mag_order_contract where order_id = '"+orderId+"'";
+        Map map = sunbmpDaoSupport.findForMap(sql);
+        String contract_src = null;
+        if (!map.get("contract_src").equals("")){
+            contract_src = map.get("contract_src").toString();
+        }
+        return contract_src;
+    }
 }
