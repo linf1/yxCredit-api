@@ -176,10 +176,11 @@ public class BasicInfoController extends AbsBaseController {
      * @Date 17:58 2018/5/16
      * @param
      */
-    @RequestMapping("/savaRealName")
-    public ResultVO savaRealName(String data) throws Exception{
+    @RequestMapping("/saveRealName")
+    public ResultVO saveRealName(String data) throws Exception{
         ResultVO resultVO = new ResultVO();
         Map map = JSONObject.parseObject(data);
+        Map resMap = appBasicInfoService.saveRealName(map);
         DSMoneyRequest request = new DSMoneyRequest();
         try {
             final Map customer = appBasicInfoServiceImpl.findById((String) map.get("customerId"));
@@ -190,6 +191,7 @@ public class BasicInfoController extends AbsBaseController {
                 request.setBorrowerUserName((String) map.get("phone"));
                 request.setBorrowerName(customer.get("PERSON_NAME").toString());
                 request.setBorrowerMobilePhone(customer.get("TEL").toString());
+                request.setBorrowerThirdId((String) map.get("customerId"));
                 request.setBorrowerChannel("yxd");
                 request.setBorrowerCardNo(customer.get("CARD").toString());
                 request.setAddress(customer.get("company_address").toString());
@@ -198,21 +200,24 @@ public class BasicInfoController extends AbsBaseController {
                 request.setAccountIdCard(customer.get("CARD").toString());
                 request.setOtherFlag("1");
                 request.setAccountChannel("yxd");
-                request.setAccountThirdId(request.getBorrowerThirdId());
-                request.setProvinceCode((String) map.get("prov_id"));
-                request.setProvinceName((String)map.get("prov_name"));
-                request.setCityCode((String) map.get("city_id"));
-                request.setCityName((String)map.get("city_name"));
-                request.setBankCode((String)map.get("bank_number"));
-                request.setBankName((String)map.get("bank_name"));
+                request.setAccountThirdId(map.get("customerId").toString());
+                request.setProvinceCode(String.valueOf(map.get("prov_id")));
+                request.setProvinceName(map.get("prov_name").toString());
+                request.setCityCode(String.valueOf(map.get("city_id")));
+                request.setCityName(map.get("city_name").toString());
+                request.setBankCode(String.valueOf(map.get("bank_number")));
+                request.setBankName(map.get("bank_name").toString());
+                request.setBankCardNo(map.get("card_number").toString());
+                request.setBankBranchName(map.get("bank_subbranch").toString());
+                request.setCnapsCode(map.get("bank_subbranch_id").toString());
                 BYXResponse byxResponse = idsMoneyServer.saveBorrowerAndAccountCard(request);
                 if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
                     final Map resData = (Map) byxResponse.getRes_data();
                     //数据同步更新个人信息到数据库
                     appBasicInfoService.updateSynById(
-                            (String)map.get("customerId"),
-                            (String)resData.get("userId"),
-                            (String)resData.get("accountId")
+                             resData.get("userId").toString(),
+                             resData.get("accountId").toString(),
+                             map.get("customerId").toString()
                             );
 
                 }
@@ -220,10 +225,10 @@ public class BasicInfoController extends AbsBaseController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Map resMap = appBasicInfoService.saveRealName(map);
         resultVO.setRetData(resMap);
         return resultVO;
     }
+
 
 
 }

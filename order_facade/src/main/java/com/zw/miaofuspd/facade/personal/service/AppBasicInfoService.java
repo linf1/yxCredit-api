@@ -160,4 +160,12 @@ public interface AppBasicInfoService {
      * @return 影响行数
      */
     int updateSynById(String userID,String accountId,String custId);
+
+    /**
+     * @author:韩梅生
+     * @Description 取消订单
+     * @Date 17:02 2018/5/19
+     * @param
+     */
+    int cancelOrder(String orderId);
 }

@@ -12,7 +12,6 @@ import com.zw.web.base.vo.ResultVO;
 import com.zw.web.base.vo.VOConst;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -47,7 +46,7 @@ public class ApplyInfoController extends AbsBaseController {
             resultVO.setRetCode("1");
         } else {
                 Map homeApplyMap = appBasicInfoService.getHomeApplyInfo(id,productName);
-                resultVO.setRetCode("2");
+                resultVO.setRetCode(homeApplyMap.get("code").toString());
                 resultVO.setRetMsg((String) homeApplyMap.get("msg"));
                 resultVO.setRetData(homeApplyMap.get("resMap"));
 
@@ -121,7 +120,7 @@ public class ApplyInfoController extends AbsBaseController {
     public ResultVO checkCustomerInfo(String data) throws Exception {
         Map map = JSONObject.parseObject(data);
         ResultVO resultVO = new ResultVO();
-        Map resultMap = appBasicInfoService.checkCustomerInfo((String) map.get("userId"),(String) map.get("card"));
+        Map resultMap = appBasicInfoService.checkCustomerInfo(map.get("customerId").toString(),map.get("card").toString());
         if(!(Boolean)(resultMap.get("flag"))){
             resultVO.setErrorMsg(VOConst.FAIL,(String)(resultMap.get("msg")));
         }
@@ -129,6 +128,40 @@ public class ApplyInfoController extends AbsBaseController {
         return resultVO;
     }
 
+    /**
+     * @author:韩梅生
+     * @Description 取消订单
+     * @Date 17:00 2018/5/19
+     * @param
+     */
+    @RequestMapping("/cancelOrder")
+    @ResponseBody
+    public  ResultVO cancelOrder(String orderId){
+        ResultVO resultVO = new ResultVO();
+        int i = appBasicInfoService.cancelOrder(orderId);
+        if(i == 0){
+            resultVO.setErrorMsg(VOConst.FAIL,"取消失败");
+        }
+        resultVO.setRetMsg("取消成功");
+        return resultVO;
+    }
+
+    /**
+     * @author:韩梅生
+     * @Description 获取申请信息主页面
+     * @Date 18:46 2018/5/19
+     * @param
+     */
+    @RequestMapping("/getHomeApplyInfo")
+    @ResponseBody
+    public  ResultVO getHomeApplyInfo(String id,String productName) throws  Exception{
+        ResultVO resultVO = new ResultVO();
+        Map homeApplyMap = appBasicInfoService.getHomeApplyInfo(id,productName);
+        resultVO.setRetCode(homeApplyMap.get("code").toString());
+        resultVO.setRetMsg((String) homeApplyMap.get("msg"));
+        resultVO.setRetData(homeApplyMap.get("resMap"));
+        return resultVO;
+    }
 
 
 
