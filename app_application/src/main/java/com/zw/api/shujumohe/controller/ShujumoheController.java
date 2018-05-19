@@ -6,7 +6,6 @@ import com.api.model.shujumohe.ShujumoheRequest;
 import com.api.service.result.IApiResultServer;
 import com.api.service.shujumohe.IShujumoheServer;
 import com.base.util.AppRouterSettings;
-import com.base.util.BeanMapperUtil;
 import com.base.util.GeneratePrimaryKeyUtils;
 import com.base.util.StringUtils;
 import com.constants.ApiConstants;
@@ -38,6 +37,11 @@ public class ShujumoheController {
     @Autowired
     private IApiResultServer apiResultServerImpl;
 
+    /**
+     * 数据魔盒回调接口
+     * @param request 数据
+     * @return
+     */
     @RequestMapping("callBackShujumohe")
     public ResultVO callBackShujumohe(ShujumoheRequest request){
         LOGGER.info("========request:{}",request.toString());
@@ -46,8 +50,10 @@ public class ShujumoheController {
             ApiResult resultParameter = new ApiResult();
             resultParameter.setUserName(request.getUserName());
             resultParameter.setSourceCode(EApiSourceEnum.MOHE.getCode());
+            //查询是否有报告
             final List<Map> mapList = apiResultServerImpl.selectApiResult(resultParameter);
             if(CollectionUtils.isEmpty(mapList)){
+                //如果数据库没有证明第一次生成报告则调用远程API获取报告
                 result = shujumoheServerImpl.callbackShujumohe(request);
             }
             if (StringUtils.isNotEmpty(result)) {
@@ -70,7 +76,6 @@ public class ShujumoheController {
                             apiResult.setUserMobile((String)data.get("user_mobile"));
                             apiResult.setUserName(request.getUserName());
                             apiResult.setResultData(data.get("task_data").toString());
-                            apiResult.setId(GeneratePrimaryKeyUtils.getUUIDKey());
                             apiResultServerImpl.insertApiResult(apiResult);
                     }
                 }
