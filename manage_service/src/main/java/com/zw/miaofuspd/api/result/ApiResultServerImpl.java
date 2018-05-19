@@ -27,7 +27,7 @@ public class ApiResultServerImpl extends AbsServiceBase implements IApiResultSer
         sql.append("'").append(result.getSourceChildName()).append("',");
         sql.append("'").append(result.getSourceChildCode()).append("',");
         sql.append("'").append(result.getSourceCode()).append("',");
-        sql.append("'").append(result.getSourceChildName()).append("',");
+        sql.append("'").append(result.getSourceName()).append("',");
         sql.append("'").append(result.getRealName()).append("',");
         sql.append("'").append(result.getIdentityCode()).append("',");
         sql.append("'").append(result.getUserMobile()).append("',");

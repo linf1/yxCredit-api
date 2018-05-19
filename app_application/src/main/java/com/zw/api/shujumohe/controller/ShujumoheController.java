@@ -77,17 +77,20 @@ public class ShujumoheController {
                             apiResult.setSourceName(EApiSourceEnum.MOHE.getName());
                             apiResult.setSourceCode(EApiSourceEnum.MOHE.getCode());
                             apiResult.setUserMobile((String)data.get("user_mobile"));
-                            apiResult.setUserName(request.getUserName());
+                            apiResult.setUserName(phone);
                             apiResult.setResultData(data.get("task_data").toString());
                             apiResultServerImpl.insertApiResult(apiResult);
                     }
+                    return  ResultVO.ok("验证成功！",null);
                 }
-                return ResultVO.error((String) jsonObject.get("message"));
+                return  ResultVO.error(jsonObject.get("message").toString());
+            }else{
+                return  ResultVO.error("重复验证！");
             }
         } catch (Exception e) {
             e.printStackTrace();
             ResultVO.error();
         }
-        return ResultVO.ok("魔盒报告产生成功！");
+        return ResultVO.error("验证失败！");
     }
 }
