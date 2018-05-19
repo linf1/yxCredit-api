@@ -8,6 +8,7 @@ import com.api.model.tongdun.ReportAO;
 import com.api.model.tongdun.TongDunRequest;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * 征信API服务接口
@@ -25,10 +26,10 @@ public interface ICreditApiService {
 
     /**
      * 保存征信数据
-     * @param request {@link CreditResultRequest}
+     * @param map {@link Map}
      * @throws  Exception 调用异常
      * @return 返回接口数据
      */
-    void saveCreditInfo(CreditResultRequest request) throws Exception;
+    void saveCreditInfo(Map map) throws Exception;
 
 }

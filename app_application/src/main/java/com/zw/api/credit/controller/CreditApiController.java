@@ -1,5 +1,7 @@
 package com.zw.api.credit.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.api.model.common.ApiConstants;
 import com.api.model.common.ResultModel;
 import com.api.model.credit.CreditRequest;
 import com.api.model.credit.CreditResultAO;
@@ -12,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 征信API控制器
@@ -40,8 +44,10 @@ public class CreditApiController {
             LOGGER.info("请求参数异常或不存在");
             return resultVO.error("请求参数异常或不存在");
         }
+
+
         CreditResultAO creditResultAO = creditApiService.validateAccount(request);
-        return resultVO.error(creditResultAO.getCode(), creditResultAO.getMessage());
+        return resultVO.error(creditResultAO.getCode(), creditResultAO.getTaskStatus());
     }
 
     /**
@@ -49,9 +55,30 @@ public class CreditApiController {
      * @param request 请求参数
      */
     @PostMapping("/getCreditApiInfo")
-    public void getCreditApiInfo(String request) throws IOException {
+    public void getCreditApiInfo(@RequestBody String request) throws Exception {
         LOGGER.info(request.toString());
-
-        //CreditResultAO creditResultAO = creditApiService.validateAccount(request);
+        LOGGER.info("--------------------------------回调成功   ------------------------");
+        JSONObject jsonObject = JSONObject.parseObject(request);
+        String code = "1";
+        Map<String,Object> map = new HashMap<>();
+        if(jsonObject.get("taskStatus").equals("success")){
+            if(jsonObject.containsKey("taskResult")){
+                map.put("taskResult",jsonObject.get("taskResult"));
+            }
+            map.put("message",ApiConstants.STATUS_SUCCESS_MSG);
+            map.put("code",ApiConstants.STATUS_SUCCESS);
+        } else {
+            if(jsonObject.get("code").equals("pbc_1")) {
+                map.put("code",ApiConstants.STATUS_ACCOUNT_PASSWORD_ERROR);
+            } else if(jsonObject.get("code").equals("pbc_2")) {
+                map.put("code",ApiConstants.STATUS_VERIF_CODE_ERROR);
+            } else {
+                map.put("code",ApiConstants.STATUS_CREDIT_INFO_ERROR);
+            }
+            map.put("message",jsonObject.get("message"));
+        }
+        map.put("taskNo",jsonObject.get("taskNo"));
+        map.put("taskStatus",jsonObject.get("taskStatus"));
+        creditApiService.saveCreditInfo(map);
     }
 }

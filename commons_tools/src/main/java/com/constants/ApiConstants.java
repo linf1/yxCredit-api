@@ -51,6 +51,15 @@ public class ApiConstants {
     public static final String STATUS_INFO_NOT_FOUND="100009";
     public static final String STATUS_INFO_NOT_FOUND_MSG="未查询到数据";
 
+    public static final String STATUS_ACCOUNT_PASSWORD_ERROR="100010";
+    public static final String STATUS_ACCOUNT_PASSWORD_MSG="账号或者密码错误";
+
+    public static final String STATUS_VERIF_CODE_ERROR="100011";
+    public static final String STATUS_VERIF_CODE_MSG="短信验证码错误";
+
+    public static final String STATUS_CREDIT_INFO_ERROR="100012";
+    public static final String STATUS_CREDIT_INFO_MSG="人行征信任务失败";
+
     /**
      * 同盾API常量
      */
@@ -67,6 +76,7 @@ public class ApiConstants {
     public static final String API_MOHE_KEY = "mohe";
     public static final String API_MOHE_TITLE = "魔盒";
     public static final String API_MOHE_YYS = "运营商";
+
 
 
     //成功状态
