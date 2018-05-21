@@ -1,7 +1,6 @@
 package com.api.model.credit;
 
 
-import com.api.model.common.ApiCommonRequest;
 
 import java.io.Serializable;
 
@@ -19,6 +18,12 @@ public class CreditRequest implements Serializable {
 
     /**  验证码 */
     private String smsCode;
+
+    /** 校验登录 */
+    private String token;
+
+    /** 订单id */
+    private String orderId;
 
     public String getAccount() {
         return account;
@@ -42,5 +47,21 @@ public class CreditRequest implements Serializable {
 
     public void setSmsCode(String smsCode) {
         this.smsCode = smsCode;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 }

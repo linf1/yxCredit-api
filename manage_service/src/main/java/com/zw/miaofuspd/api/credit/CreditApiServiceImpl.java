@@ -5,6 +5,7 @@ import com.api.model.credit.CreditRequest;
 import com.api.model.credit.CreditResultAO;
 import com.api.model.credit.CreditResultRequest;
 import com.api.model.credit.CreditSettings;
+import com.api.model.result.ApiResult;
 import com.api.service.credit.ICreditApiService;
 import com.base.util.DateUtils;
 import com.base.util.TokenHelper;
@@ -12,6 +13,7 @@ import com.zw.api.HttpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.print.attribute.standard.RequestingUserName;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,8 +33,12 @@ public class CreditApiServiceImpl implements ICreditApiService {
     @Override
     public CreditResultAO validateAccount(CreditRequest request) throws IOException {
         Map<String,Object> params = new LinkedHashMap<String,Object>(2);
-        params.put("data", request);
-        params.put("callbackUrl", creditSettings.getCallbackUrl());
+        Map<String,Object> dataMap = new LinkedHashMap<String,Object>(3);
+        dataMap.put("account",request.getAccount());
+        dataMap.put("password",request.getPassword());
+        dataMap.put("smsCode",request.getSmsCode());
+        params.put("data", dataMap);
+        params.put("callbackUrl", creditSettings.getCallbackUrl()+ request.getOrderId() + request.getToken());
         TokenHelper tokenHelper = new TokenHelper(creditSettings.getAk(), creditSettings.getSk());
         int expireTime = new Long(new Date().getTime()/1000).intValue() + 3600;
         String bodyJson = JSONObject.toJSONString(params);
@@ -45,8 +51,4 @@ public class CreditApiServiceImpl implements ICreditApiService {
         return  JSONObject.parseObject(result,CreditResultAO.class);
     }
 
-    @Override
-    public void saveCreditInfo(Map map) throws Exception {
-
-    }
 }
