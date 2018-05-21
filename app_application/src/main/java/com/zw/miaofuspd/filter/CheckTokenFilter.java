@@ -34,7 +34,7 @@ public class CheckTokenFilter implements Filter {
 			FilterChain chain ) throws IOException, ServletException {
 		HttpServletRequest request=(HttpServletRequest) argo;
 		HttpServletResponse response=(HttpServletResponse) arg1;
-		String[] nonPath  ={AppRouterSettings.VERSION + "/login",AppRouterSettings.VERSION + "1.0.0/sms"};
+		String[] nonPath  ={AppRouterSettings.VERSION + "/login",AppRouterSettings.VERSION + "/sms"};
 		for (String non : nonPath) {
 			if(request.getRequestURI().startsWith(non)){
 				//登陆接口不校验token，直接放行
