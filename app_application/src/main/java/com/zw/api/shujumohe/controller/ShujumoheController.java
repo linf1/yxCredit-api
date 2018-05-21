@@ -41,17 +41,15 @@ public class ShujumoheController {
     /**
      * 数据魔盒回调接口
      * @param request 数据
-     * @param orderId 订单id
-     * @param phone 登录手机号码
      * @return
      */
-    @RequestMapping("callBackShujumohe/{orderId}/{phone}")
-    public ResultVO callBackShujumohe(ShujumoheRequest request, @PathVariable String  orderId,@PathVariable String phone){
+    @RequestMapping("/callBackShujumohe")
+    public ResultVO callBackShujumohe(ShujumoheRequest request){
         LOGGER.info("========request:{}",request.toString());
         String result = null;
         try {
             ApiResult resultParameter = new ApiResult();
-            resultParameter.setUserName(phone);
+            resultParameter.setUserName(request.getPhone());
             resultParameter.setSourceCode(EApiSourceEnum.MOHE.getCode());
             //查询是否有报告
             final List<Map> mapList = apiResultServerImpl.selectApiResult(resultParameter);
@@ -72,12 +70,12 @@ public class ShujumoheController {
                             apiResult.setMessage((String) jsonObject.get("message"));
                             apiResult.setSourceChildName(ApiConstants.API_MOHE_YYS);
                             apiResult.setSourceChildCode((String)data.get("channel_type"));
-                            apiResult.setOnlyKey(orderId);
+                            apiResult.setOnlyKey(request.getOrderId());
                             apiResult.setRealName((String)data.get("real_name"));
                             apiResult.setSourceName(EApiSourceEnum.MOHE.getName());
                             apiResult.setSourceCode(EApiSourceEnum.MOHE.getCode());
                             apiResult.setUserMobile((String)data.get("user_mobile"));
-                            apiResult.setUserName(phone);
+                            apiResult.setUserName(request.getPhone());
                             apiResult.setResultData(data.get("task_data").toString());
                             apiResultServerImpl.insertApiResult(apiResult);
                     }

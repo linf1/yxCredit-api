@@ -15,6 +15,10 @@ public class ShujumoheRequest implements Serializable {
 
     private String userName;
 
+    private String orderId;
+
+    private String phone;
+
     public String getTask_id() {
         return task_id;
     }
@@ -39,6 +43,21 @@ public class ShujumoheRequest implements Serializable {
         this.userName = userName;
     }
 
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     @Override
     public String toString() {
