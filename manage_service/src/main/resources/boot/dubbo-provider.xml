@@ -43,5 +43,7 @@
                    ref="apiResultServerImpl"/>
     <dubbo:service interface="com.api.service.tongdun.ITongDunApiService" timeout="30000"
                    ref="tongDunApiServiceImpl"/>
+    <dubbo:service interface="com.api.service.contractsign.IContractSignService" timeout="30000"
+                   ref="contractSignServiceImpl"/>
 
 </beans>

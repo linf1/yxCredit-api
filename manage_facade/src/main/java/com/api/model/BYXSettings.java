@@ -74,6 +74,11 @@ public class BYXSettings {
     public String signa(Long ts){
         return MD5Util.MD5Encode (key(ts)+ getAppKey(), "utf-8").toUpperCase();
     }
+    public String signaSignContract(Long ts){
+        String serverSigna = MD5Util.MD5Encode(appSecrect + ts, "utf-8");
+        signa = MD5Util.MD5Encode(serverSigna + appKey, "utf-8").toUpperCase();
+        return signa;
+    }
 
     /**
      * 获取碧友信请求头
@@ -85,6 +90,20 @@ public class BYXSettings {
         headers.add(new BasicHeader("appKey",getAppKey()));
         headers.add(new BasicHeader("ts",String.valueOf(millis)));
         headers.add(new BasicHeader("signa",signa(millis)));
+        System.out.println("appKey:" + getAppKey()+",ts:"+ millis +",signa:" + signa(millis));
+        return headers;
+    }
+    /**
+     * 获取碧友信请求头
+     * @return 请求头map
+     */
+    public  List<Header> getSignContractHeadRequest(){
+        Calendar c = Calendar.getInstance();
+        final long millis = c.getTimeInMillis();
+        List<Header> headers = new ArrayList<>();
+        headers.add(new BasicHeader("appKey",getAppKey()));
+        headers.add(new BasicHeader("ts",String.valueOf(millis)));
+        headers.add(new BasicHeader("signa",signaSignContract(millis)));
         System.out.println("appKey:" + getAppKey()+",ts:"+ millis +",signa:" + signa(millis));
         return headers;
     }

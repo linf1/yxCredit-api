@@ -137,6 +137,9 @@
 
     <dubbo:reference interface="com.api.service.shujumohe.IShujumoheServer"
                      id="shujumoheServerImpl" check="false"/>
+    <!-- 电子签章接口-->
+    <dubbo:reference interface="com.api.service.contractsign.IContractSignService"
+                     id="contractSignServiceImpl" check="false"/>
 
     <dubbo:reference interface="com.api.service.result.IApiResultServer"
                      id="apiResultServerImpl" check="false"/>

@@ -427,7 +427,7 @@ public class DateUtils {
 	 */
 	public static long getDifferenceDays(Date date1,Date date2){
 		long betweenTime = date1.getTime() - date2.getTime();
-		return  betweenTime/(1000*60*60*24);
+		return  betweenTime/(1000*60*60*24L);
 	}
 
 }
