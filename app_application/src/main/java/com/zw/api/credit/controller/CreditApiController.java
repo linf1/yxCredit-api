@@ -56,33 +56,48 @@ public class CreditApiController {
         }
         token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHQiOjE1Mjc2NzIyOTQxOTIsInVpZCI6ImlkIiwiaWF0IjoxNTI2Mzc2Mjk0MTkyfQ.Jubw3m8u_dl-FzmftYRUn97i5LclpuYre5KuRe4wOZU";
         request.setOrderId("123456");
+        String orderId = request.getOrderId();
         if(StringUtils.isNotBlank(token) && StringUtils.isNotBlank(request.getOrderId())) {
             request.setToken("/"+token);
-            request.setOrderId("/"+ request.getOrderId());
+            request.setOrderId("/"+ orderId);
         }
-        CreditResultAO creditResultAO = creditApiService.validateAccount(request);
-        LOGGER.info("个人征信--获取报告信息 API调用开始.");
-        if("processing".equals(creditResultAO.getTaskStatus())) {
-            try {
-                Thread.sleep(3000);
-                LOGGER.info("个人征信--获取报告信息 API调用参数：{}", request.toString());
-                //从数据库中获取数据
-                ApiResult result = new ApiResult();
-                result.setSourceCode(EApiSourceEnum.CREDIT.getCode());
-                result.setOnlyKey(request.getOrderId());
-                List<Map> apiResultMap = apiResultServer.selectApiResult(result);
-                if(!CollectionUtils.isEmpty(apiResultMap)) {
-                    LOGGER.info("个人征信-获取报告信息结束.");
-                    return ResultVO.error(apiResultMap.get(0).get(ApiConstants.API_CODE_KEY).toString(), apiResultMap.get(0).get(ApiConstants.API_MESSAGE_KEY).toString());
+        //根据订单id获取当前用户是否存在征信报告
+        try {
+            ApiResult result = new ApiResult();
+            result.setSourceCode(EApiSourceEnum.CREDIT.getCode());
+            result.setOnlyKey(orderId);
+            result.setState(ApiConstants.STATUS_CODE_STATE);//获取有效数据
+            List<Map> apiResultMap = apiResultServer.selectApiResult(result);
+            if(CollectionUtils.isEmpty(apiResultMap)) {
+                LOGGER.info("个人征信--获取报告信息 API调用开始.");
+                CreditResultAO creditResultAO = creditApiService.validateAccount(request);
+                if("processing".equals(creditResultAO.getTaskStatus())) {
+                    try {
+                        Thread.sleep(3000);
+                        LOGGER.info("个人征信--获取报告信息 API调用参数：{}", request.toString());
+                        //从数据库中获取数据
+                        apiResultMap = apiResultServer.selectApiResult(result);
+                        if(!CollectionUtils.isEmpty(apiResultMap)) {
+                            LOGGER.info("个人征信-获取报告信息结束.");
+                            return ResultVO.error(apiResultMap.get(0).get(ApiConstants.API_CODE_KEY).toString(), apiResultMap.get(0).get(ApiConstants.API_MESSAGE_KEY).toString());
+                        } else {
+                            return ResultVO.error(ApiConstants.STATUS_CREDIT_INFO_ERROR, ApiConstants.STATUS_CREDIT_INFO_MSG);
+                        }
+                    } catch (Exception e) {
+                        LOGGER.info("个人征信-获取数据出错" + e);
+                        return ResultVO.error(ApiConstants.STATUS_DATASOURCE_INTERNAL_ERROR,ApiConstants.STATUS_DATASOURCE_INTERNAL_ERROR_MSG);
+                    }
                 } else {
-                    return ResultVO.error(ApiConstants.STATUS_CREDIT_INFO_ERROR, ApiConstants.STATUS_CREDIT_INFO_MSG);
+                    return ResultVO.error(ApiConstants.STATUS_SYS_ERROR,"需要补充任务信息");
                 }
-            } catch (Exception e) {
-                LOGGER.info("个人征信-获取数据出错" + e);
-                return ResultVO.error(ApiConstants.STATUS_DATASOURCE_INTERNAL_ERROR,ApiConstants.STATUS_DATASOURCE_INTERNAL_ERROR_MSG);
+            } else {
+                LOGGER.info("个人征信-存在.");
+                return ResultVO.error(apiResultMap.get(0).get(ApiConstants.API_CODE_KEY).toString(), apiResultMap.get(0).get(ApiConstants.API_MESSAGE_KEY).toString());
             }
+        } catch (Exception e) {
+            LOGGER.info("个人征信-获取数据出错" + e);
+            return ResultVO.error(ApiConstants.STATUS_DATASOURCE_INTERNAL_ERROR,ApiConstants.STATUS_DATASOURCE_INTERNAL_ERROR_MSG);
         }
-        return ResultVO.error(creditResultAO.getCode(), "需要提供补充信息");
     }
 
     /**
@@ -116,6 +131,7 @@ public class CreditApiController {
                 } else {
                     map.put(ApiConstants.API_CODE_KEY,ApiConstants.STATUS_CREDIT_INFO_ERROR);
                 }
+                result.setState(ApiConstants.STATUS_CODE_NO_STATE);
                 map.put(ApiConstants.API_MESSAGE_KEY,jsonObject.getString(ApiConstants.API_MESSAGE_KEY));
             }
             result.setId(GeneratePrimaryKeyUtils.getUUIDKey());

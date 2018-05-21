@@ -21,6 +21,9 @@ public class ApiConstants {
     public static final String STATUS_ERROR = "1";
     public static final String STATUS_ERROR_MSG = "操作失败";
 
+    public static final String STATUS_CODE_STATE = "1";
+    public static final String STATUS_CODE_NO_STATE = "0";
+
     public static final String STATUS_CREATE_SUCCESS = "2";
     public static final String STATUS_CREATE_SUCCESS_MSG = "阶段一操作成功";
 

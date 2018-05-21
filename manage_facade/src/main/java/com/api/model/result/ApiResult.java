@@ -56,6 +56,7 @@ public class ApiResult implements Serializable {
      * 唯一键
      */
     private String onlyKey;
+
     /**
      * 结果数据
      */
@@ -64,6 +65,11 @@ public class ApiResult implements Serializable {
      * 创建时间
      */
     private Date createdTime;
+
+    /**
+     * 1:有效，0：无效
+     */
+    private String state;
 
     public String getId() {
         return id;
@@ -175,5 +181,13 @@ public class ApiResult implements Serializable {
 
     public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }
