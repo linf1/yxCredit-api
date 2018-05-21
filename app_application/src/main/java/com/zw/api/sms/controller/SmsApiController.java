@@ -48,6 +48,10 @@ public class SmsApiController  {
      */
     @PostMapping("/sendMsg")
     public ResultVO sendMsg (MsgRequest msgRequest){
+        if(msgRequest == null || StringUtils.isEmpty(msgRequest.getPhone())) {
+            return ResultVO.error("参数为空");
+        }
+        LOGGER.info("发送端信手机号：" + msgRequest.getPhone());
         //生成6位数随机数
         final String smsCode = RandomUtil.createRandomVcode(6);
         Map<String,String> parameters = new HashMap<>(2);
@@ -82,6 +86,7 @@ public class SmsApiController  {
             if(msgRequest == null || StringUtils.isEmpty(msgRequest.getSmsCode())) {
                 return ResultVO.error("参数为空");
             }
+            LOGGER.info("验证手机号：{},验证码：{}" ,msgRequest.getPhone(),msgRequest.getSmsCode().toLowerCase());
             //先查询验证码和用户是否正确
             Map inMap=new HashMap();
             inMap.put("tel",msgRequest.getPhone());
