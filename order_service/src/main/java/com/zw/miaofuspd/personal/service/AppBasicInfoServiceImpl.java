@@ -179,7 +179,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
      */
     @Override
     public Map addBasicCustomerInfo(Map<String, String> map) {
-        String createTime = DateUtils.formatDate(new Date(),DateUtils.STYLE_7);
+        String createTime = DateUtils.getCurrentTime(DateUtils.STYLE_10);
         Map<String,Object> resultMap = new HashMap<String,Object>(3);
         String id = map.get("id");
         String tel = map.get("tel");
@@ -450,8 +450,9 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         List list = sunbmpDaoSupport.findForList(sql);
         if (list.size()==0){
             resMap.put("code","1");
+            return resMap;
         }
-        resMap.put("code","2");
+        resMap.put("code","");
         return resMap;
     }
 
@@ -473,7 +474,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         String  sql2 = "select state from mag_order where user_id = '"+id+"' and product_name = '"+productName+"'";
         List<Map> staList = sunbmpDaoSupport.findForList(sql2);
         //申请主页面的相关信息
-        String sql3 = "select t2.CREAT_TIME as creat_time,t1.id as customerId,t1.card as card,t2.applay_money as applay_money,t1.tel as tel,t1.PERSON_NAME as personName,t1.Baseinfo_complete as baseinfoComplete" +
+        String sql3 = "select date_format(str_to_date(t2.CREAT_TIME,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%i:%s') as creat_time,t1.id as customerId,t1.card as card,t2.applay_money as applay_money,t1.tel as tel,t1.PERSON_NAME as personName,t1.Baseinfo_complete as baseinfoComplete" +
                 ",t2.complete as applyComplete,t2.order_no as orderId,t1.is_identity as is_identity,t1.authorization_complete as authorization_complete,t1.link_man_complete as link_man_complete  from mag_customer t1 left join  mag_order t2 on t1.id = t2.CUSTOMER_ID " +
                 " where t1.user_id = '" +id+ "'and t2.product_name= '"+productName+"'and t2.state='1'";
         for(Map map:staList){
@@ -900,7 +901,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     public Map checkCustomerInfo(String costomerId,String card)  {
         Map resultMap = new HashMap(3);
         //验证用户年龄
-        Date age = DateUtils.strConvertToDateByType(card.substring(6,14));
+        Date age = DateUtils.strConvertToDateByType(card.substring(6,14),DateUtils.STYLE_3);
         Date now =  new Date();
         long  days = DateUtils.getDifferenceDays(now,age);
         long year = days/365L;
@@ -913,7 +914,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         String sql = "select t2.contract_start_date as contract_start_date,t2.job as job from mag_customer t1 " +
                 "left join byx_white_list t2 on t1.PERSON_NAME = t2.real_name and t1.card = t2.card where t1.ID = '"+costomerId+"'";
         Map workMap = sunbmpDaoSupport.findForMap(sql);
-        Date workTime = DateUtils.strConvertToDateByType(workMap.get("contract_start_date").toString());
+        Date workTime = DateUtils.strConvertToDateByType(workMap.get("contract_start_date").toString(),DateUtils.STYLE_3);
         long workTimeDiff = DateUtils.getDifferenceDays(now,workTime);
         if(workTimeDiff < 30){
             resultMap.put("flag",false);

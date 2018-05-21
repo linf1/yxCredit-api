@@ -21,6 +21,9 @@ public class ApiConstants {
     public static final String STATUS_ERROR = "1";
     public static final String STATUS_ERROR_MSG = "操作失败";
 
+    public static final String STATUS_CODE_STATE = "1";
+    public static final String STATUS_CODE_NO_STATE = "0";
+
     public static final String STATUS_CREATE_SUCCESS = "2";
     public static final String STATUS_CREATE_SUCCESS_MSG = "阶段一操作成功";
 
@@ -58,7 +61,7 @@ public class ApiConstants {
     public static final String STATUS_VERIF_CODE_MSG="短信验证码错误";
 
     public static final String STATUS_CREDIT_INFO_ERROR="100012";
-    public static final String STATUS_CREDIT_INFO_MSG="人行征信任务失败";
+    public static final String STATUS_CREDIT_INFO_MSG="获取征信信息超时";
 
     /**
      * 同盾API常量
@@ -68,6 +71,18 @@ public class ApiConstants {
     public static final String REASON_DESC_KEY="reason_desc";
     public static final String API_TONGDUN_KEY = "tongdun";
     public static final String API_TONGDUN_TITLE = "同盾";
+
+    /**
+     * 个人征信API常量
+     */
+    public static final String API_SUCCESS_KEY="success";
+    public static final String API_MESSAGE_KEY="message";
+    public static final String API_CODE_KEY="code";
+    public static final String API_TASK_STATUS_KEY="taskStatus";
+    public static final String API_TASK_RESULT_KEY = "taskResult";
+    public static final String API__PBC_1_CODE_KEY = "pbc_1";
+    public static final String API__PBC_2_CODE_KEY = "pbc_2";
+    public static final String API_CREDIT_TITLE = "个人征信";
 
 
     /**
