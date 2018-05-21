@@ -43,7 +43,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         insertOrUpdate((CustomerLinkmanBean) map1.get("customerLinkmanBean4"), customer_id);
         insertOrUpdate((CustomerLinkmanBean) map1.get("customerLinkmanBean5"), customer_id);
         insertOrUpdate((CustomerLinkmanBean) map1.get("customerLinkmanBean6"), customer_id);
-        String magSql = "update mag_customer set link_man_complete = '1' where id = '" + customer_id + "'";
+        String magSql = "update mag_customer set link_man_complete = '100' where id = '" + customer_id + "'";
         sunbmpDaoSupport.exeSql(magSql);
         retMap.put("success", true);
         retMap.put("msg", "保存成功！");
@@ -351,7 +351,9 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             resturnMap.put("msg", "保存客户基本信息失败");
             resturnMap.put("flag", false);
         }
-
+        //更新完成状态
+        String completeSql = "update mag_customer set Baseinfo_complete = '100' where id ='"+customerId+"'";
+        sunbmpDaoSupport.exeSql(completeSql);
         resturnMap.put("msg", "保存客户基本信息成功");
         resturnMap.put("flag", true);
         return resturnMap;
