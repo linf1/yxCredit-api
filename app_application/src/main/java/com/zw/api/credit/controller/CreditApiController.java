@@ -50,30 +50,24 @@ public class CreditApiController {
     @PostMapping("/validateCreditApi")
     @ResponseBody
     public ResultVO validateCreditApi(@RequestBody CreditRequest request, @RequestHeader String token) throws IOException {
-        if (request == null) {
+        if (null == request || StringUtils.isBlank(request.getOrderId())) {
             LOGGER.info("请求参数异常或不存在");
             return ResultVO.error("请求参数异常或不存在");
-        }
-        token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHQiOjE1Mjc2NzIyOTQxOTIsInVpZCI6ImlkIiwiaWF0IjoxNTI2Mzc2Mjk0MTkyfQ.Jubw3m8u_dl-FzmftYRUn97i5LclpuYre5KuRe4wOZU";
-        request.setOrderId("123456");
-        String orderId = request.getOrderId();
-        if(StringUtils.isNotBlank(token) && StringUtils.isNotBlank(request.getOrderId())) {
-            request.setToken("/"+token);
-            request.setOrderId("/"+ orderId);
         }
         //根据订单id获取当前用户是否存在征信报告
         try {
             ApiResult result = new ApiResult();
             result.setSourceCode(EApiSourceEnum.CREDIT.getCode());
-            result.setOnlyKey(orderId);
+            result.setOnlyKey(request.getOrderId());
             result.setState(ApiConstants.STATUS_CODE_STATE);//获取有效数据
             List<Map> apiResultMap = apiResultServer.selectApiResult(result);
             if(CollectionUtils.isEmpty(apiResultMap)) {
                 LOGGER.info("个人征信--获取报告信息 API调用开始.");
+                request.setToken(token);
                 CreditResultAO creditResultAO = creditApiService.validateAccount(request);
                 if("processing".equals(creditResultAO.getTaskStatus())) {
                     try {
-                        Thread.sleep(3000);
+                        Thread.sleep(8000);
                         LOGGER.info("个人征信--获取报告信息 API调用参数：{}", request.toString());
                         //从数据库中获取数据
                         apiResultMap = apiResultServer.selectApiResult(result);
@@ -104,13 +98,14 @@ public class CreditApiController {
      * 获取个人征信信息回调入口
      * @param request 请求参数
      */
-    @RequestMapping("/getCreditApiInfo/{orderId}/{token}")
+    @RequestMapping("/getCreditApiInfo/{orderId}")
     public void getCreditApiInfo(@RequestBody String request, @PathVariable String  orderId) throws Exception {
         LOGGER.info(request.toString());
         LOGGER.info("--------------------------------回调成功   ------------------------");
         JSONObject jsonObject = JSONObject.parseObject(request);
         Map<String,Object> map = new HashMap<>();
         ApiResult result = new ApiResult();
+        result.setState(ApiConstants.STATUS_CODE_STATE);
         result.setResultData("");
         result.setIdentityCode("");
         result.setRealName("");
