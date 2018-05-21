@@ -67,7 +67,7 @@ public class BasicInfoController extends AbsBaseController {
     }
 
     /**
-     * @author:韩梅生
+     * @author 韩梅生
      * @Description  保存用户的个人信息
      * @Date 14:07 2018/5/12
      * @param
@@ -108,8 +108,6 @@ public class BasicInfoController extends AbsBaseController {
     }
 
 
-
-
     /**
      * @author:韩梅生
      * @Description  获取省份信息
@@ -126,12 +124,11 @@ public class BasicInfoController extends AbsBaseController {
     }
 
     /**
-     * @author:韩梅生
-     * @Description  获取市的信息
-     * @Date 13:54 2018/5/12
-     * @param  provinceId 省id
-     * @return
+     * @author 韩梅生
+     * @date 15:38 2018/5/21
+     * 获取市列表
      */
+
     @RequestMapping("/getCityList")
     public ResultVO getCityList(String provinceId) throws Exception{
         ResultVO resultVO = new ResultVO();
