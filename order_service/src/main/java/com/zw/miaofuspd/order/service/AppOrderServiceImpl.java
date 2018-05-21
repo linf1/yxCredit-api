@@ -1907,9 +1907,12 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
     @Override
     public Map getAllOrderByUserId(String userId ,String pageNumber,String pageSize) {
         Map returnMap = new HashMap();
-        String sql ="SELECT ID AS orderId ,  product_name_name AS productName , applay_money AS applayMoney , PERIODS AS periods , applay_time AS applayTime , Order_state AS orderState  " +
+
+
+            String sql ="SELECT ID AS orderId ,  product_name_name AS productName , applay_money AS applayMoney , PERIODS AS periods , date_format(str_to_date(applay_time, '%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS applayTime , Order_state AS orderState  " +
                 "FROM mag_order WHERE USER_ID='"+userId+"' limit "+pageNumber+","+pageSize;
         List allOrderList = sunbmpDaoSupport.findForList(sql);
+
         returnMap.put("allOrderList",allOrderList);
         return returnMap;
     }
@@ -1949,15 +1952,19 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
     public Map getOrderAllInFoByOrderId(String orderId) {
         Map returnMap = new HashMap();
         String orderSql = "SELECT  ID AS orderId , CUSTOMER_NAME AS customerName , TEL AS tel , CARD AS card , " +
-                                    "product_name_name AS productName , applay_money AS applayMoney , applay_time AS applayTime , " +
-                                    "loan_amount AS loanAmount , Examine_time AS examineTime , contract_amount AS contractAmount , " +
+                                    "product_name_name AS productName , applay_money AS applayMoney , " +
+                                    "date_format(str_to_date(applay_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS applayTime , " +
+                                    "loan_amount AS loanAmount ," +
+                                    "date_format(str_to_date(Examine_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS examineTime , " +
+                                    "contract_amount AS contractAmount , " +
                                     "repay_type AS repayType , Job AS job , Service_fee AS serviceFee , loan_purpose AS loanPurpose , " +
                                     "PERIODS AS periods , Order_state AS orderStatus  " +
                             "FROM mag_order  WHERE  ID='"+orderId+"' ";
         Map orderMap = sunbmpDaoSupport.findForMap(orderSql);
 
-        String operationSql="SELECT id AS operationId , order_id AS orderId , emp_id AS empId , emp_name AS empName, " +
-                                    "operation_time AS operationTime , amount AS amount , STATUS AS status , operation_node AS operationNode , " +
+        String operationSql="SELECT id AS operationId , order_id AS orderId , emp_id AS empId , emp_name AS empName," +
+                                    "date_format(str_to_date(operation_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS operationTime , " +
+                                    "amount AS amount , STATUS AS status , operation_node AS operationNode , " +
                                     "operation_result AS operationResult , description AS description " +
                             "FROM order_operation_record " +
                             "WHERE order_id='"+orderId+"'";

@@ -100,10 +100,10 @@ public class DateUtils {
 	 * @param str
 	 * @return
 	 */
-	public static Date strConvertToDateByType(String str){
+	public static Date strConvertToDateByType(String str,String style){
 		if(StringUtils.isNotEmpty(str)){
 			try {
-				return sdfMap.get(STYLE_3).parse(str);
+				return sdfMap.get(style).parse(str);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
