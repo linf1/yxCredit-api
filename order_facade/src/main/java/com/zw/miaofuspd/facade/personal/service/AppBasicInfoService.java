@@ -168,4 +168,13 @@ public interface AppBasicInfoService {
      * @param
      */
     int cancelOrder(String orderId);
+
+    /**
+     * @author:韩梅生
+     * @Description 获取授权状态
+     * @Date 17:02 2018/5/19
+     * @param
+     */
+    int getEmpowerStatus(String orderId,String customerId);
+
 }

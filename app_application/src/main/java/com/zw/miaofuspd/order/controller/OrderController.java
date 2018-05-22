@@ -1,6 +1,7 @@
 package com.zw.miaofuspd.order.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.base.util.AppRouterSettings;
 import com.base.util.AverageCapitalPlusInterestUtils;
 import com.base.util.DateUtils;
 import com.zw.app.util.AppConstant;
@@ -32,7 +33,7 @@ import java.util.*;
  * Created by Administrator on 2017/11/27 0027.
  */
 @Controller
-@RequestMapping("/order")
+@RequestMapping(AppRouterSettings.VERSION+"/order")
 public class  OrderController extends AbsBaseController {
     @Autowired
     private AppOrderService appOrderService;

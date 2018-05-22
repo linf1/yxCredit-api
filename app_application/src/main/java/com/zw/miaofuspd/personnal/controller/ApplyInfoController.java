@@ -163,6 +163,24 @@ public class ApplyInfoController extends AbsBaseController {
         return resultVO;
     }
 
-
+    /**
+     * @author 韩梅生
+     * @date 19:43 2018/5/21
+     * 获取授权状态
+     */
+    @RequestMapping("/getEmpowerStatus")
+    @ResponseBody
+    public  ResultVO getEmpowerStatus(String orderId,String customerId) throws  Exception{
+        ResultVO resultVO = new ResultVO();
+        int count = appBasicInfoService.getEmpowerStatus(orderId,customerId);
+        if(count == 1){
+            resultVO.setRetCode("0");
+            resultVO.setRetMsg("未授权");
+        }else {
+            resultVO.setRetCode("1");
+            resultVO.setRetMsg("已授权");
+        }
+        return resultVO;
+    }
 
 }

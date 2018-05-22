@@ -135,14 +135,22 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         //BigDecimal applayMoney = new BigDecimal( String.valueOf(paramMap.get("applyMoney")));
         Object applayMoney = paramMap.get("applyMoney");
         //申请期限
-        String periods = (String) paramMap.get("periods");
+        String periods = paramMap.get("periods").toString();
         //借款用途
         String loanPurpose = (String) paramMap.get("loanPurpose");
-
-        String sql = "update mag_order set applay_money = " + applayMoney + "," + "PERIODS = '" + periods + "'," +
-                "loan_purpose = '" + loanPurpose + "'," +
+        //获取订单的产品名称及编号
+        String sql = "select product_Id,product_name_name from mag_order where order_no='"+orderId+"'";
+        Map map1 = sunbmpDaoSupport.findForMap(sql);
+        //插入产品的利率
+        String sql2 = "select t1.li_xi as lixi from mag_product_fee t1\n" +
+                "inner join(\n" +
+                "select id,product_term_min,product_term_max from pro_working_product_detail where crm_product_id =(\n" +
+                "select id from  pro_crm_product where pro_name ='"+map1.get("product_name_name")+"' and pro_number = '"+map1.get("product_Id")+"') and product_term_min*1 <= "+periods+" and product_term_max*1 >= "+periods+")t2 on t1.product_id = t2.id";
+        Map map2 = sunbmpDaoSupport.findForMap(sql2);
+        String sql3 = "update mag_order set applay_money = " + applayMoney + "," + "PERIODS = '" + periods + "'," +
+                "loan_purpose = '" + loanPurpose + "',rate = '"+map2.get("lixi")+"'," +
                 "complete = '100' where order_no = '" + orderId + "'  ";
-        int count = sunbmpDaoSupport.executeSql(sql);
+        int count = sunbmpDaoSupport.executeSql(sql3);
         //sunbmpDaoSupport.exeSql(sql);
         if(count == 0){
             resturnMap.put("msg","保存客户基本信息失败");
@@ -195,8 +203,8 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             sunbmpDaoSupport.exeSql(sql1);
             orderid = String.valueOf(GeneratePrimaryKeyUtils.getOrderNum());
             //新增订单信息
-            String sql2 = "insert into mag_order (ID,USER_ID,order_no,CUSTOMER_ID,state,product_name,CUSTOMER_NAME,TEL,CARD,CREAT_TIME) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+id+"'" +
-                        ",'"+orderid+"','"+uuidKey+"','1','"+productName+"','"+personName+"','"+tel+"','"+card+"','"+createTime+"')";
+            String sql2 = "insert into mag_order (ID,USER_ID,order_no,CUSTOMER_ID,state,product_Id,product_name_name,CUSTOMER_NAME,TEL,CARD,CREAT_TIME) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+id+"'" +
+                        ",'"+orderid+"','"+uuidKey+"','1','BYX0001','"+productName+"','"+personName+"','"+tel+"','"+card+"','"+createTime+"')";
             sunbmpDaoSupport.exeSql(sql2);
         } catch (DAOException e) {
             e.printStackTrace();
@@ -471,12 +479,12 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         String sql1 = "select id,PERSON_NAME,TEL,CARD from mag_customer where USER_ID = '" + id + "'";
         Map cusmap = sunbmpDaoSupport.findForMap(sql1);
         //获取当前用户的所有订单状态
-        String  sql2 = "select state from mag_order where user_id = '"+id+"' and product_name = '"+productName+"'";
+        String  sql2 = "select state from mag_order where user_id = '"+id+"' and product_name_name = '"+productName+"'";
         List<Map> staList = sunbmpDaoSupport.findForList(sql2);
         //申请主页面的相关信息
         String sql3 = "select date_format(str_to_date(t2.CREAT_TIME,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%i:%s') as creat_time,t1.id as customerId,t1.card as card,t2.applay_money as applay_money,t1.tel as tel,t1.PERSON_NAME as personName,t1.Baseinfo_complete as baseinfoComplete" +
                 ",t2.complete as applyComplete,t2.order_no as orderId,t1.is_identity as is_identity,t1.authorization_complete as authorization_complete,t1.link_man_complete as link_man_complete  from mag_customer t1 left join  mag_order t2 on t1.id = t2.CUSTOMER_ID " +
-                " where t1.user_id = '" +id+ "'and t2.product_name= '"+productName+"'and t2.state='1'";
+                " where t1.user_id = '" +id+ "'and t2.product_name_name= '"+productName+"'and t2.state='1'";
         for(Map map:staList){
             //未完成订单
             if( "1".equals(map.get("state"))){
@@ -496,7 +504,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             }
         }
         //新增订单信息
-        String sql4 = "insert into mag_order (ID,USER_ID,order_no,CUSTOMER_ID,state,product_name,CUSTOMER_NAME,TEL,CARD,CREAT_TIME) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+id+"'," +
+        String sql4 = "insert into mag_order (ID,USER_ID,order_no,CUSTOMER_ID,state,product_name_name,CUSTOMER_NAME,TEL,CARD,CREAT_TIME) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+id+"'," +
                 "'"+GeneratePrimaryKeyUtils.getOrderNum()+"','"+cusmap.get("id")+"','1','"+productName+"','"+cusmap.get("CUSTOMER_NAME")+"','"+cusmap.get("TEL")+"','"+cusmap.get("CARD")+"','"+DateUtils.getCurrentTime()+"')";
         sunbmpDaoSupport.exeSql(sql4);
         resMap = sunbmpDaoSupport.findForMap(sql3);
@@ -872,14 +880,18 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
                     ",'"+forMap.get("periods")+"','"+contractAmount+"','"+forMap.get("loan_purpose")+"','"+linkjson+"','"+DateUtils.getDateString(new Date())+"')";
             sunbmpDaoSupport.exeSql(sql2);
             //申请时间
-            String applyTime = DateUtils.formatDate(new Date(),DateUtils.STYLE_7);
+            String applyTime = DateUtils.getCurrentTime(DateUtils.STYLE_10);
             //修改订单状态为已提交
-            String sql3 = "update mag_order set state = '2',applay_time = '"+applyTime+"' where order_no = '"+orderId+"'";
+            String sql3 = "update mag_order set Order_state = '2',applay_time = '"+applyTime+"' where order_no = '"+orderId+"'";
             sunbmpDaoSupport.exeSql(sql3);
+
+            //根据订单编号获取订单id
+            String sql4 = "select id from mag_order where order_no = '"+orderId+"'";
+            Map orderMap = sunbmpDaoSupport.findForMap(sql4);
             //新增操作表订单信息
-            String sql4 = "insert into order_operation_record (id,operation_node,operation_result,order_id,operation_time,emp_id,emp_name,description) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"'," +
-                    "1,1,'"+orderId+"','"+applyTime+"','"+forMap.get("user_id")+"','"+forMap.get("CUSTOMER_NAME")+"','已申请')";
-            sunbmpDaoSupport.exeSql(sql4);
+            String sql5 = "insert into order_operation_record (id,operation_node,operation_result,order_id,operation_time,emp_id,emp_name,description) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"'," +
+                    "1,1,'"+orderMap.get("id")+"','"+applyTime+"','"+forMap.get("user_id")+"','"+forMap.get("CUSTOMER_NAME")+"','已申请')";
+            sunbmpDaoSupport.exeSql(sql5);
         } catch (DAOException e) {
             e.printStackTrace();
             resultMap.put("flag",false);
@@ -972,7 +984,17 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
                         "city_name = '"+map.get("city_name")+"',update_time = '"+DateUtils.getNowDate()+"' where cust_id = '"+map.get("customerId")+"'";
                 sunbmpDaoSupport.exeSql(sql3);
             }
-            String sql4 = "update mag_customer set PERSON_NAME='"+map.get("cust_name")+"',tel = '"+map.get("tel")+"',card = '"+map.get("card")+"',is_identity = '1' where id = '"+map.get("customerId")+"'";
+            String card = map.get("card").toString();
+            String sexNo = card.substring(16,17);
+            if(Integer.valueOf(sexNo)%2==0){
+                sexNo = "女";
+            }else {
+                sexNo = "男";
+            }
+            String birth = card.substring(6,14);
+            String birthName = birth.substring(0,4)+"年"+birth.substring(4,6)+"月"+birth.substring(6,8)+"日";
+
+            String sql4 = "update mag_customer set PERSON_NAME='"+map.get("cust_name")+"',sex_name = '"+sexNo+"',birth = '"+birthName+"',tel = '"+map.get("tel")+"',card = '"+card+"',is_identity = '1' where id = '"+map.get("customerId")+"'";
             sunbmpDaoSupport.exeSql(sql4);
         } catch (DAOException e) {
             e.printStackTrace();
@@ -1005,5 +1027,17 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         //取消订单将申请时间改为已取消
         String sql = "update mag_order set state = '7',ALTER_TIME='"+DateUtils.getNowDate()+"' where order_no = '"+orderId+"'";
         return sunbmpDaoSupport.executeSql(sql);
+    }
+    @Override
+    public int getEmpowerStatus(String orderId,String customerId){
+        Map resultMap = new HashMap();
+        //取消订单将申请时间改为已取消
+        String sql = "SELECT * from zw_api_result where state = 1 and code = 0 and only_key = '"+orderId+"' and ( source_code = 1 or source_code = 3) ";
+        int count = sunbmpDaoSupport.executeSql(sql);
+        if(count == 2){
+            String sql2 = "update mag_customer set authorization_complete = '100' where id = '"+customerId+"'";
+            sunbmpDaoSupport.exeSql(sql2);
+        }
+        return count;
     }
 }
