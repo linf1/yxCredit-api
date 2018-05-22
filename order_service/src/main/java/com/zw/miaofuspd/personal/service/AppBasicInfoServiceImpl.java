@@ -193,7 +193,6 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
      */
     @Override
     public Map addBasicCustomerInfo(Map<String, String> map) {
-        //String createTime = DateUtils.getCurrentTime(DateUtils.STYLE_10);
         String createTime="20180522202401";
         Map<String,Object> resultMap = new HashMap<String,Object>(4);
         String id = map.get("id");
