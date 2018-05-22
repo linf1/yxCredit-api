@@ -38,7 +38,7 @@ public class DateUtils {
 	public final static String STYLE_8 = "yyyy年MM月dd日";
 
 	public final static String STYLE_9 = "hhmmss";
-	public final static String STYLE_10 = "yyyyMMddhhmmss";
+	public final static String STYLE_10 = "yyyyMMddHHmmss";
 	/**
 	 * create 仙海峰 start
 	 */
