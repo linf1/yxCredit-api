@@ -172,14 +172,8 @@ public class ApplyInfoController extends AbsBaseController {
     @ResponseBody
     public  ResultVO getEmpowerStatus(String orderId,String customerId) throws  Exception{
         ResultVO resultVO = new ResultVO();
-        int count = appBasicInfoService.getEmpowerStatus(orderId,customerId);
-        if(count == 1){
-            resultVO.setRetCode("0");
-            resultVO.setRetMsg("未授权");
-        }else {
-            resultVO.setRetCode("1");
-            resultVO.setRetMsg("已授权");
-        }
+        Map map = appBasicInfoService.getEmpowerStatus(orderId,customerId);
+        resultVO.setRetData(map);
         return resultVO;
     }
 

@@ -1035,15 +1035,26 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         return sunbmpDaoSupport.executeSql(sql);
     }
     @Override
-    public int getEmpowerStatus(String orderId,String customerId){
+    public Map getEmpowerStatus(String orderId,String customerId){
         Map resultMap = new HashMap();
-        //
-        String sql = "SELECT * from zw_api_result where state = 1 and code = 0 and only_key = '"+orderId+"' and ( source_code = 1 or source_code = 3) ";
+        resultMap.put("mohe","0");
+        resultMap.put("zhengxin","0");
+        //更细授权状态
+        String sql = "SELECT * from zw_api_result where state = 1 and code = 0 and only_key = '"+orderId+"'";
+        List<Map> list = sunbmpDaoSupport.findForList(sql);
+        for (Map map:list){
+            if("1".equals(map.get("source_code"))){
+                resultMap.put("mohe","1");
+            }
+            if("3".equals(map.get("source_code"))){
+                resultMap.put("zhengxin","1");
+            }
+        }
         int count = sunbmpDaoSupport.executeSql(sql);
         if(count == 2){
             String sql2 = "update mag_customer set authorization_complete = '100' where id = '"+customerId+"'";
             sunbmpDaoSupport.exeSql(sql2);
         }
-        return count;
+        return resultMap;
     }
 }

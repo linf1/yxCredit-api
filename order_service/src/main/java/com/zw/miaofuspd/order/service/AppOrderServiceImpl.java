@@ -1909,8 +1909,10 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
         Map returnMap = new HashMap();
 
 
-            String sql ="SELECT ID AS orderId ,  product_name_name AS productName , applay_money AS applayMoney , PERIODS AS periods , date_format(str_to_date(applay_time, '%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS applayTime , Order_state AS orderState  " +
-                "FROM mag_order WHERE USER_ID='"+userId+"' limit "+pageNumber+","+pageSize;
+            String sql ="SELECT ID AS orderId ,  product_name_name AS productName , applay_money AS applayMoney , " +
+                                "PERIODS AS periods , date_format(str_to_date(applay_time, " +
+                                "'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS applayTime , Order_state AS orderState  " +
+                        "FROM mag_order WHERE USER_ID='"+userId+"' limit "+pageNumber+","+pageSize;
         List allOrderList = sunbmpDaoSupport.findForList(sql);
 
         returnMap.put("allOrderList",allOrderList);
@@ -1927,8 +1929,9 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
     public Map getPendingMoneyInfoByOrderId(String orderId) {
         Map returnMap = new HashMap();
 
-        String orderSql="SELECT o.ID AS orderId , o.`product_name_name` AS productName , o.`applay_money` AS applayMoney , o.`PERIODS` AS periods , o.`Order_state` AS orderStatus " +
-                    "FROM mag_order o WHERE  o.`ID`='"+orderId+"' ";
+        String orderSql="SELECT o.ID AS orderId , o.`product_name_name` AS productName , o.`applay_money` AS applayMoney ," +
+                                "o.`PERIODS` AS periods , o.`Order_state` AS orderStatus " +
+                        "FROM mag_order o WHERE  o.`ID`='"+orderId+"' ";
         Map orderMap = sunbmpDaoSupport.findForMap(orderSql);
         String operationSql="SELECT operation_time AS operationTime , amount AS amount , operation_node AS operationNode  " +
                 "FROM order_operation_record " +
