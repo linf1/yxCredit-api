@@ -175,6 +175,6 @@ public interface AppBasicInfoService {
      * @Date 17:02 2018/5/19
      * @param
      */
-    int getEmpowerStatus(String orderId,String customerId);
+    Map getEmpowerStatus(String orderId,String customerId);
 
 }
