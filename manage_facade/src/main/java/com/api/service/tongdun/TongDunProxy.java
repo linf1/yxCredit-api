@@ -90,6 +90,7 @@ public class TongDunProxy implements ITongDunApiService {
                     apiResult.setUserMobile(request.getPhone());
                     apiResult.setUserName(request.getName());
                     apiResult.setResultData(jsonObject.toJSONString());
+                    apiResult.setState(1);
                     apiResultServerImpl.insertApiResult(apiResult);
                 } else {
                     response.setResponseCode(jsonObject.getString(ApiConstants.REASON_CODE_KEY));

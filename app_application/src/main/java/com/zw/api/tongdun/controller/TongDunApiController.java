@@ -37,7 +37,10 @@ public class TongDunApiController {
 
     /**
      * 贷前审核调用同盾API调用入口
-     * @param request 请求参数
+     * @param request 请求参数 idNo - 身份证号码
+     *                       name - 姓名
+     *                       phone - 电话
+     *                                 
      * @return 最终数据
      */
     @GetMapping("/invokeTongDunApi")
