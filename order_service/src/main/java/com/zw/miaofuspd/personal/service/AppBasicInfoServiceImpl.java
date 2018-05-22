@@ -140,13 +140,13 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         //借款用途
         String loanPurpose = (String) paramMap.get("loanPurpose");
         //获取订单的产品名称及编号
-        String sql = "select product_Id,product_name_name from mag_order where order_no='"+orderId+"'";
+        String sql = "select product_name,product_name_name from mag_order where order_no='"+orderId+"'";
         Map map1 = sunbmpDaoSupport.findForMap(sql);
         //插入产品的利率
-        String sql2 = "select t1.li_xi as lixi from mag_product_fee t1\n" +
+        String sql2 = "select t1.li_xi as lixi,t1.id as id from mag_product_fee t1\n" +
                 "inner join(\n" +
                 "select id,product_term_min,product_term_max from pro_working_product_detail where crm_product_id =(\n" +
-                "select id from  pro_crm_product where pro_name ='"+map1.get("product_name_name")+"' and pro_number = '"+map1.get("product_Id")+"') and product_term_min*1 <= "+periods+" and product_term_max*1 >= "+periods+")t2 on t1.product_id = t2.id";
+                "select id from  pro_crm_product where pro_name ='"+map1.get("product_name_name")+"' and pro_number = '"+map1.get("product_name")+"') and product_term_min*1 <= "+periods+" and product_term_max*1 >= "+periods+")t2 on t1.product_id = t2.id";
         Map map2 = sunbmpDaoSupport.findForMap(sql2);
         if(CollectionUtils.isEmpty(map2)){
             resturnMap.put("msg","请输入正确的申请期限");
@@ -154,7 +154,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             return resturnMap;
         }
         String sql3 = "update mag_order set applay_money = " + applayMoney + "," + "PERIODS = '" + periods + "'," +
-                "loan_purpose = '" + loanPurpose + "',rate = '"+map2.get("lixi")+"'," +
+                "loan_purpose = '" + loanPurpose + "',rate = '"+map2.get("lixi")+"',product_detail = '"+map2.get("id")+"'," +
                 "complete = '100' where order_no = '" + orderId + "'  ";
         int count = sunbmpDaoSupport.executeSql(sql3);
         //sunbmpDaoSupport.exeSql(sql);
@@ -208,9 +208,13 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             String sql1 = "insert into mag_customer (ID,USER_ID,PERSON_NAME,TEL,CARD,surplus_contract_amount,CREAT_TIME) values ('" + uuidKey + "','" + id + "','" + personName + "','" + tel + "','" + card + "',200000,'"+createTime+"')";
             sunbmpDaoSupport.exeSql(sql1);
             orderid = String.valueOf(GeneratePrimaryKeyUtils.getOrderNum());
+            //获取产品id
+            String productSql = "select id from pro_crm_product where pro_name='"+productName+"' and pro_number = 'BYX0001'";
+            Map proMap = sunbmpDaoSupport.findForMap(productSql);
+            String product_id = proMap.get("id")==null?"":proMap.get("id").toString();
             //新增订单信息
-            String sql2 = "insert into mag_order (ID,USER_ID,order_no,CUSTOMER_ID,order_state,product_Id,product_name_name,CUSTOMER_NAME,TEL,CARD,CREAT_TIME) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+id+"'" +
-                        ",'"+orderid+"','"+uuidKey+"','1','BYX0001','"+productName+"','"+personName+"','"+tel+"','"+card+"','"+createTime+"')";
+            String sql2 = "insert into mag_order (ID,USER_ID,order_no,CUSTOMER_ID,order_state,product_id,product_name,product_name_name,CUSTOMER_NAME,TEL,CARD,CREAT_TIME) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+id+"'" +
+                        ",'"+orderid+"','"+uuidKey+"','1','"+product_id+"','BYX0001','"+productName+"','"+personName+"','"+tel+"','"+card+"','"+createTime+"')";
             sunbmpDaoSupport.exeSql(sql2);
         } catch (DAOException e) {
             e.printStackTrace();
@@ -1056,5 +1060,28 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             sunbmpDaoSupport.exeSql(sql2);
         }
         return resultMap;
+    }
+
+    @Override
+    public Map getOrderDetailById(Map map) {
+        //总包商
+        String contractorName = map.get("contractorName").toString();
+        //订单编号
+        String orderNo = map.get("orderNo").toString();
+        //获取居间服务费
+        String sql1 = "select t1.zbs_jujian_fee  as zbs_jujian_fee from mag_product_fee t1 inner join " +
+                "mag_order t2 on t1.id = t2.product_detail where t2.order_no = '"+orderNo+"'";
+        Map map1 =sunbmpDaoSupport.findForMap(sql1);
+        String zbs_jujian_fee = map1.get("zbs_jujian_fee")==null?"":map1.get("zbs_jujian_fee").toString();
+        String[] zbs_jujian =  zbs_jujian_fee.split(",");
+        String jujian_fee;
+//        for(int i=0;i<zbs_jujian.length;i++){
+//            if(){
+//
+//            }
+//        }
+        //根据订单id获取订单详情信息
+        String sql = "select product_name_name,loan_amount,";
+        return null;
     }
 }
