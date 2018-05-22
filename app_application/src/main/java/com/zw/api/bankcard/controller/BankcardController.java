@@ -6,6 +6,7 @@ import com.api.service.bankcard.IBankcardServer;
 import com.base.util.AppRouterSettings;
 import com.base.util.GeneratePrimaryKeyUtils;
 import com.base.util.SnowflakeIdWorker;
+import com.base.util.StringUtils;
 import com.zw.web.base.vo.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,11 @@ public class BankcardController {
     /**
      * 银行卡四要素认证发送短信
      * @param bankcardRequest 银行四要素请求参数
+     *                         cardId	必要	string	身份证号（加密）
+     *                         realName	必要	string	真实姓名（加密）
+     *                         bankCardNo	必要	string	银行卡号必传（加密）
+     *                         reservePhone	必要	string	预留手机号（加密）
+     *                         userId	非必要	string	用户ID，有则传（加密）
      * @return 成功失败
      */
     @PostMapping("/authsms")
@@ -40,6 +46,7 @@ public class BankcardController {
         if(bankcardRequest == null){
             return ResultVO.error("参数异常");
         }
+        LOGGER.info("进入银行卡四要素认证发送短信,参数为：{}",bankcardRequest.toString());
         final String orderNum = "O" + GeneratePrimaryKeyUtils.getSnowflakeKey();
         final String orderNo = "N" + GeneratePrimaryKeyUtils.getSnowflakeKey();
         bankcardRequest.setMerchantNeqNo(orderNo);
@@ -57,12 +64,21 @@ public class BankcardController {
         }
     }
 
-        @PostMapping("/authconfirm")
+    /**
+     * 银行卡四要素认证短信确认
+     * @param bankcardRequest 接口请求参数对象
+     *            smsCode    必要	string	短信验证码  （加密）
+     *            cardId	必要	string	身份证号（加密）
+     *            bankCardNo	必要	string	银行卡号必传（加密）
+     * @return
+     */
+    @PostMapping("/authconfirm")
     public ResultVO authconfirm(BankcardRequest bankcardRequest) {
         try {
             if (bankcardRequest == null) {
                 return ResultVO.error("参数异常");
             }
+            LOGGER.info("进入银行卡四要素认证短信确认,参数为：{}",bankcardRequest.toString());
             final List bankcardList = bankcardServer.findBankcard(bankcardRequest);
             if(CollectionUtils.isEmpty(bankcardList)){
                 return ResultVO.error("验证码过期");
