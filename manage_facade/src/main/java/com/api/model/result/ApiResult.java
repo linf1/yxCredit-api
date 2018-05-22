@@ -69,7 +69,7 @@ public class ApiResult implements Serializable {
     /**
      * 1:有效，0：无效
      */
-    private String state;
+    private Integer state;
 
     public String getId() {
         return id;
@@ -183,11 +183,11 @@ public class ApiResult implements Serializable {
         this.createdTime = createdTime;
     }
 
-    public String getState() {
+    public Integer getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(Integer state) {
         this.state = state;
     }
 }

@@ -38,7 +38,7 @@ public class CreditApiServiceImpl implements ICreditApiService {
         dataMap.put("password",request.getPassword());
         dataMap.put("smsCode",request.getSmsCode());
         params.put("data", dataMap);
-        params.put("callbackUrl", creditSettings.getCallbackUrl()+ request.getOrderId() + request.getToken());
+        params.put("callbackUrl", creditSettings.getCallbackUrl()+ request.getOrderId() +"?token="+ request.getToken());
         TokenHelper tokenHelper = new TokenHelper(creditSettings.getAk(), creditSettings.getSk());
         int expireTime = new Long(new Date().getTime()/1000).intValue() + 3600;
         String bodyJson = JSONObject.toJSONString(params);
