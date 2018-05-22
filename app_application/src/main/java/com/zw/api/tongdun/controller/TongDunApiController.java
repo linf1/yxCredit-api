@@ -37,7 +37,7 @@ public class TongDunApiController {
 
 
     /**
-     * 贷前审核调用同盾API调用入口
+     * 调用同盾API调用入口
      * @param request 请求参数 idNo - 身份证号码
      *                       name - 姓名
      *                       phone - 电话
@@ -51,6 +51,7 @@ public class TongDunApiController {
             LOGGER.info("请求参数异常或不存在");
             return ResultVO.error("请求参数异常或不存在");
         }
+        LOGGER.info("=====同盾数据调用====请求参数：{}",request.toString());
         try {
         TongDunProxy tongDunProxy = new TongDunProxy(tongDunApiService,apiResultServer);
          final ApiCommonResponse apiCommonResponse = tongDunProxy.invokeTongDunApi(request);
