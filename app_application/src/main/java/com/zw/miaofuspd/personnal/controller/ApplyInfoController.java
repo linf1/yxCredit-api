@@ -12,6 +12,8 @@ import com.zw.miaofuspd.facade.user.service.IAppIdentityService;
 import com.zw.web.base.AbsBaseController;
 import com.zw.web.base.vo.ResultVO;
 import com.zw.web.base.vo.VOConst;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +27,8 @@ import java.util.Map;
 @Controller
 @RequestMapping(AppRouterSettings.VERSION+AppRouterSettings.APPLY_MODULE)
 public class ApplyInfoController extends AbsBaseController {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(ApplyInfoController.class);
     @Autowired
     AppBasicInfoService appBasicInfoService;
     @Autowired
@@ -65,6 +69,7 @@ public class ApplyInfoController extends AbsBaseController {
     @RequestMapping("/addBasicInfo")
     @ResponseBody
     public ResultVO addBasicInfo(String data) throws Exception {
+        LOGGER.info("---------三要素:"+data);
         Map map = JSONObject.parseObject(data);
         ResultVO resultVO = new ResultVO();
         Map resultMap = appBasicInfoService.addBasicCustomerInfo(map);
