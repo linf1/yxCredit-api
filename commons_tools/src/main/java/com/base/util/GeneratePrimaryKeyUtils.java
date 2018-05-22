@@ -8,6 +8,7 @@ import java.util.UUID;
  */
 public class GeneratePrimaryKeyUtils {
 
+    private static SnowflakeIdWorker  snowflakeIdWorker =  new SnowflakeIdWorker(0, 0);
     /**
      * jdk提供{@link UUID#randomUUID} uuid 考虑到资源问题去掉"-"
      * @return uuid 唯一主键
@@ -21,25 +22,32 @@ public class GeneratePrimaryKeyUtils {
      * @return
      */
     public static long getSnowflakeKey(){
-        return new SnowflakeIdWorker(0, 0).nextId();
+        return snowflakeIdWorker.nextId();
     }
 
+    /**
+     * Twitter_Snowflake 雪花主键
+     * @return
+     */
+    public  SnowflakeIdWorker getSnowflakeIdWorker(){
+      return  snowflakeIdWorker;
+    }
     /**
      * 订单编号生成
      * @return
      */
     public static long getOrderNum(){
-        return new SnowflakeIdWorker(0, 0).nextId();
+        return snowflakeIdWorker.nextId();
     }
 
-    /**
-     * Twitter_Snowflake 雪花主键
-     * @param workerId  工作ID (0~31)
-     * @param datacenterId 数据中心ID (0~31)
-     * @return
-     */
-    public static long getSnowflakeKey(long workerId, long datacenterId){
-        return new SnowflakeIdWorker(workerId, datacenterId).nextId();
-    }
+//    /**
+//     * Twitter_Snowflake 雪花主键
+//     * @param workerId  工作ID (0~31)
+//     * @param datacenterId 数据中心ID (0~31)
+//     * @return
+//     */
+//    public static long getSnowflakeKey(long workerId, long datacenterId){
+//        return new SnowflakeIdWorker(workerId, datacenterId).nextId();
+//    }
 
 }
