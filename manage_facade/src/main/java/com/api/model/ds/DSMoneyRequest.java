@@ -297,4 +297,34 @@ public class DSMoneyRequest implements Serializable {
     public void setAccountThirdId(String accountThirdId) {
         this.accountThirdId = accountThirdId;
     }
+
+    @Override
+    public String toString() {
+        return "DSMoneyRequest{" +
+                "borrowerUserName='" + borrowerUserName + '\'' +
+                ", borrowerType=" + borrowerType +
+                ", borrowerCardType='" + borrowerCardType + '\'' +
+                ", borrowerName='" + borrowerName + '\'' +
+                ", borrowerCardNo='" + borrowerCardNo + '\'' +
+                ", address='" + address + '\'' +
+                ", borrowerMobilePhone='" + borrowerMobilePhone + '\'' +
+                ", borrowerChannel='" + borrowerChannel + '\'' +
+                ", borrowerThirdId='" + borrowerThirdId + '\'' +
+                ", accountType='" + accountType + '\'' +
+                ", accountName='" + accountName + '\'' +
+                ", accountIdCard='" + accountIdCard + '\'' +
+                ", provinceCode='" + provinceCode + '\'' +
+                ", provinceName='" + provinceName + '\'' +
+                ", cityCode='" + cityCode + '\'' +
+                ", cityName='" + cityName + '\'' +
+                ", bankCode='" + bankCode + '\'' +
+                ", bankName='" + bankName + '\'' +
+                ", bankCardNo='" + bankCardNo + '\'' +
+                ", bankBranchName='" + bankBranchName + '\'' +
+                ", cnapsCode='" + cnapsCode + '\'' +
+                ", otherFlag='" + otherFlag + '\'' +
+                ", accountChannel='" + accountChannel + '\'' +
+                ", accountThirdId='" + accountThirdId + '\'' +
+                '}';
+    }
 }

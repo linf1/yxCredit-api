@@ -16,4 +16,11 @@ public class TongDunRequest extends ApiCommonRequest {
     public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
+
+    @Override
+    public String toString() {
+        return "TongDunRequest{" +
+                "orderId='" + orderId + '\'' +
+                '}';
+    }
 }

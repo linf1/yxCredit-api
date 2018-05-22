@@ -6,6 +6,8 @@ import com.api.service.ds.IDSMoneyServer;
 import com.base.util.AppRouterSettings;
 import com.zw.miaofuspd.facade.personal.service.AppBasicInfoService;
 import com.zw.web.base.vo.ResultVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,8 @@ import java.util.Map;
 @RequestMapping(AppRouterSettings.VERSION + "/ds")
 public class DsMoneyController {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(DsMoneyController.class);
+
     @Autowired
     private IDSMoneyServer idsMoneyServer;
 
@@ -35,6 +39,7 @@ public class DsMoneyController {
      */
     @PostMapping("/dsBorrowerAndAccountCard")
     public ResultVO dsBorrowerAndAccountCard(DSMoneyRequest request) {
+        LOGGER.info("==============借款人及放款账户数据同步开始========参数：{}",request.toString());
         final Map customer = appBasicInfoServiceImpl.findById(request.getBorrowerThirdId());
         if (customer != null) {
             request.setBorrowerType(0);
