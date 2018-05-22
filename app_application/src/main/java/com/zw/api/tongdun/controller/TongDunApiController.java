@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,10 +41,11 @@ public class TongDunApiController {
      * @param request 请求参数 idNo - 身份证号码
      *                       name - 姓名
      *                       phone - 电话
+     *                       orderId - 订单号
      *                                 
      * @return 最终数据
      */
-    @GetMapping("/invokeTongDunApi")
+    @PostMapping("/invokeTongDunApi")
     public ResultVO invokeTongDunApi(TongDunRequest request){
         if (request == null) {
             LOGGER.info("请求参数异常或不存在");
