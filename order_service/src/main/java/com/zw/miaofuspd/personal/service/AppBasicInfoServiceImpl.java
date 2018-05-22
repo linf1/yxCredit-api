@@ -515,7 +515,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         }
         //新增订单信息
         String sql4 = "insert into mag_order (ID,USER_ID,order_no,CUSTOMER_ID,order_state,product_name,product_name_name,CUSTOMER_NAME,TEL,CARD,CREAT_TIME) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+id+"'," +
-                "'"+GeneratePrimaryKeyUtils.getOrderNum()+"','"+cusmap.get("id")+"','1','BYX0001','"+productName+"','"+cusmap.get("CUSTOMER_NAME")+"','"+cusmap.get("TEL")+"','"+cusmap.get("CARD")+"','"+DateUtils.getCurrentTime(DateUtils.STYLE_10)+"')";
+                "'"+GeneratePrimaryKeyUtils.getOrderNum()+"','"+cusmap.get("id")+"','1','BYX0001','"+productName+"','"+cusmap.get("PERSON_NAME")+"','"+cusmap.get("TEL")+"','"+cusmap.get("CARD")+"','"+DateUtils.getCurrentTime(DateUtils.STYLE_10)+"')";
         sunbmpDaoSupport.exeSql(sql4);
         resMap = sunbmpDaoSupport.findForMap(sql3);
         resultMap.put("code","4");
