@@ -193,8 +193,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
      */
     @Override
     public Map addBasicCustomerInfo(Map<String, String> map) {
-        //String createTime = DateUtils.getCurrentTime(DateUtils.STYLE_10);
-        String createTime="20180522202401";
+        String createTime = DateUtils.getCurrentTime(DateUtils.STYLE_10);
         Map<String,Object> resultMap = new HashMap<String,Object>(4);
         String id = map.get("id");
         String tel = map.get("tel");
@@ -515,8 +514,8 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             }
         }
         //新增订单信息
-        String sql4 = "insert into mag_order (ID,USER_ID,order_no,CUSTOMER_ID,order_state,product_name_name,CUSTOMER_NAME,TEL,CARD,CREAT_TIME) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+id+"'," +
-                "'"+GeneratePrimaryKeyUtils.getOrderNum()+"','"+cusmap.get("id")+"','1','"+productName+"','"+cusmap.get("CUSTOMER_NAME")+"','"+cusmap.get("TEL")+"','"+cusmap.get("CARD")+"','"+DateUtils.getCurrentTime()+"')";
+        String sql4 = "insert into mag_order (ID,USER_ID,order_no,CUSTOMER_ID,order_state,product_name,product_name_name,CUSTOMER_NAME,TEL,CARD,CREAT_TIME) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+id+"'," +
+                "'"+GeneratePrimaryKeyUtils.getOrderNum()+"','"+cusmap.get("id")+"','1','BYX0001','"+productName+"','"+cusmap.get("CUSTOMER_NAME")+"','"+cusmap.get("TEL")+"','"+cusmap.get("CARD")+"','"+DateUtils.getCurrentTime()+"')";
         sunbmpDaoSupport.exeSql(sql4);
         resMap = sunbmpDaoSupport.findForMap(sql3);
         resultMap.put("code","4");
