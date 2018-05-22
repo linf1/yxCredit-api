@@ -45,7 +45,7 @@ public class ShujumoheController {
      */
     @RequestMapping("/callBackShujumohe")
     public ResultVO callBackShujumohe(ShujumoheRequest request){
-        LOGGER.info("========request:{}",request.toString());
+        LOGGER.info("=======数据魔盒回调接参数request:{}",request.toString());
         String result = null;
         try {
             ApiResult resultParameter = new ApiResult();
@@ -61,7 +61,7 @@ public class ShujumoheController {
                 final JSONObject jsonObject = JSONObject.parseObject(result);
                 final String code = jsonObject.getString("code");
                 if(ApiConstants.STATUS_SUCCESS.equals(code)){
-                    final Map<String,Object> data = (Map) jsonObject.get("data");
+                    final Map data = (Map) jsonObject.get("data");
                     if(data != null) {
                             ApiResult apiResult = new ApiResult();
                             apiResult.setId(GeneratePrimaryKeyUtils.getUUIDKey());
