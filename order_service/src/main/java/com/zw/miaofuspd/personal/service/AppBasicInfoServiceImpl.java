@@ -148,11 +148,11 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
                 "select id,product_term_min,product_term_max from pro_working_product_detail where crm_product_id =(\n" +
                 "select id from  pro_crm_product where pro_name ='"+map1.get("product_name_name")+"' and pro_number = '"+map1.get("product_name")+"') and product_term_min*1 <= "+periods+" and product_term_max*1 >= "+periods+")t2 on t1.product_id = t2.id";
         Map map2 = sunbmpDaoSupport.findForMap(sql2);
-        if(CollectionUtils.isEmpty(map2)){
-            resturnMap.put("msg","请输入正确的申请期限");
-            resturnMap.put("flag",false);
-            return resturnMap;
-        }
+//        if(CollectionUtils.isEmpty(map2)){
+//            resturnMap.put("msg","请输入正确的申请期限");
+//            resturnMap.put("flag",false);
+//            return resturnMap;
+//        }
         String sql3 = "update mag_order set applay_money = " + applayMoney + "," + "PERIODS = '" + periods + "'," +
                 "loan_purpose = '" + loanPurpose + "',rate = '"+map2.get("lixi")+"',product_detail = '"+map2.get("id")+"'," +
                 "complete = '100' where order_no = '" + orderId + "'  ";
