@@ -77,6 +77,7 @@ public class ShujumoheController {
                             apiResult.setUserMobile((String)data.get("user_mobile"));
                             apiResult.setUserName(request.getPhone());
                             apiResult.setResultData(data.get("task_data").toString());
+                            apiResult.setState(1);
                             apiResultServerImpl.insertApiResult(apiResult);
                     }
                     return  ResultVO.ok("验证成功！",null);
