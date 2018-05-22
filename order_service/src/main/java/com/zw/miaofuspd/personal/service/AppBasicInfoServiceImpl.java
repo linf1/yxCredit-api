@@ -209,7 +209,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             sunbmpDaoSupport.exeSql(sql1);
             orderid = String.valueOf(GeneratePrimaryKeyUtils.getOrderNum());
             //新增订单信息
-            String sql2 = "insert into mag_order (ID,USER_ID,order_no,CUSTOMER_ID,state,product_Id,product_name_name,CUSTOMER_NAME,TEL,CARD,CREAT_TIME) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+id+"'" +
+            String sql2 = "insert into mag_order (ID,USER_ID,order_no,CUSTOMER_ID,order_state,product_Id,product_name_name,CUSTOMER_NAME,TEL,CARD,CREAT_TIME) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+id+"'" +
                         ",'"+orderid+"','"+uuidKey+"','1','BYX0001','"+productName+"','"+personName+"','"+tel+"','"+card+"','"+createTime+"')";
             sunbmpDaoSupport.exeSql(sql2);
         } catch (DAOException e) {
@@ -485,12 +485,12 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         String sql1 = "select id,PERSON_NAME,TEL,CARD from mag_customer where USER_ID = '" + id + "'";
         Map cusmap = sunbmpDaoSupport.findForMap(sql1);
         //获取当前用户的所有订单状态
-        String  sql2 = "select state from mag_order where user_id = '"+id+"' and product_name_name = '"+productName+"'";
+        String  sql2 = "select order_state as state from mag_order where user_id = '"+id+"' and product_name_name = '"+productName+"'";
         List<Map> staList = sunbmpDaoSupport.findForList(sql2);
         //申请主页面的相关信息
         String sql3 = "select date_format(str_to_date(t2.CREAT_TIME,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%i:%s') as creat_time,t1.id as customerId,t1.card as card,t2.applay_money as applay_money,t1.tel as tel,t1.PERSON_NAME as personName,t1.Baseinfo_complete as baseinfoComplete" +
                 ",t2.complete as applyComplete,t2.order_no as orderId,t1.is_identity as is_identity,t1.authorization_complete as authorization_complete,t1.link_man_complete as link_man_complete  from mag_customer t1 left join  mag_order t2 on t1.id = t2.CUSTOMER_ID " +
-                " where t1.user_id = '" +id+ "'and t2.product_name_name= '"+productName+"'and t2.state='1'";
+                " where t1.user_id = '" +id+ "'and t2.product_name_name= '"+productName+"'and t2.order_state='1'";
         for(Map map:staList){
             //未完成订单
             if( "1".equals(map.get("state"))){
@@ -510,7 +510,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             }
         }
         //新增订单信息
-        String sql4 = "insert into mag_order (ID,USER_ID,order_no,CUSTOMER_ID,state,product_name_name,CUSTOMER_NAME,TEL,CARD,CREAT_TIME) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+id+"'," +
+        String sql4 = "insert into mag_order (ID,USER_ID,order_no,CUSTOMER_ID,order_state,product_name_name,CUSTOMER_NAME,TEL,CARD,CREAT_TIME) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+id+"'," +
                 "'"+GeneratePrimaryKeyUtils.getOrderNum()+"','"+cusmap.get("id")+"','1','"+productName+"','"+cusmap.get("CUSTOMER_NAME")+"','"+cusmap.get("TEL")+"','"+cusmap.get("CARD")+"','"+DateUtils.getCurrentTime()+"')";
         sunbmpDaoSupport.exeSql(sql4);
         resMap = sunbmpDaoSupport.findForMap(sql3);
@@ -1031,13 +1031,13 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     public int cancelOrder(String orderId) {
         Map resultMap = new HashMap();
         //取消订单将申请时间改为已取消
-        String sql = "update mag_order set state = '7',ALTER_TIME='"+DateUtils.getNowDate()+"' where order_no = '"+orderId+"'";
+        String sql = "update mag_order set order_state = '7',ALTER_TIME='"+DateUtils.getNowDate()+"' where order_no = '"+orderId+"'";
         return sunbmpDaoSupport.executeSql(sql);
     }
     @Override
     public int getEmpowerStatus(String orderId,String customerId){
         Map resultMap = new HashMap();
-        //取消订单将申请时间改为已取消
+        //
         String sql = "SELECT * from zw_api_result where state = 1 and code = 0 and only_key = '"+orderId+"' and ( source_code = 1 or source_code = 3) ";
         int count = sunbmpDaoSupport.executeSql(sql);
         if(count == 2){
