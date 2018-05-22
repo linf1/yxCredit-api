@@ -5,6 +5,8 @@ import com.api.model.BYXSettings;
 import com.zhiwang.zwfinance.app.jiguang.util.api.CryptoTools;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.ws.soap.Addressing;
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ import java.util.Map;
  * @author 陈清玉
  */
 public class BYXRequest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BYXRequest.class);
+
     private Long requestTime;
     private String data;
 
@@ -52,6 +56,7 @@ public class BYXRequest {
        }else{
            //参数转化JSON
            final String paramJson = JSONObject.toJSONString(param);
+           LOGGER.info("请求参数JSON字符串：{}",paramJson);
            //碧友信参数加密
            final String encodesStr = cryptoTools.encode(paramJson);
            byxRequest.setData(encodesStr);
