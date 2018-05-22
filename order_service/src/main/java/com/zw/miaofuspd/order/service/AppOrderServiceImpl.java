@@ -1910,9 +1910,10 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
 
 
             String sql ="SELECT ID AS orderId ,  product_name_name AS productName , applay_money AS applayMoney , " +
-                                "PERIODS AS periods , date_format(str_to_date(applay_time, " +
-                                "'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS applayTime , Order_state AS orderState  " +
-                        "FROM mag_order WHERE USER_ID='"+userId+"' limit "+pageNumber+","+pageSize;
+                                "PERIODS AS periods , " +
+                                "date_format(str_to_date(applay_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS applayTime , " +
+                                "Order_state AS orderState  " +
+                        "FROM mag_order WHERE USER_ID='"+userId+"' ORDER BY applay_time DESC  limit "+pageNumber+","+pageSize;
         List allOrderList = sunbmpDaoSupport.findForList(sql);
 
         returnMap.put("allOrderList",allOrderList);
@@ -1970,7 +1971,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                                     "amount AS amount , STATUS AS status , operation_node AS operationNode , " +
                                     "operation_result AS operationResult , description AS description " +
                             "FROM order_operation_record " +
-                            "WHERE order_id='"+orderId+"'";
+                            "WHERE order_id='"+orderId+"' ORDER BY operation_time DESC";
         List operationList = sunbmpDaoSupport.findForList(operationSql);
 
         returnMap.put("orderInfo",orderMap);
