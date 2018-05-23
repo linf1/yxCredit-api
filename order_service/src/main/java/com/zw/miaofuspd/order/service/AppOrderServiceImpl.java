@@ -1974,7 +1974,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                                     "amount AS amount , STATUS AS status , operation_node AS operationNode , " +
                                     "operation_result AS operationResult , description AS description " +
                             "FROM order_operation_record " +
-                            "WHERE order_id='"+orderId+"' ORDER BY operation_time DESC";
+                            "WHERE order_id='"+orderId+"' AND  operation_node NOT IN (2)  ORDER BY operation_time DESC";
         List operationList = sunbmpDaoSupport.findForList(operationSql);
 
         returnMap.put("orderInfo",orderMap);
