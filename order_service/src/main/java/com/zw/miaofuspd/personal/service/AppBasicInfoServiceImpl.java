@@ -1093,9 +1093,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         final Map forMap = sunbmpDaoSupport.findForMap(sql.toString());
         if(forMap != null){
             final Object identity = forMap.get("is_identity");
-            if( identity != null && EIsIdentityEnum.CERTIFIED.getCode().equals(identity.toString())){
-                return true;
-            }
+            return identity != null && EIsIdentityEnum.CERTIFIED.getCode().equals(identity.toString());
         }
         return false;
     }
