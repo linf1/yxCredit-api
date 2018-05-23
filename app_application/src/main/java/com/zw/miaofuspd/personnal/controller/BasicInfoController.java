@@ -170,7 +170,7 @@ public class BasicInfoController extends AbsBaseController {
 
     /**
      * @author:韩梅生
-     * @Description 获取实名认证信息
+     * @Description 保存实名认证信息
      * @Date 17:58 2018/5/16
      * @param
      */
@@ -224,6 +224,19 @@ public class BasicInfoController extends AbsBaseController {
             e.printStackTrace();
         }
         resultVO.setRetData(resMap);
+        return resultVO;
+    }
+
+    /**
+     * @author 韩梅生
+     * @date 18:45 2018/5/23
+     * 获取实名认证信息
+     */
+    @RequestMapping("/getAuthorStatus")
+    public ResultVO getAuthorStatus(String userId) throws Exception{
+        ResultVO resultVO = new ResultVO();
+        Map map = appBasicInfoService.getAuthorStatus(userId);
+        resultVO.setRetData(map);
         return resultVO;
     }
 

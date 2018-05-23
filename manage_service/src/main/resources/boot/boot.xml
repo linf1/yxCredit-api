@@ -99,4 +99,10 @@
         <property name="requestType" value="${contractsign.requestType}"/>
     </bean>
 
+    <!-- 数据同步BEAN create by 韩梅生-->
+    <bean id="assetSettings" class="com.api.model.ds.AssetSettings">
+        <property name="requestType" value="${asset.requestType}"/>
+        <property name="requestUrl" value="${asset.requestUrl}"/>
+    </bean>
+
 </beans>

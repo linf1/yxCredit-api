@@ -145,4 +145,6 @@
                      id="apiResultServerImpl" check="false"/>
     <dubbo:reference interface="com.api.service.tongdun.ITongDunApiService" check="false"
                    id="tongDunApiServiceImpl"/>
+    <dubbo:reference interface="com.api.service.ds.IAssetServer" check="false"
+                   id="assetServerImpl"/>
 </beans>
