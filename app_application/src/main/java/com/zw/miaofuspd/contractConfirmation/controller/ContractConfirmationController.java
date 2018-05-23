@@ -513,7 +513,7 @@ public class ContractConfirmationController extends AbsBaseController {
             return ResultVO.error(map1.get("res_msg").toString());
         }
         //签章2
-        Map map2=signSingleContract(contract, "居间协议", root+pdfPath[1]);
+        Map map2=signSingleContract(contract, "居间服务协议", root+pdfPath[1]);
         if("0".equals(map2.get("res_code"))){
             return ResultVO.error(map2.get("res_msg").toString());
         }
@@ -543,7 +543,12 @@ public class ContractConfirmationController extends AbsBaseController {
 
         //电子签章需要参数
         contractSignRequest.setIsOutSign(0);//外部系统调用
-        contractSignRequest.setRealTemplateId("1");
+        if("借款协议".equals(title)){
+            contractSignRequest.setRealTemplateId("3f4072ea-73fa-4df3-8b37-986e89abde7a");
+        }else if("居间服务协议".equals(title)){
+            contractSignRequest.setRealTemplateId("f86a9ff0-51c8-47aa-b61d-7a74d0dfccd7");
+        }
+
         contractSignRequest.setContractTitle(title);
 
         List<ByxUserModel> userModelList = new ArrayList<ByxUserModel>();
@@ -552,8 +557,8 @@ public class ContractConfirmationController extends AbsBaseController {
         ByxUserModel byxUserModel = new ByxUserModel();
         byxUserModel.setPersonArea(0);
         byxUserModel.setPersonIdType(ByxUserModel.IDTYPE_ID);
-        byxUserModel.setPersonIdValue("410883198906060534");
-        byxUserModel.setPersonName("韩万楠");
+        byxUserModel.setPersonIdValue(contract.get("card").toString());
+        byxUserModel.setPersonName(contract.get("person_name").toString());
         //甲方
         byxUserModel.setSignatory(0);
         //个人
