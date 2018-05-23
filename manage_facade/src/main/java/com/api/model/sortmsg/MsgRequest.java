@@ -21,7 +21,9 @@ public class MsgRequest implements Serializable {
     private String smsCode;
 
     private Long timeOut;
-
+    /**
+     * 时间戳
+     */
     private String t;
     /**
      * 类型 0 ： 手机短信验证码，1：图片验证码

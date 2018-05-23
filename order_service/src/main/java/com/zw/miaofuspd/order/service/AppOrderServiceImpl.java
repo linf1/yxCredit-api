@@ -1955,15 +1955,18 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
     @Override
     public Map getOrderAllInFoByOrderId(String orderId) {
         Map returnMap = new HashMap();
-        String orderSql = "SELECT  ID AS orderId , CUSTOMER_NAME AS customerName , TEL AS tel , CARD AS card , " +
+        String orderSql = "SELECT   o.ID AS orderId ,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
                                     "product_name_name AS productName , applay_money AS applayMoney , " +
-                                    "date_format(str_to_date(applay_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS applayTime , " +
-                                    "loan_amount AS loanAmount ," +
-                                    "date_format(str_to_date(Examine_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS examineTime , " +
-                                    "contract_amount AS contractAmount , " +
-                                    "repay_type AS repayType , Job AS job , Service_fee AS serviceFee , loan_purpose AS loanPurpose , " +
-                                    "PERIODS AS periods , Order_state AS orderStatus  " +
-                            "FROM mag_order  WHERE  ID='"+orderId+"' ";
+                                    "date_format(str_to_date( o.applay_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS applayTime , " +
+                                    " o.loan_amount AS loanAmount ," +
+                                    "date_format(str_to_date( o.Examine_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS examineTime , " +
+                                    " o.contract_amount AS contractAmount , " +
+                                    " o.repay_type AS repayType ,  o.Job AS job ,  o.Service_fee AS serviceFee ,  o.loan_purpose AS loanPurpose , " +
+                                    " o.PERIODS AS periods ,  o.Order_state AS orderStatus  ,wpd.payment AS payment " +
+                            "FROM mag_order o " +
+                            "LEFT JOIN mag_product_fee pf ON o.product_detail = pf.id " +
+                            "LEFT JOIN pro_working_product_detail wpd ON pf.product_id=wpd.id " +
+                            "WHERE  o.ID='"+orderId+"' ";
         Map orderMap = sunbmpDaoSupport.findForMap(orderSql);
 
         String operationSql="SELECT id AS operationId , order_id AS orderId , emp_id AS empId , emp_name AS empName," +
@@ -1971,7 +1974,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                                     "amount AS amount , STATUS AS status , operation_node AS operationNode , " +
                                     "operation_result AS operationResult , description AS description " +
                             "FROM order_operation_record " +
-                            "WHERE order_id='"+orderId+"' ORDER BY operation_time DESC";
+                            "WHERE order_id='"+orderId+"' AND  operation_node NOT IN (2)  ORDER BY operation_time DESC";
         List operationList = sunbmpDaoSupport.findForList(operationSql);
 
         returnMap.put("orderInfo",orderMap);

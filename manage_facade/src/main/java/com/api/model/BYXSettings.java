@@ -80,7 +80,7 @@ public class BYXSettings {
         return signa;
     }
 
-    /**
+    /**‰
      * 获取碧友信请求头
      * @return 请求头map
      */
@@ -102,6 +102,7 @@ public class BYXSettings {
         final long millis = c.getTimeInMillis();
         List<Header> headers = new ArrayList<>();
         headers.add(new BasicHeader("appKey",getAppKey()));
+        headers.add(new BasicHeader("appSecret",getAppSecrect()));
         headers.add(new BasicHeader("ts",String.valueOf(millis)));
         headers.add(new BasicHeader("signa",signaSignContract(millis)));
         System.out.println("appKey:" + getAppKey()+",ts:"+ millis +",signa:" + signa(millis));

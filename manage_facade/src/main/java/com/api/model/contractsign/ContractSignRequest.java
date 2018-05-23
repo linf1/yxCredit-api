@@ -1,5 +1,13 @@
 package com.api.model.contractsign;
 
+import com.alibaba.fastjson.JSONObject;
+import com.api.model.BYXSettings;
+import com.api.model.common.BYXRequest;
+import com.google.gson.Gson;
+import com.zhiwang.zwfinance.app.jiguang.util.api.CryptoTools;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -8,6 +16,7 @@ import java.util.List;
  *
  */
 public class ContractSignRequest implements Serializable {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ContractSignRequest.class);
 
 	private static final long serialVersionUID = 3407669563620418172L;
 	
@@ -95,4 +104,28 @@ public class ContractSignRequest implements Serializable {
 		this.userModelList = userModelList;
 	}
 
+	/**
+	 * 返回json对象参数
+	 * @param param 返回参数
+	 * @param byxSettings 碧友信配置
+	 * @return 请求参数json字符串
+	 * @throws Exception 加密异常
+	 */
+	public static String getBYXRequest(Object param,BYXSettings byxSettings) throws Exception {
+		CryptoTools cryptoTools = new CryptoTools(byxSettings.getDesKey(),byxSettings.getVi());
+		BYXRequest byxRequest  = new BYXRequest();
+		if(param == null){
+			byxRequest.setData("");
+		}else{
+			//参数转化JSON
+			Gson gson=new Gson();
+			final String paramJson = gson.toJson(param);
+			LOGGER.info("请求参数JSON字符串：{}",paramJson);
+			//碧友信参数加密
+			final String encodesStr = cryptoTools.encode(paramJson);
+			byxRequest.setData(encodesStr);
+		}
+		byxRequest.setRequestTime(System.currentTimeMillis());
+		return JSONObject.toJSONString(byxRequest);
+	}
 }

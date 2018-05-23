@@ -193,4 +193,10 @@ public interface AppBasicInfoService {
 
 
 
+    /**
+     * 根据登录用户ID获取是否实名认证create by 陈清玉
+     * @param userId 登录用户ID
+     * @return TRUE 已认证 FALSE 未认证
+     */
+    Boolean isAuthentication(String userId);
 }

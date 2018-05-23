@@ -80,7 +80,7 @@ public class TongDunProxy implements ITongDunApiService {
                     apiResult.setId(GeneratePrimaryKeyUtils.getUUIDKey());
                     apiResult.setCode(ApiConstants.STATUS_SUCCESS);
                     apiResult.setIdentityCode(request.getIdNo());
-                    apiResult.setMessage("成功");
+                    apiResult.setMessage(ApiConstants.STATUS_SUCCESS_MSG);
                     apiResult.setSourceChildName(EApiSourceEnum.TODONG.getName());
                     apiResult.setSourceChildCode(EApiSourceEnum.TODONG.getCode());
                     apiResult.setOnlyKey(request.getOrderId());
@@ -88,7 +88,7 @@ public class TongDunProxy implements ITongDunApiService {
                     apiResult.setSourceName(EApiSourceEnum.TODONG.getName());
                     apiResult.setSourceCode(EApiSourceEnum.TODONG.getCode());
                     apiResult.setUserMobile(request.getPhone());
-                    apiResult.setUserName(request.getName());
+                    apiResult.setUserName(request.getPhone());
                     apiResult.setResultData(jsonObject.toJSONString());
                     apiResult.setState(1);
                     apiResultServerImpl.insertApiResult(apiResult);

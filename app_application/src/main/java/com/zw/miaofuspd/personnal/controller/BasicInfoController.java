@@ -11,6 +11,8 @@ import com.zw.miaofuspd.facade.user.service.IUserService;
 import com.zw.web.base.AbsBaseController;
 import com.zw.web.base.vo.ResultVO;
 import com.zw.web.base.vo.VOConst;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +26,9 @@ import java.util.Map;
 @RestController
 @RequestMapping(AppRouterSettings.VERSION+AppRouterSettings.BASIC_MODUAL)
 public class BasicInfoController extends AbsBaseController {
+
+    private final  Logger LOGGER =  LoggerFactory.getLogger(BasicInfoController.class);
+
     @Autowired
     AppBasicInfoService appBasicInfoService;
     @Autowired
@@ -217,7 +222,7 @@ public class BasicInfoController extends AbsBaseController {
                              resData.get("accountId").toString(),
                              map.get("customerId").toString()
                             );
-
+                    LOGGER.info("------借款人及放款账户数据同步更新个人信息到数据库成功------");
                 }
             }
         } catch (Exception e) {

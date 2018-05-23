@@ -6,6 +6,7 @@ import com.base.util.DateUtils;
 import com.base.util.GeneratePrimaryKeyUtils;
 import com.base.util.TraceLoggerUtil;
 import com.constants.CommonConstant;
+import com.enums.EIsIdentityEnum;
 import com.zw.api.HttpUtil;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
 import com.zw.miaofuspd.facade.dict.service.ISystemDictService;
@@ -1108,5 +1109,17 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         resultMap.put("msg","该用户已实名认证！");
         resultMap.put("code","1");
         return resultMap;
+    }
+
+    @Override
+    public Boolean isAuthentication(String userId) {
+        StringBuilder sql  = new StringBuilder("select is_identity from mag_customer where USER_ID = '");
+        sql.append(userId).append("' ");
+        final Map forMap = sunbmpDaoSupport.findForMap(sql.toString());
+        if(forMap != null){
+            final Object identity = forMap.get("is_identity");
+            return identity != null && EIsIdentityEnum.CERTIFIED.getCode().equals(identity.toString());
+        }
+        return false;
     }
 }
