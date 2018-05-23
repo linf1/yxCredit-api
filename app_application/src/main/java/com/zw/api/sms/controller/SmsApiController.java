@@ -43,7 +43,9 @@ public class SmsApiController  {
 
     /**
      * 短信发送接口
-     * @param msgRequest 请求参数
+     * @param msgRequest ype 0 手机验证码 1 图片验证码 ，
+ *                       phone 手机号，
+*                        smsCode 验证码
      * @return
      */
     @PostMapping("/sendMsg")
@@ -76,7 +78,8 @@ public class SmsApiController  {
     /**
      * 验证验证码
      * @param msgRequest type 0 手机验证码 1 图片验证码 ，
-     *                   phone 手机号，
+     *                    此字段为老表预留字段 phone 手机号（如果是手机验证码，该入口参数为手机电话，
+     *      *                      如果是图片验证码，该入口参数为时间戳），
      *                   smsCode 验证码
      * @return
      */
@@ -88,7 +91,7 @@ public class SmsApiController  {
             }
             LOGGER.info("验证手机号：{},验证码：{}" ,msgRequest.getPhone(),msgRequest.getSmsCode().toLowerCase());
             //先查询验证码和用户是否正确
-            Map inMap=new HashMap();
+            Map inMap=new HashMap(2);
             inMap.put("tel",msgRequest.getPhone());
             inMap.put("smsCode",msgRequest.getSmsCode().toLowerCase());
             //设置
@@ -112,6 +115,7 @@ public class SmsApiController  {
     /**
      * 图片验证码生成控制器
      * @param response HttpServletResponse
+     * @param msgRequest phone 这里的电话是时间戳
      * @throws IOException io异常
      */
     @RequestMapping("captcha.jpg")
