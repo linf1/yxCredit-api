@@ -1,10 +1,15 @@
 
 package com.zw.miaofuspd.contractConfirmation.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.api.model.common.BYXResponse;
 import com.api.model.contractsign.ContractSignRequest;
 import com.api.model.contractsign.ByxUserModel;
+import com.api.model.contractsign.ContractSignResponse;
+import com.api.model.contractsign.ResData;
 import com.api.service.contractsign.IContractSignService;
+import com.base.util.AppRouterSettings;
+import com.google.gson.Gson;
 import com.junziqian.service.JunziqianService;
 import com.zw.app.util.AppConstant;
 import com.zw.miaofuspd.facade.contractConfirmation.service.ContractConfirmationService;
@@ -17,6 +22,7 @@ import com.zw.util.ContextToPdf;
 import com.zw.util.UploadFileUtil;
 import com.zw.web.base.AbsBaseController;
 import com.zw.web.base.vo.ResultVO;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +58,7 @@ import java.util.*;
 
 
 @Controller
-@RequestMapping("/contractConfirmation")
+@RequestMapping(AppRouterSettings.VERSION+"/contractConfirmation")
 public class ContractConfirmationController extends AbsBaseController {
     private static Logger logger = LoggerFactory.getLogger(ContractConfirmationController.class);
     public static final String TOP_TYPE = "ThirdPartner:ContractConfirmationController:";
@@ -379,35 +385,49 @@ public class ContractConfirmationController extends AbsBaseController {
     /**
      * 生成未签订合同
      *
-     * @param request
+     * @param orderId
      * @return
      */
-    @RequestMapping("/generateContract")
-    @ResponseBody
-    public ResultVO generateContract(HttpServletRequest request) throws Exception {
+    public ResultVO generateContract(String orderId, HttpServletRequest request) throws Exception {
         ResultVO resultVO = new ResultVO();
-        String orderId=request.getParameter("orderId");
         Map map = contractConfirmationService.getContractInfo(orderId);
-        try {
-            String cjName = iDictService.getDictInfo("出借人", "cjrxm");
-            String cjCard = iDictService.getDictInfo("出借人", "cjsfz");
-            //防止合同底部签名变形
-            while (cjName.length() < 8) {
-                cjName += " ";
-            }
-            map.put("cjName", cjName);
-            map.put("cjCard", cjCard);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
 
         //获取合同内容并将对应信息填入合同中
-        Map loanMap = contractConfirmationService.getContractAgreement(map);
+        //填入合同1 借款协议
+        map.put("template_type","0");
+        Map loanMap1 = contractConfirmationService.getContractAgreement(map);
+        //生成合同1
+        //文件名
+        String fileName1 = orderId + "_"+map.get("template_type").toString()+".pdf";
+        String pdfUrl1=generatePdf(request,loanMap1,fileName1);
+
+        //填入合同2 居间协议
+        map.put("template_type","1");
+        Map loanMap2 = contractConfirmationService.getContractAgreement(map);
+        //生成合同2
+        String fileName2 = orderId + "_"+map.get("template_type").toString()+".pdf";
+        String pdfUrl2=generatePdf(request,loanMap2,fileName2);
+
+        map.put("pdfUrl",pdfUrl1+","+pdfUrl2);
+         contractConfirmationService.insertContract(map);
+
+        Map mapPdf = new HashMap();
+        mapPdf.put("pdfUrl1", pdfUrl1);
+        mapPdf.put("pdfUrl2", pdfUrl2);
+        mapPdf.put("orderId", map.get("orderId").toString());
+
+        resultVO.setRetData(mapPdf);
+
+        return resultVO;
+    }
+
+    public String generatePdf(HttpServletRequest request, Map loanMap, String fileName){
+        Map returnMap=new HashMap();
         //获取根目录
         String root = request.getSession().getServletContext().getRealPath("/loan_agreement");
         //文件名
-        String filename = UUID.randomUUID().toString() + ".pdf";
-        String url = "/" + "loan_agreement_pdf" + "/" + filename;
+        String url = "/" + "loan_agreement_pdf" + "/" + fileName;
         //先创建文件夹，避免fileOutputStream报错
         File file = new File(root + File.separator + "loan_agreement_pdf");
         if (!file.exists()) {
@@ -415,26 +435,13 @@ public class ContractConfirmationController extends AbsBaseController {
         }
 
         loanMap.put("url", root + url);
-        Map mapPdf = new HashMap();
-        mapPdf.put("pdfUrl", "/loan_agreement" + url);
-        mapPdf.put("orderId", map.get("orderId").toString());
-       /* String host = iSystemDictService.getInfo("contract.host");
-        mapPdf.put("host", host);*/
         try {
             //转换成pdf
             ContextToPdf.insertPDF(loanMap);
-            resultVO.setRetData(mapPdf);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        map.put("pdfUrl","/loan_agreement" + url);
-//        String value=loanMap.get("value").toString();
-//        map.put("value",value);
-//
-       /* modelAndView.addObject("info",map);*/
-        contractConfirmationService.insertContract(map);
-
-        return resultVO;
+        return "/loan_agreement"+url;
     }
 
     /**
@@ -451,32 +458,93 @@ public class ContractConfirmationController extends AbsBaseController {
      /*  orderId="80d8949a-ac68-4c7b-a65e-0bdb5672f50d";*/
         ResultVO resultVO = new ResultVO();
         //获取根目录
-        String contractSrc = contractConfirmationService.getContractByOrderId(orderId);
+        Map contract = contractConfirmationService.getContractByOrderId(orderId);
+        if(contract==null){
+            this.generateContract(orderId, request);
+        }
+        contract = contractConfirmationService.getContractByOrderId(orderId);
         String host = iSystemDictService.getInfo("contract.host");
         Map map = new HashMap();
-        map.put("pdfUrl", contractSrc);
+        map.put("pdfUrl", contract.get("contract_src").toString());
         map.put("host", host);
         resultVO.setRetData(map);
         return resultVO;
     }
 
+    /**
+     * 放弃签约更新订单状态
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping("/getupSignContract")
+    @ResponseBody
+    public ResultVO getupContract(String orderId, HttpServletRequest request) throws Exception{
+
+        Map params=new HashMap();
+        params.put("orderId", orderId);
+        params.put("empId",request.getParameter("empId"));
+        params.put("empName",request.getParameter("empName"));
+        params.put("amount",request.getParameter("amount"));
+        params.put("operationResult", 6);
+        params.put("orderState", 7);
+        params.put("description", request.getParameter("description"));
+        contractConfirmationService.updateOrderStatus(params);
+
+        return ResultVO.ok(params);
+    }
 
     /**
-     * 生成签订合同
+     * 确认签约更新订单状态
      *
      * @param
      * @return
      */
     @RequestMapping("/signContract")
     @ResponseBody
-    public ResultVO signContract() throws Exception{
-        ResultVO resultVO = new ResultVO();
+    public ResultVO signContract(String orderId, HttpServletRequest request) throws Exception{
+        Map contract = contractConfirmationService.getContractByOrderId(orderId);
+
+        String[] pdfPath=contract.get("contract_src").toString().split(",");
+        String root = request.getSession().getServletContext().getRealPath("/");
+        //签章1
+        Map map1=signSingleContract(contract, "借款协议", root+pdfPath[0]);
+        if("0".equals(map1.get("res_code"))){
+            return ResultVO.error(map1.get("res_msg").toString());
+        }
+        //签章2
+        Map map2=signSingleContract(contract, "居间协议", root+pdfPath[1]);
+        if("0".equals(map2.get("res_code"))){
+            return ResultVO.error(map2.get("res_msg").toString());
+        }
+
+
+        Map map=new HashMap();
+        map.put("result1",map1);
+        map.put("result2",map2);
+
+        Map params=new HashMap();
+        params.put("orderId", orderId);
+        params.put("empId",request.getParameter("empId"));
+        params.put("empName",request.getParameter("empName"));
+        params.put("amount",request.getParameter("amount"));
+        params.put("operationResult", 5);
+        params.put("orderState", 4);
+        params.put("description", request.getParameter("description"));
+        contractConfirmationService.updateOrderStatus(params);
+
+        return ResultVO.ok(map);
+    }
+
+    private Map signSingleContract(Map contract, String title, String pdfPath) throws Exception{
+        Map returnMap=new HashMap();
+
+        ContractSignRequest contractSignRequest = new ContractSignRequest();
 
         //电子签章需要参数
-        ContractSignRequest contractSignRequest = new ContractSignRequest();
         contractSignRequest.setIsOutSign(0);//外部系统调用
-        contractSignRequest.setRealTemplateId("666666");
-        contractSignRequest.setContractTitle("20180428测试合同模板");
+        contractSignRequest.setRealTemplateId("1");
+        contractSignRequest.setContractTitle(title);
 
         List<ByxUserModel> userModelList = new ArrayList<ByxUserModel>();
         contractSignRequest.setUserModelList(userModelList);
@@ -484,20 +552,21 @@ public class ContractConfirmationController extends AbsBaseController {
         ByxUserModel byxUserModel = new ByxUserModel();
         byxUserModel.setPersonArea(0);
         byxUserModel.setPersonIdType(ByxUserModel.IDTYPE_ID);
-        byxUserModel.setPersonIdValue("410622198211180181");
-        byxUserModel.setPersonName("张乐");
+        byxUserModel.setPersonIdValue("410883198906060534");
+        byxUserModel.setPersonName("韩万楠");
         //甲方
         byxUserModel.setSignatory(0);
         //个人
         byxUserModel.setUserType(ByxUserModel.USERTYPE_PERSON);
         //关键字定位
         byxUserModel.setPosType(ByxUserModel.POS_TYPE_KEY);
+
+
         userModelList.add(byxUserModel);
 
-        String pdfPath = "/Users/van/work/zwkj/byx/test.pdf";//此路径为test.pdf文件本地存放的路径。
         contractSignRequest.setUnsignPath(pdfPath);
 
-        BYXResponse response=iContractSignService.signContract(contractSignRequest);
+        ContractSignResponse response=iContractSignService.signContract(contractSignRequest);
 
         System.out.println("$$$$$doElecSign:code:"+response.getRes_code()+";msg:"+response.getRes_msg());
 
@@ -505,38 +574,23 @@ public class ContractConfirmationController extends AbsBaseController {
         String res_msg=response.getRes_msg();
         /**签署成功**/
         if("1".equals(res_code)){
-//            try {
-//                response.getRes_data();
-//                ResData resData = gson.fromJson(jsonEncodeString, ResData.class);
-//                /**解密后的文件流**/
-//                byte[] signedStream = resData.getSignedStream();
-//                String orderNo = resData.getOrderNo();
-//                /**订单编号**/
-//                logger.info(TOP_TYPE + "签署成功:orderNo:"+orderNo);
-//                /**测试输出文件是否成功**/
-//                String pathname = "e:"+File.separator+"elecsign4out"+File.separator+"signedDir"+File.separator+"sign06.pdf";
-//                File signFile = new File(pathname );
-//                FileUtils.writeByteArrayToFile(signFile , signedStream);
-//            } catch (Exception e) {
-//                /**解析结果异常**/
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//                logger.error(TOP_TYPE+":解析结果异常:",e);
-//            }
+            String resDataStr = response.getRes_data();
+            Gson gson=new Gson();
+            ResData resData = gson.fromJson(resDataStr, ResData.class);
+            byte[] signedStream=resData.getSignedStream();
+            String pathname =  pdfPath;;
+            File signFile = new File(pathname );
+            FileUtils.writeByteArrayToFile(signFile , signedStream);
+
         }else{
             /**签署失败**/
             logger.info(TOP_TYPE + "失败编码:res_code:"+res_code);
             logger.info(TOP_TYPE + "失败的原因:res_msg:"+res_msg);
 
-//            if(StringUtils.isNotBlank(jsonEncodeString)){
-//                ResData resData = gson.fromJson(jsonEncodeString, ResData.class);
-//                String orderNo = resData.getOrderNo();
-//                logger.info(TOP_TYPE + "失败订单编号为:orderNo:"+orderNo);
-//            }
         }
-        resultVO.setRetCode(res_code);
-        resultVO.setRetMsg(res_msg);
-        return resultVO;
+        returnMap.put("res_code",res_code);
+        returnMap.put("res_msg",res_msg);
+        return returnMap;
     }
 
 }

@@ -2,6 +2,7 @@ package com.api.service.contractsign;
 
 import com.api.model.common.BYXResponse;
 import com.api.model.contractsign.ContractSignRequest;
+import com.api.model.contractsign.ContractSignResponse;
 
 
 /**
@@ -18,5 +19,5 @@ public interface IContractSignService {
      * @return
      * @throws Exception
      */
-    BYXResponse signContract(ContractSignRequest request) throws Exception;
+    ContractSignResponse signContract(ContractSignRequest request) throws Exception;
 }

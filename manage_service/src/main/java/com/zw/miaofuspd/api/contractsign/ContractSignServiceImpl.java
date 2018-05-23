@@ -4,6 +4,7 @@ import com.api.model.BYXSettings;
 import com.api.model.common.BYXRequest;
 import com.api.model.common.BYXResponse;
 import com.api.model.contractsign.ContractSignRequest;
+import com.api.model.contractsign.ContractSignResponse;
 import com.api.model.contractsign.ContractSignSettings;
 import com.api.service.contractsign.IContractSignService;
 import com.zw.api.HttpClientUtil;
@@ -33,8 +34,8 @@ public class ContractSignServiceImpl implements IContractSignService {
     private BYXSettings byxSettings;
 
     @Override
-    public BYXResponse signContract(ContractSignRequest request) throws Exception {
-        BYXResponse response=new BYXResponse();
+    public ContractSignResponse signContract(ContractSignRequest request) throws Exception {
+        ContractSignResponse response=new ContractSignResponse();
 
         File pdfFile = new File(request.getUnsignPath());
         try {
@@ -47,11 +48,11 @@ public class ContractSignServiceImpl implements IContractSignService {
             // TODO Auto-generated catch block
             e1.printStackTrace();
             //返回结果
-            return BYXResponse.error("待签署的pdf文件转文件流失败");
+            return ContractSignResponse.error("待签署的pdf文件转文件流失败");
         }
 
         logger.info(TOP_TYPE + "开始启动电子签章客户端调用接口:");
-        String result = HttpClientUtil.post(contractSignSettings.getRequestUrl(), BYXRequest.getBYXRequest(request, byxSettings),byxSettings.getSignContractHeadRequest());
-        return BYXResponse.getBYXResponse(result, byxSettings);
+        String result = HttpClientUtil.post(contractSignSettings.getRequestUrl(), ContractSignRequest.getBYXRequest(request, byxSettings),byxSettings.getSignContractHeadRequest());
+        return ContractSignResponse.getBYXResponse(result, byxSettings);
     }
 }

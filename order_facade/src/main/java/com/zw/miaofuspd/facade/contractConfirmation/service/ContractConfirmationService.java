@@ -72,6 +72,12 @@ public interface ContractConfirmationService {
      * @param orderId
      * @return
      */
-    String getContractByOrderId(String orderId);
+    Map getContractByOrderId(String orderId);
+
+    /**
+     * 更新订单状态
+     * @param params
+     */
+    void updateOrderStatus(Map params);
 
 }

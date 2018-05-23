@@ -3,6 +3,7 @@ package com.zw.miaofuspd.contractConfirmation.service;
 import com.base.util.AverageCapitalPlusInterestUtils;
 import com.base.util.DateUtils;
 import com.zw.miaofuspd.facade.contractConfirmation.service.ContractConfirmationService;
+import com.zw.miaofuspd.facade.dict.service.IDictService;
 import com.zw.miaofuspd.facade.order.service.AppOrderService;
 import com.zw.miaofuspd.util.ChineseCharToEnUtil;
 import com.zw.miaofuspd.util.NumberToChnUtil;
@@ -35,8 +36,10 @@ import java.util.*;
  */
 @Service("contractConfirmationServiceImpl")
 public class ContractConfirmationServiceImpl extends AbsServiceBase implements ContractConfirmationService {
-@Autowired
-private AppOrderService appOrderService;
+    @Autowired
+    private AppOrderService appOrderService;
+    @Autowired
+    private IDictService iDictService;
 
     @Override
     public Map getContractUserInfo(String userId) {
@@ -195,6 +198,9 @@ private AppOrderService appOrderService;
     public Map getContractAgreement(Map mapInfo) {
         Map map = new HashMap();
         String sql = "SELECT content_no_bq as context from mag_template t where t.template_type = '0'and platform_type='1' and state='1'";
+        if(mapInfo.get("template_type")!=null){
+            sql="SELECT content_no_bq as context from mag_template t where t.template_type = '"+mapInfo.get("template_type").toString()+"'and platform_type='1' and state='1'";
+        }
         Map mapContext = sunbmpDaoSupport.findForMap(sql);
         Iterator<Map.Entry> it = mapInfo.entrySet().iterator();
         String context = mapContext.get("context").toString();
@@ -265,7 +271,7 @@ private AppOrderService appOrderService;
     public Map getContractInfo(String orderId) {
         Map map = new HashMap();
         //查询订单
-        String orderSql="select id as orderId, customer_id as customerId, amount, fee, periods as deadline, loan_purpose as useOfLoans from mag_order where id='"+orderId+"'";
+        String orderSql="select id as orderId, order_no as orderNo, customer_id as customerId, amount, fee, periods as deadline, loan_purpose as useOfLoans from mag_order where id='"+orderId+"'";
         Map orderMap = sunbmpDaoSupport.findForMap(orderSql);
         map.putAll(orderMap);
         //查询客户
@@ -283,7 +289,7 @@ private AppOrderService appOrderService;
         String countSql="select count(*) as count from mag_order_contract where customer_id='"+customerId+"' and creat_time like '"+currentDateStr+"%'";
         Map countMap = sunbmpDaoSupport.findForMap(countSql);
         String subYear=currentDateStr.substring(2,4);
-        int jkCount=Integer.parseInt(countMap.get("count").toString());
+        int jkCount=Integer.parseInt(countMap.get("count").toString())+1;
         String jkCountStr=jkCount+"";
         if(jkCount/100==0){
             if(jkCount/10>0){
@@ -317,6 +323,19 @@ private AppOrderService appOrderService;
         String updateSql="update mag_order set contract_time='"+time+"' where id='"+orderId+"'";
         sunbmpDaoSupport.exeSql(updateSql);
 
+        try {
+            String cjName = iDictService.getDictInfo("出借人", "cjrxm");
+            String cjCard = iDictService.getDictInfo("出借人", "cjsfz");
+            //防止合同底部签名变形
+            while (cjName.length() < 8) {
+                cjName += " ";
+            }
+            map.put("cjName", cjName);
+            map.put("cjCard", cjCard);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return map;
     }
 
@@ -331,16 +350,17 @@ private AppOrderService appOrderService;
         String createTime = DateUtils.getDateString(new Date());
         String customerId=map.get("customerId").toString();
         String orderId=map.get("orderId").toString();
+        String orderNo=map.get("orderNo").toString();
         String customerName=map.get("cusName").toString();
         String card=map.get("cusCard").toString();
         String userId=map.get("userId").toString();
         String amount=map.get("amount").toString();
         String contractSrc=map.get("pdfUrl").toString();
-        String contract_no="";
+        String contract_no=map.get("contractNo").toString();
 
         String insertContractSql = "insert into mag_order_contract  (id,CUSTOMER_ID,customer_name,custID,user_id,contract_amount,order_no,contract_no,contract_name," +
                 "order_id,contract_src,CREAT_TIME, status) values " +
-                "('"+uuId+"','"+customerId+"','"+customerName+"','"+card+"','"+userId+"','"+amount+"','"+orderId+"','"+contract_no+"','申购协议','"+orderId+"','"+contractSrc+"'" +
+                "('"+uuId+"','"+customerId+"','"+customerName+"','"+card+"','"+userId+"','"+amount+"','"+orderNo+"','"+contract_no+"','申购协议','"+orderId+"','"+contractSrc+"'" +
                 ",'"+createTime+"','0')";
 
         sunbmpDaoSupport.exeSql(insertContractSql);
@@ -348,13 +368,20 @@ private AppOrderService appOrderService;
     }
 
     @Override
-    public String getContractByOrderId(String orderId) {
-        String sql = "select contract_src from mag_order_contract where order_id = '"+orderId+"'";
+    public Map getContractByOrderId(String orderId) {
+        String sql = "select moc.id, moc.customer_id, moc.customer_name, moc.custId, moc.user_id, moc.contract_amount, moc.order_no, moc.contract_no, moc.contract_name,"+
+                "moc.order_id, moc.contract_src, moc.creat_time, moc.status, mc.person_name,mc.card from mag_order_contract moc left join mag_customer mc on mc.id=moc.customer_id where moc.order_id = '"+orderId+"'";
         Map map = sunbmpDaoSupport.findForMap(sql);
-        String contract_src = null;
-        if (!map.get("contract_src").equals("")){
-            contract_src = map.get("contract_src").toString();
-        }
-        return contract_src;
+        return map;
+    }
+
+    @Override
+    public void updateOrderStatus(Map params) {
+        String uuId = UUID.randomUUID().toString();
+        String insertOpSql="insert into order_operation_record (id, operation_node,operation_result, status, amount, order_id, operation_time, emp_id, emp_name, description) values ('"+uuId+"', '4', '"+params.get("operationResult")+"', '1', amount, '"+params.get("orderId")+"', '"+DateUtils.getCurrentTime(DateUtils.STYLE_10)+"', '"+params.get("empId")+"', '"+params.get("empName")+"', '"+params.get("description")+"')";
+
+        String updateStatusSql = "update mag_order set order_state='"+params.get("orderState")+"' where id = '"+params.get("orderId")+"'";
+        sunbmpDaoSupport.exeSql(insertOpSql);
+        sunbmpDaoSupport.exeSql(updateStatusSql);
     }
 }
