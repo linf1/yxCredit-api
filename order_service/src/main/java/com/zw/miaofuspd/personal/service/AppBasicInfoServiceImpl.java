@@ -6,6 +6,7 @@ import com.base.util.DateUtils;
 import com.base.util.GeneratePrimaryKeyUtils;
 import com.base.util.TraceLoggerUtil;
 import com.constants.CommonConstant;
+import com.enums.EIsIdentityEnum;
 import com.zw.api.HttpUtil;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
 import com.zw.miaofuspd.facade.dict.service.ISystemDictService;
@@ -1083,5 +1084,19 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         //根据订单id获取订单详情信息
         String sql = "select product_name_name,loan_amount,";
         return null;
+    }
+
+    @Override
+    public Boolean isAuthentication(String userId) {
+        StringBuilder sql  = new StringBuilder("select is_identity from mag_customer where USER_ID = '");
+        sql.append(userId).append("' ");
+        final Map forMap = sunbmpDaoSupport.findForMap(sql.toString());
+        if(forMap != null){
+            final Object identity = forMap.get("is_identity");
+            if( identity != null && EIsIdentityEnum.CERTIFIED.getCode().equals(identity.toString())){
+                return true;
+            }
+        }
+        return false;
     }
 }
