@@ -214,15 +214,18 @@ public class BasicInfoController extends AbsBaseController {
                 request.setBankBranchName(map.get("bank_subbranch").toString());
                 request.setCnapsCode(map.get("bank_subbranch_id").toString());
                 BYXResponse byxResponse = idsMoneyServer.saveBorrowerAndAccountCard(request);
-                if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
+                //数据同步接口一个相同的人只会同步一次，所以不用判断是否成功
+                if(byxResponse != null) {
                     final Map resData = (Map) byxResponse.getRes_data();
-                    //数据同步更新个人信息到数据库
-                    appBasicInfoService.updateSynById(
-                             resData.get("userId").toString(),
-                             resData.get("accountId").toString(),
-                             map.get("customerId").toString()
-                            );
-                    LOGGER.info("------借款人及放款账户数据同步更新个人信息到数据库成功------");
+                    if(resData != null) {
+                        //数据同步更新个人信息到数据库
+                        appBasicInfoService.updateSynById(
+                                resData.get("userId").toString(),
+                                resData.get("accountId").toString(),
+                                map.get("customerId").toString()
+                        );
+                        LOGGER.info("------借款人及放款账户数据同步更新个人信息到数据库成功------");
+                    }
                 }
             }
         } catch (Exception e) {
