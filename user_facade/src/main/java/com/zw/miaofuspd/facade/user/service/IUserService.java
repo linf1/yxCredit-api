@@ -20,4 +20,11 @@ public interface IUserService {
      * @return
      */
     AppUserInfo getUserByOrderId(String orderId);
+
+    /**
+     * userId 获取用户信息
+     * @param userId
+     * @return
+     */
+    Map getUserInfoByUserId(String userId);
 }

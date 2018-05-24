@@ -10,6 +10,7 @@ import com.base.util.AppRouterSettings;
 import com.base.util.GeneratePrimaryKeyUtils;
 import com.constants.ApiConstants;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;
+import com.zw.miaofuspd.facade.user.service.IUserService;
 import com.zw.web.base.vo.ResultVO;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -18,12 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.jsp.tagext.TryCatchFinally;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * 征信API控制器
@@ -42,6 +40,9 @@ public class CreditApiController {
     @Autowired
     private IApiResultServer apiResultServer;
 
+    @Autowired
+    private IUserService userService;
+
     /**
      * 个人征信验证API调用入口
      * @param request 请求参数
@@ -49,8 +50,9 @@ public class CreditApiController {
      */
     @PostMapping("/validateCreditApi")
     @ResponseBody
-    public ResultVO validateCreditApi(CreditRequest request, @RequestHeader String token) throws IOException {
-        if (null == request || StringUtils.isBlank(request.getOrderId())) {
+    public ResultVO validateCreditApi(CreditRequest request, @RequestHeader String token){
+        if (null == request || StringUtils.isBlank(request.getOrderId())
+                || StringUtils.isBlank(request.getUserId())) {
             LOGGER.info("请求参数异常或不存在");
             return ResultVO.error("请求参数异常或不存在");
         }
@@ -96,14 +98,17 @@ public class CreditApiController {
 
     /**
      * 获取个人征信信息回调入口
-     * @param request 请求参数
+     * @param request 参数
+     * @param orderId 订单id
+     * @param userId 用户id
      */
-    @RequestMapping("/getCreditApiInfo/{orderId}")
-    public void getCreditApiInfo(@RequestBody String request, @PathVariable String  orderId) throws Exception {
-        LOGGER.info(request.toString());
+    @RequestMapping("/getCreditApiInfo/{orderId}/{userId}")
+    public void getCreditApiInfo(@RequestBody String request, @PathVariable String  orderId, @PathVariable String  userId){
+        LOGGER.info(request);
         LOGGER.info("--------------------------------回调成功   ------------------------");
         JSONObject jsonObject = JSONObject.parseObject(request);
         Map<String,Object> map = new HashMap<>();
+        Map userMap = userService.getUserInfoByUserId(userId);
         ApiResult result = new ApiResult();
         result.setState(ApiConstants.STATUS_CODE_STATE);
         result.setResultData("");
@@ -111,6 +116,14 @@ public class CreditApiController {
         result.setRealName("");
         result.setUserMobile("");
         result.setUserName("");
+        if(null == userMap) {
+            LOGGER.info("征信用户不存在：{}", userId);
+        } else {
+            result.setRealName(userMap.get("realName").toString());
+            result.setUserName(userMap.get("realName").toString());
+            result.setIdentityCode(userMap.get("idCard").toString());
+            result.setUserMobile(userMap.get("telNum").toString());
+        }
         try {
             if(jsonObject.getString(ApiConstants.API_TASK_STATUS_KEY).equals(ApiConstants.API_SUCCESS_KEY)){
                 if(jsonObject.containsKey(ApiConstants.API_TASK_RESULT_KEY)){
