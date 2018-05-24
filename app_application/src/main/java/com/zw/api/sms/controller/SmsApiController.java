@@ -7,6 +7,7 @@ import com.base.util.RandomUtil;
 import com.base.util.StringUtils;
 import com.api.model.sortmsg.MsgRequest;
 import com.google.code.kaptcha.Producer;
+import com.zw.app.util.AppConstant;
 import com.zw.miaofuspd.facade.user.service.ISmsService;
 import com.zw.web.base.vo.ResultVO;
 import org.slf4j.Logger;
@@ -119,7 +120,8 @@ public class SmsApiController  {
      * @throws IOException io异常
      */
     @RequestMapping("captcha.jpg")
-    public void captcha(HttpServletResponse response,MsgRequest msgRequest)throws IOException {
+    public void captcha(HttpServletResponse response,MsgRequest msgRequest)throws Exception {
+        Thread.sleep(AppConstant.CAPTCHA_INTERVAL_TIME);
         response.setHeader("Cache-Control", "no-store, no-cache");
         response.setContentType("image/jpeg");
         //生成文字验证码
@@ -138,5 +140,4 @@ public class SmsApiController  {
         ImageIO.write(image, "jpg", out);
         out.flush();
     }
-
 }
