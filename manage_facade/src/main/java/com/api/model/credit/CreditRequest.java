@@ -25,6 +25,9 @@ public class CreditRequest implements Serializable {
     /** 订单id */
     private String orderId;
 
+    /** 用户id */
+    private String userId;
+
     public String getAccount() {
         return account;
     }
@@ -63,5 +66,13 @@ public class CreditRequest implements Serializable {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

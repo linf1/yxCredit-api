@@ -894,11 +894,11 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             sunbmpDaoSupport.exeSql(sql3);
 
             //根据订单编号获取订单id
-            String sql4 = "select id from mag_order where order_no = '"+orderId+"'";
+            String sql4 = "select id,applay_money from mag_order where order_no = '"+orderId+"'";
             Map orderMap = sunbmpDaoSupport.findForMap(sql4);
             //新增操作表订单信息
-            String sql5 = "insert into order_operation_record (id,operation_node,operation_result,order_id,operation_time,emp_id,emp_name,description) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"'," +
-                    "1,1,'"+orderMap.get("id")+"','"+applyTime+"','"+forMap.get("user_id")+"','"+forMap.get("CUSTOMER_NAME")+"','已申请')";
+            String sql5 = "insert into order_operation_record (id,operation_node,operation_result,order_id,operation_time,applay_money,emp_id,emp_name,description) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"'," +
+                    "1,1,'"+orderMap.get("id")+"','"+applyTime+"','"+forMap.get("applay_money")+"','"+forMap.get("user_id")+"','"+forMap.get("CUSTOMER_NAME")+"','已申请')";
             sunbmpDaoSupport.exeSql(sql5);
         } catch (DAOException e) {
             e.printStackTrace();
