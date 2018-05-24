@@ -49,7 +49,7 @@ public class CreditApiController {
      */
     @PostMapping("/validateCreditApi")
     @ResponseBody
-    public ResultVO validateCreditApi(@RequestBody CreditRequest request, @RequestHeader String token) throws IOException {
+    public ResultVO validateCreditApi(CreditRequest request, @RequestHeader String token) throws IOException {
         if (null == request || StringUtils.isBlank(request.getOrderId())) {
             LOGGER.info("请求参数异常或不存在");
             return ResultVO.error("请求参数异常或不存在");
@@ -67,7 +67,7 @@ public class CreditApiController {
                 CreditResultAO creditResultAO = creditApiService.validateAccount(request);
                 if("processing".equals(creditResultAO.getTaskStatus())) {
                     try {
-                        Thread.sleep(8000);
+                        Thread.sleep(10000);
                         LOGGER.info("个人征信--获取报告信息 API调用参数：{}", request.toString());
                         //从数据库中获取数据
                         apiResultMap = apiResultServer.selectApiResult(result);
