@@ -149,13 +149,10 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
                 "select id,product_term_min,product_term_max from pro_working_product_detail where crm_product_id =(\n" +
                 "select id from  pro_crm_product where pro_name ='"+map1.get("product_name_name")+"' and pro_number = '"+map1.get("product_name")+"') and product_term_min*1 <= "+periods+" and product_term_max*1 >= "+periods+")t2 on t1.product_id = t2.id";
         Map map2 = sunbmpDaoSupport.findForMap(sql2);
-//        if(CollectionUtils.isEmpty(map2)){
-//            resturnMap.put("msg","请输入正确的申请期限");
-//            resturnMap.put("flag",false);
-//            return resturnMap;
-//        }
+        String lixi = map2.get("lixi")==null?"":map2.get("lixi").toString();
+        String product_detail = map2.get("id")==null?"":map2.get("id").toString();
         String sql3 = "update mag_order set applay_money = " + applayMoney + "," + "PERIODS = '" + periods + "'," +
-                "loan_purpose = '" + loanPurpose + "',rate = '"+map2.get("lixi")+"',product_detail = '"+map2.get("id")+"'," +
+                "loan_purpose = '" + loanPurpose + "',rate = '"+lixi+"',product_detail = '"+product_detail+"'," +
                 "complete = '100' where order_no = '" + orderId + "'  ";
         int count = sunbmpDaoSupport.executeSql(sql3);
         //sunbmpDaoSupport.exeSql(sql);
@@ -963,7 +960,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     @Override
     public Map getRealName(String userId){
         Map resultMap = new HashMap();
-        String sql = "select t1.PERSON_NAME as cust_name,t1.card as card,t1.tel as tel,t2.bank_name as bank_name,t2.bank_number as bank_number," +
+        String sql = "select t1.PERSON_NAME as cust_name,t1.card as card,t1.tel as tel,t2.bank_name as bank_name,t2.bank_number as bank_number,t2.bank_subbranch_id as bank_subbranch_id," +
                 "t2.bank_subbranch as bank_subbranch,t2.card_number as card_number,t2.prov_id as prov_id,t2.prov_name as prov_name,t2.city_id as city_id," +
                 "t2.city_name as city_name from mag_customer t1 left join sys_bank_card t2 on t1.id = t2.cust_id where t1.id = '"+userId+"'";
         resultMap =  sunbmpDaoSupport.findForMap(sql);
@@ -1055,8 +1052,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
                 resultMap.put("zhengxin","1");
             }
         }
-        int count = sunbmpDaoSupport.executeSql(sql);
-        if(count == 2){
+        if(list.size() == 2){
             String sql2 = "update mag_customer set authorization_complete = '100' where id = '"+customerId+"'";
             sunbmpDaoSupport.exeSql(sql2);
         }
@@ -1064,26 +1060,55 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     }
 
     @Override
-    public Map getOrderDetailById(Map map) {
+    public Map getOrderDetailById(String orderId,String customerId,String contractorName) {
+        Map reslutMap = new HashMap();
         //总包商
-        String contractorName = map.get("contractorName").toString();
-        //订单编号
-        String orderNo = map.get("orderNo").toString();
-        //获取居间服务费
-        String sql1 = "select t1.zbs_jujian_fee  as zbs_jujian_fee from mag_product_fee t1 inner join " +
-                "mag_order t2 on t1.id = t2.product_detail where t2.order_no = '"+orderNo+"'";
-        Map map1 =sunbmpDaoSupport.findForMap(sql1);
-        String zbs_jujian_fee = map1.get("zbs_jujian_fee")==null?"":map1.get("zbs_jujian_fee").toString();
+       // String contractorName = map.get("contractorName").toString();
+
+        String sql1 = "select t2.order_no as order_no,t2.product_name_name as product_name_name,t2.loan_amount as loan_amount,t2.rate as rate,t2.PERIODS as periods,date_format(str_to_date(t2.applay_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%i:%s') as applay_time," +
+                "t2.loan_purpose as loan_purpose,t2.customer_name as customer_name,t2.card as card ,t2.tel as tel,t1.zbs_jujian_fee  as zbs_jujian_fee,t1.li_xi as lixi,t3.repayment as repayment,t3.repayment_days as repayment_days" +
+                " from mag_product_fee t1 left join mag_order t2 on t1.id = t2.product_detail left join pro_working_product_detail t3 on t2.product_id = t3.id where t2.id = '"+orderId+"'";
+        Map orderMap =sunbmpDaoSupport.findForMap(sql1);
+        String zbs_jujian_fee = orderMap.get("zbs_jujian_fee")==null?"":orderMap.get("zbs_jujian_fee").toString();
+        String  lixi = orderMap.get("lixi")==null?"":orderMap.get("lixi").toString();
         String[] zbs_jujian =  zbs_jujian_fee.split(",");
-        String jujian_fee;
-//        for(int i=0;i<zbs_jujian.length;i++){
-//            if(){
-//
-//            }
-//        }
-        //根据订单id获取订单详情信息
-        String sql = "select product_name_name,loan_amount,";
-        return null;
+        String jujian_fee="";
+        for(int i=0;i<zbs_jujian.length;i++){
+            if(zbs_jujian[i].equals(contractorName)){
+                jujian_fee = zbs_jujian[i+1];
+            }
+        }
+        //融资成本
+        double assetFinanceCost = Double.parseDouble(jujian_fee)+Double.parseDouble(lixi);
+        //居间服务费年化率
+        double assetServiceRate = Double.parseDouble(jujian_fee)*365;
+        orderMap.put("assetFinanceCost",assetFinanceCost);
+        orderMap.put("assetServiceRate",assetServiceRate);
+        //根据用户id获取用户相关信息
+        String sql2 = "select t1.sync_user_id as sync_user_id,t1.sync_account_id as sync_account_id,t2.company_address as company_address  " +
+                "from mag_customer t1 left join mag_customer_job t2 on t1.id=t2.customer_id where t1.id = '"+customerId+"'";
+        Map customerMap =sunbmpDaoSupport.findForMap(sql2);
+        //获取银行卡信息
+        Map bankMap = getRealName(customerId);
+        reslutMap.put("orderMap",orderMap);
+        reslutMap.put("customerMap",customerMap);
+        reslutMap.put("bankMap",bankMap);
+        return reslutMap;
+    }
+
+    @Override
+    public Map getAuthorStatus(String userId) {
+        Map resultMap = new HashMap();
+        String sql = "select count(1) from mag_customer where user_id = '"+userId+"' and is_identity = '1'";
+        int i = sunbmpDaoSupport.getCount(sql);
+        if(i==0){
+            resultMap.put("msg","该用户未实名认证！");
+            resultMap.put("code","0");
+            return  resultMap;
+        }
+        resultMap.put("msg","该用户已实名认证！");
+        resultMap.put("code","1");
+        return resultMap;
     }
 
     @Override
