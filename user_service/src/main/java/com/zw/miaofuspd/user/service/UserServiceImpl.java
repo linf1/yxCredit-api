@@ -92,4 +92,11 @@ public class UserServiceImpl extends AbsServiceBase implements IUserService {
         appUserInfo.setRegistration_id(map.get("registrationId").toString());
         return appUserInfo;
     }
+
+    @Override
+    public Map getUserInfoByUserId(String userId) {
+        String sql = "select appUser.tel as telNum,appUser.realName as realName,appUser.idCard as idCard from app_user as appUser" +
+                " where appUser.id='"+userId+"'";
+        return sunbmpDaoSupport.findForMap(sql);
+    }
 }
