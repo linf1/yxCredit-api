@@ -11,6 +11,8 @@ import com.zw.miaofuspd.facade.user.service.IUserService;
 import com.zw.web.base.AbsBaseController;
 import com.zw.web.base.vo.ResultVO;
 import com.zw.web.base.vo.VOConst;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +26,9 @@ import java.util.Map;
 @RestController
 @RequestMapping(AppRouterSettings.VERSION+AppRouterSettings.BASIC_MODUAL)
 public class BasicInfoController extends AbsBaseController {
+
+    private final  Logger LOGGER =  LoggerFactory.getLogger(BasicInfoController.class);
+
     @Autowired
     AppBasicInfoService appBasicInfoService;
     @Autowired
@@ -170,7 +175,7 @@ public class BasicInfoController extends AbsBaseController {
 
     /**
      * @author:韩梅生
-     * @Description 获取实名认证信息
+     * @Description 保存实名认证信息
      * @Date 17:58 2018/5/16
      * @param
      */
@@ -209,21 +214,39 @@ public class BasicInfoController extends AbsBaseController {
                 request.setBankBranchName(map.get("bank_subbranch").toString());
                 request.setCnapsCode(map.get("bank_subbranch_id").toString());
                 BYXResponse byxResponse = idsMoneyServer.saveBorrowerAndAccountCard(request);
-                if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
+                //数据同步接口一个相同的实名只会同步一次，所以不用判断是否成功
+                if(byxResponse != null) {
                     final Map resData = (Map) byxResponse.getRes_data();
-                    //数据同步更新个人信息到数据库
-                    appBasicInfoService.updateSynById(
-                             resData.get("userId").toString(),
-                             resData.get("accountId").toString(),
-                             map.get("customerId").toString()
-                            );
-
+                    if(resData != null) {
+                        //数据同步更新个人信息到数据库
+                        appBasicInfoService.updateSynById(
+                                resData.get("userId").toString(),
+                                resData.get("accountId").toString(),
+                                map.get("customerId").toString()
+                        );
+                        LOGGER.info("------借款人及放款账户数据同步更新个人信息到数据库成功------");
+                    }
+                }else{
+                    LOGGER.info("------借款人及放款账户数据同步更新个人信息到数据库失败------");
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         resultVO.setRetData(resMap);
+        return resultVO;
+    }
+
+    /**
+     * @author 韩梅生
+     * @date 18:45 2018/5/23
+     * 获取实名认证信息
+     */
+    @RequestMapping("/getAuthorStatus")
+    public ResultVO getAuthorStatus(String userId) throws Exception{
+        ResultVO resultVO = new ResultVO();
+        Map map = appBasicInfoService.getAuthorStatus(userId);
+        resultVO.setRetData(map);
         return resultVO;
     }
 

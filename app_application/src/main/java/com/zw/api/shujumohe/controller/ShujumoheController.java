@@ -67,7 +67,7 @@ public class ShujumoheController {
                             apiResult.setId(GeneratePrimaryKeyUtils.getUUIDKey());
                             apiResult.setCode(code);
                             apiResult.setIdentityCode((String)data.get("identity_code"));
-                            apiResult.setMessage((String) jsonObject.get("message"));
+                            apiResult.setMessage(ApiConstants.STATUS_SUCCESS_MSG);
                             apiResult.setSourceChildName(ApiConstants.API_MOHE_YYS);
                             apiResult.setSourceChildCode((String)data.get("channel_type"));
                             apiResult.setOnlyKey(request.getOrderId());

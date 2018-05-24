@@ -2,8 +2,6 @@ package com.zw.miaofuspd.personnal.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.base.util.AppRouterSettings;
-import com.base.util.DateUtils;
-import com.sun.org.apache.xerces.internal.dom.PSVIAttrNSImpl;
 import com.zw.app.util.AppConstant;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
 import com.zw.miaofuspd.facade.entity.AppUserInfo;
@@ -184,7 +182,4 @@ public class ApplyInfoController extends AbsBaseController {
         return resultVO;
     }
 
-    public static void main(String[] args) {
-        String ss="总包商01-测试,3,总包商0,4";
-    }
 }

@@ -182,7 +182,21 @@ public interface AppBasicInfoService {
      * @date 16:13 2018/5/22
      * 根据订单id获取订单详情
      */
-    Map getOrderDetailById(Map map);
+    Map getOrderDetailById(String orderId,String customerId,String contractorName);
+
+    /**
+     * @author 韩梅生
+     * @date 18:49 2018/5/23
+     * 获取实名认证状态
+     */
+    Map getAuthorStatus(String userId);
 
 
+
+    /**
+     * 根据登录用户ID获取是否实名认证create by 陈清玉
+     * @param userId 登录用户ID
+     * @return TRUE 已认证 FALSE 未认证
+     */
+    Boolean isAuthentication(String userId);
 }

@@ -53,6 +53,8 @@ public class TongDunProxy implements ITongDunApiService {
         ApiResult resultParameter = new ApiResult();
         resultParameter.setSourceCode(EApiSourceEnum.TODONG.getCode());
         resultParameter.setIdentityCode(request.getIdNo());
+        resultParameter.setUserMobile(request.getPhone());
+        resultParameter.setRealName(request.getName());
         final List<Map> mapList = apiResultServerImpl.selectApiResult(resultParameter);
         if (CollectionUtils.isEmpty(mapList)) {
             try {
@@ -76,22 +78,7 @@ public class TongDunProxy implements ITongDunApiService {
                     response.setResponseMsg(ApiConstants.STATUS_SUCCESS_MSG);
                     response.setOriginalData(jsonObject);
                     //保存数据到数据库
-                    ApiResult apiResult = new ApiResult();
-                    apiResult.setId(GeneratePrimaryKeyUtils.getUUIDKey());
-                    apiResult.setCode(ApiConstants.STATUS_SUCCESS);
-                    apiResult.setIdentityCode(request.getIdNo());
-                    apiResult.setMessage("成功");
-                    apiResult.setSourceChildName(EApiSourceEnum.TODONG.getName());
-                    apiResult.setSourceChildCode(EApiSourceEnum.TODONG.getCode());
-                    apiResult.setOnlyKey(request.getOrderId());
-                    apiResult.setRealName(request.getName());
-                    apiResult.setSourceName(EApiSourceEnum.TODONG.getName());
-                    apiResult.setSourceCode(EApiSourceEnum.TODONG.getCode());
-                    apiResult.setUserMobile(request.getPhone());
-                    apiResult.setUserName(request.getName());
-                    apiResult.setResultData(jsonObject.toJSONString());
-                    apiResult.setState(1);
-                    apiResultServerImpl.insertApiResult(apiResult);
+                    saveTongDunInfo(request, jsonObject.toString());
                 } else {
                     response.setResponseCode(jsonObject.getString(ApiConstants.REASON_CODE_KEY));
                     response.setResponseMsg(jsonObject.getString(ApiConstants.REASON_DESC_KEY));
@@ -102,35 +89,38 @@ public class TongDunProxy implements ITongDunApiService {
                 response.setResponseMsg(ApiConstants.STATUS_DATASOURCE_INTERNAL_ERROR_MSG);
             }
         }else{
+            final Map map = mapList.get(0);
+            //保存数据到数据库
+            saveTongDunInfo(request, map.get("result_data").toString());
             LOGGER.info("同盾-命中数据库记录");
        }
         LOGGER.info("同盾-获取报告信息.[耗时:{}毫秒]", costTime);
         return response;
     }
-
     /**
      * 持久化调用API的数据
      * @param request 请求参数 {@link TongDunRequest}
-     * @param jsonObject API请求到的数据
+     * @param jsonStr API请求到的数据
      * @return 影响行数
      */
-//    private int saveResultData(TongDunRequest request, String jsonObject) {
-//        CrMagicDataResultWithBLOBs record = new CrMagicDataResultWithBLOBs();
-//        record.setId(GeneratePrimaryKeyUtils.getUUIDKey());
-//        record.setCode(ApiConstants.STATUS_SUCCESS);
-//        record.setMessage(ApiConstants.STATUS_SUCCESS_MSG);
-//        record.setTaskId("");
-//        record.setChannelType(ApiConstants.API_TONGDUN_KEY);
-//        record.setChannelCode("");
-//        record.setChannelAttr(ApiConstants.API_TONGDUN_TITLE);
-//        record.setChannelSrc(ApiConstants.API_TONGDUN_TITLE);
-//        record.setRealName(request.getName());
-//        record.setIdentityCode(request.getIdNo());
-//        record.setUserMobile(request.getPhone());
-//        record.setUserName(request.getName());
-//        record.setCreatedTime(DateUtils.formatDate(DateUtils.STYLE_1));
-//        record.setTaskData(jsonObject);
-//        record.setLostData("");
-//        return crMagicDataResultService.saveDataResult(record);
-//    }
+    private void saveTongDunInfo(TongDunRequest request, String jsonStr) throws Exception {
+        ApiResult apiResult = new ApiResult();
+        apiResult.setId(GeneratePrimaryKeyUtils.getUUIDKey());
+        apiResult.setCode(ApiConstants.STATUS_SUCCESS);
+        apiResult.setIdentityCode(request.getIdNo());
+        apiResult.setMessage(ApiConstants.STATUS_SUCCESS_MSG);
+        apiResult.setSourceChildName(EApiSourceEnum.TODONG.getName());
+        apiResult.setSourceChildCode(EApiSourceEnum.TODONG.getCode());
+        apiResult.setOnlyKey(request.getOrderId());
+        apiResult.setRealName(request.getName());
+        apiResult.setSourceName(EApiSourceEnum.TODONG.getName());
+        apiResult.setSourceCode(EApiSourceEnum.TODONG.getCode());
+        apiResult.setUserMobile(request.getPhone());
+        apiResult.setUserName(request.getPhone());
+        apiResult.setResultData(jsonStr);
+        apiResult.setState(1);
+        apiResultServerImpl.insertApiResult(apiResult);
+    }
+
+
 }
