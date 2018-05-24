@@ -95,6 +95,14 @@ public class ShujumoheController {
      * @throws Exception
      */
     private void saveMoheInfo(ShujumoheRequest request, Map data) throws Exception {
+        ApiResult resultParameter = new ApiResult();
+        resultParameter.setUserName(request.getPhone());
+        resultParameter.setSourceCode(EApiSourceEnum.MOHE.getCode());
+        resultParameter.setOnlyKey(request.getOrderId());
+        //一个订单只会有一种风控数据 ，如果数据存在就不在继续添加
+        if (apiResultServerImpl.validateData(resultParameter)) {
+            return;
+        }
         ApiResult apiResult = new ApiResult();
         apiResult.setId(GeneratePrimaryKeyUtils.getUUIDKey());
         apiResult.setCode(ApiConstants.STATUS_SUCCESS);

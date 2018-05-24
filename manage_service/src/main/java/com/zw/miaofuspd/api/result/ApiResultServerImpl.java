@@ -49,6 +49,17 @@ public class ApiResultServerImpl extends AbsServiceBase implements IApiResultSer
             }
         }
         return sunbmpDaoSupport.findForList(sql.toString());
+    }
 
+    @Override
+    public Boolean validateData(ApiResult result) throws Exception {
+        StringBuilder sql = new StringBuilder("SELECT count(id) FROM zw_api_result WHERE 1=1 ");
+        final Map<String, Object> objectMap = BeanMapperUtil.converMap(result);
+        for (Map.Entry<String, Object> entry : objectMap.entrySet()) {
+            if(entry.getValue() != null  &&  !"serialVersionUID".equals(entry.getKey())){
+                sql.append("AND ").append(BeanHump.camelToUnderline(entry.getKey())).append("='").append(entry.getValue()).append("' ");
+            }
+        }
+       return sunbmpDaoSupport.getCount(sql.toString()) > 0;
     }
 }
