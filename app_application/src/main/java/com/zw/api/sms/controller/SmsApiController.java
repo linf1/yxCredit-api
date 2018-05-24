@@ -65,9 +65,13 @@ public class SmsApiController  {
         try {
             final BYXResponse byxResponse = messageServer.sendSms(msgRequest, parameters);
             if (byxResponse != null) {
-                smsService.saveSms(msgRequest);
-                LOGGER.info("短信发送成功",byxResponse.toString());
-                return ResultVO.ok(byxResponse.getRes_msg(),null);
+                if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
+                    smsService.saveSms(msgRequest);
+                    LOGGER.info("短信发送成功", byxResponse.toString());
+                    return ResultVO.ok(byxResponse.getRes_msg(), null);
+                }else{
+                    return ResultVO.error(byxResponse.getRes_msg());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
