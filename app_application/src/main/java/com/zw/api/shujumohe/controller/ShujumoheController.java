@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -63,33 +64,52 @@ public class ShujumoheController {
                 if(ApiConstants.STATUS_SUCCESS.equals(code)){
                     final Map data = (Map) jsonObject.get("data");
                     if(data != null) {
-                            ApiResult apiResult = new ApiResult();
-                            apiResult.setId(GeneratePrimaryKeyUtils.getUUIDKey());
-                            apiResult.setCode(code);
-                            apiResult.setIdentityCode((String)data.get("identity_code"));
-                            apiResult.setMessage(ApiConstants.STATUS_SUCCESS_MSG);
-                            apiResult.setSourceChildName(ApiConstants.API_MOHE_YYS);
-                            apiResult.setSourceChildCode((String)data.get("channel_type"));
-                            apiResult.setOnlyKey(request.getOrderId());
-                            apiResult.setRealName((String)data.get("real_name"));
-                            apiResult.setSourceName(EApiSourceEnum.MOHE.getName());
-                            apiResult.setSourceCode(EApiSourceEnum.MOHE.getCode());
-                            apiResult.setUserMobile((String)data.get("user_mobile"));
-                            apiResult.setUserName(request.getPhone());
-                            apiResult.setResultData(data.get("task_data").toString());
-                            apiResult.setState(1);
-                            apiResultServerImpl.insertApiResult(apiResult);
+                        saveMoheInfo(request, data);
                     }
-                    return  ResultVO.ok("验证成功！",null);
+                }else {
+                    return ResultVO.error(jsonObject.get("message").toString());
                 }
-                return  ResultVO.error(jsonObject.get("message").toString());
             }else{
-                return  ResultVO.error("重复验证！");
+                final Map map = mapList.get(0);
+                Map<String,Object>  param = new HashMap<>(5);
+                param.put("identity_code",map.get("identity_code"));
+                param.put("channel_type",map.get("source_child_code"));
+                param.put("real_name",map.get("real_name"));
+                param.put("user_mobile",map.get("user_mobile"));
+                param.put("task_data",map.get("result_data"));
+                //保存数据到数据库
+                saveMoheInfo(request, param);
             }
+            return  ResultVO.ok("验证成功！",null);
         } catch (Exception e) {
             e.printStackTrace();
             ResultVO.error();
         }
         return ResultVO.error("验证失败！");
+    }
+
+    /**
+     * 持久化魔盒数据
+     * @param request 数据请求数据
+     * @param data 魔盒数据
+     * @throws Exception
+     */
+    private void saveMoheInfo(ShujumoheRequest request, Map data) throws Exception {
+        ApiResult apiResult = new ApiResult();
+        apiResult.setId(GeneratePrimaryKeyUtils.getUUIDKey());
+        apiResult.setCode(ApiConstants.STATUS_SUCCESS);
+        apiResult.setIdentityCode((String)data.get("identity_code"));
+        apiResult.setMessage(ApiConstants.STATUS_SUCCESS_MSG);
+        apiResult.setSourceChildName(ApiConstants.API_MOHE_YYS);
+        apiResult.setSourceChildCode((String)data.get("channel_type"));
+        apiResult.setOnlyKey(request.getOrderId());
+        apiResult.setRealName((String)data.get("real_name"));
+        apiResult.setSourceName(EApiSourceEnum.MOHE.getName());
+        apiResult.setSourceCode(EApiSourceEnum.MOHE.getCode());
+        apiResult.setUserMobile((String)data.get("user_mobile"));
+        apiResult.setUserName(request.getPhone());
+        apiResult.setResultData(data.get("task_data").toString());
+        apiResult.setState(1);
+        apiResultServerImpl.insertApiResult(apiResult);
     }
 }
