@@ -43,6 +43,13 @@ public class AppConstant {
 
     public static final String APP_SYS_ID_VALUE = "DAI_WO_ZOU";
     public static final String APP_SYS_ID_KEY = "APP_SYS_ID";
+    /**
+     * 验证码请求间隔时间 防止频繁请求系统
+     */
+    public static final int CAPTCHA_INTERVAL_TIME = 1 * 1000;
+
+
+
 
 
 
