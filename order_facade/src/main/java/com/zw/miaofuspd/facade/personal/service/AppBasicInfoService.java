@@ -199,4 +199,12 @@ public interface AppBasicInfoService {
      * @return TRUE 已认证 FALSE 未认证
      */
     Boolean isAuthentication(String userId);
+
+    /**
+     * @author 韩梅生
+     * @date 9:33 2018/5/25
+     * 更新资产推送状态
+     */
+    void updateAssetStatus(String orderId,boolean flag);
+
 }

@@ -1126,4 +1126,16 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         return false;
     }
 
+    @Override
+    public void updateAssetStatus(String orderId,boolean flag) {
+        StringBuilder sql = new StringBuilder("update mag_order set asset_state =");
+        if(flag){
+            sql.append("'1'");
+        }else{
+            sql.append("'2'");
+        }
+        sql.append(" where id = '");
+        sql.append(orderId).append("' ");
+        sunbmpDaoSupport.exeSql(sql.toString());
+    }
 }

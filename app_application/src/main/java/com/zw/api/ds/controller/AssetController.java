@@ -76,13 +76,16 @@ public class AssetController {
             try {
                 BYXResponse  byxResponse = iassetServer.thirdAssetsReceiver(request);
                 if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
+                    appBasicInfoServiceImpl.updateAssetStatus(orderId,true);
                     return ResultVO.ok(byxResponse.getRes_data());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        appBasicInfoServiceImpl.updateAssetStatus(orderId,false);
         return ResultVO.error();
    }
+
 
 }
