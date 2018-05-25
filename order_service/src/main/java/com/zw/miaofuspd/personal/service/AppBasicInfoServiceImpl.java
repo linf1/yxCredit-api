@@ -929,7 +929,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         long year = days/365L;
         if(year < CommonConstant.MIN_AGE || year > CommonConstant.MAX_AGE){
             resultMap.put("flag",false);
-            resultMap.put("msg","您的年龄不在范围内");
+            resultMap.put("msg","您的年龄不符合申请条件");
             return  resultMap;
         }
         //验证工作时间是否满一个月
@@ -940,12 +940,12 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         long workTimeDiff = DateUtils.getDifferenceDays(now,workTime);
         if(workTimeDiff < 30){
             resultMap.put("flag",false);
-            resultMap.put("msg","您的工作时间未满一个月");
+            resultMap.put("msg","所在工地工作未满1个月");
             return  resultMap;
         }
         if(workMap.get("job").toString().equals("3")){
             resultMap.put("flag",false);
-            resultMap.put("msg","临时工无法申请贷款");
+            resultMap.put("msg","工地临时工不符合申请条件");
             return  resultMap;
         }
         resultMap.put("flag",true);
