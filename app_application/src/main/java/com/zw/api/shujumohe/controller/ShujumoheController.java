@@ -55,6 +55,7 @@ public class ShujumoheController {
             //查询是否有报告
             final List<Map> mapList = apiResultServerImpl.selectApiResult(resultParameter);
             if(CollectionUtils.isEmpty(mapList)){
+                Thread.sleep(5000);
                 //如果数据库没有证明第一次生成报告则调用远程API获取报告
                 result = shujumoheServerImpl.callbackShujumohe(request);
             }
@@ -67,7 +68,7 @@ public class ShujumoheController {
                         saveMoheInfo(request, data);
                     }
                 }else {
-                    return ResultVO.error(jsonObject.get("message").toString());
+                    return ResultVO.error("运营商认证失败请重试！");
                 }
             }else{
                 final Map map = mapList.get(0);
