@@ -68,7 +68,7 @@ public class ShujumoheController {
                         saveMoheInfo(request, data);
                     }
                 }else {
-                    return ResultVO.error(jsonObject.get("message").toString());
+                    return ResultVO.error("运营商认证失败请重试！");
                 }
             }else{
                 final Map map = mapList.get(0);
