@@ -123,6 +123,7 @@ public class CreditApiController {
         Map<String,Object> map = new HashMap<>();
         Map userMap = userService.getCustomerInfoByOrderId(orderId);
         ApiResult result = new ApiResult();
+        result.setState(ApiConstants.STATUS_CODE_STATE);
         result.setResultData("");
         result.setIdentityCode("");
         result.setRealName("");
