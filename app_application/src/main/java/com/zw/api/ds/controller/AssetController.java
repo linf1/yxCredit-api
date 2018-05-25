@@ -68,10 +68,10 @@ public class AssetController {
               request.setAssetBankAddress(bankMap.get("prov_name").toString()+bankMap.get("city_name"));
               request.setAssetLoanCard(bankMap.get("card") == null?"":bankMap.get("card").toString());
               request.setAssetGuarantorName(contractorName);
-              request.setContractId("4123421");
-              request.setServiceContractId("4234242");
-              request.setThirdAssetOrderNum(orderMap.get("order_no") == null?"1":orderMap.get("order_no").toString());
-              request.setAssetCustomerName(orderMap.get("customer_name") == null?"1":orderMap.get("customer_name").toString());
+              request.setContractId("3f4072ea-73fa-4df3-8b37-986e89abde7a");
+              request.setServiceContractId("f86a9ff0-51c8-47aa-b61d-7a74d0dfccd7");
+              request.setThirdAssetOrderNum(orderMap.get("order_no") == null?"":orderMap.get("order_no").toString());
+              request.setAssetCustomerName(orderMap.get("customer_name") == null?"":orderMap.get("customer_name").toString());
 
             try {
                 BYXResponse  byxResponse = iassetServer.thirdAssetsReceiver(request);

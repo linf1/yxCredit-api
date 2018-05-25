@@ -7,6 +7,7 @@ import com.base.util.RandomUtil;
 import com.base.util.StringUtils;
 import com.api.model.sortmsg.MsgRequest;
 import com.google.code.kaptcha.Producer;
+import com.zw.app.util.AppConstant;
 import com.zw.miaofuspd.facade.user.service.ISmsService;
 import com.zw.web.base.vo.ResultVO;
 import org.slf4j.Logger;
@@ -64,9 +65,13 @@ public class SmsApiController  {
         try {
             final BYXResponse byxResponse = messageServer.sendSms(msgRequest, parameters);
             if (byxResponse != null) {
-                smsService.saveSms(msgRequest);
-                LOGGER.info("短信发送成功",byxResponse.toString());
-                return ResultVO.ok(byxResponse.getRes_msg(),null);
+                if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
+                    smsService.saveSms(msgRequest);
+                    LOGGER.info("短信发送成功", byxResponse.toString());
+                    return ResultVO.ok(byxResponse.getRes_msg(), null);
+                }else{
+                    return ResultVO.error(byxResponse.getRes_msg());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -119,7 +124,8 @@ public class SmsApiController  {
      * @throws IOException io异常
      */
     @RequestMapping("captcha.jpg")
-    public void captcha(HttpServletResponse response,MsgRequest msgRequest)throws IOException {
+    public void captcha(HttpServletResponse response,MsgRequest msgRequest)throws Exception {
+        Thread.sleep(AppConstant.CAPTCHA_INTERVAL_TIME);
         response.setHeader("Cache-Control", "no-store, no-cache");
         response.setContentType("image/jpeg");
         //生成文字验证码
@@ -138,5 +144,4 @@ public class SmsApiController  {
         ImageIO.write(image, "jpg", out);
         out.flush();
     }
-
 }
