@@ -1957,9 +1957,9 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
         Map returnMap = new HashMap();
         Map operationMap = new HashMap();
         String orderSql = "SELECT   o.ID AS orderId ,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
-                                    "product_name_name AS productName , applay_money AS applayMoney , " +
-                                    "date_format(str_to_date( o.applay_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS applayTime , " +
-                                    " o.loan_amount AS loanAmount ," +
+                                    "product_name_name AS productName , applay_money AS applayMoney ,  " +
+                                    "date_format(str_to_date( o.applay_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS applayTime ,  " +
+                                    " o.loan_amount AS loanAmount ,  o.repay_money AS repayMoney ," +
                                     "date_format(str_to_date( o.Examine_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS examineTime , " +
                                     " o.contract_amount AS contractAmount , " +
                                     " o.repay_type AS repayType ,  o.Job AS job ,  o.Service_fee AS serviceFee ,  o.loan_purpose AS loanPurpose , " +
@@ -1982,7 +1982,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
             String orderStatus= orderMap.get("orderStatus").toString();
 
             operationMap.put("operationId","");
-            operationMap.put("operationNode","");
+            operationMap.put("operationNode",orderStatus);
             operationMap.put("operationResult","");
             operationMap.put("status","");
             operationMap.put("amount","");
