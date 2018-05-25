@@ -4,6 +4,7 @@ import com.api.model.result.ApiResult;
 import com.api.service.result.IApiResultServer;
 import com.base.util.BeanHump;
 import com.base.util.BeanMapperUtil;
+import com.base.util.StringUtils;
 import com.zw.service.base.AbsServiceBase;
 import org.springframework.stereotype.Service;
 
@@ -44,10 +45,11 @@ public class ApiResultServerImpl extends AbsServiceBase implements IApiResultSer
         StringBuilder sql = new StringBuilder("SELECT * FROM zw_api_result WHERE 1=1 ");
         final Map<String, Object> objectMap = BeanMapperUtil.converMap(result);
         for (Map.Entry<String, Object> entry : objectMap.entrySet()) {
-            if(entry.getValue() != null  &&  !"serialVersionUID".equals(entry.getKey())){
+            if(entry.getValue() != null &&  !"serialVersionUID".equals(entry.getKey())){
                 sql.append("AND ").append(BeanHump.camelToUnderline(entry.getKey())).append("='").append(entry.getValue()).append("' ");
             }
         }
+
         return sunbmpDaoSupport.findForList(sql.toString());
     }
 
@@ -61,5 +63,18 @@ public class ApiResultServerImpl extends AbsServiceBase implements IApiResultSer
             }
         }
        return sunbmpDaoSupport.getCount(sql.toString()) > 0;
+    }
+
+    @Override
+    public int deleteApiResult(ApiResult result) throws Exception {
+        StringBuilder sql = new StringBuilder("delete from zw_api_result where 1 = 1 ");
+        final Map<String, Object> objectMap = BeanMapperUtil.converMap(result);
+        for (Map.Entry<String, Object> entry : objectMap.entrySet()) {
+            if(entry.getValue() != null &&  !"serialVersionUID".equals(entry.getKey())){
+                sql.append("AND ").append(BeanHump.camelToUnderline(entry.getKey())).append("='").append(entry.getValue()).append("' ");
+            }
+        }
+
+        return sunbmpDaoSupport.executeSql(sql.toString());
     }
 }

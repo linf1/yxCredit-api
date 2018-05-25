@@ -104,7 +104,8 @@ public class SmsApiController  {
             inMap.put("type",msgRequest.getType());
             final Map resData  = smsService.checkSms(inMap);
             if(resData != null){
-                if((Boolean) resData.get("flag")){
+                Boolean flag = (Boolean) resData.get("flag");
+                if(flag ){
                     return   ResultVO.ok("验证成功",null);
                 }else{
                     return   ResultVO.error(resData.get("msg").toString());
