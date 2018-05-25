@@ -2,10 +2,7 @@ package com.zw.api;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
+import org.apache.http.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -177,16 +174,15 @@ public class HttpUtil {
      *
      * @param apiUrl  API接口URL
      * @param params  参数map
-     * @param headMap 请求头参数map
+     * @param headerList 请求头参数map
      * @return
      * @throws IOException
      */
-    public static String doPost(String apiUrl, Map<String, Object> params, Map<String, Object> headMap) throws IOException {
+    public static String doPost(String apiUrl, Map<String, Object> params, List<Header> headerList) throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         String httpStr = null;
         HttpPost httpPost = new HttpPost(apiUrl);
         CloseableHttpResponse response = null;
-
         try {
             httpPost.setConfig(requestConfig);
             List<NameValuePair> pairList = new ArrayList<>(params.size());
@@ -196,8 +192,9 @@ public class HttpUtil {
                 pairList.add(pair);
             }
             httpPost.setEntity(new UrlEncodedFormEntity(pairList, Charset.forName("UTF-8")));
-            for (Map.Entry<String, Object> entry : headMap.entrySet()) {
-                httpPost.addHeader(entry.getKey(), entry.getValue().toString());
+            //添加头部信息
+            for(int i=0;i<headerList.size();i++){
+                httpPost.addHeader(headerList.get(i));
             }
             response = httpClient.execute(httpPost);
             System.out.println(response.toString());
