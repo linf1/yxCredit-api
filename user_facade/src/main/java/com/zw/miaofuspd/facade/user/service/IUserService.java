@@ -22,9 +22,9 @@ public interface IUserService {
     AppUserInfo getUserByOrderId(String orderId);
 
     /**
-     * userId 获取用户信息
-     * @param userId
+     * orderId 获取客户信息
+     * @param orderId
      * @return
      */
-    Map getUserInfoByUserId(String userId);
+    Map getCustomerInfoByOrderId(String orderId);
 }

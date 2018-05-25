@@ -20,6 +20,13 @@ public interface IApiResultServer {
     int insertApiResult(ApiResult result) throws Exception;
 
     /**
+     * 删除数据
+     * @param result 参数实体
+     * @return 影响行数
+     */
+    int deleteApiResult(ApiResult result) throws Exception;
+
+    /**
      * 查询数据
      * @param result 参数实体
      * @return 影响行数
