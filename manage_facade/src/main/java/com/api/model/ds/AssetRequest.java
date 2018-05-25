@@ -38,7 +38,7 @@ public class AssetRequest implements Serializable {
     /**
      * Y	String	投资人收益率（0.00已除以100的结果）－空
      */
-    private String assetInvestRate = "";
+    private String assetInvestRate = "0";
     /**
      * Y	String	居间服务费年化利率（0.00已除以100的结果）
      */

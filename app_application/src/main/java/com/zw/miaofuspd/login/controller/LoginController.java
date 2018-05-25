@@ -129,8 +129,6 @@ public class LoginController extends AbsBaseController {
             returnMap.put("imgUrl",map.get("img_url"));
             returnMap.put("token",token);
             returnMap.put("sessionId",getRequest().getSession().getId());
-            //设置是否实名认证
-            returnMap.put("isIdentity",this.appBasicInfoService.isAuthentication(map.get("id").toString()));
             resultVO.setRetData(returnMap);
         } else {
             resultVO.setErrorMsg(VOConst.FAIL, msg);

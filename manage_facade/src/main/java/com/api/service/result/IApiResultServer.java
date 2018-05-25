@@ -32,4 +32,11 @@ public interface IApiResultServer {
      * @return 影响行数
      */
     List<Map>  selectApiResult(ApiResult result) throws Exception;
+
+    /**
+     * 根据条件检查数据是否存在
+     * @param result 入口参数
+     * @return true 存在 FALSE 不存在
+     */
+    Boolean validateData(ApiResult result) throws Exception;
 }
