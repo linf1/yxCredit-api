@@ -51,12 +51,10 @@ public class CreditApiController {
     @PostMapping("/validateCreditApi")
     @ResponseBody
     public ResultVO validateCreditApi(CreditRequest request, @RequestHeader String token){
-        if (null == request || StringUtils.isBlank(request.getOrderId())
-                || StringUtils.isBlank(request.getUserId())) {
+        if (null == request || StringUtils.isBlank(request.getOrderId())) {
             LOGGER.info("请求参数异常或不存在");
             return ResultVO.error("请求参数异常或不存在");
         }
-        //根据订单id获取当前用户是否存在征信报告
         try {
             Map userMap = userService.getCustomerInfoByOrderId(request.getOrderId());
             if(null == userMap) {
@@ -70,6 +68,7 @@ public class CreditApiController {
             //result.setCode(ApiConstants.STATUS_SUCCESS);//操作成功
             //result.setOnlyKey(request.getOrderId());
             result.setState(ApiConstants.STATUS_CODE_STATE);//获取有效数据
+            //根据订单id获取当前用户是否存在征信报告
             List<Map> apiResultMap = apiResultServer.selectApiResult(result);
 
             if(!CollectionUtils.isEmpty(apiResultMap) && apiResultMap.get(0).get("code") != null
@@ -113,10 +112,9 @@ public class CreditApiController {
      * 获取个人征信信息回调入口
      * @param request 参数
      * @param orderId 订单id
-     * @param userId 用户id
      */
-    @RequestMapping("/getCreditApiInfo/{orderId}/{userId}")
-    public void getCreditApiInfo(@RequestBody String request, @PathVariable String  orderId, @PathVariable String  userId){
+    @RequestMapping("/getCreditApiInfo/{orderId}")
+    public void getCreditApiInfo(@RequestBody String request, @PathVariable String  orderId){
         LOGGER.info(request);
         LOGGER.info("--------------------------------回调成功   ------------------------");
         JSONObject jsonObject = JSONObject.parseObject(request);
