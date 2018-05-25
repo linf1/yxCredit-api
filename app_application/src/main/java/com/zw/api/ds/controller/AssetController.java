@@ -37,9 +37,9 @@ public class AssetController {
      * @return
      */
     @PostMapping("/thirdAssetsReceiver")
-    public ResultVO thirdAssetsReceiver(String orderId,String customerId,String contractorName) {
+    public ResultVO thirdAssetsReceiver(String orderId,String customerId) {
         //final Map resultMap = appBasicInfoServiceImpl.getOrderDetailById(request.getOrderId(),request.getCustomerId(),request.getContractorName());
-        final Map resultMap = appBasicInfoServiceImpl.getOrderDetailById(orderId,customerId,contractorName);
+        final Map resultMap = appBasicInfoServiceImpl.getOrderDetailById(orderId,customerId);
         AssetRequest request = new AssetRequest();
         Map orderMap = (Map) resultMap.get("orderMap");
         Map customerMap = (Map) resultMap.get("customerMap");
@@ -67,7 +67,7 @@ public class AssetController {
               request.setAssetBankNo(bankMap.get("card_number") == null?"":bankMap.get("card_number").toString());
               request.setAssetBankAddress(bankMap.get("prov_name").toString()+bankMap.get("city_name"));
               request.setAssetLoanCard(bankMap.get("card") == null?"":bankMap.get("card").toString());
-              request.setAssetGuarantorName(contractorName);
+              request.setAssetGuarantorName(customerMap.get("contractor_name") == null?"":customerMap.get("contractor_name").toString());
               request.setContractId("3f4072ea-73fa-4df3-8b37-986e89abde7a");
               request.setServiceContractId("f86a9ff0-51c8-47aa-b61d-7a74d0dfccd7");
               request.setThirdAssetOrderNum(orderMap.get("order_no") == null?"":orderMap.get("order_no").toString());
@@ -76,13 +76,16 @@ public class AssetController {
             try {
                 BYXResponse  byxResponse = iassetServer.thirdAssetsReceiver(request);
                 if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
+                    appBasicInfoServiceImpl.updateAssetStatus(orderId,true);
                     return ResultVO.ok(byxResponse.getRes_data());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        appBasicInfoServiceImpl.updateAssetStatus(orderId,false);
         return ResultVO.error();
    }
+
 
 }

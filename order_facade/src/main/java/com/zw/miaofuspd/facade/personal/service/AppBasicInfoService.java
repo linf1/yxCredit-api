@@ -182,7 +182,7 @@ public interface AppBasicInfoService {
      * @date 16:13 2018/5/22
      * 根据订单id获取订单详情
      */
-    Map getOrderDetailById(String orderId,String customerId,String contractorName);
+    Map getOrderDetailById(String orderId,String customerId);
 
     /**
      * @author 韩梅生
@@ -199,4 +199,12 @@ public interface AppBasicInfoService {
      * @return TRUE 已认证 FALSE 未认证
      */
     Boolean isAuthentication(String userId);
+
+    /**
+     * @author 韩梅生
+     * @date 9:33 2018/5/25
+     * 更新资产推送状态
+     */
+    void updateAssetStatus(String orderId,boolean flag);
+
 }

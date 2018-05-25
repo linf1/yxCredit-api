@@ -100,7 +100,7 @@ public class SmsApiController  {
             inMap.put("tel",msgRequest.getPhone());
             inMap.put("smsCode",msgRequest.getSmsCode().toLowerCase());
             //设置
-            inMap.put("errortime","600");
+            inMap.put("errortime",AppConstant.SMS_CODE_OVERTIME);
             inMap.put("type",msgRequest.getType());
             final Map resData  = smsService.checkSms(inMap);
             if(resData != null){

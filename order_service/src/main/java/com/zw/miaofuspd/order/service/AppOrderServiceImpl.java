@@ -1955,6 +1955,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
     @Override
     public Map getOrderAllInFoByOrderId(String orderId) {
         Map returnMap = new HashMap();
+        Map operationMap = new HashMap();
         String orderSql = "SELECT   o.ID AS orderId ,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
                                     "product_name_name AS productName , applay_money AS applayMoney , " +
                                     "date_format(str_to_date( o.applay_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS applayTime , " +
@@ -1976,7 +1977,26 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                             "FROM order_operation_record " +
                             "WHERE order_id='"+orderId+"' AND  operation_node NOT IN (2)  ORDER BY operation_time DESC";
         List operationList = sunbmpDaoSupport.findForList(operationSql);
+        if (operationList!=null){
+            //获取订单状态
+            String orderStatus= orderMap.get("orderStatus").toString();
 
+            operationMap.put("operationId","");
+            operationMap.put("operationNode","");
+            operationMap.put("operationResult","");
+            operationMap.put("status","");
+            operationMap.put("amount","");
+            operationMap.put("orderId",orderId);
+            operationMap.put("operationTime","");
+            operationMap.put("empId","");
+            operationMap.put("empName","");
+            operationMap.put("description","");
+            operationMap.put("orderStatus",orderStatus);
+
+            //添加到operationList 索引为0的位置
+            operationList.add(0,operationMap);
+          ;
+        }
         returnMap.put("orderInfo",orderMap);
         returnMap.put("operationInfo",operationList);
         return  returnMap;
