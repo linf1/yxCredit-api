@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.*;
 
 
@@ -869,9 +870,10 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         try {
             //查询订单相关的列表信息
             String sql = "select t2.customer_id as customer_id,t1.user_id as user_id,t2.CUSTOMER_NAME as CUSTOMER_NAME,t2.product_name_name as product_name_name,t1.person_name as person_name,t1.card as card,t1.tel as tel,t1.marital_status as marital_status,t1.children_status as children_status," +
-                    "  t1.hometown_house_property as hometown_house_property,t1.residence_address as residence_address,t1.card_register_address as card_register_address," +
+                    "  t4.company_address as residence_address,t3.nowaddress as card_register_address," +
                     "  t2.product_name as product_name,t2.applay_money as applay_money,t2.periods as periods,t2.contract_amount as contract_amount," +
-                    "  t2.loan_purpose as loan_purpose from mag_customer t1  left join mag_order t2 on t1.id = t2.CUSTOMER_ID" +
+                    "  t2.loan_purpose as loan_purpose from mag_customer t1  left join mag_order t2 LEFT JOIN mag_customer_live t3 on t1.id = t3.customer_id" +
+                    "  left join mag_customer_job t4 on t1.id = t4.customer_id on t1.id = t2.CUSTOMER_ID" +
                     "  where t2.order_no='"+orderId+"'";
             Map forMap = sunbmpDaoSupport.findForMap(sql);
             //查询联系人信息
@@ -883,7 +885,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             BigDecimal applayMoney = new BigDecimal( forMap.get("applay_money").toString());
             BigDecimal contractAmount = new BigDecimal(forMap.get("contract_amount").toString());
             String sql2 = "insert into mag_order_entry values ('"+id+"','"+orderId+"','"+forMap.get("customer_id")+"','"+forMap.get("person_name")+"'" +
-                    ",'"+forMap.get("card")+"','"+forMap.get("tel")+"','"+forMap.get("marital_status")+"','"+forMap.get("children_status")+"','"+forMap.get("hometown_house_property")+"'" +
+                    ",'"+forMap.get("card")+"','"+forMap.get("tel")+"','"+forMap.get("marital_status")+"','"+forMap.get("children_status")+"',''" +
                     ",'"+forMap.get("residence_address")+"','"+forMap.get("card_register_address")+"','"+forMap.get("product_name")+"','"+applayMoney+"'" +
                     ",'"+forMap.get("periods")+"','"+contractAmount+"','"+forMap.get("loan_purpose")+"','"+linkjson+"','"+DateUtils.getDateString(new Date())+"')";
             sunbmpDaoSupport.exeSql(sql2);
@@ -1060,34 +1062,39 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     }
 
     @Override
-    public Map getOrderDetailById(String orderId,String customerId,String contractorName) {
+    public Map getOrderDetailById(String orderId,String customerId) {
         Map reslutMap = new HashMap();
         //总包商
        // String contractorName = map.get("contractorName").toString();
 
         String sql1 = "select t2.order_no as order_no,t2.product_name_name as product_name_name,t2.loan_amount as loan_amount,t2.rate as rate,t2.PERIODS as periods,date_format(str_to_date(t2.applay_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%i:%s') as applay_time," +
                 "t2.loan_purpose as loan_purpose,t2.customer_name as customer_name,t2.card as card ,t2.tel as tel,t1.zbs_jujian_fee  as zbs_jujian_fee,t1.li_xi as lixi,t3.repayment as repayment,t3.repayment_days as repayment_days" +
-                " from mag_product_fee t1 left join mag_order t2 on t1.id = t2.product_detail left join pro_working_product_detail t3 on t2.product_id = t3.id where t2.id = '"+orderId+"'";
+                " from mag_product_fee t1 left join mag_order t2 on t1.id = t2.product_detail left join pro_working_product_detail t3 on t1.product_id = t3.id where t2.id = '"+orderId+"'";
         Map orderMap =sunbmpDaoSupport.findForMap(sql1);
+
+        //根据用户id获取用户相关信息
+        String sql2 = "select t4.contractor_name as contractor_name,t1.sync_user_id as sync_user_id,t1.sync_account_id as sync_account_id,t2.company_address as company_address  " +
+                "from mag_customer t1 left join mag_customer_job t2 on t1.id=t2.customer_id left join byx_white_list t3 on t1.person_name = t3. real_name " +
+                "left join byx_contractor t4 on t3.contractor_id = t4.id where t1.id = '"+customerId+"'";
+        Map customerMap =sunbmpDaoSupport.findForMap(sql2);
         String zbs_jujian_fee = orderMap.get("zbs_jujian_fee")==null?"":orderMap.get("zbs_jujian_fee").toString();
         String  lixi = orderMap.get("lixi")==null?"":orderMap.get("lixi").toString();
         String[] zbs_jujian =  zbs_jujian_fee.split(",");
         String jujian_fee="";
+        String contractorName = customerMap.get("contractor_name") == null?"":customerMap.get("contractor_name").toString();
         for(int i=0;i<zbs_jujian.length;i++){
             if(zbs_jujian[i].equals(contractorName)){
                 jujian_fee = zbs_jujian[i+1];
             }
         }
+        DecimalFormat df = new DecimalFormat("#0.0000");
         //融资成本
-        double assetFinanceCost = Double.parseDouble(jujian_fee)+Double.parseDouble(lixi);
+        String assetFinanceCost = df.format(Double.parseDouble(jujian_fee)/100+Double.parseDouble(lixi)/100);
         //居间服务费年化率
-        double assetServiceRate = Double.parseDouble(jujian_fee)*365;
+        String assetServiceRate = df.format(Double.parseDouble(jujian_fee)*365/100);
         orderMap.put("assetFinanceCost",assetFinanceCost);
         orderMap.put("assetServiceRate",assetServiceRate);
-        //根据用户id获取用户相关信息
-        String sql2 = "select t1.sync_user_id as sync_user_id,t1.sync_account_id as sync_account_id,t2.company_address as company_address  " +
-                "from mag_customer t1 left join mag_customer_job t2 on t1.id=t2.customer_id where t1.id = '"+customerId+"'";
-        Map customerMap =sunbmpDaoSupport.findForMap(sql2);
+
         //获取银行卡信息
         Map bankMap = getRealName(customerId);
         reslutMap.put("orderMap",orderMap);
@@ -1121,5 +1128,18 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             return identity != null && EIsIdentityEnum.CERTIFIED.getCode().equals(identity.toString());
         }
         return false;
+    }
+
+    @Override
+    public void updateAssetStatus(String orderId,boolean flag) {
+        StringBuilder sql = new StringBuilder("update mag_order set asset_state =");
+        if(flag){
+            sql.append("'1'");
+        }else{
+            sql.append("'2'");
+        }
+        sql.append(" where id = '");
+        sql.append(orderId).append("' ");
+        sunbmpDaoSupport.exeSql(sql.toString());
     }
 }
