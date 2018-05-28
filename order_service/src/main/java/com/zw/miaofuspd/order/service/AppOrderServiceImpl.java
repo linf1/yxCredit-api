@@ -1989,6 +1989,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                             "WHERE order_id='"+orderId+"' AND  operation_node NOT IN (2)  ORDER BY operation_time DESC";
         List operationList = sunbmpDaoSupport.findForList(operationSql);
         if (operationList!=null){
+
             //获取订单状态
              String orderStatus= orderMap.get("orderStatus").toString();
 
