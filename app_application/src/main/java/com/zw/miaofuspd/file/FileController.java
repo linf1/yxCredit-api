@@ -1,5 +1,7 @@
 package com.zw.miaofuspd.file;
 
+import com.zw.miaofuspd.facade.dict.service.ISystemDictService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +12,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 public class FileController {
+    @Autowired
+    private ISystemDictService iSystemDictService;
 
     @RequestMapping("/img/getImg.html")
     public void getimg(String saveAddress , HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -36,17 +40,19 @@ public class FileController {
     }
 
     @RequestMapping("/file/get")
-    public void getFile(String saveAddress,HttpServletRequest request, HttpServletResponse response) throws IOException{
+    public void getFile(String saveAddress,HttpServletRequest request, HttpServletResponse response) throws Exception{
         try{
         	/*saveAddress = URLEncoder.encode(saveAddress, "utf-8");*/
         	/*saveAddress = URLDecoder.decode(saveAddress, "utf-8");*/
+
+            String fileBasePath = iSystemDictService.getInfo("file.path");
 
             java.io.InputStream in = null;
 
             // 方式1: 以流方式读取视频文件. pic.jsp?src=c:\img\test.rm
             //if ( from.equals("") || from.equals("file") )
             //{
-            in = new java.io.FileInputStream(saveAddress);
+            in = new java.io.FileInputStream(fileBasePath+saveAddress);
             //}
             //else // 方式2: 从数据库中读取流. pic.jsp?src=c:\img\232
             //{

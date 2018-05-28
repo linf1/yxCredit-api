@@ -405,14 +405,14 @@ public class ContractConfirmationController extends AbsBaseController {
         Map loanMap1 = contractConfirmationService.getContractAgreement(map);
         //生成合同1
         //文件名
-        String fileName1 = orderId + "_"+map.get("template_name").toString()+".pdf";
+        String fileName1 = orderId + "_jiekuanxieyi.pdf";
         String pdfUrl1=generatePdf(request,loanMap1,fileName1);
 
         //填入合同2 居间协议
         map.put("template_name","碧有信居间服务协议");
         Map loanMap2 = contractConfirmationService.getContractAgreement(map);
         //生成合同2
-        String fileName2 = orderId + "_"+map.get("template_name").toString()+".pdf";
+        String fileName2 = orderId + "_jujianfuwuxieyi.pdf";
         String pdfUrl2=generatePdf(request,loanMap2,fileName2);
 
         map.put("pdfUrl",pdfUrl1+","+pdfUrl2);
@@ -428,10 +428,10 @@ public class ContractConfirmationController extends AbsBaseController {
         return resultVO;
     }
 
-    public String generatePdf(HttpServletRequest request, Map loanMap, String fileName){
+    public String generatePdf(HttpServletRequest request, Map loanMap, String fileName) throws Exception{
         Map returnMap=new HashMap();
         //获取根目录
-        String root = request.getSession().getServletContext().getRealPath("/loan_agreement");
+        String root = iSystemDictService.getInfo("file.path");
         //文件名
         String url = "/" + "loan_agreement_pdf" + "/" + fileName;
         //先创建文件夹，避免fileOutputStream报错
@@ -447,7 +447,7 @@ public class ContractConfirmationController extends AbsBaseController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "/loan_agreement"+url;
+        return url;
     }
 
     /**
