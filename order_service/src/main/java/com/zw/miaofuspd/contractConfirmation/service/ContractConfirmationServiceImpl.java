@@ -198,8 +198,8 @@ public class ContractConfirmationServiceImpl extends AbsServiceBase implements C
     public Map getContractAgreement(Map mapInfo) {
         Map map = new HashMap();
         String sql = "SELECT content_no_bq as context from mag_template t where t.template_type = '0'and platform_type='1' and state='1'";
-        if(mapInfo.get("template_type")!=null){
-            sql="SELECT content_no_bq as context from mag_template t where t.template_type = '"+mapInfo.get("template_type").toString()+"'and platform_type='1' and state='1'";
+        if(mapInfo.get("template_name")!=null){
+            sql="SELECT content_no_bq as context from mag_template t where name='"+mapInfo.get("template_name")+"'";
         }
         Map mapContext = sunbmpDaoSupport.findForMap(sql);
         Iterator<Map.Entry> it = mapInfo.entrySet().iterator();
@@ -271,12 +271,12 @@ public class ContractConfirmationServiceImpl extends AbsServiceBase implements C
     public Map getContractInfo(String orderId) {
         Map map = new HashMap();
         //查询订单
-        String orderSql="select id as orderId, order_no as orderNo, customer_id as customerId, amount, fee, periods as deadline, loan_purpose as useOfLoans from mag_order where id='"+orderId+"'";
+        String orderSql="select id as orderId, order_no as orderNo, customer_id as customerId, amount, loan_amount as loanAmount, fee, periods as deadline, loan_purpose as useOfLoans from mag_order where id='"+orderId+"'";
         Map orderMap = sunbmpDaoSupport.findForMap(orderSql);
         map.putAll(orderMap);
         //查询客户
         String customerId=map.get("customerId").toString();
-        String customerSql = "SELECT id as customerId  , user_id as userId, person_name as cusName , card as cusCard ,tel as cusTel , card_register_address as cusReceiveAddress FROM  mag_customer where id = '"+customerId+"'";
+        String customerSql = "SELECT id as customerId  , user_id as userId, person_name as cusName , card as cusCard ,tel as cusTel , card_register_address as cusReceiveAddress, residence_address as cusAddress FROM  mag_customer where id = '"+customerId+"'";
         Map customerMap = sunbmpDaoSupport.findForMap(customerSql);
         map.putAll(customerMap);
         //查询银行卡信息
@@ -354,7 +354,7 @@ public class ContractConfirmationServiceImpl extends AbsServiceBase implements C
         String customerName=map.get("cusName").toString();
         String card=map.get("cusCard").toString();
         String userId=map.get("userId").toString();
-        String amount=map.get("amount").toString();
+        String amount=map.get("loanAmount").toString();
         String contractSrc=map.get("pdfUrl").toString();
         String contract_no=map.get("contractNo").toString();
 
@@ -382,6 +382,12 @@ public class ContractConfirmationServiceImpl extends AbsServiceBase implements C
 
         String updateStatusSql = "update mag_order set order_state='"+params.get("orderState")+"' where id = '"+params.get("orderId")+"'";
         sunbmpDaoSupport.exeSql(insertOpSql);
+        sunbmpDaoSupport.exeSql(updateStatusSql);
+    }
+
+    @Override
+    public void updateAssetStatus(String orderId, String assetState) {
+        String updateStatusSql = "update mag_order set asset_state='"+assetState+"' where id = '"+orderId+"'";
         sunbmpDaoSupport.exeSql(updateStatusSql);
     }
 }
