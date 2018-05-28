@@ -144,13 +144,13 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         String sql = "select product_name,product_name_name from mag_order where id='"+orderId+"'";
         Map map1 = sunbmpDaoSupport.findForMap(sql);
         //插入产品的利率
-        String sql2 = "select t1.li_xi as lixi,t1.id as id from mag_product_fee t1\n" +
+        String sql2 = "select t1.li_xi as lixi,t1.product_id as product_id from mag_product_fee t1\n" +
                 "inner join(\n" +
                 "select id,product_term_min,product_term_max from pro_working_product_detail where crm_product_id =(\n" +
                 "select id from  pro_crm_product where pro_name ='"+map1.get("product_name_name")+"' and pro_number = '"+map1.get("product_name")+"') and product_term_min*1 <= "+periods+" and product_term_max*1 >= "+periods+")t2 on t1.product_id = t2.id";
         Map map2 = sunbmpDaoSupport.findForMap(sql2);
         String lixi = map2.get("lixi")==null?"":map2.get("lixi").toString();
-        String product_detail = map2.get("id")==null?"":map2.get("id").toString();
+        String product_detail = map2.get("product_id")==null?"":map2.get("product_id").toString();
         String sql3 = "update mag_order set applay_money = " + applayMoney + "," + "PERIODS = '" + periods + "'," +
                 "loan_purpose = '" + loanPurpose + "',rate = '"+lixi+"',product_detail = '"+product_detail+"'," +
                 "complete = '100' where id = '" + orderId + "'  ";

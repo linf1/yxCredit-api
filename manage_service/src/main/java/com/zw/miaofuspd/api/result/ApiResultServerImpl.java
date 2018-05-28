@@ -77,4 +77,20 @@ public class ApiResultServerImpl extends AbsServiceBase implements IApiResultSer
 
         return sunbmpDaoSupport.executeSql(sql.toString());
     }
+
+
+    @Override
+    public Boolean updateByOnlyKey(ApiResult result) throws Exception {
+        StringBuilder sql = new StringBuilder("update zw_api_result  set ");
+        final Map<String, Object> objectMap = BeanMapperUtil.converMap(result);
+        for (Map.Entry<String, Object> entry : objectMap.entrySet()) {
+            if(entry.getValue() != null &&  !"serialVersionUID".equals(entry.getKey())){
+                    sql.append(BeanHump.camelToUnderline(entry.getKey())).append(" = '").append(entry.getValue()).append("',");
+            }
+        }
+        String  sqlStr = sql.toString();
+        sql  = new StringBuilder(sqlStr.substring(0,sqlStr.lastIndexOf(",")));
+        sql.append("where only_key = '").append(result.getOnlyKey()).append("'");
+        return sunbmpDaoSupport.executeSql(sql.toString()) > 0;
+    }
 }
