@@ -1089,7 +1089,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         Map orderMap =sunbmpDaoSupport.findForMap(sql1);
 
         //根据用户id获取用户相关信息
-        String sql2 = "select t4.contractor_name as contractor_name,t1.sync_user_id as sync_user_id,t1.sync_account_id as sync_account_id,t2.company_address as company_address  " +
+        String sql2 = "select t1.user_id as user_id,t4.contractor_name as contractor_name,t1.sync_user_id as sync_user_id,t1.sync_account_id as sync_account_id,t2.company_address as company_address  " +
                 "from mag_customer t1 left join mag_customer_job t2 on t1.id=t2.customer_id left join byx_white_list t3 on t1.person_name = t3. real_name " +
                 "left join byx_contractor t4 on t3.contractor_id = t4.id where t1.id = '"+customerId+"'";
         Map customerMap =sunbmpDaoSupport.findForMap(sql2);
@@ -1112,7 +1112,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         orderMap.put("assetServiceRate",assetServiceRate);
 
         //获取银行卡信息
-        Map bankMap = getRealName(customerId);
+        Map bankMap = getRealName(customerMap.get("user_id").toString());
         reslutMap.put("orderMap",orderMap);
         reslutMap.put("customerMap",customerMap);
         reslutMap.put("bankMap",bankMap);
