@@ -160,6 +160,7 @@ public class CreditApiController {
             result.setSourceCode(EApiSourceEnum.CREDIT.getCode());
             result.setSourceChildName(EApiSourceEnum.CREDIT.getName());
             result.setSourceChildCode(EApiSourceEnum.CREDIT.getCode());
+            result.setApiReturnId("");
             LOGGER.info("个人征信--获取报告信息{}", result);
             apiResultServer.insertApiResult(result);
         } catch (Exception e) {

@@ -1960,7 +1960,10 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                                     "product_name_name AS productName , applay_money AS applayMoney ,  " +
                                     "date_format(str_to_date( o.applay_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS applayTime ,  " +
                                     " o.loan_amount AS loanAmount ,  o.repay_money AS repayMoney ," +
-                                    "date_format(str_to_date( o.Examine_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS examineTime , " +
+                                    "date_format(str_to_date( o.Examine_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS examineTime ,      " +
+                                    "DATE_FORMAT(STR_TO_DATE( o.CREAT_TIME,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS creatTime , " +
+                                    "DATE_FORMAT(STR_TO_DATE( o.ALTER_TIME,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS alterTime , " +
+                                    "DATE_FORMAT(STR_TO_DATE( o.loan_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS loanTime , " +
                                     " o.contract_amount AS contractAmount , " +
                                     " o.repay_type AS repayType ,  o.Job AS job ,  o.Service_fee AS serviceFee ,  o.loan_purpose AS loanPurpose , " +
                                     " o.PERIODS AS periods ,  o.Order_state AS orderStatus  ,wpd.payment AS payment " +
