@@ -1919,7 +1919,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                             "DATE_FORMAT(STR_TO_DATE( o.loan_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS loanTime , " +
                             "o.contract_amount AS contractAmount , " +
                             "o.repay_type AS repayType ,  o.Job AS job ,  o.Service_fee AS serviceFee ,  o.loan_purpose AS loanPurpose , " +
-                            "o.PERIODS AS periods ,  o.Order_state AS orderStatus " +
+                            "o.PERIODS AS periods ,  o.Order_state AS orderState " +
                         "FROM mag_order o WHERE o.USER_ID='"+userId+"' ORDER BY o.applay_time DESC  limit "+pageNumber+","+pageSize;
         List allOrderList = sunbmpDaoSupport.findForList(sql);
 
@@ -1973,7 +1973,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                                     "DATE_FORMAT(STR_TO_DATE( o.loan_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS loanTime , " +
                                     " o.contract_amount AS contractAmount , " +
                                     " o.repay_type AS repayType ,  o.Job AS job ,  o.Service_fee AS serviceFee ,  o.loan_purpose AS loanPurpose , " +
-                                    " o.PERIODS AS periods ,  o.Order_state AS orderStatus  ,wpd.payment AS payment " +
+                                    " o.PERIODS AS periods ,  o.Order_state AS orderState  ,wpd.payment AS payment " +
                             "FROM mag_order o " +
                             "LEFT JOIN mag_product_fee pf ON o.product_detail = pf.product_id " +
                             "LEFT JOIN pro_working_product_detail wpd ON pf.product_id=wpd.id " +
