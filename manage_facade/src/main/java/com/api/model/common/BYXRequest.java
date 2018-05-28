@@ -56,7 +56,7 @@ public class BYXRequest {
        }else{
            //参数转化JSON
            final String paramJson = JSONObject.toJSONString(param);
-           LOGGER.info("请求参数JSON字符串：{}",paramJson);
+           System.out.println("请求参数JSON字符串:" + paramJson);
            //碧友信参数加密
            final String encodesStr = cryptoTools.encode(paramJson);
            byxRequest.setData(encodesStr);

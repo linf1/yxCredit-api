@@ -126,6 +126,7 @@ public class TongDunProxy implements ITongDunApiService {
         apiResult.setSourceCode(EApiSourceEnum.TODONG.getCode());
         apiResult.setUserMobile(request.getPhone());
         apiResult.setUserName(request.getPhone());
+        apiResult.setResultData(jsonStr);
         apiResult.setApiReturnId(request.getReportId());
         apiResult.setState(1);
         apiResultServerImpl.insertApiResult(apiResult);
