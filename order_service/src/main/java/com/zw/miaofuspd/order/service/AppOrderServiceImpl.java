@@ -1973,11 +1973,12 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                                     "DATE_FORMAT(STR_TO_DATE( o.loan_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS loanTime , " +
                                     " o.contract_amount AS contractAmount , " +
                                     " o.repay_type AS repayType ,  o.Job AS job ,  o.Service_fee AS serviceFee ,  o.loan_purpose AS loanPurpose , " +
-                                    " o.PERIODS AS periods ,  o.Order_state AS orderState  ,wpd.payment AS payment " +
+                                    " o.PERIODS AS periods ,  o.Order_state AS orderStatus  ,wpd.payment AS payment " +
                             "FROM mag_order o " +
                             "LEFT JOIN mag_product_fee pf ON o.product_detail = pf.product_id " +
                             "LEFT JOIN pro_working_product_detail wpd ON pf.product_id=wpd.id " +
                             "WHERE  o.ID='"+orderId+"' ";
+
         Map orderMap = sunbmpDaoSupport.findForMap(orderSql);
 
         String operationSql="SELECT id AS operationId , order_id AS orderId , emp_id AS empId , emp_name AS empName," +
@@ -1989,7 +1990,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
         List operationList = sunbmpDaoSupport.findForList(operationSql);
         if (operationList!=null){
             //获取订单状态
-            String orderStatus= orderMap.get("orderStatus").toString();
+             String orderStatus= orderMap.get("orderStatus").toString();
 
             operationMap.put("operationId","");
             operationMap.put("operationNode",orderStatus);
@@ -2001,7 +2002,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
             operationMap.put("empId","");
             operationMap.put("empName","");
             operationMap.put("description","");
-            operationMap.put("orderStatus",orderStatus);
+            operationMap.put("orderState",orderStatus);
 
             //添加到operationList 索引为0的位置
             operationList.add(0,operationMap);
