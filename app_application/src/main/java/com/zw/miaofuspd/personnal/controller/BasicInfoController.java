@@ -165,9 +165,9 @@ public class BasicInfoController extends AbsBaseController {
      * @param
      */
     @RequestMapping("/getRealName")
-    public ResultVO getRealName(String customerId) throws Exception{
+    public ResultVO getRealName(String userId) throws Exception{
         ResultVO resultVO = new ResultVO();
-        Map map = appBasicInfoService.getRealName(customerId);
+        Map map = appBasicInfoService.getRealName(userId);
         resultVO.setRetData(map);
         return resultVO;
     }
@@ -186,7 +186,7 @@ public class BasicInfoController extends AbsBaseController {
         Map resMap = appBasicInfoService.saveRealName(map);
         DSMoneyRequest request = new DSMoneyRequest();
         try {
-            final Map customer = appBasicInfoServiceImpl.findById((String) map.get("customerId"));
+            final Map customer = appBasicInfoServiceImpl.findById((String) map.get("userId"));
             if (customer != null) {
                 request.setBorrowerType(0);
                 request.setBorrowerCardType("1");
