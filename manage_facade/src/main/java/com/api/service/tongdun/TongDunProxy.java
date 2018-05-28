@@ -68,6 +68,7 @@ public class TongDunProxy implements ITongDunApiService {
                 }
                 Thread.sleep(3000);
                 LOGGER.info("同盾--获取报告信息 API调用参数：{}", request.toString());
+                request.setReportId(reportAO.getReportId());
                 final String result = queryReportInfo(reportAO);
                 costTime = System.currentTimeMillis() - startTime;
                 LOGGER.info("同盾--获取报告信息{}", result);
@@ -125,7 +126,7 @@ public class TongDunProxy implements ITongDunApiService {
         apiResult.setSourceCode(EApiSourceEnum.TODONG.getCode());
         apiResult.setUserMobile(request.getPhone());
         apiResult.setUserName(request.getPhone());
-        apiResult.setResultData(jsonStr);
+        apiResult.setApiReturnId(request.getReportId());
         apiResult.setState(1);
         apiResultServerImpl.insertApiResult(apiResult);
     }
