@@ -11,6 +11,8 @@ import com.api.service.contractsign.IContractSignService;
 import com.base.util.AppRouterSettings;
 import com.google.gson.Gson;
 import com.junziqian.service.JunziqianService;
+import com.sun.org.apache.regexp.internal.RE;
+import com.zw.api.ds.controller.AssetController;
 import com.zw.app.util.AppConstant;
 import com.zw.miaofuspd.facade.contractConfirmation.service.ContractConfirmationService;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
@@ -81,6 +83,10 @@ public class ContractConfirmationController extends AbsBaseController {
 
     @Autowired
     private IContractSignService iContractSignService;
+
+    @Autowired
+    private AssetController assetController;
+
 
     /**
      * 获取未签订合同
@@ -395,18 +401,18 @@ public class ContractConfirmationController extends AbsBaseController {
 
         //获取合同内容并将对应信息填入合同中
         //填入合同1 借款协议
-        map.put("template_type","0");
+        map.put("template_name","碧有信借款协议");
         Map loanMap1 = contractConfirmationService.getContractAgreement(map);
         //生成合同1
         //文件名
-        String fileName1 = orderId + "_"+map.get("template_type").toString()+".pdf";
+        String fileName1 = orderId + "_"+map.get("template_name").toString()+".pdf";
         String pdfUrl1=generatePdf(request,loanMap1,fileName1);
 
         //填入合同2 居间协议
-        map.put("template_type","1");
+        map.put("template_name","碧有信居间服务协议");
         Map loanMap2 = contractConfirmationService.getContractAgreement(map);
         //生成合同2
-        String fileName2 = orderId + "_"+map.get("template_type").toString()+".pdf";
+        String fileName2 = orderId + "_"+map.get("template_name").toString()+".pdf";
         String pdfUrl2=generatePdf(request,loanMap2,fileName2);
 
         map.put("pdfUrl",pdfUrl1+","+pdfUrl2);
@@ -480,12 +486,13 @@ public class ContractConfirmationController extends AbsBaseController {
     @RequestMapping("/getupSignContract")
     @ResponseBody
     public ResultVO getupContract(String orderId, HttpServletRequest request) throws Exception{
-
+        Map contract = contractConfirmationService.getContractByOrderId(orderId);
+        String amount=contract.get("contract_amount").toString();
         Map params=new HashMap();
         params.put("orderId", orderId);
         params.put("empId",request.getParameter("empId"));
         params.put("empName",request.getParameter("empName"));
-        params.put("amount",request.getParameter("amount"));
+        params.put("amount",amount);
         params.put("operationResult", 6);
         params.put("orderState", 7);
         params.put("description", request.getParameter("description"));
@@ -523,15 +530,24 @@ public class ContractConfirmationController extends AbsBaseController {
         map.put("result1",map1);
         map.put("result2",map2);
 
+        String customerId=request.getParameter("empId");
+        String customerName=request.getParameter("empName");
+        String amount=contract.get("contract_amount").toString();
+        String description=request.getParameter("description");
         Map params=new HashMap();
         params.put("orderId", orderId);
-        params.put("empId",request.getParameter("empId"));
-        params.put("empName",request.getParameter("empName"));
-        params.put("amount",request.getParameter("amount"));
+        params.put("empId",customerId);
+        params.put("empName",customerName);
+        params.put("amount",amount);
         params.put("operationResult", 5);
         params.put("orderState", 4);
-        params.put("description", request.getParameter("description"));
+        params.put("description", description);
         contractConfirmationService.updateOrderStatus(params);
+
+        ResultVO resultVO = assetController.thirdAssetsReceiver(orderId,customerId);
+        if("SUCCESS".equals(resultVO.getRetCode())){
+            contractConfirmationService.updateAssetStatus(orderId,"1");
+        }
 
         return ResultVO.ok(map);
     }
