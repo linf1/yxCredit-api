@@ -39,4 +39,10 @@ public interface IApiResultServer {
      * @return true 存在 FALSE 不存在
      */
     Boolean validateData(ApiResult result) throws Exception;
+
+    /**
+     * 根据唯一KEY 更新数据
+     * @return 更新是否成功
+     */
+    Boolean updateByOnlyKey(ApiResult result) throws Exception;
 }
