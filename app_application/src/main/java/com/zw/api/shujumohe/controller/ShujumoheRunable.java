@@ -80,7 +80,7 @@ public class ShujumoheRunable implements Runnable {
     @Override
     public void run()  {
         //重试次数
-        final int countNum = 5;
+        final int countNum = 10;
         int i = 0;
         //如果没有获得数据就继续查询数据
         do {

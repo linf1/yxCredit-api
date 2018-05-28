@@ -1965,7 +1965,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                                     " o.repay_type AS repayType ,  o.Job AS job ,  o.Service_fee AS serviceFee ,  o.loan_purpose AS loanPurpose , " +
                                     " o.PERIODS AS periods ,  o.Order_state AS orderStatus  ,wpd.payment AS payment " +
                             "FROM mag_order o " +
-                            "LEFT JOIN mag_product_fee pf ON o.product_detail = pf.id " +
+                            "LEFT JOIN mag_product_fee pf ON o.product_detail = pf.product_id " +
                             "LEFT JOIN pro_working_product_detail wpd ON pf.product_id=wpd.id " +
                             "WHERE  o.ID='"+orderId+"' ";
         Map orderMap = sunbmpDaoSupport.findForMap(orderSql);
