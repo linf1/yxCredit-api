@@ -84,7 +84,7 @@ public class CreditApiController {
                 CreditResultAO creditResultAO = creditApiService.validateAccount(request);
                 if("processing".equals(creditResultAO.getTaskStatus())) {
                     try {
-                        Thread.sleep(15000);
+                        Thread.sleep(5000);
                         LOGGER.info("个人征信--获取报告信息 API调用参数：{}", request.toString());
                         //从数据库中获取数据
                         apiResultMap = apiResultServer.selectApiResult(result);
