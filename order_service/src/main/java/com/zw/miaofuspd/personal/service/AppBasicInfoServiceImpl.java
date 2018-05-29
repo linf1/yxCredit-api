@@ -7,6 +7,7 @@ import com.base.util.GeneratePrimaryKeyUtils;
 import com.base.util.TraceLoggerUtil;
 import com.constants.CommonConstant;
 import com.enums.EIsIdentityEnum;
+import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;
 import com.zw.api.HttpUtil;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
 import com.zw.miaofuspd.facade.dict.service.ISystemDictService;
@@ -141,18 +142,21 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         //借款用途
         String loanPurpose = (String) paramMap.get("loanPurpose");
         //获取订单的产品名称及编号
-        String sql = "select product_name,product_name_name from mag_order where id='"+orderId+"'";
+        String sql = "select t3.contractor_name as contractor_name,t1.product_name as product_name,t1.product_name_name as product_name_name from mag_order t1 left join byx_white_list t2 on t1.customer_name = t2.real_name and t1.card = t2.card left join byx_contractor t3 on t2.contractor_id = t3.id where t1.id='"+orderId+"'";
         Map map1 = sunbmpDaoSupport.findForMap(sql);
         //插入产品的利率
-        String sql2 = "select t1.li_xi as lixi,t1.product_id as product_id from mag_product_fee t1\n" +
+        String sql2 = "select t1.li_xi as lixi,t1.product_id as product_id,t1.zbs_jujian_fee as zbs_jujian_fee from mag_product_fee t1\n" +
                 "inner join(\n" +
                 "select id,product_term_min,product_term_max from pro_working_product_detail where crm_product_id =(\n" +
                 "select id from  pro_crm_product where pro_name ='"+map1.get("product_name_name")+"' and pro_number = '"+map1.get("product_name")+"') and product_term_min*1 <= "+periods+" and product_term_max*1 >= "+periods+")t2 on t1.product_id = t2.id";
         Map map2 = sunbmpDaoSupport.findForMap(sql2);
         String lixi = map2.get("lixi")==null?"":map2.get("lixi").toString();
         String product_detail = map2.get("product_id")==null?"":map2.get("product_id").toString();
+        String zbs_jujian_fee = map2.get("zbs_jujian_fee") == null?"":map2.get("zbs_jujian_fee").toString();
+        String contractorName = map1.get("contractor_name") == null?"":map1.get("contractor_name").toString();
+        double serviceFee = Double.valueOf(getServiceFee(contractorName, zbs_jujian_fee))/100;
         String sql3 = "update mag_order set applay_money = " + applayMoney + "," + "PERIODS = '" + periods + "'," +
-                "loan_purpose = '" + loanPurpose + "',rate = '"+lixi+"',product_detail = '"+product_detail+"'," +
+                "loan_purpose = '" + loanPurpose + "',rate = '"+lixi+"',product_detail = '"+product_detail+"',Service_fee = '"+serviceFee+"'," +
                 "complete = '100' where id = '" + orderId + "'  ";
         int count = sunbmpDaoSupport.executeSql(sql3);
         //sunbmpDaoSupport.exeSql(sql);
@@ -165,6 +169,20 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         resturnMap.put("flag", true);
         return resturnMap;
     }
+
+    /**
+     * 获取居间服务费
+     */
+    private String  getServiceFee(String contractorName,String ServiceFee){
+        String[] ServiceFeeArray =  ServiceFee.split(",");
+        for(int i=0;i<ServiceFeeArray.length;i++){
+            if(ServiceFeeArray[i].equals(contractorName)){
+                return ServiceFeeArray[i+1] == null?"0":ServiceFeeArray[i+1];
+            }
+        }
+        return "0";
+    }
+
 
     /**
      * 办单员端-获取用户基本信息
@@ -1059,14 +1077,15 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         Map resultMap = new HashMap();
         resultMap.put("mohe","0");
         resultMap.put("zhengxin","0");
+        Map customerMap = getThreeItems(customerId);
         //更细授权状态
-        String sql = "SELECT * from zw_api_result where state = 1 and code = 0 and only_key = '"+orderId+"'";
+        String sql = "SELECT * from zw_api_result where state = 1 and code = 0 and real_name = '"+customerMap.get("PERSON_NAME")+"' and user_mobile = '"+customerMap.get("TEL")+"' and identity_code = '"+customerMap.get("CARD")+"'";
         List<Map> list = sunbmpDaoSupport.findForList(sql);
         for (Map map:list){
-            if("1".equals(map.get("source_code"))){
+            if(EApiSourceEnum.MOHE.getCode().equals(map.get("source_code"))){
                 resultMap.put("mohe","1");
             }
-            if("3".equals(map.get("source_code"))){
+            if(EApiSourceEnum.CREDIT.getCode().equals(map.get("source_code"))){
                 resultMap.put("zhengxin","1");
             }
         }
@@ -1076,6 +1095,17 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         }
         return resultMap;
     }
+
+    /**
+     * 获取用户三要素信息
+     * @param customerId
+     * @return
+     */
+    public Map getThreeItems(String customerId){
+        StringBuilder sql = new StringBuilder("select PERSON_NAME,TEL,CARD from mag_customer where id = '").append(customerId).append("'");
+        return  sunbmpDaoSupport.findForMap(sql.toString());
+    }
+
 
     @Override
     public Map getOrderDetailById(String orderId,String customerId) {
