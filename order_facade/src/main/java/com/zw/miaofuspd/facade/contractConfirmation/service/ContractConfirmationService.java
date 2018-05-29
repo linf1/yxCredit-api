@@ -79,5 +79,10 @@ public interface ContractConfirmationService {
      * @param params
      */
     void updateOrderStatus(Map params);
+    /**
+     * 更新资产推送状态
+     * @param orderId,assetState
+     */
+    void updateAssetStatus(String orderId, String assetState);
 
 }

@@ -14,9 +14,10 @@
     <!-- 使用zookeeper注册中心暴露服务地址 -->
     <!-- 注册中心地址 -->
     <!--生产-->
-    <dubbo:registry protocol="zookeeper" address="127.0.0.1:2181"/>
-    <!--测试-->
-    <!--<dubbo:registry protocol="zookeeper" address="192.168.102.188:2181"/>-->
+    <dubbo:registry protocol="zookeeper" address="10.139.33.121:2181"/>
+    <!--开发-->
+    <!--<dubbo:registry protocol="zookeeper" address="127.0.0.1:2181"/>-->
+
     <dubbo:reference interface="com.zw.miaofuspd.facade.dict.service.IDictService"
                      id="dictServiceImpl" check="false"/>
     <dubbo:reference interface="com.zw.miaofuspd.facade.dict.service.ISystemDictService"

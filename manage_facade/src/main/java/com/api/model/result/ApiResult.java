@@ -65,6 +65,10 @@ public class ApiResult implements Serializable {
      * 创建时间
      */
     private Date createdTime;
+    /**
+     * 调用API返回的查询报告ID
+     */
+    private String apiReturnId;
 
     /**
      * 1:有效，0：无效
@@ -189,5 +193,13 @@ public class ApiResult implements Serializable {
 
     public void setState(Integer state) {
         this.state = state;
+    }
+
+    public String getApiReturnId() {
+        return apiReturnId;
+    }
+
+    public void setApiReturnId(String apiReturnId) {
+        this.apiReturnId = apiReturnId;
     }
 }

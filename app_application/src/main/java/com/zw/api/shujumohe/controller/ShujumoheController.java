@@ -49,6 +49,7 @@ public class ShujumoheController {
             ApiResult resultParameter = new ApiResult();
             resultParameter.setUserName(request.getPhone());
             resultParameter.setSourceCode(EApiSourceEnum.MOHE.getCode());
+            resultParameter.setState(ApiConstants.STATUS_CODE_STATE);
             //查询是否有报告
             final List<Map> mapList = apiResultServerImpl.selectApiResult(resultParameter);
             if(CollectionUtils.isEmpty(mapList)){
@@ -61,7 +62,7 @@ public class ShujumoheController {
                 //默认数据成功
                 saveMoheInfo(request,param);
                 //异步更新数据
-                syncExecutor(request);
+                asyncExecutor(request);
             }else{
                 final Map map = mapList.get(0);
                 Map<String,Object>  param = new HashMap<>(5);
@@ -109,6 +110,7 @@ public class ShujumoheController {
         apiResult.setUserMobile(data.get("user_mobile").toString());
         apiResult.setUserName(request.getPhone());
         apiResult.setResultData(data.get("task_data").toString());
+        apiResult.setApiReturnId(request.getTask_id());
         apiResult.setState(1);
         apiResultServerImpl.insertApiResult(apiResult);
     }
@@ -121,7 +123,7 @@ public class ShujumoheController {
      *                taskId - 数据魔盒数据查询id
      *
      */
-    private void syncExecutor(ShujumoheRequest request){
+    private void asyncExecutor(ShujumoheRequest request){
         final BlockingQueue<Runnable> blockingQueue = new LinkedBlockingQueue<>();
         final ThreadFactory threadFactory = Thread::new;
         final ThreadPoolExecutor poolExecutor = new ThreadPoolExecutor(1, 1,

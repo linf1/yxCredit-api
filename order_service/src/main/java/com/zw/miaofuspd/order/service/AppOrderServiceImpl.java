@@ -1909,11 +1909,18 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
         Map returnMap = new HashMap();
 
 
-            String sql ="SELECT ID AS orderId ,  product_name_name AS productName , applay_money AS applayMoney , " +
-                                "PERIODS AS periods , " +
-                                "date_format(str_to_date(applay_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS applayTime , " +
-                                "Order_state AS orderState  " +
-                        "FROM mag_order WHERE USER_ID='"+userId+"' ORDER BY applay_time DESC  limit "+pageNumber+","+pageSize;
+        String sql = "SELECT o.ID AS orderId ,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
+                            "o.product_name_name AS productName , o.applay_money AS applayMoney ,  " +
+                            "o.loan_amount AS loanAmount ,  o.repay_money AS repayMoney , " +
+                            "date_format(str_to_date( o.applay_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS applayTime , " +
+                            "date_format(str_to_date( o.Examine_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS examineTime , " +
+                            "DATE_FORMAT(STR_TO_DATE( o.CREAT_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS creatTime , " +
+                            "DATE_FORMAT(STR_TO_DATE( o.ALTER_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS alterTime , " +
+                            "DATE_FORMAT(STR_TO_DATE( o.loan_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS loanTime , " +
+                            "o.contract_amount AS contractAmount , " +
+                            "o.repay_type AS repayType ,  o.Job AS job ,  o.Service_fee AS serviceFee ,  o.loan_purpose AS loanPurpose , " +
+                            "o.PERIODS AS periods ,  o.Order_state AS orderState " +
+                        "FROM mag_order o WHERE o.USER_ID='"+userId+"' ORDER BY CREAT_TIME DESC  limit "+pageNumber+","+pageSize;
         List allOrderList = sunbmpDaoSupport.findForList(sql);
 
         returnMap.put("allOrderList",allOrderList);
@@ -1957,10 +1964,13 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
         Map returnMap = new HashMap();
         Map operationMap = new HashMap();
         String orderSql = "SELECT   o.ID AS orderId ,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
-                                    "product_name_name AS productName , applay_money AS applayMoney ,  " +
-                                    "date_format(str_to_date( o.applay_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS applayTime ,  " +
-                                    " o.loan_amount AS loanAmount ,  o.repay_money AS repayMoney ," +
-                                    "date_format(str_to_date( o.Examine_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS examineTime , " +
+                                    "o.product_name_name AS productName , o.applay_money AS applayMoney ,  " +
+                                    "o.loan_amount AS loanAmount ,  o.repay_money AS repayMoney ," +
+                                    "date_format(str_to_date( o.applay_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS applayTime , " +
+                                    "date_format(str_to_date( o.Examine_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS examineTime , " +
+                                    "DATE_FORMAT(STR_TO_DATE( o.CREAT_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS creatTime , " +
+                                    "DATE_FORMAT(STR_TO_DATE( o.ALTER_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS alterTime , " +
+                                    "DATE_FORMAT(STR_TO_DATE( o.loan_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS loanTime , " +
                                     " o.contract_amount AS contractAmount , " +
                                     " o.repay_type AS repayType ,  o.Job AS job ,  o.Service_fee AS serviceFee ,  o.loan_purpose AS loanPurpose , " +
                                     " o.PERIODS AS periods ,  o.Order_state AS orderStatus  ,wpd.payment AS payment " +
@@ -1968,18 +1978,20 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                             "LEFT JOIN mag_product_fee pf ON o.product_detail = pf.product_id " +
                             "LEFT JOIN pro_working_product_detail wpd ON pf.product_id=wpd.id " +
                             "WHERE  o.ID='"+orderId+"' ";
+
         Map orderMap = sunbmpDaoSupport.findForMap(orderSql);
 
         String operationSql="SELECT id AS operationId , order_id AS orderId , emp_id AS empId , emp_name AS empName," +
-                                    "date_format(str_to_date(operation_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%I:%S') AS operationTime , " +
+                                    "date_format(str_to_date(operation_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS operationTime , " +
                                     "amount AS amount , STATUS AS status , operation_node AS operationNode , " +
                                     "operation_result AS operationResult , description AS description " +
                             "FROM order_operation_record " +
                             "WHERE order_id='"+orderId+"' AND  operation_node NOT IN (2)  ORDER BY operation_time DESC";
         List operationList = sunbmpDaoSupport.findForList(operationSql);
         if (operationList!=null){
+
             //获取订单状态
-            String orderStatus= orderMap.get("orderStatus").toString();
+             String orderStatus= orderMap.get("orderStatus").toString();
 
             operationMap.put("operationId","");
             operationMap.put("operationNode",orderStatus);
@@ -1991,7 +2003,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
             operationMap.put("empId","");
             operationMap.put("empName","");
             operationMap.put("description","");
-            operationMap.put("orderStatus",orderStatus);
+            operationMap.put("orderState",orderStatus);
 
             //添加到operationList 索引为0的位置
             operationList.add(0,operationMap);

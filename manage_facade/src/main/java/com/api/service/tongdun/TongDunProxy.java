@@ -55,6 +55,7 @@ public class TongDunProxy implements ITongDunApiService {
         resultParameter.setIdentityCode(request.getIdNo());
         resultParameter.setUserMobile(request.getPhone());
         resultParameter.setRealName(request.getName());
+        resultParameter.setState(ApiConstants.STATUS_CODE_STATE);
         final List<Map> mapList = apiResultServerImpl.selectApiResult(resultParameter);
         if (CollectionUtils.isEmpty(mapList)) {
             try {
@@ -68,6 +69,7 @@ public class TongDunProxy implements ITongDunApiService {
                 }
                 Thread.sleep(3000);
                 LOGGER.info("同盾--获取报告信息 API调用参数：{}", request.toString());
+                request.setReportId(reportAO.getReportId());
                 final String result = queryReportInfo(reportAO);
                 costTime = System.currentTimeMillis() - startTime;
                 LOGGER.info("同盾--获取报告信息{}", result);
@@ -90,6 +92,7 @@ public class TongDunProxy implements ITongDunApiService {
             }
         }else{
             final Map map = mapList.get(0);
+            request.setReportId(map.get("api_return_id").toString());
             //保存数据到数据库
             saveTongDunInfo(request, map.get("result_data").toString());
             LOGGER.info("同盾-命中数据库记录");
@@ -126,6 +129,7 @@ public class TongDunProxy implements ITongDunApiService {
         apiResult.setUserMobile(request.getPhone());
         apiResult.setUserName(request.getPhone());
         apiResult.setResultData(jsonStr);
+        apiResult.setApiReturnId(request.getReportId());
         apiResult.setState(1);
         apiResultServerImpl.insertApiResult(apiResult);
     }

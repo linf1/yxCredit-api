@@ -20,7 +20,7 @@ public class ApiResultServerImpl extends AbsServiceBase implements IApiResultSer
     @Override
     public int insertApiResult(ApiResult result) throws Exception {
         StringBuilder sql = new StringBuilder("INSERT INTO zw_api_result");
-        sql.append(" (id,code,message,source_child_name,source_child_code,source_code,source_name,real_name,identity_code,user_mobile,user_name,only_key,result_data,state)");
+        sql.append(" (id,code,message,source_child_name,source_child_code,source_code,source_name,real_name,identity_code,user_mobile,user_name,only_key,result_data,api_return_id,state)");
         sql.append(" VALUES(");
         sql.append("'").append(result.getId()).append("',");
         sql.append("'").append(result.getCode()).append("',");
@@ -35,6 +35,7 @@ public class ApiResultServerImpl extends AbsServiceBase implements IApiResultSer
         sql.append("'").append(result.getUserName()).append("',");
         sql.append("'").append(result.getOnlyKey()).append("',");
         sql.append("'").append(result.getResultData()).append("',");
+        sql.append("'").append(result.getApiReturnId()).append("',");
         sql.append("'").append(result.getState()).append("'");
         sql.append(")");
         return sunbmpDaoSupport.executeSql(sql.toString());
