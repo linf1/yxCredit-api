@@ -62,7 +62,7 @@ public class ShujumoheController {
                 //默认数据成功
                 saveMoheInfo(request,param);
                 //异步更新数据
-                syncExecutor(request);
+                asyncExecutor(request);
             }else{
                 final Map map = mapList.get(0);
                 Map<String,Object>  param = new HashMap<>(5);
@@ -123,7 +123,7 @@ public class ShujumoheController {
      *                taskId - 数据魔盒数据查询id
      *
      */
-    private void syncExecutor(ShujumoheRequest request){
+    private void asyncExecutor(ShujumoheRequest request){
         final BlockingQueue<Runnable> blockingQueue = new LinkedBlockingQueue<>();
         final ThreadFactory threadFactory = Thread::new;
         final ThreadPoolExecutor poolExecutor = new ThreadPoolExecutor(1, 1,
