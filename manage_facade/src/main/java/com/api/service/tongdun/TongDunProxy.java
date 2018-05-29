@@ -55,6 +55,7 @@ public class TongDunProxy implements ITongDunApiService {
         resultParameter.setIdentityCode(request.getIdNo());
         resultParameter.setUserMobile(request.getPhone());
         resultParameter.setRealName(request.getName());
+        resultParameter.setState(ApiConstants.API_STATE_ENABLE);
         final List<Map> mapList = apiResultServerImpl.selectApiResult(resultParameter);
         if (CollectionUtils.isEmpty(mapList)) {
             try {
@@ -91,6 +92,7 @@ public class TongDunProxy implements ITongDunApiService {
             }
         }else{
             final Map map = mapList.get(0);
+            request.setReportId(map.get("api_return_id").toString());
             //保存数据到数据库
             saveTongDunInfo(request, map.get("result_data").toString());
             LOGGER.info("同盾-命中数据库记录");

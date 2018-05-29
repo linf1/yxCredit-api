@@ -64,6 +64,17 @@ public class ApiConstants {
     public static final String STATUS_CREDIT_INFO_MSG="输入信息有误";
 
     /**
+     * 有效
+     */
+    public static final int API_STATE_ENABLE = 1;
+    /**
+     * 无效
+     */
+    public static final int API_STATE_UNABLE = 0;
+
+
+
+    /**
      * 同盾API常量
      */
     public static final String REPORT_SUCCESS_KEY="success";

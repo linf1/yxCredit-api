@@ -49,6 +49,7 @@ public class ShujumoheController {
             ApiResult resultParameter = new ApiResult();
             resultParameter.setUserName(request.getPhone());
             resultParameter.setSourceCode(EApiSourceEnum.MOHE.getCode());
+            resultParameter.setState(ApiConstants.API_STATE_ENABLE);
             //查询是否有报告
             final List<Map> mapList = apiResultServerImpl.selectApiResult(resultParameter);
             if(CollectionUtils.isEmpty(mapList)){
