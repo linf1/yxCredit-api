@@ -55,7 +55,7 @@ public class TongDunProxy implements ITongDunApiService {
         resultParameter.setIdentityCode(request.getIdNo());
         resultParameter.setUserMobile(request.getPhone());
         resultParameter.setRealName(request.getName());
-        resultParameter.setState(ApiConstants.API_STATE_ENABLE);
+        resultParameter.setState(ApiConstants.STATUS_CODE_STATE);
         final List<Map> mapList = apiResultServerImpl.selectApiResult(resultParameter);
         if (CollectionUtils.isEmpty(mapList)) {
             try {

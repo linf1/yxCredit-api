@@ -20,8 +20,13 @@ public class ApiConstants {
 
     public static final String STATUS_ERROR = "1";
     public static final String STATUS_ERROR_MSG = "操作失败";
-
+    /**
+     * zw_api_result 表 state 有效
+     */
     public static final int STATUS_CODE_STATE = 1;
+    /**
+     * zw_api_result 表 state 无效
+     */
     public static final int STATUS_CODE_NO_STATE = 0;
 
     public static final String STATUS_CREATE_SUCCESS = "2";
@@ -61,18 +66,7 @@ public class ApiConstants {
     public static final String STATUS_VERIF_CODE_MSG="短信验证码错误";
 
     public static final String STATUS_CREDIT_INFO_ERROR="100012";
-    public static final String STATUS_CREDIT_INFO_MSG="输入信息有误";
-
-    /**
-     * 有效
-     */
-    public static final int API_STATE_ENABLE = 1;
-    /**
-     * 无效
-     */
-    public static final int API_STATE_UNABLE = 0;
-
-
+    public static final String STATUS_CREDIT_INFO_MSG="获取征信信息超时";
 
     /**
      * 同盾API常量
