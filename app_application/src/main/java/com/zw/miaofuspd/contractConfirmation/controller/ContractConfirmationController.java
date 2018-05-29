@@ -513,7 +513,7 @@ public class ContractConfirmationController extends AbsBaseController {
         Map contract = contractConfirmationService.getContractByOrderId(orderId);
 
         String[] pdfPath=contract.get("contract_src").toString().split(",");
-        String root = request.getSession().getServletContext().getRealPath("/");
+        String root = iSystemDictService.getInfo("file.path");
         //签章1
         Map map1=signSingleContract(contract, "借款协议", root+pdfPath[0]);
         if("0".equals(map1.get("res_code"))){

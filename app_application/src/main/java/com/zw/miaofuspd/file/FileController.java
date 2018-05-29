@@ -2,6 +2,7 @@ package com.zw.miaofuspd.file;
 
 import com.zw.miaofuspd.facade.dict.service.ISystemDictService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +11,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-
+@Controller
+@RequestMapping("/file")
 public class FileController {
     @Autowired
     private ISystemDictService iSystemDictService;
@@ -39,7 +41,7 @@ public class FileController {
         }
     }
 
-    @RequestMapping("/file/get")
+    @RequestMapping("/getFile")
     public void getFile(String saveAddress,HttpServletRequest request, HttpServletResponse response) throws Exception{
         try{
         	/*saveAddress = URLEncoder.encode(saveAddress, "utf-8");*/

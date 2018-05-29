@@ -1093,10 +1093,10 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
                 "from mag_customer t1 left join mag_customer_job t2 on t1.id=t2.customer_id left join byx_white_list t3 on t1.person_name = t3. real_name " +
                 "left join byx_contractor t4 on t3.contractor_id = t4.id where t1.id = '"+customerId+"'";
         Map customerMap =sunbmpDaoSupport.findForMap(sql2);
-        String zbs_jujian_fee = orderMap.get("zbs_jujian_fee")==null?"":orderMap.get("zbs_jujian_fee").toString();
-        String  lixi = orderMap.get("lixi")==null?"":orderMap.get("lixi").toString();
+        String zbs_jujian_fee = orderMap.get("zbs_jujian_fee")==null?"0":orderMap.get("zbs_jujian_fee").toString();
+        String  lixi = orderMap.get("lixi")==null?"0":orderMap.get("lixi").toString();
         String[] zbs_jujian =  zbs_jujian_fee.split(",");
-        String jujian_fee="";
+        String jujian_fee="0";
         String contractorName = customerMap.get("contractor_name") == null?"":customerMap.get("contractor_name").toString();
         for(int i=0;i<zbs_jujian.length;i++){
             if(zbs_jujian[i].equals(contractorName)){
