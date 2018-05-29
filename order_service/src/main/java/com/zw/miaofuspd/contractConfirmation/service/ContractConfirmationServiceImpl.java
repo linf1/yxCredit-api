@@ -378,9 +378,9 @@ public class ContractConfirmationServiceImpl extends AbsServiceBase implements C
     @Override
     public void updateOrderStatus(Map params) {
         String uuId = UUID.randomUUID().toString();
-        String insertOpSql="insert into order_operation_record (id, operation_node,operation_result, status, amount, order_id, operation_time, emp_id, emp_name, description) values ('"+uuId+"', '4', '"+params.get("operationResult")+"', '1', amount, '"+params.get("orderId")+"', '"+DateUtils.getCurrentTime(DateUtils.STYLE_10)+"', '"+params.get("empId")+"', '"+params.get("empName")+"', '"+params.get("description")+"')";
+        String insertOpSql="insert into order_operation_record (id, operation_node,operation_result, status, amount, order_id, operation_time, emp_id, emp_name, description) values ('"+uuId+"', '4', '"+params.get("operationResult")+"', '1', '"+params.get("amount")+"', '"+params.get("orderId")+"', '"+DateUtils.getCurrentTime(DateUtils.STYLE_10)+"', '"+params.get("empId")+"', '"+params.get("empName")+"', '"+params.get("description")+"')";
 
-        String updateStatusSql = "update mag_order set order_state='"+params.get("orderState")+"' where id = '"+params.get("orderId")+"'";
+        String updateStatusSql = "update mag_order set contract_no='"+params.get("contract_no")+"',order_state='"+params.get("orderState")+"' where id = '"+params.get("orderId")+"'";
         sunbmpDaoSupport.exeSql(insertOpSql);
         sunbmpDaoSupport.exeSql(updateStatusSql);
     }

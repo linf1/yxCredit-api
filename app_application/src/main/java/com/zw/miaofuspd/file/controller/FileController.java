@@ -1,4 +1,4 @@
-package com.zw.miaofuspd.file;
+package com.zw.miaofuspd.file.controller;
 
 import com.zw.miaofuspd.facade.dict.service.ISystemDictService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +12,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 @Controller
-@RequestMapping("/file")
 public class FileController {
     @Autowired
     private ISystemDictService iSystemDictService;
 
-    @RequestMapping("/img/getImg.html")
+    @RequestMapping("/img/get")
     public void getimg(String saveAddress , HttpServletRequest request, HttpServletResponse response) throws IOException {
         try{
             saveAddress = "";//Constants.UPLOAD_FILE_PATH+saveAddress;
@@ -35,13 +34,13 @@ public class FileController {
         {
             e.printStackTrace();
             PrintWriter toClient = response.getWriter(); //得到向客户端输出文本的对象
-            response.setContentType("text/html;charset=gb2312");
+            response.setContentType("text/html;charset=utf-8");
             toClient.write("无法打开!");
             toClient.close();
         }
     }
 
-    @RequestMapping("/getFile")
+    @RequestMapping("/file/get")
     public void getFile(String saveAddress,HttpServletRequest request, HttpServletResponse response) throws Exception{
         try{
         	/*saveAddress = URLEncoder.encode(saveAddress, "utf-8");*/
@@ -86,7 +85,7 @@ public class FileController {
         {
             e.printStackTrace();
             PrintWriter toClient = response.getWriter(); //得到向客户端输出文本的对象
-            response.setContentType("text/html;charset=gb2312");
+            response.setContentType("text/html;charset=utf-8");
             toClient.write("无法打开资源!");
             toClient.close();
         }

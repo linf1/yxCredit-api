@@ -533,6 +533,7 @@ public class ContractConfirmationController extends AbsBaseController {
         String customerId=request.getParameter("empId");
         String customerName=request.getParameter("empName");
         String amount=contract.get("contract_amount").toString();
+        String contractNo=contract.get("contract_no").toString();
         String description=request.getParameter("description");
         Map params=new HashMap();
         params.put("orderId", orderId);
@@ -542,6 +543,7 @@ public class ContractConfirmationController extends AbsBaseController {
         params.put("operationResult", 5);
         params.put("orderState", 4);
         params.put("description", description);
+        params.put("contract_no", contractNo);
         contractConfirmationService.updateOrderStatus(params);
 
         ResultVO resultVO = assetController.thirdAssetsReceiver(orderId,customerId);
