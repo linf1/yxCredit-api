@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.base.util.DateUtils;
 import com.base.util.GeneratePrimaryKeyUtils;
 import com.base.util.TraceLoggerUtil;
+import com.constants.ApiConstants;
 import com.constants.CommonConstant;
 import com.enums.EIsIdentityEnum;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;
@@ -1082,28 +1083,32 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         resultMap.put("mohe","0");
         resultMap.put("zhengxin","0");
         Map customerMap = getThreeItems(customerId);
-        //更细魔盒授权状态
-        String moheSql = "SELECT count(1) from zw_api_result where source_code = '1' and state = 1 and code = 0 and  created_time >= date_add(NOW(), interval -1 MONTH) and real_name = '"+customerMap.get("PERSON_NAME")+"' and user_mobile = '"+customerMap.get("TEL")+"' and identity_code = '"+customerMap.get("CARD")+"' ORDER BY created_time desc LIMIT 1";
-        int moheCount = sunbmpDaoSupport.getCount(moheSql);
-        //更新个人征信授权状态
-        String creditSql = "SELECT count(1) from zw_api_result where source_code = '3' and state = 1 and code = 0 and  created_time >= date_add(NOW(), interval -1 MONTH) and real_name = '"+customerMap.get("PERSON_NAME")+"' and user_mobile = '"+customerMap.get("TEL")+"' and identity_code = '"+customerMap.get("CARD")+"' ORDER BY created_time desc LIMIT 1";
-        int creditCount = sunbmpDaoSupport.getCount(creditSql);
-
+        //获取魔盒授权状态
+        int moheCount = findEmpowerStatus(EApiSourceEnum.MOHE.getCode(),customerMap);
+        //获取个人征信授权状态
+        int creditCount = findEmpowerStatus(EApiSourceEnum.CREDIT.getCode(),customerMap);
         if(moheCount == 1){
             resultMap.put("mohe","1");
         }
         if(creditCount == 1){
             resultMap.put("zhengxin","1");
         }
-        String sql2 = "";
+        String sql2;
         if(moheCount + creditCount == 2 ){
             sql2 = "update mag_customer set authorization_complete = '100' where id = '"+customerId+"'";
-
         }else {
             sql2 = "update mag_customer set authorization_complete = '0' where id = '"+customerId+"'";
         }
         sunbmpDaoSupport.exeSql(sql2);
         return resultMap;
+    }
+
+    /**
+     * 获取授权状态
+     */
+    private  int findEmpowerStatus(String sourceCode,Map customerMap){
+        String sql = "SELECT count(1) from zw_api_result where source_code = '"+sourceCode+"' and state = "+ApiConstants.STATUS_CODE_STATE+" and code = "+ApiConstants.STATUS_SUCCESS+" and  created_time >= date_add(NOW(), interval -1 MONTH) and real_name = '"+customerMap.get("PERSON_NAME")+"' and user_mobile = '"+customerMap.get("TEL")+"' and identity_code = '"+customerMap.get("CARD")+"' ORDER BY created_time desc LIMIT 1";
+        return sunbmpDaoSupport.getCount(sql);
     }
 
     /**
