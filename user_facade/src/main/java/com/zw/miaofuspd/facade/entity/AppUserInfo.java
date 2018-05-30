@@ -102,6 +102,7 @@ public class AppUserInfo implements Serializable {
     private String img_url;
     //性别 code
     private String sex;
+
     //性别
     private String sex_name;
     //person表主键id
