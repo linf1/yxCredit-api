@@ -1078,25 +1078,31 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     }
     @Override
     public Map getEmpowerStatus(String orderId,String customerId){
-        Map resultMap = new HashMap();
+        Map<String,String> resultMap = new HashMap<String, String>(2);
         resultMap.put("mohe","0");
         resultMap.put("zhengxin","0");
         Map customerMap = getThreeItems(customerId);
-        //更细授权状态
-        String sql = "SELECT * from zw_api_result where state = 1 and code = 0 and real_name = '"+customerMap.get("PERSON_NAME")+"' and user_mobile = '"+customerMap.get("TEL")+"' and identity_code = '"+customerMap.get("CARD")+"'";
-        List<Map> list = sunbmpDaoSupport.findForList(sql);
-        for (Map map:list){
-            if(EApiSourceEnum.MOHE.getCode().equals(map.get("source_code"))){
-                resultMap.put("mohe","1");
-            }
-            if(EApiSourceEnum.CREDIT.getCode().equals(map.get("source_code"))){
-                resultMap.put("zhengxin","1");
-            }
+        //更细魔盒授权状态
+        String moheSql = "SELECT count(1) from zw_api_result where source_code = '1' and state = 1 and code = 0 and  created_time >= date_add(NOW(), interval -1 MONTH) and real_name = '"+customerMap.get("PERSON_NAME")+"' and user_mobile = '"+customerMap.get("TEL")+"' and identity_code = '"+customerMap.get("CARD")+"' ORDER BY created_time desc LIMIT 1";
+        int moheCount = sunbmpDaoSupport.getCount(moheSql);
+        //更新个人征信授权状态
+        String creditSql = "SELECT count(1) from zw_api_result where source_code = '3' and state = 1 and code = 0 and  created_time >= date_add(NOW(), interval -1 MONTH) and real_name = '"+customerMap.get("PERSON_NAME")+"' and user_mobile = '"+customerMap.get("TEL")+"' and identity_code = '"+customerMap.get("CARD")+"' ORDER BY created_time desc LIMIT 1";
+        int creditCount = sunbmpDaoSupport.getCount(creditSql);
+
+        if(moheCount == 1){
+            resultMap.put("mohe","1");
         }
-        if(list.size() == 2){
-            String sql2 = "update mag_customer set authorization_complete = '100' where id = '"+customerId+"'";
-            sunbmpDaoSupport.exeSql(sql2);
+        if(creditCount == 1){
+            resultMap.put("zhengxin","1");
         }
+        String sql2 = "";
+        if(moheCount + creditCount == 2 ){
+            sql2 = "update mag_customer set authorization_complete = '100' where id = '"+customerId+"'";
+
+        }else {
+            sql2 = "update mag_customer set authorization_complete = '0' where id = '"+customerId+"'";
+        }
+        sunbmpDaoSupport.exeSql(sql2);
         return resultMap;
     }
 
@@ -1113,10 +1119,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
 
     @Override
     public Map getOrderDetailById(String orderId,String customerId) {
-        Map reslutMap = new HashMap();
-        //总包商
-       // String contractorName = map.get("contractorName").toString();
-
+        Map reslutMap = new HashMap(3);
         String sql1 = "select t2.order_no as order_no,t2.product_name_name as product_name_name,t2.loan_amount as loan_amount,t2.rate as rate,t2.PERIODS as periods,date_format(str_to_date(t2.applay_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%i:%s') as applay_time," +
                 "t2.loan_purpose as loan_purpose,t2.customer_name as customer_name,t2.card as card ,t2.tel as tel,t1.zbs_jujian_fee  as zbs_jujian_fee,t1.li_xi as lixi,t3.repayment as repayment,t3.repayment_days as repayment_days" +
                 " from mag_product_fee t1 left join mag_order t2 on t1.product_id = t2.product_detail left join pro_working_product_detail t3 on t1.product_id = t3.id where t2.id = '"+orderId+"'";
