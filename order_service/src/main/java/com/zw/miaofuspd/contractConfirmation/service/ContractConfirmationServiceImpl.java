@@ -357,10 +357,11 @@ public class ContractConfirmationServiceImpl extends AbsServiceBase implements C
         String amount=map.get("loanAmount").toString();
         String contractSrc=map.get("pdfUrl").toString();
         String contract_no=map.get("contractNo").toString();
+        String contract_name=map.get("template_name").toString();
 
         String insertContractSql = "insert into mag_order_contract  (id,CUSTOMER_ID,customer_name,custID,user_id,contract_amount,order_no,contract_no,contract_name," +
                 "order_id,contract_src,CREAT_TIME, status) values " +
-                "('"+uuId+"','"+customerId+"','"+customerName+"','"+card+"','"+userId+"','"+amount+"','"+orderNo+"','"+contract_no+"','申购协议','"+orderId+"','"+contractSrc+"'" +
+                "('"+uuId+"','"+customerId+"','"+customerName+"','"+card+"','"+userId+"','"+amount+"','"+orderNo+"','"+contract_no+"','"+contract_name+"','"+orderId+"','"+contractSrc+"'" +
                 ",'"+createTime+"','0')";
 
         sunbmpDaoSupport.exeSql(insertContractSql);
@@ -368,11 +369,20 @@ public class ContractConfirmationServiceImpl extends AbsServiceBase implements C
     }
 
     @Override
-    public Map getContractByOrderId(String orderId) {
+    public List<Map> getContractByOrderId(String orderId) {
         String sql = "select moc.id, moc.customer_id, moc.customer_name, moc.custId, moc.user_id, moc.contract_amount, moc.order_no, moc.contract_no, moc.contract_name,"+
-                "moc.order_id, moc.contract_src, moc.creat_time, moc.status, mc.person_name,mc.card from mag_order_contract moc left join mag_customer mc on mc.id=moc.customer_id where moc.order_id = '"+orderId+"'";
-        Map map = sunbmpDaoSupport.findForMap(sql);
-        return map;
+                "moc.order_id, moc.contract_src, moc.creat_time, moc.status, mc.person_name,mc.card from mag_order_contract moc left join mag_customer mc on mc.id=moc.customer_id where moc.order_id = '"+orderId+"' order by CREAT_TIME";
+
+        List<Map> contracts = sunbmpDaoSupport.findForList(sql);
+        return contracts;
+    }
+
+    @Override
+    public Map getContractById(String contractId) {
+        String sql = "select moc.id, moc.customer_id, moc.customer_name, moc.custId, moc.user_id, moc.contract_amount, moc.order_no, moc.contract_no, moc.contract_name,"+
+                "moc.order_id, moc.contract_src, moc.creat_time, moc.status, mc.person_name,mc.card from mag_order_contract moc left join mag_customer mc on mc.id=moc.customer_id where moc.id = '"+contractId+"' order by CREAT_TIME";
+        Map contract = sunbmpDaoSupport.findForMap(sql);
+        return contract;
     }
 
     @Override
