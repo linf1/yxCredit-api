@@ -946,7 +946,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     public Map checkCustomerInfo(String costomerId,String card)  {
         Map resultMap = new HashMap(3);
         Map workMap = null;
-        long workTimeDiff = 0;
+        long workTimeDiff = -1L;
 
         try {
             //验证用户年龄
@@ -979,7 +979,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             resultMap.put("msg","工地临时工不符合申请条件");
             return  resultMap;
         }
-        if(workTimeDiff < 30){
+        if(workTimeDiff < 30 && workTimeDiff != -1L){
             resultMap.put("flag",false);
             resultMap.put("msg","所在工地工作未满1个月");
             return  resultMap;
