@@ -1,5 +1,6 @@
 package com.zw.miaofuspd.facade.contractConfirmation.service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -72,7 +73,14 @@ public interface ContractConfirmationService {
      * @param orderId
      * @return
      */
-    Map getContractByOrderId(String orderId);
+    List<Map> getContractByOrderId(String orderId);
+
+    /**
+     * 获取合同
+     * @param contractId
+     * @return
+     */
+    Map getContractById(String contractId);
 
     /**
      * 更新订单状态

@@ -7,10 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
+
 @Controller
 public class FileController {
     @Autowired
@@ -43,43 +41,41 @@ public class FileController {
     @RequestMapping("/file/get")
     public void getFile(String saveAddress,HttpServletRequest request, HttpServletResponse response) throws Exception{
         try{
-        	/*saveAddress = URLEncoder.encode(saveAddress, "utf-8");*/
-        	/*saveAddress = URLDecoder.decode(saveAddress, "utf-8");*/
-
             String fileBasePath = iSystemDictService.getInfo("file.path");
-
-            java.io.InputStream in = null;
-
-            // 方式1: 以流方式读取视频文件. pic.jsp?src=c:\img\test.rm
-            //if ( from.equals("") || from.equals("file") )
-            //{
-            in = new java.io.FileInputStream(fileBasePath+saveAddress);
-            //}
-            //else // 方式2: 从数据库中读取流. pic.jsp?src=c:\img\232
-            //{
-            //    java.util.List list = DbWrapper.executeQuery(
-            //        "select CONTENT from IMAGE where id = '" + request.getParameter("src").toString() + "'"
-            //        );
-            //
-            //    if ( list.size() > 0 )
-            //    {
-            //        in = (InputStream)(((java.util.Map)list.get(0)).get("CONTENT"));
-            //    }
-            //}
-
-            if ( in != null )
-            {
-                javax.servlet.ServletOutputStream OStream=response.getOutputStream();
-                byte[] b = new byte[1024];
-                int len=0;
-                while( ( len = in.read(b)) != -1 )
+            java.io.InputStream in = new java.io.FileInputStream(fileBasePath+saveAddress);
+        	if(saveAddress.endsWith(".html")){
+                if ( in != null )
                 {
-                    OStream.write(b);
-                }
+                    InputStreamReader is=new InputStreamReader(in);
+                    PrintWriter out=response.getWriter();
+                    response.setContentType("text/html;charset=utf-8");
+                    BufferedReader br=new BufferedReader(is);
+                    String txtLine=null;
+                    while((txtLine=br.readLine())!=null)
+                    {
+                        out.println(txtLine);
+                    }
 
-                OStream.close();
+                    br.close();
+                    out.close();
+                }
+                in.close();
+            }else{
+                if ( in != null )
+                {
+                    javax.servlet.ServletOutputStream OStream=response.getOutputStream();
+                    byte[] b = new byte[1024];
+                    int len=0;
+                    while( ( len = in.read(b)) != -1 )
+                    {
+                        OStream.write(b);
+                    }
+
+                    OStream.close();
+                }
+                in.close();
             }
-            in.close();
+
         }
         catch(IOException e) //错误处理
         {

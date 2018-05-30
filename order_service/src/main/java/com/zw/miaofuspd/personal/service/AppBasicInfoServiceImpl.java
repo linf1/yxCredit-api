@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.base.util.DateUtils;
 import com.base.util.GeneratePrimaryKeyUtils;
 import com.base.util.TraceLoggerUtil;
+import com.constants.ApiConstants;
 import com.constants.CommonConstant;
 import com.enums.EIsIdentityEnum;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;
@@ -945,7 +946,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     public Map checkCustomerInfo(String costomerId,String card)  {
         Map resultMap = new HashMap(3);
         Map workMap = null;
-        long workTimeDiff = 0;
+        long workTimeDiff = -1L;
 
         try {
             //验证用户年龄
@@ -962,22 +963,25 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             String sql = "select t2.contract_start_date as contract_start_date,t2.job as job from mag_customer t1 " +
                     "left join byx_white_list t2 on t1.PERSON_NAME = t2.real_name and t1.card = t2.card where t1.ID = '"+costomerId+"'";
             workMap = sunbmpDaoSupport.findForMap(sql);
-            Date workTime = DateUtils.strConvertToDateByType(workMap.get("contract_start_date").toString(),DateUtils.STYLE_3);
-            workTimeDiff = DateUtils.getDifferenceDays(now,workTime);
+            String contractStartDate = workMap.get("contract_start_date") == null?"":workMap.get("contract_start_date").toString();
+            if(StringUtils.isNotEmpty(contractStartDate)){
+                Date workTime = DateUtils.strConvertToDateByType(contractStartDate,DateUtils.STYLE_3);
+                workTimeDiff = DateUtils.getDifferenceDays(now,workTime);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             resultMap.put("flag",false);
             resultMap.put("msg","系统繁忙，请稍后重试");
             return  resultMap;
         }
-        if(workTimeDiff < 30){
-            resultMap.put("flag",false);
-            resultMap.put("msg","所在工地工作未满1个月");
-            return  resultMap;
-        }
         if(workMap.get("job").toString().equals("3")){
             resultMap.put("flag",false);
             resultMap.put("msg","工地临时工不符合申请条件");
+            return  resultMap;
+        }
+        if(workTimeDiff < 30 && workTimeDiff != -1L){
+            resultMap.put("flag",false);
+            resultMap.put("msg","所在工地工作未满1个月");
             return  resultMap;
         }
         resultMap.put("flag",true);
@@ -1082,28 +1086,32 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         resultMap.put("mohe","0");
         resultMap.put("zhengxin","0");
         Map customerMap = getThreeItems(customerId);
-        //更细魔盒授权状态
-        String moheSql = "SELECT count(1) from zw_api_result where source_code = '1' and state = 1 and code = 0 and  created_time >= date_add(NOW(), interval -1 MONTH) and real_name = '"+customerMap.get("PERSON_NAME")+"' and user_mobile = '"+customerMap.get("TEL")+"' and identity_code = '"+customerMap.get("CARD")+"' ORDER BY created_time desc LIMIT 1";
-        int moheCount = sunbmpDaoSupport.getCount(moheSql);
-        //更新个人征信授权状态
-        String creditSql = "SELECT count(1) from zw_api_result where source_code = '3' and state = 1 and code = 0 and  created_time >= date_add(NOW(), interval -1 MONTH) and real_name = '"+customerMap.get("PERSON_NAME")+"' and user_mobile = '"+customerMap.get("TEL")+"' and identity_code = '"+customerMap.get("CARD")+"' ORDER BY created_time desc LIMIT 1";
-        int creditCount = sunbmpDaoSupport.getCount(creditSql);
-
+        //获取魔盒授权状态
+        int moheCount = findEmpowerStatus(EApiSourceEnum.MOHE.getCode(),customerMap);
+        //获取个人征信授权状态
+        int creditCount = findEmpowerStatus(EApiSourceEnum.CREDIT.getCode(),customerMap);
         if(moheCount == 1){
             resultMap.put("mohe","1");
         }
         if(creditCount == 1){
             resultMap.put("zhengxin","1");
         }
-        String sql2 = "";
+        String sql2;
         if(moheCount + creditCount == 2 ){
             sql2 = "update mag_customer set authorization_complete = '100' where id = '"+customerId+"'";
-
         }else {
             sql2 = "update mag_customer set authorization_complete = '0' where id = '"+customerId+"'";
         }
         sunbmpDaoSupport.exeSql(sql2);
         return resultMap;
+    }
+
+    /**
+     * 获取授权状态
+     */
+    private  int findEmpowerStatus(String sourceCode,Map customerMap){
+        String sql = "SELECT count(1) from zw_api_result where source_code = '"+sourceCode+"' and state = "+ApiConstants.STATUS_CODE_STATE+" and code = "+ApiConstants.STATUS_SUCCESS+" and  created_time >= date_add(NOW(), interval -1 MONTH) and real_name = '"+customerMap.get("PERSON_NAME")+"' and user_mobile = '"+customerMap.get("TEL")+"' and identity_code = '"+customerMap.get("CARD")+"' ORDER BY created_time desc LIMIT 1";
+        return sunbmpDaoSupport.getCount(sql);
     }
 
     /**
