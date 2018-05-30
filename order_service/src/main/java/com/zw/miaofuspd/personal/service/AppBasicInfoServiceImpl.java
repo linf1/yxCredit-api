@@ -18,6 +18,7 @@ import com.zw.miaofuspd.facade.order.service.IAppInsapplicationService;
 import com.zw.miaofuspd.facade.personal.service.AppBasicInfoService;
 import com.zw.service.base.AbsServiceBase;
 import com.zw.service.exception.DAOException;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -154,7 +155,10 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         String product_detail = map2.get("product_id")==null?"":map2.get("product_id").toString();
         String zbs_jujian_fee = map2.get("zbs_jujian_fee") == null?"":map2.get("zbs_jujian_fee").toString();
         String contractorName = map1.get("contractor_name") == null?"":map1.get("contractor_name").toString();
-        double serviceFee = Double.valueOf(getServiceFee(contractorName, zbs_jujian_fee))/100;
+        double serviceFee = 0.0;
+        if(StringUtils.isNotEmpty(zbs_jujian_fee)){
+            serviceFee = Double.valueOf(getServiceFee(contractorName, zbs_jujian_fee))/100;
+        }
         String sql3 = "update mag_order set applay_money = " + applayMoney + "," + "PERIODS = '" + periods + "'," +
                 "loan_purpose = '" + loanPurpose + "',rate = '"+lixi+"',product_detail = '"+product_detail+"',Service_fee = '"+serviceFee+"'," +
                 "complete = '100' where id = '" + orderId + "'  ";
