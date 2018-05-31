@@ -66,7 +66,7 @@ public class ApiConstants {
     public static final String STATUS_VERIF_CODE_MSG="短信验证码错误";
 
     public static final String STATUS_CREDIT_INFO_ERROR="100012";
-    public static final String STATUS_CREDIT_INFO_MSG="获取征信信息超时";
+    public static final String STATUS_CREDIT_INFO_MSG="输入信息有误";
 
     /**
      * 同盾API常量
