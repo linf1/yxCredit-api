@@ -1058,12 +1058,12 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     }
 
     @Override
-    public Map findById(String id)  {
-        StringBuilder sql = new StringBuilder("select id from mag_customer where user_id = '").append(id).append("'");
-        Map forMap = sunbmpDaoSupport.findForMap(sql.toString());
-        sql = new StringBuilder("select cust.id,cust.PERSON_NAME,cust.TEL,cust.CARD,job.company_address ");
-        sql.append("from mag_customer cust INNER JOIN mag_customer_job job on cust.id = job.customer_id ")
-                .append("where cust.id = '").append(forMap.get("id")).append("'");
+    public Map findByOrderId(String orderId)  {
+        StringBuilder sql = new StringBuilder("SELECT magorder.USER_ID as userId,cust.id custId,cust.PERSON_NAME as custName,cust.TEL as custPhone,cust.CARD as custCard,");
+        sql.append("job.company_address as jobAddress,cust.sync_account_id as syncAccountId,sync_user_id as syncUserId ");
+        sql.append("FROM mag_order magOrder INNER JOIN mag_customer cust ON magOrder.CUSTOMER_ID = cust.id ");
+        sql.append("INNER JOIN mag_customer_job job ON job.customer_id = cust.id ");
+        sql.append("where magOrder.id = '").append(orderId).append("'");
         return sunbmpDaoSupport.findForMap(sql.toString());
     }
 

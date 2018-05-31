@@ -48,4 +48,6 @@ public interface AppUserService {
      * @return
      */
     Map getAccountInfo(AppUserInfo userInfo);
+
+    String getPhoneById(String id);
 }

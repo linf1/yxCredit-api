@@ -100,4 +100,18 @@ public class AppUserServiceImpl extends AbsServiceBase implements AppUserService
         }
         return map;
     }
+
+    @Override
+    public String getPhoneById(String id) {
+        String sql = "select tel from  app_user where id = '"+ id + "'";
+        try {
+            Map support = sunbmpDaoSupport.findForMap(sql);
+            if(support != null) {
+                return support.get("tel").toString();
+            }
+        }catch (Exception e ){
+            return "";
+        }
+        return "";
+    }
 }

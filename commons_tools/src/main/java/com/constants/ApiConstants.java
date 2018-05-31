@@ -97,6 +97,14 @@ public class ApiConstants {
     public static final String API_MOHE_TITLE = "魔盒";
     public static final String API_MOHE_YYS = "运营商";
 
+    /**
+     * 银行卡四要素发送短信成功状态码
+     */
+    public static final String AUTH_SEND_STATUS_SUCCESS = "4";
+    /**
+     * 银行卡四要素短信验证成功状态码
+     */
+    public static final String AUTH_FIRM_STATUS_SUCCESS = "1";
 
 
     //成功状态

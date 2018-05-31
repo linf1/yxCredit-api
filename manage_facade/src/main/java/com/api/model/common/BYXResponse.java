@@ -94,6 +94,7 @@ public class BYXResponse implements Serializable {
        }
    }
 
+
     /**
      * 解析内容返回结果
      * @param byxResponseJson 远程调用接口返回结果字符串

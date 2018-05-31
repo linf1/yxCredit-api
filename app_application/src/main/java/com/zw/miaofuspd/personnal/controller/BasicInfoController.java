@@ -184,55 +184,6 @@ public class BasicInfoController extends AbsBaseController {
         ResultVO resultVO = new ResultVO();
         Map map = JSONObject.parseObject(data);
         Map resMap = appBasicInfoService.saveRealName(map);
-        DSMoneyRequest request = new DSMoneyRequest();
-        try {
-            final Map customer = appBasicInfoServiceImpl.findById((String) map.get("userId"));
-            if (customer != null) {
-                request.setBorrowerType(0);
-                request.setBorrowerCardType("1");
-                //app登录手机号码
-                request.setBorrowerUserName((String) map.get("phone"));
-                request.setBorrowerName(customer.get("PERSON_NAME").toString());
-                request.setBorrowerMobilePhone(customer.get("TEL").toString());
-                request.setBorrowerThirdId(customer.get("id").toString());
-                request.setBorrowerChannel("yxd");
-                request.setBorrowerCardNo(customer.get("CARD").toString());
-                request.setAddress(customer.get("company_address").toString());
-                request.setAccountType("0");
-                request.setAccountName(customer.get("PERSON_NAME").toString());
-                request.setAccountIdCard(customer.get("CARD").toString());
-                request.setOtherFlag("1");
-                request.setAccountChannel("yxd");
-                request.setAccountThirdId(customer.get("id").toString());
-                request.setProvinceCode(String.valueOf(map.get("prov_id")));
-                request.setProvinceName(map.get("prov_name").toString());
-                request.setCityCode(String.valueOf(map.get("city_id")));
-                request.setCityName(map.get("city_name").toString());
-                request.setBankCode(String.valueOf(map.get("bank_number")));
-                request.setBankName(map.get("bank_name").toString());
-                request.setBankCardNo(map.get("card_number").toString());
-                request.setBankBranchName(map.get("bank_subbranch").toString());
-                request.setCnapsCode(map.get("bank_subbranch_id").toString());
-                BYXResponse byxResponse = idsMoneyServer.saveBorrowerAndAccountCard(request);
-                //数据同步接口一个相同的实名只会同步一次，所以不用判断是否成功
-                if(byxResponse != null) {
-                    final Map resData = (Map) byxResponse.getRes_data();
-                    if(resData != null) {
-                        //数据同步更新个人信息到数据库
-                        appBasicInfoService.updateSynById(
-                                resData.get("userId").toString(),
-                                resData.get("accountId").toString(),
-                                map.get("customerId").toString()
-                        );
-                        LOGGER.info("------借款人及放款账户数据同步更新个人信息到数据库成功------");
-                    }
-                }else{
-                    LOGGER.info("------借款人及放款账户数据同步更新个人信息到数据库失败------");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         resultVO.setRetData(resMap);
         return resultVO;
     }

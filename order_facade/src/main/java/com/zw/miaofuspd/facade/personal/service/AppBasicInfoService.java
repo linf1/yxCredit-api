@@ -149,9 +149,9 @@ public interface AppBasicInfoService {
 
     /**
      *  按id获取用户信息 create by 陈清玉 2018-05-16
-     * @param id 用户ID
+     * @param orderId 用户ID
      */
-    Map findById(String id);
+    Map findByOrderId(String orderId);
 
     /**
      * 数据同步完成后更新个人信息
