@@ -1,8 +1,6 @@
 package com.zw.miaofuspd.myset.service;
 
 import com.base.util.DateUtils;
-import com.base.util.StringUtils;
-import com.zw.miaofuspd.facade.entity.AppUserInfo;
 import com.zw.miaofuspd.facade.myset.service.FeedBackService;
 import com.zw.service.base.AbsServiceBase;
 import org.springframework.stereotype.Service;
@@ -55,13 +53,13 @@ public class FeedBackServiceImpl extends AbsServiceBase implements FeedBackServi
                 outMap.put("res_msg","保存成功");
             }else {
                 outMap.put("res_code",2);
-                outMap.put("res_msg","意见反馈失败");
+                outMap.put("res_msg","保存失败");
             }
 
         }catch (Exception e){
             e.printStackTrace();
-            outMap.put("flag",2);
-            outMap.put("msg","意见反馈失败");
+            outMap.put("res_code",2);
+            outMap.put("res_msg","保存失败");
         }
         return outMap;
     }

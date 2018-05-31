@@ -47,5 +47,7 @@
                    ref="contractSignServiceImpl"/>
     <dubbo:service interface="com.api.service.ds.IAssetServer" timeout="30000"
                    ref="assetServerImpl"/>
+    <dubbo:service interface="com.zw.activity.service.ActivityService" timeout="30000"
+    ref="activityServiceImpl"/>
 
 </beans>
