@@ -63,7 +63,6 @@ public class BankcardController {
                         return  ResultVO.error(resDataMap.get("msg").toString());
                     }
                 }
-                return  ResultVO.ok(authsms.getRes_data());
             }
             return ResultVO.error(authsms.getRes_msg());
         } catch (Exception e) {
