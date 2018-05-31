@@ -1,8 +1,5 @@
 
 package com.zw.miaofuspd.contractConfirmation.controller;
-
-import com.alibaba.fastjson.JSONObject;
-import com.api.model.common.BYXResponse;
 import com.api.model.contractsign.ContractSignRequest;
 import com.api.model.contractsign.ByxUserModel;
 import com.api.model.contractsign.ContractSignResponse;
@@ -11,7 +8,6 @@ import com.api.service.contractsign.IContractSignService;
 import com.base.util.AppRouterSettings;
 import com.google.gson.Gson;
 import com.junziqian.service.JunziqianService;
-import com.sun.org.apache.regexp.internal.RE;
 import com.zw.api.ds.controller.AssetController;
 import com.zw.app.util.AppConstant;
 import com.zw.miaofuspd.facade.contractConfirmation.service.ContractConfirmationService;
@@ -21,6 +17,7 @@ import com.zw.miaofuspd.facade.entity.AppUserInfo;
 import com.zw.miaofuspd.facade.order.service.AppOrderService;
 import com.zw.miaofuspd.facade.user.service.IMsgService;
 import com.zw.util.ContextToPdf;
+import com.zw.util.PdfToHtml;
 import com.zw.util.UploadFileUtil;
 import com.zw.web.base.AbsBaseController;
 import com.zw.web.base.vo.ResultVO;
@@ -407,6 +404,8 @@ public class ContractConfirmationController extends AbsBaseController {
         //文件名
         String fileName1 = orderId + "_jiekuanxieyi.pdf";
         String pdfUrl1=generatePdf(request,loanMap1,fileName1);
+        map.put("pdfUrl",pdfUrl1);
+        contractConfirmationService.insertContract(map);
 
         //填入合同2 居间协议
         map.put("template_name","碧有信居间服务协议");
@@ -414,9 +413,8 @@ public class ContractConfirmationController extends AbsBaseController {
         //生成合同2
         String fileName2 = orderId + "_jujianfuwuxieyi.pdf";
         String pdfUrl2=generatePdf(request,loanMap2,fileName2);
-
-        map.put("pdfUrl",pdfUrl1+","+pdfUrl2);
-         contractConfirmationService.insertContract(map);
+        map.put("pdfUrl",pdfUrl2);
+        contractConfirmationService.insertContract(map);
 
         Map mapPdf = new HashMap();
         mapPdf.put("pdfUrl1", pdfUrl1);
@@ -464,14 +462,45 @@ public class ContractConfirmationController extends AbsBaseController {
      /*  orderId="80d8949a-ac68-4c7b-a65e-0bdb5672f50d";*/
         ResultVO resultVO = new ResultVO();
         //获取根目录
-        Map contract = contractConfirmationService.getContractByOrderId(orderId);
-        if(contract==null){
+        List<Map> contracts = contractConfirmationService.getContractByOrderId(orderId);
+        if(contracts==null||contracts.size()==0){
             this.generateContract(orderId, request);
         }
-        contract = contractConfirmationService.getContractByOrderId(orderId);
-        String host = iSystemDictService.getInfo("contract.host");
+        contracts = contractConfirmationService.getContractByOrderId(orderId);
         Map map = new HashMap();
-        map.put("pdfUrl", contract.get("contract_src").toString());
+        String contractId1=contracts.get(0).get("id").toString();
+        String contractId2=contracts.get(1).get("id").toString();
+        map.put("contractId1", contractId1);
+        map.put("contractId2", contractId2);
+        resultVO.setRetData(map);
+        return resultVO;
+    }
+
+    @RequestMapping("/previewContract")
+    @ResponseBody
+    public ResultVO previewContract(String contractId, HttpServletRequest request) throws Exception {
+     /*  orderId="80d8949a-ac68-4c7b-a65e-0bdb5672f50d";*/
+        ResultVO resultVO = new ResultVO();
+
+        Map contract = contractConfirmationService.getContractById(contractId);
+
+        String host = iSystemDictService.getInfo("contract.host");
+        String root = iSystemDictService.getInfo("file.path");
+        String url=contract.get("contract_src").toString();
+
+//        if(contract.get("contract_no")!=null&&!"".equals(contract.get("contract_no"))){
+//            url=url.replace(".pdf","_signed.pdf");
+//        }
+
+        String htmlUrl=url.replace(".pdf", ".html");
+
+        File contractHtmlFile=new File(root+htmlUrl);
+        if(!contractHtmlFile.exists()){
+            PdfToHtml.PdfToImage(new File(root+url), host, url);
+        }
+
+        Map map = new HashMap();
+        map.put("pdfUrl", htmlUrl);
         map.put("host", host);
         resultVO.setRetData(map);
         return resultVO;
@@ -486,8 +515,8 @@ public class ContractConfirmationController extends AbsBaseController {
     @RequestMapping("/getupSignContract")
     @ResponseBody
     public ResultVO getupContract(String orderId, HttpServletRequest request) throws Exception{
-        Map contract = contractConfirmationService.getContractByOrderId(orderId);
-        String amount=contract.get("contract_amount").toString();
+        List<Map> contracts = contractConfirmationService.getContractByOrderId(orderId);
+        String amount=contracts.get(0).get("contract_amount").toString();
         Map params=new HashMap();
         params.put("orderId", orderId);
         params.put("empId",request.getParameter("empId"));
@@ -510,21 +539,24 @@ public class ContractConfirmationController extends AbsBaseController {
     @RequestMapping("/signContract")
     @ResponseBody
     public ResultVO signContract(String orderId, HttpServletRequest request) throws Exception{
-        Map contract = contractConfirmationService.getContractByOrderId(orderId);
+        List<Map> contracts = contractConfirmationService.getContractByOrderId(orderId);
 
-        String[] pdfPath=contract.get("contract_src").toString().split(",");
         String root = iSystemDictService.getInfo("file.path");
+        String host = iSystemDictService.getInfo("contract.host");
         //签章1
-        Map map1=signSingleContract(contract, "借款协议", root+pdfPath[0]);
+        String pdfUrl1=contracts.get(0).get("contract_src").toString();
+        Map map1=signSingleContract(contracts.get(0), "借款协议", root+pdfUrl1);
         if("0".equals(map1.get("res_code"))){
             return ResultVO.error(map1.get("res_msg").toString());
         }
+        PdfToHtml.PdfToImage(new File(root+pdfUrl1), host, pdfUrl1);
         //签章2
-        Map map2=signSingleContract(contract, "居间服务协议", root+pdfPath[1]);
+        String pdfUrl2=contracts.get(1).get("contract_src").toString();
+        Map map2=signSingleContract(contracts.get(1), "居间服务协议", root+pdfUrl2);
         if("0".equals(map2.get("res_code"))){
             return ResultVO.error(map2.get("res_msg").toString());
         }
-
+        PdfToHtml.PdfToImage(new File(root+pdfUrl2), host, pdfUrl2);
 
         Map map=new HashMap();
         map.put("result1",map1);
@@ -532,8 +564,8 @@ public class ContractConfirmationController extends AbsBaseController {
 
         String customerId=request.getParameter("empId");
         String customerName=request.getParameter("empName");
-        String amount=contract.get("contract_amount").toString();
-        String contractNo=contract.get("contract_no").toString();
+        String amount=contracts.get(0).get("contract_amount").toString();
+        String contractNo=contracts.get(0).get("contract_no").toString();
         String description=request.getParameter("description");
         Map params=new HashMap();
         params.put("orderId", orderId);

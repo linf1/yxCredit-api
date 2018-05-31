@@ -5,9 +5,15 @@ import com.zw.miaofuspd.facade.entity.AppUserInfo;
 
 import java.util.Map;
 
-/**
- * Created by Administrator on 2017/2/28.
- */
+
 public interface FeedBackService {
-     Map<String, String> feedbackAdd(AppUserInfo userinfo, String content) throws Exception;
+     /**
+      * 添加客户意见反馈
+      * @author 仙海峰
+      * @param userId
+      * @param content
+      * @return
+      * @throws Exception
+      */
+     Map<String, String> feedbackAdd(String userId, String content) throws Exception;
 }

@@ -1,8 +1,6 @@
 package com.zw.miaofuspd.myset.service;
 
 import com.base.util.DateUtils;
-import com.base.util.StringUtils;
-import com.zw.miaofuspd.facade.entity.AppUserInfo;
 import com.zw.miaofuspd.facade.myset.service.FeedBackService;
 import com.zw.service.base.AbsServiceBase;
 import org.springframework.stereotype.Service;
@@ -16,36 +14,52 @@ import java.util.UUID;
 @Service
 @Transactional
 public class FeedBackServiceImpl extends AbsServiceBase implements FeedBackService {
+
+
+   /************************************************** 碧友信******************************************************/
+
     /**
-     * 秒付金服保存投诉信息
-     * @param userinfo
+     * 添加客户意见反馈
+     * @author 仙海峰
+     * @param userId
      * @param content
      * @return
      * @throws Exception
      */
     @Override
-    public Map<String, String> feedbackAdd(AppUserInfo userinfo, String content) throws Exception {
+    public Map<String, String> feedbackAdd(String userId, String content) throws Exception {
         Map outMap=new HashMap();
         try {
-            String id = UUID.randomUUID().toString();//生成id
-            String creatTime = DateUtils.getDateString(new Date());//获得当前时间
-            String title = "投诉";
-            StringBuffer insql = new StringBuffer("INSERT INTO app_suggestion "
-                    + "(id,user_id,tel,title,content,person_id,"
-                    + "person_name,creat_time,alter_time) VALUES('"+id+"','"+userinfo.getId()+"','"+userinfo.getTel()+"',"
-                    + "'"+title+"','"+content+"','"+(StringUtils.isNotEmpty(userinfo.getPerson_id())?userinfo.getPerson_id():"")+"','");
-            if(StringUtils.isNotEmpty(userinfo.getName())){
-                insql.append(userinfo.getName());
-            }else{
-                insql.append(userinfo.getTel());
+            String selectSql="SELECT ID AS customerId , PERSON_NAME AS customerName ,TEL AS tel  FROM mag_customer WHERE USER_ID='"+userId+"'";
+            Map customerMap = sunbmpDaoSupport.findForMap(selectSql);
+
+            //获取客户ID
+            String customerId = customerMap.get("customerId").toString();
+            //获取客户名称
+            String customerName = customerMap.get("customerName").toString();
+            //获取客户电话
+            String tel = customerMap.get("tel").toString();
+            //生成id
+            String id = UUID.randomUUID().toString();
+            //获得当前时间
+            String creatTime = DateUtils.getDateString(new Date());
+            String title = "意见反馈";
+            String insertSql="INSERT INTO app_suggestion (id,user_id,customer_id,customer_name,tel,title,content,creat_time)  " +
+                             "VALUES ('"+id+"','"+userId+"','"+customerId+"','"+customerName+"','"+tel+"','"+title+"','"+content+"','"+creatTime+"')";
+            //插入表中
+            int count= sunbmpDaoSupport.executeSql(insertSql);
+            if (count==1){
+                outMap.put("res_code",1);
+                outMap.put("res_msg","保存成功");
+            }else {
+                outMap.put("res_code",2);
+                outMap.put("res_msg","保存失败");
             }
-            insql.append("','"+creatTime+"','"+creatTime+"')");
-            sunbmpDaoSupport.exeSql(insql.toString());//插入表中
-            outMap.put("flag",true);
-            outMap.put("msg","保存成功");
+
         }catch (Exception e){
-            outMap.put("flag",false);
-            outMap.put("msg","意见反馈失败");
+            e.printStackTrace();
+            outMap.put("res_code",2);
+            outMap.put("res_msg","保存失败");
         }
         return outMap;
     }

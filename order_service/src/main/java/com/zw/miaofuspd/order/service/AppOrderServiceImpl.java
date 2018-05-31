@@ -1964,7 +1964,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
         Map returnMap = new HashMap();
         Map operationMap = new HashMap();
         String orderSql = "SELECT   o.ID AS orderId ,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
-                                    "o.product_name_name AS productName , o.applay_money AS applayMoney ,  " +
+                                    "o.product_name_name AS productName , o.applay_money AS applayMoney , o.CUSTOMER_ID AS customerId, " +
                                     "o.loan_amount AS loanAmount ,  o.repay_money AS repayMoney ," +
                                     "date_format(str_to_date( o.applay_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS applayTime , " +
                                     "date_format(str_to_date( o.Examine_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS examineTime , " +

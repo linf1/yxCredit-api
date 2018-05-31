@@ -194,7 +194,7 @@ public class BasicInfoController extends AbsBaseController {
                 request.setBorrowerUserName((String) map.get("phone"));
                 request.setBorrowerName(customer.get("PERSON_NAME").toString());
                 request.setBorrowerMobilePhone(customer.get("TEL").toString());
-                request.setBorrowerThirdId((String) map.get("customerId"));
+                request.setBorrowerThirdId(customer.get("id").toString());
                 request.setBorrowerChannel("yxd");
                 request.setBorrowerCardNo(customer.get("CARD").toString());
                 request.setAddress(customer.get("company_address").toString());
@@ -203,7 +203,7 @@ public class BasicInfoController extends AbsBaseController {
                 request.setAccountIdCard(customer.get("CARD").toString());
                 request.setOtherFlag("1");
                 request.setAccountChannel("yxd");
-                request.setAccountThirdId(map.get("customerId").toString());
+                request.setAccountThirdId(customer.get("id").toString());
                 request.setProvinceCode(String.valueOf(map.get("prov_id")));
                 request.setProvinceName(map.get("prov_name").toString());
                 request.setCityCode(String.valueOf(map.get("city_id")));

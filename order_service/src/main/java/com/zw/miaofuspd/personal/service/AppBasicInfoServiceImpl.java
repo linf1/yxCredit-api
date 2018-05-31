@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.base.util.DateUtils;
 import com.base.util.GeneratePrimaryKeyUtils;
 import com.base.util.TraceLoggerUtil;
+import com.constants.ApiConstants;
 import com.constants.CommonConstant;
 import com.enums.EIsIdentityEnum;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;
@@ -198,8 +199,8 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     public Map getApplyInfo(String orderId) {
         //根据订单id获取客户基本信息
         String customerSql = "select t1.applay_money as apply_money,t1.PERIODS as PERIODS," +
-                "t2.surplus_contract_amount as surplus_contract_amount," +
-                "t1.loan_purpose as loan_purpose from mag_order t1 left join mag_customer t2 on t1.CUSTOMER_ID = t2.id" +
+                "t2.surplus_contract_amount as surplus_contract_amount,t3.latest_pay as latest_pay," +
+                "t1.loan_purpose as loan_purpose from mag_order t1 left join mag_customer t2 on t1.CUSTOMER_ID = t2.id left join byx_white_list t3 on t3.real_name = t2.PERSON_NAME and t2.CARD = t3.card" +
                 " where t1.id = '" + orderId + "'";
         Map resutMap = sunbmpDaoSupport.findForMap(customerSql);
         return resutMap;
@@ -945,7 +946,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     public Map checkCustomerInfo(String costomerId,String card)  {
         Map resultMap = new HashMap(3);
         Map workMap = null;
-        long workTimeDiff = 0;
+        long workTimeDiff = -1L;
 
         try {
             //验证用户年龄
@@ -962,22 +963,25 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             String sql = "select t2.contract_start_date as contract_start_date,t2.job as job from mag_customer t1 " +
                     "left join byx_white_list t2 on t1.PERSON_NAME = t2.real_name and t1.card = t2.card where t1.ID = '"+costomerId+"'";
             workMap = sunbmpDaoSupport.findForMap(sql);
-            Date workTime = DateUtils.strConvertToDateByType(workMap.get("contract_start_date").toString(),DateUtils.STYLE_3);
-            workTimeDiff = DateUtils.getDifferenceDays(now,workTime);
+            String contractStartDate = workMap.get("contract_start_date") == null?"":workMap.get("contract_start_date").toString();
+            if(StringUtils.isNotEmpty(contractStartDate)){
+                Date workTime = DateUtils.strConvertToDateByType(contractStartDate,DateUtils.STYLE_3);
+                workTimeDiff = DateUtils.getDifferenceDays(now,workTime);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             resultMap.put("flag",false);
             resultMap.put("msg","系统繁忙，请稍后重试");
             return  resultMap;
         }
-        if(workTimeDiff < 30){
-            resultMap.put("flag",false);
-            resultMap.put("msg","所在工地工作未满1个月");
-            return  resultMap;
-        }
         if(workMap.get("job").toString().equals("3")){
             resultMap.put("flag",false);
             resultMap.put("msg","工地临时工不符合申请条件");
+            return  resultMap;
+        }
+        if(workTimeDiff < 30 && workTimeDiff != -1L){
+            resultMap.put("flag",false);
+            resultMap.put("msg","所在工地工作未满1个月");
             return  resultMap;
         }
         resultMap.put("flag",true);
@@ -1078,26 +1082,36 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     }
     @Override
     public Map getEmpowerStatus(String orderId,String customerId){
-        Map resultMap = new HashMap();
+        Map<String,String> resultMap = new HashMap<String, String>(2);
         resultMap.put("mohe","0");
         resultMap.put("zhengxin","0");
         Map customerMap = getThreeItems(customerId);
-        //更细授权状态
-        String sql = "SELECT * from zw_api_result where state = 1 and code = 0 and real_name = '"+customerMap.get("PERSON_NAME")+"' and user_mobile = '"+customerMap.get("TEL")+"' and identity_code = '"+customerMap.get("CARD")+"'";
-        List<Map> list = sunbmpDaoSupport.findForList(sql);
-        for (Map map:list){
-            if(EApiSourceEnum.MOHE.getCode().equals(map.get("source_code"))){
-                resultMap.put("mohe","1");
-            }
-            if(EApiSourceEnum.CREDIT.getCode().equals(map.get("source_code"))){
-                resultMap.put("zhengxin","1");
-            }
+        //获取魔盒授权状态
+        int moheCount = findEmpowerStatus(EApiSourceEnum.MOHE.getCode(),customerMap);
+        //获取个人征信授权状态
+        int creditCount = findEmpowerStatus(EApiSourceEnum.CREDIT.getCode(),customerMap);
+        if(moheCount == 1){
+            resultMap.put("mohe","1");
         }
-        if(list.size() == 2){
-            String sql2 = "update mag_customer set authorization_complete = '100' where id = '"+customerId+"'";
-            sunbmpDaoSupport.exeSql(sql2);
+        if(creditCount == 1){
+            resultMap.put("zhengxin","1");
         }
+        String sql2;
+        if(moheCount + creditCount == 2 ){
+            sql2 = "update mag_customer set authorization_complete = '100' where id = '"+customerId+"'";
+        }else {
+            sql2 = "update mag_customer set authorization_complete = '0' where id = '"+customerId+"'";
+        }
+        sunbmpDaoSupport.exeSql(sql2);
         return resultMap;
+    }
+
+    /**
+     * 获取授权状态
+     */
+    private  int findEmpowerStatus(String sourceCode,Map customerMap){
+        String sql = "SELECT count(1) from zw_api_result where source_code = '"+sourceCode+"' and state = "+ApiConstants.STATUS_CODE_STATE+" and code = "+ApiConstants.STATUS_SUCCESS+" and  created_time >= date_add(NOW(), interval -1 MONTH) and real_name = '"+customerMap.get("PERSON_NAME")+"' and user_mobile = '"+customerMap.get("TEL")+"' and identity_code = '"+customerMap.get("CARD")+"' ORDER BY created_time desc LIMIT 1";
+        return sunbmpDaoSupport.getCount(sql);
     }
 
     /**
@@ -1113,10 +1127,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
 
     @Override
     public Map getOrderDetailById(String orderId,String customerId) {
-        Map reslutMap = new HashMap();
-        //总包商
-       // String contractorName = map.get("contractorName").toString();
-
+        Map reslutMap = new HashMap(3);
         String sql1 = "select t2.order_no as order_no,t2.product_name_name as product_name_name,t2.loan_amount as loan_amount,t2.rate as rate,t2.PERIODS as periods,date_format(str_to_date(t2.applay_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%i:%s') as applay_time," +
                 "t2.loan_purpose as loan_purpose,t2.customer_name as customer_name,t2.card as card ,t2.tel as tel,t1.zbs_jujian_fee  as zbs_jujian_fee,t1.li_xi as lixi,t3.repayment as repayment,t3.repayment_days as repayment_days" +
                 " from mag_product_fee t1 left join mag_order t2 on t1.product_id = t2.product_detail left join pro_working_product_detail t3 on t1.product_id = t3.id where t2.id = '"+orderId+"'";
