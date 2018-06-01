@@ -1,15 +1,12 @@
 package com.zw.api.credit.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.api.model.DayCompare;
 import com.api.model.credit.CreditRequest;
 import com.api.model.credit.CreditResultAO;
-import com.api.model.credit.CreditSettings;
 import com.api.model.result.ApiResult;
 import com.api.service.credit.ICreditApiService;
 import com.api.service.result.IApiResultServer;
 import com.base.util.AppRouterSettings;
-import com.base.util.DateUtils;
 import com.base.util.GeneratePrimaryKeyUtils;
 import com.constants.ApiConstants;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;

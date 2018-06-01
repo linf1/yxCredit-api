@@ -43,8 +43,6 @@ public class CreditSettings extends BaseSettings {
      */
     private String taskType;
 
-    private Long effectiveDay;
-
     public String getRequestUrl() {
         return  creditUrl + creditUrlPath + "?appKey="+ appKey + "&taskType="+ taskType;
     }
