@@ -49,7 +49,7 @@ public class ShujumoheRunable implements Runnable {
                 if(data != null) {
                     ApiResult apiResult = new ApiResult();
                     apiResult.setSourceChildCode(data.get("channel_type").toString());
-                    apiResult.setOnlyKey(request.getCustId());
+                    apiResult.setOnlyKey(request.getCustomerId());
                     apiResult.setSourceCode(EApiSourceEnum.MOHE.getCode());
                     apiResult.setResultData(data.get("task_data").toString());
                     //吧获取的数据更新到数据库

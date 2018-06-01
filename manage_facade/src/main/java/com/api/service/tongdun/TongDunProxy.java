@@ -51,7 +51,7 @@ public class TongDunProxy implements ITongDunApiService {
         ApiCommonResponse response = new ApiCommonResponse();
         ApiResult resultParameter = new ApiResult();
         resultParameter.setSourceCode(EApiSourceEnum.TODONG.getCode());
-        resultParameter.setOnlyKey(request.getCustId());
+        resultParameter.setOnlyKey(request.getCustomerId());
         resultParameter.setState(ApiConstants.STATUS_CODE_NO_STATE);
         //吧老数据更新为失效
         apiResultServerImpl.updateByOnlyKey(resultParameter);
@@ -104,7 +104,7 @@ public class TongDunProxy implements ITongDunApiService {
         apiResult.setMessage(ApiConstants.STATUS_SUCCESS_MSG);
         apiResult.setSourceChildName(EApiSourceEnum.TODONG.getName());
         apiResult.setSourceChildCode(EApiSourceEnum.TODONG.getCode());
-        apiResult.setOnlyKey(request.getCustId());
+        apiResult.setOnlyKey(request.getCustomerId());
         apiResult.setRealName(request.getName());
         apiResult.setSourceName(EApiSourceEnum.TODONG.getName());
         apiResult.setSourceCode(EApiSourceEnum.TODONG.getCode());

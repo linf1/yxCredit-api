@@ -56,12 +56,12 @@ public class ShujumoheController {
         LOGGER.info("=======数据魔盒回调接参数request:{}",request.toString());
         try {
             ApiResult resultParameter = new ApiResult();
-            resultParameter.setOnlyKey(request.getCustId());
+            resultParameter.setOnlyKey(request.getCustomerId());
             resultParameter.setSourceCode(EApiSourceEnum.MOHE.getCode());
             resultParameter.setState(ApiConstants.STATUS_CODE_NO_STATE);
             //把以前的数据更新成为失效
             apiResultServerImpl.updateByOnlyKey(resultParameter);
-            Map custInfoMap = userService.getCustomerInfoByCustomerId(request.getCustId());
+            Map custInfoMap = userService.getCustomerInfoByCustomerId(request.getCustomerId());
             Map<String,Object>  param = new HashMap<>(5);
             param.put("identity_code",custInfoMap.get("card"));
             param.put("channel_type","");
@@ -93,7 +93,7 @@ public class ShujumoheController {
         apiResult.setMessage(ApiConstants.STATUS_SUCCESS_MSG);
         apiResult.setSourceChildName(ApiConstants.API_MOHE_YYS);
         apiResult.setSourceChildCode(data.get("channel_type").toString());
-        apiResult.setOnlyKey(request.getCustId());
+        apiResult.setOnlyKey(request.getCustomerId());
         apiResult.setRealName(data.get("real_name").toString());
         apiResult.setSourceName(EApiSourceEnum.MOHE.getName());
         apiResult.setSourceCode(EApiSourceEnum.MOHE.getCode());
