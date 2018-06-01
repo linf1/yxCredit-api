@@ -508,8 +508,13 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         Map resMap = new HashMap();
         Map resultMap = new HashMap(4);
         //根据登录用户id获取客户信息表id
-        String sql1 = "select id,PERSON_NAME,TEL,CARD from mag_customer where USER_ID = '" + id + "'";
+        String sql1 = "select t2.white_status as whiteStatus,t1.id as id,t1.PERSON_NAME as PERSON_NAME,t1.TEL as TEL,t1.CARD as CARD from mag_customer t1 left join byx_white_list t2 on t1.PERSON_NAME=t2.real_name and t1.card=t2.card where t1.USER_ID = '" + id + "'";
         Map cusmap = sunbmpDaoSupport.findForMap(sql1);
+        if(CommonConstant.WHITE_STATUS_OFF.equals(cusmap.get("whiteStatus"))){
+            resultMap.put("code","3");
+            resultMap.put("msg","您的白名单已被停用!");
+            return resultMap;
+        }
         //获取当前用户的所有订单状态
         String  sql2 = "select order_state as state from mag_order where user_id = '"+id+"' and product_name_name = '"+productName+"'";
         List<Map> staList = sunbmpDaoSupport.findForList(sql2);

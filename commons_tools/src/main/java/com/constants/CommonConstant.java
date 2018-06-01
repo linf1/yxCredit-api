@@ -43,4 +43,11 @@ public interface CommonConstant {
      * 订单-申请失败状态
      */
     String ORDER_STATE_FAILED = "8";
+
+    /**
+     * 白名单状态-1启用 0停用
+     */
+    String WHITE_STATUS_ON = "1";
+
+    String WHITE_STATUS_OFF = "0";
 }
