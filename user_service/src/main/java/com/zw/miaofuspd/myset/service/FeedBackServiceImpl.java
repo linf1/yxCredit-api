@@ -30,7 +30,7 @@ public class FeedBackServiceImpl extends AbsServiceBase implements FeedBackServi
     public Map<String, String> feedbackAdd(String userId, String content) throws Exception {
         Map outMap=new HashMap();
         try {
-            String selectSql="SELECT ID AS customerId , PERSON_NAME AS customerName ,TEL AS tel  FROM mag_customer WHERE USER_ID='"+userId+"'";
+            String selectSql="SELECT mc.ID AS customerId , mc.PERSON_NAME AS customerName , au.TEL AS tel FROM app_user au LEFT JOIN mag_customer mc ON au.`id`=mc.`USER_ID` WHERE au.ID='"+userId+"'";
             Map customerMap = sunbmpDaoSupport.findForMap(selectSql);
 
             //获取客户ID
