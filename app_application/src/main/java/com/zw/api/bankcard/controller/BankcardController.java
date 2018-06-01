@@ -5,8 +5,7 @@ import com.api.model.common.BYXResponse;
 import com.api.service.bankcard.IBankcardServer;
 import com.base.util.AppRouterSettings;
 import com.base.util.GeneratePrimaryKeyUtils;
-import com.base.util.SnowflakeIdWorker;
-import com.base.util.StringUtils;
+import com.constants.ApiConstants;
 import com.zw.web.base.vo.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +54,15 @@ public class BankcardController {
             final BYXResponse authsms = bankcardServer.authsms(bankcardRequest);
             if (BYXResponse.resCode.success.getCode().equals(authsms.getRes_code())) {
                 bankcardServer.saveBankcard(bankcardRequest);
-                return  ResultVO.ok(authsms.getRes_data());
+                Object resData = authsms.getRes_data();
+                if(resData != null){
+                    Map resDataMap = (Map) resData;
+                    if(ApiConstants.AUTH_SEND_STATUS_SUCCESS.equals(resDataMap.get("status").toString())){
+                        return ResultVO.ok(resDataMap.get("msg").toString(),null);
+                    }else{
+                        return  ResultVO.error(resDataMap.get("msg").toString());
+                    }
+                }
             }
             return ResultVO.error(authsms.getRes_msg());
         } catch (Exception e) {
@@ -88,8 +95,16 @@ public class BankcardController {
             bankcardRequest.setMerchantNeqNo(o.get("merchant_neq_no").toString());
             final BYXResponse authsms = bankcardServer.authconfirm(bankcardRequest);
                 if (BYXResponse.resCode.success.getCode().equals(authsms.getRes_code())) {
-                    bankcardServer.updateState(bankcardRequest);
-                    return ResultVO.ok(authsms.getRes_data());
+                    Object resData = authsms.getRes_data();
+                    if(resData != null){
+                        Map resDataMap = (Map) resData;
+                       if(ApiConstants.AUTH_FIRM_STATUS_SUCCESS.equals(resDataMap.get("status").toString())){
+                           bankcardServer.updateState(bankcardRequest);
+                           return ResultVO.ok(resDataMap.get("msg").toString(),null);
+                       }else{
+                           return ResultVO.error(resDataMap.get("msg").toString());
+                       }
+                    }
                 }
                 return ResultVO.error(authsms.getRes_msg());
             } catch (Exception e) {

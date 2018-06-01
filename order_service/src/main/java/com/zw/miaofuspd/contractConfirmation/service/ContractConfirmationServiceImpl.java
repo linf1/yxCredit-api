@@ -213,11 +213,6 @@ public class ContractConfirmationServiceImpl extends AbsServiceBase implements C
             //根据key值替换内容
             String key = "#"+entry.getKey()+"#";
             String value = String.valueOf(entry.getValue());
-            if (entry.getKey().equals("amountChn")){
-                //数字转大写
-                value = NumberToChnUtil.numToChn(Double.parseDouble(value));
-                map.put("value",value);
-            }
             context =context.replace(key,value);
         }
         map.put("context",kongGe+context);
@@ -313,6 +308,7 @@ public class ContractConfirmationServiceImpl extends AbsServiceBase implements C
         map.put("year",year);
         map.put("month",month);
         map.put("day",day);
+        map.put("amountChn", NumberToChnUtil.numToChn(Double.parseDouble(map.get("loanAmount").toString())));
         if(month.length()==1){
             month='0'+month;
         }
