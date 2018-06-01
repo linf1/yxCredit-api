@@ -22,8 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,9 +46,6 @@ public class CreditApiController {
     @Autowired
     private IUserService userService;
 
-    @Autowired
-    private CreditSettings creditSettings;
-
     /**
      * 个人征信验证API调用入口
      * @param request 请求参数
@@ -64,7 +59,7 @@ public class CreditApiController {
             return ResultVO.error("请求参数异常或不存在");
         }
         try {
-            Map customerMap = userService.getCustomerInfoByOrderId(request.getCustomerId());
+            Map customerMap = userService.getCustomerInfoByCustomerId(request.getCustomerId());
             if(null == customerMap) {
                 LOGGER.info("该客户不存在：{}", request.getCustomerId());
                 return ResultVO.error("客户不存在");
@@ -119,7 +114,7 @@ public class CreditApiController {
         LOGGER.info("--------------------------------回调成功   ------------------------");
         JSONObject jsonObject = JSONObject.parseObject(request);
         Map<String,Object> map = new HashMap<>();
-        Map userMap = userService.getCustomerInfoByOrderId(customerId);
+        Map userMap = userService.getCustomerInfoByCustomerId(customerId);
         if(null == userMap) {
             LOGGER.info("该客户不存在：{}", customerId);
         } else {
