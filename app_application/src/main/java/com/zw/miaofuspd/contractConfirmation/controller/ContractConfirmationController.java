@@ -470,8 +470,15 @@ public class ContractConfirmationController extends AbsBaseController {
         Map map = new HashMap();
         String contractId1=contracts.get(0).get("id").toString();
         String contractId2=contracts.get(1).get("id").toString();
-        map.put("contractId1", contractId1);
-        map.put("contractId2", contractId2);
+        String contractName1=contracts.get(0).get("contract_name").toString().trim();
+        if("碧有信借款协议".equals(contractName1)){
+            map.put("contractId1", contractId1);
+            map.put("contractId2", contractId2);
+        }else{
+            map.put("contractId1", contractId2);
+            map.put("contractId2", contractId1);
+        }
+
         resultVO.setRetData(map);
         return resultVO;
     }
@@ -515,13 +522,11 @@ public class ContractConfirmationController extends AbsBaseController {
     @RequestMapping("/getupSignContract")
     @ResponseBody
     public ResultVO getupContract(String orderId, HttpServletRequest request) throws Exception{
-        List<Map> contracts = contractConfirmationService.getContractByOrderId(orderId);
-        String amount=contracts.get(0).get("contract_amount").toString();
         Map params=new HashMap();
         params.put("orderId", orderId);
         params.put("empId",request.getParameter("empId"));
         params.put("empName",request.getParameter("empName"));
-        params.put("amount",amount);
+        params.put("amount",request.getParameter("amount"));
         params.put("operationResult", 6);
         params.put("orderState", 7);
         params.put("description", request.getParameter("description"));
@@ -543,16 +548,27 @@ public class ContractConfirmationController extends AbsBaseController {
 
         String root = iSystemDictService.getInfo("file.path");
         String host = iSystemDictService.getInfo("contract.host");
+
+        Map contract1=null;
+        Map contract2=null;
+        if("碧有信借款协议".equals(contracts.get(0).get("contract_name").toString().trim())){
+            contract1=contracts.get(0);
+            contract2=contracts.get(1);
+        }else{
+            contract1=contracts.get(1);
+            contract2=contracts.get(0);
+        }
+
         //签章1
-        String pdfUrl1=contracts.get(0).get("contract_src").toString();
-        Map map1=signSingleContract(contracts.get(0), "借款协议", root+pdfUrl1);
+        String pdfUrl1=contract1.get("contract_src").toString();
+        Map map1=signSingleContract(contract1, "借款协议", root+pdfUrl1);
         if("0".equals(map1.get("res_code"))){
             return ResultVO.error(map1.get("res_msg").toString());
         }
         PdfToHtml.PdfToImage(new File(root+pdfUrl1), host, pdfUrl1);
         //签章2
-        String pdfUrl2=contracts.get(1).get("contract_src").toString();
-        Map map2=signSingleContract(contracts.get(1), "居间服务协议", root+pdfUrl2);
+        String pdfUrl2=contract2.get("contract_src").toString();
+        Map map2=signSingleContract(contract2, "居间服务协议", root+pdfUrl2);
         if("0".equals(map2.get("res_code"))){
             return ResultVO.error(map2.get("res_msg").toString());
         }
@@ -564,8 +580,8 @@ public class ContractConfirmationController extends AbsBaseController {
 
         String customerId=request.getParameter("empId");
         String customerName=request.getParameter("empName");
-        String amount=contracts.get(0).get("contract_amount").toString();
-        String contractNo=contracts.get(0).get("contract_no").toString();
+        String amount=contract1.get("contract_amount").toString();
+        String contractNo=contract1.get("contract_no").toString();
         String description=request.getParameter("description");
         Map params=new HashMap();
         params.put("orderId", orderId);
