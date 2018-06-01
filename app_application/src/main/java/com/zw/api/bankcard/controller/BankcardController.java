@@ -54,9 +54,9 @@ public class BankcardController {
             final BYXResponse authsms = bankcardServer.authsms(bankcardRequest);
             if (BYXResponse.resCode.success.getCode().equals(authsms.getRes_code())) {
                 bankcardServer.saveBankcard(bankcardRequest);
-                Object res_data = authsms.getRes_data();
-                if(res_data != null){
-                    Map resDataMap = (Map) res_data;
+                Object resData = authsms.getRes_data();
+                if(resData != null){
+                    Map resDataMap = (Map) resData;
                     if(ApiConstants.AUTH_SEND_STATUS_SUCCESS.equals(resDataMap.get("status").toString())){
                         return ResultVO.ok(resDataMap.get("msg").toString(),null);
                     }else{
@@ -95,9 +95,9 @@ public class BankcardController {
             bankcardRequest.setMerchantNeqNo(o.get("merchant_neq_no").toString());
             final BYXResponse authsms = bankcardServer.authconfirm(bankcardRequest);
                 if (BYXResponse.resCode.success.getCode().equals(authsms.getRes_code())) {
-                    Object res_data = authsms.getRes_data();
-                    if(res_data != null){
-                        Map resDataMap = (Map) res_data;
+                    Object resData = authsms.getRes_data();
+                    if(resData != null){
+                        Map resDataMap = (Map) resData;
                        if(ApiConstants.AUTH_FIRM_STATUS_SUCCESS.equals(resDataMap.get("status").toString())){
                            bankcardServer.updateState(bankcardRequest);
                            return ResultVO.ok(resDataMap.get("msg").toString(),null);

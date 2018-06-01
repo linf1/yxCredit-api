@@ -119,7 +119,7 @@ public class DSMoneyBusinessImpl implements IDSMoneyBusiness {
      * @return （0：浙商；1：非浙商）
      */
     private String getOtherFlag(String bankCode){
-        String code = "301";
+        String code = "316";
         return code.equals(bankCode) ? "0" : "1";
     }
 }
