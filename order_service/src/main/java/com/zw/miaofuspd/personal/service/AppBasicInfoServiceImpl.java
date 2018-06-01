@@ -519,7 +519,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
                 " where t1.user_id = '" +id+ "'and t2.product_name_name= '"+productName+"'and t2.order_state='1'";
         for(Map map:staList){
             //未完成订单
-            if( "1".equals(map.get("state"))){
+            if( CommonConstant.ORDER_STATE_PREAPPLY.equals(map.get("state"))){
                 //获取申请主页面的未完成订单的基本信息及资料的完成状态
                 resMap = sunbmpDaoSupport.findForMap(sql3);
                 resultMap.put("code","2");
@@ -527,12 +527,23 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
                 resultMap.put("msg","成功获取未完成订单！");
                 return resultMap;
 
-            }else if("2".equals(map.get("state") ) || "3".equals(map.get("state") ) || "4".equals(map.get("state") ) || "5".equals(map.get("state") ) ){
+            }else if(CommonConstant.ORDER_STATE_REVIEW.equals(map.get("state") )){
                 //当有未结清订单，不允许访问申请主页面
                 resultMap.put("code","3");
-                resultMap.put("msg","您有未结清的订单!");
+                resultMap.put("msg","您有审核中的订单!");
                 return resultMap;
-
+            }else if(CommonConstant.ORDER_STATE_PRESIGNED.equals(map.get("state"))){
+                resultMap.put("code","3");
+                resultMap.put("msg","您有待签约的订单!");
+                return resultMap;
+            }else if(CommonConstant.ORDER_STATE_PRELOAN.equals(map.get("state"))){
+                resultMap.put("code","3");
+                resultMap.put("msg","您有待放款的订单!");
+                return resultMap;
+            }else if(CommonConstant.ORDER_STATE_PREREPAYMENT.equals(map.get("state"))){
+                resultMap.put("code","3");
+                resultMap.put("msg","您有待还款的订单!");
+                return resultMap;
             }
         }
         //新增订单信息
