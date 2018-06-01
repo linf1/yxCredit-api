@@ -1,7 +1,7 @@
 package com.zhiwang.zwfinance.app.jiguang.util.api.util;
 
 /**
- * 订单状态【1.待申请、2.审核中、3.待签约、4.待放款、5.待还款、6.已结清、7.已取消、8.申请失败（拒绝）、9.已放弃】
+ * 订单状态【1.待申请、2.审核中、3.待签约、4.待放款、5.待还款、6.已结清、7.已取消、8.审批拒绝、9.已放弃】
  * @author 仙海峰
  */
 public enum OrderStateEnum {
@@ -43,7 +43,7 @@ public enum OrderStateEnum {
 
 
     /**
-     * 申请失败（拒绝）
+     * 审批拒绝
      */
     REFUSE(8),
 
