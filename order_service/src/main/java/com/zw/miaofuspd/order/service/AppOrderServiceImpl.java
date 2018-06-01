@@ -1907,7 +1907,8 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
     @Override
     public Map getAllOrderByUserId(String userId ,String pageNumber,String pageSize) {
         Map returnMap = new HashMap();
-
+        int unm= Integer.parseInt(pageNumber);
+        int size= Integer.parseInt(pageSize);
 
         String sql = "SELECT o.ID AS orderId ,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
                             "o.product_name_name AS productName , o.applay_money AS applayMoney ,  " +
@@ -1921,7 +1922,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                             "o.contract_amount AS contractAmount , " +
                             "o.repay_type AS repayType ,  o.Job AS job ,  o.Service_fee AS serviceFee ,  o.loan_purpose AS loanPurpose , " +
                             "o.PERIODS AS periods ,  o.Order_state AS orderState " +
-                        "FROM mag_order o WHERE o.USER_ID='"+userId+"' ORDER BY CREAT_TIME DESC  limit "+pageNumber+","+pageSize;
+                        "FROM mag_order o WHERE o.USER_ID='"+userId+"' ORDER BY CREAT_TIME DESC  limit "+(( unm-1)*size+1)+","+(unm*size);
         List allOrderList = sunbmpDaoSupport.findForList(sql);
 
         returnMap.put("allOrderList",allOrderList);

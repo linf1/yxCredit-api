@@ -64,7 +64,6 @@ public class CreditApiController {
             //根据客户信息更新征信报告
             ApiResult result = new ApiResult();
             result.setSourceCode(EApiSourceEnum.CREDIT.getCode());
-            result.setIdentityCode(customerMap.get("card").toString());//身份证号码
             result.setOnlyKey(request.getCustomerId());//客户id
             result.setState(ApiConstants.STATUS_CODE_NO_STATE);//改为无效数据
             apiResultServer.updateByOnlyKey(result);
