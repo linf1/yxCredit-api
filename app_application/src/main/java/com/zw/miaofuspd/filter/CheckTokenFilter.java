@@ -35,7 +35,7 @@ public class CheckTokenFilter implements Filter {
 		HttpServletRequest request=(HttpServletRequest) argo;
 		HttpServletResponse response=(HttpServletResponse) arg1;
 		String cxt = request.getContextPath();
-		String[] nonPath  ={cxt + AppRouterSettings.VERSION + "/login",cxt + AppRouterSettings.VERSION + "/sms"};
+		String[] nonPath  ={cxt + AppRouterSettings.VERSION + "/login",cxt + AppRouterSettings.VERSION + "/sms",cxt + AppRouterSettings.VERSION + "/activity"};
 		for (String non : nonPath) {
 			if(request.getRequestURI().startsWith(non)){
 				//登陆接口不校验token，直接放行
