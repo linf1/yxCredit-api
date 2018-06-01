@@ -7,6 +7,7 @@ import com.api.service.result.IApiResultServer;
 import com.api.service.shujumohe.IShujumoheServer;
 import com.base.util.StringUtils;
 import com.constants.ApiConstants;
+import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,11 +48,9 @@ public class ShujumoheRunable implements Runnable {
                 final Map data = (Map) jsonObject.get("data");
                 if(data != null) {
                     ApiResult apiResult = new ApiResult();
-                    apiResult.setIdentityCode(data.get("identity_code").toString());
                     apiResult.setSourceChildCode(data.get("channel_type").toString());
-                    apiResult.setRealName(data.get("real_name").toString());
-                    apiResult.setUserMobile(data.get("user_mobile").toString());
-                    apiResult.setOnlyKey(request.getOrderId());
+                    apiResult.setOnlyKey(request.getCustId());
+                    apiResult.setSourceCode(EApiSourceEnum.MOHE.getCode());
                     apiResult.setResultData(data.get("task_data").toString());
                     //吧获取的数据更新到数据库
                     apiResultServer.updateByOnlyKey(apiResult);
@@ -73,7 +72,7 @@ public class ShujumoheRunable implements Runnable {
      */
     private void doSleep() throws InterruptedException {
         //休眠时间
-        final int sleepMillis  = 3000;
+        final int sleepMillis  = 5000;
         Thread.sleep(sleepMillis);
     }
 

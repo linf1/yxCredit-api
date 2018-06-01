@@ -49,54 +49,44 @@ public class TongDunProxy implements ITongDunApiService {
         long startTime = System.currentTimeMillis();
         long costTime = 0;
         ApiCommonResponse response = new ApiCommonResponse();
-      //TODO 根据  去数据库查询 如果有数据就不进行API调用（可加上时间期限）
         ApiResult resultParameter = new ApiResult();
         resultParameter.setSourceCode(EApiSourceEnum.TODONG.getCode());
-        resultParameter.setIdentityCode(request.getIdNo());
-        resultParameter.setUserMobile(request.getPhone());
-        resultParameter.setRealName(request.getName());
-        resultParameter.setState(ApiConstants.STATUS_CODE_STATE);
-        final List<Map> mapList = apiResultServerImpl.selectApiResult(resultParameter);
-        if (CollectionUtils.isEmpty(mapList)) {
-            try {
-                //获取报告ID
-                final ReportAO reportAO = queryReportId(request);
-                if (!reportAO.isSuccess()) {
-                    LOGGER.info("同盾-查询获取reportId失败或参数验证不通过");
-                    response.setResponseCode(ApiConstants.STATUS_INPUT_ERROR);
-                    response.setResponseMsg(ApiConstants.STATUS_INPUT_ERROR_MSG);
-                    return response;
-                }
-                Thread.sleep(3000);
-                LOGGER.info("同盾--获取报告信息 API调用参数：{}", request.toString());
-                request.setReportId(reportAO.getReportId());
-                final String result = queryReportInfo(reportAO);
-                costTime = System.currentTimeMillis() - startTime;
-                LOGGER.info("同盾--获取报告信息{}", result);
-                final JSONObject jsonObject = JSONObject.parseObject(result);
-                //查到数据
-                if (jsonObject.getBoolean(ApiConstants.REPORT_SUCCESS_KEY)) {
-                    response.setResponseCode(ApiConstants.STATUS_SUCCESS);
-                    response.setResponseMsg(ApiConstants.STATUS_SUCCESS_MSG);
-                    response.setOriginalData(jsonObject);
-                    //保存数据到数据库
-                    saveTongDunInfo(request, jsonObject.toString());
-                } else {
-                    response.setResponseCode(jsonObject.getString(ApiConstants.REASON_CODE_KEY));
-                    response.setResponseMsg(jsonObject.getString(ApiConstants.REASON_DESC_KEY));
-                }
-            } catch (Exception e) {
-                LOGGER.info("同盾-返回数据解析出错" + e);
-                response.setResponseCode(ApiConstants.STATUS_DATASOURCE_INTERNAL_ERROR);
-                response.setResponseMsg(ApiConstants.STATUS_DATASOURCE_INTERNAL_ERROR_MSG);
+        resultParameter.setOnlyKey(request.getCustId());
+        resultParameter.setState(ApiConstants.STATUS_CODE_NO_STATE);
+        //吧老数据更新为失效
+        apiResultServerImpl.updateByOnlyKey(resultParameter);
+        try {
+            //获取报告ID
+            final ReportAO reportAO = queryReportId(request);
+            if (!reportAO.isSuccess()) {
+                LOGGER.info("同盾-查询获取reportId失败或参数验证不通过");
+                response.setResponseCode(ApiConstants.STATUS_INPUT_ERROR);
+                response.setResponseMsg(ApiConstants.STATUS_INPUT_ERROR_MSG);
+                return response;
             }
-        }else{
-            final Map map = mapList.get(0);
-            request.setReportId(map.get("api_return_id").toString());
-            //保存数据到数据库
-            saveTongDunInfo(request, map.get("result_data").toString());
-            LOGGER.info("同盾-命中数据库记录");
-       }
+            Thread.sleep(3000);
+            LOGGER.info("同盾--获取报告信息 API调用参数：{}", request.toString());
+            request.setReportId(reportAO.getReportId());
+            final String result = queryReportInfo(reportAO);
+            costTime = System.currentTimeMillis() - startTime;
+            LOGGER.info("同盾--获取报告信息{}", result);
+            final JSONObject jsonObject = JSONObject.parseObject(result);
+            //查到数据
+            if (jsonObject.getBoolean(ApiConstants.REPORT_SUCCESS_KEY)) {
+                response.setResponseCode(ApiConstants.STATUS_SUCCESS);
+                response.setResponseMsg(ApiConstants.STATUS_SUCCESS_MSG);
+                response.setOriginalData(jsonObject);
+                //保存数据到数据库
+                saveTongDunInfo(request, jsonObject.toString());
+            } else {
+                response.setResponseCode(jsonObject.getString(ApiConstants.REASON_CODE_KEY));
+                response.setResponseMsg(jsonObject.getString(ApiConstants.REASON_DESC_KEY));
+            }
+        } catch (Exception e) {
+            LOGGER.info("同盾-返回数据解析出错" + e);
+            response.setResponseCode(ApiConstants.STATUS_DATASOURCE_INTERNAL_ERROR);
+            response.setResponseMsg(ApiConstants.STATUS_DATASOURCE_INTERNAL_ERROR_MSG);
+        }
         LOGGER.info("同盾-获取报告信息.[耗时:{}毫秒]", costTime);
         return response;
     }
@@ -107,14 +97,6 @@ public class TongDunProxy implements ITongDunApiService {
      * @return 影响行数
      */
     private void saveTongDunInfo(TongDunRequest request, String jsonStr) throws Exception {
-        ApiResult resultParameter = new ApiResult();
-        resultParameter.setUserName(request.getPhone());
-        resultParameter.setSourceCode(EApiSourceEnum.TODONG.getCode());
-        resultParameter.setOnlyKey(request.getOrderId());
-        //一个订单只会有一种风控数据 ，如果数据存在就不在继续添加
-        if (apiResultServerImpl.validateData(resultParameter)) {
-            return;
-        }
         ApiResult apiResult = new ApiResult();
         apiResult.setId(GeneratePrimaryKeyUtils.getUUIDKey());
         apiResult.setCode(ApiConstants.STATUS_SUCCESS);
@@ -122,7 +104,7 @@ public class TongDunProxy implements ITongDunApiService {
         apiResult.setMessage(ApiConstants.STATUS_SUCCESS_MSG);
         apiResult.setSourceChildName(EApiSourceEnum.TODONG.getName());
         apiResult.setSourceChildCode(EApiSourceEnum.TODONG.getCode());
-        apiResult.setOnlyKey(request.getOrderId());
+        apiResult.setOnlyKey(request.getCustId());
         apiResult.setRealName(request.getName());
         apiResult.setSourceName(EApiSourceEnum.TODONG.getName());
         apiResult.setSourceCode(EApiSourceEnum.TODONG.getCode());

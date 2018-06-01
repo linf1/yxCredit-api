@@ -17,7 +17,17 @@ public class ShujumoheRequest implements Serializable {
 
     private String orderId;
 
+    private String custId;
+
     private String phone;
+
+    public String getCustId() {
+        return custId;
+    }
+
+    public void setCustId(String custId) {
+        this.custId = custId;
+    }
 
     public String getTask_id() {
         return task_id;

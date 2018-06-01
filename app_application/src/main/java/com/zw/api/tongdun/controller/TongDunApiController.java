@@ -41,7 +41,7 @@ public class TongDunApiController {
      * @param request 请求参数 idNo - 身份证号码
      *                       name - 姓名
      *                       phone - 电话
-     *                       orderId - 订单号
+     *                       custId - 个人信息ID
      *                                 
      * @return 最终数据
      */

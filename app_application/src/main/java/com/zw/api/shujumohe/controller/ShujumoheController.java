@@ -1,5 +1,6 @@
 package com.zw.api.shujumohe.controller;
 
+import com.api.model.DayCompare;
 import com.api.model.result.ApiResult;
 import com.api.model.shujumohe.ShujumoheRequest;
 import com.api.service.result.IApiResultServer;
@@ -8,6 +9,8 @@ import com.base.util.AppRouterSettings;
 import com.base.util.GeneratePrimaryKeyUtils;
 import com.constants.ApiConstants;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;
+import com.zw.miaofuspd.facade.personal.service.AppBasicInfoService;
+import com.zw.miaofuspd.facade.user.service.IUserService;
 import com.zw.web.base.vo.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +19,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,9 +41,14 @@ public class ShujumoheController {
     @Autowired
     private IApiResultServer apiResultServerImpl;
 
+    @Autowired
+    private IUserService userService;
+
     /**
      * 数据魔盒回调接口
-     * @param request 数据
+     * @param request 数据 custId - 个人信息ID
+     *                     task_id - 魔盒数据查询ID
+     *                      phone - 登录手机
      * @return
      */
     @RequestMapping("/callBackShujumohe")
@@ -47,33 +56,22 @@ public class ShujumoheController {
         LOGGER.info("=======数据魔盒回调接参数request:{}",request.toString());
         try {
             ApiResult resultParameter = new ApiResult();
-            resultParameter.setUserName(request.getPhone());
+            resultParameter.setOnlyKey(request.getCustId());
             resultParameter.setSourceCode(EApiSourceEnum.MOHE.getCode());
-            resultParameter.setState(ApiConstants.STATUS_CODE_STATE);
-            //查询是否有报告
-            final List<Map> mapList = apiResultServerImpl.selectApiResult(resultParameter);
-            if(CollectionUtils.isEmpty(mapList)){
-                Map<String,Object>  param = new HashMap<>(5);
-                param.put("identity_code","");
-                param.put("channel_type","");
-                param.put("real_name","");
-                param.put("user_mobile","");
-                param.put("task_data","");
-                //默认数据成功
-                saveMoheInfo(request,param);
-                //异步更新数据
-                asyncExecutor(request);
-            }else{
-                final Map map = mapList.get(0);
-                Map<String,Object>  param = new HashMap<>(5);
-                param.put("identity_code",map.get("identity_code"));
-                param.put("channel_type",map.get("source_child_code"));
-                param.put("real_name",map.get("real_name"));
-                param.put("user_mobile",map.get("user_mobile"));
-                param.put("task_data",map.get("result_data"));
-                //保存数据到数据库
-                saveMoheInfo(request, param);
-            }
+            resultParameter.setState(ApiConstants.STATUS_CODE_NO_STATE);
+            //把以前的数据更新成为失效
+            apiResultServerImpl.updateByOnlyKey(resultParameter);
+            Map custInfoMap = userService.getCustomerInfoByCustomerId(request.getCustId());
+            Map<String,Object>  param = new HashMap<>(5);
+            param.put("identity_code",custInfoMap.get("card"));
+            param.put("channel_type","");
+            param.put("real_name",custInfoMap.get("customerName"));
+            param.put("user_mobile",custInfoMap.get("tel"));
+            param.put("task_data","");
+            //默认数据成功
+            saveMoheInfo(request,param);
+            //异步更新数据
+            asyncExecutor(request);
         } catch (Exception e) {
             e.printStackTrace();
             ResultVO.error();
@@ -88,14 +86,6 @@ public class ShujumoheController {
      * @throws Exception
      */
     private void saveMoheInfo(ShujumoheRequest request, Map data) throws Exception {
-        ApiResult resultParameter = new ApiResult();
-        resultParameter.setUserName(request.getPhone());
-        resultParameter.setSourceCode(EApiSourceEnum.MOHE.getCode());
-        resultParameter.setOnlyKey(request.getOrderId());
-        //一个订单只会有一种风控数据 ，如果数据存在就不在继续添加
-        if (apiResultServerImpl.validateData(resultParameter)) {
-            return;
-        }
         ApiResult apiResult = new ApiResult();
         apiResult.setId(GeneratePrimaryKeyUtils.getUUIDKey());
         apiResult.setCode(ApiConstants.STATUS_SUCCESS);
@@ -103,7 +93,7 @@ public class ShujumoheController {
         apiResult.setMessage(ApiConstants.STATUS_SUCCESS_MSG);
         apiResult.setSourceChildName(ApiConstants.API_MOHE_YYS);
         apiResult.setSourceChildCode(data.get("channel_type").toString());
-        apiResult.setOnlyKey(request.getOrderId());
+        apiResult.setOnlyKey(request.getCustId());
         apiResult.setRealName(data.get("real_name").toString());
         apiResult.setSourceName(EApiSourceEnum.MOHE.getName());
         apiResult.setSourceCode(EApiSourceEnum.MOHE.getCode());

@@ -9,7 +9,7 @@ import com.api.model.common.ApiCommonRequest;
  */
 public class TongDunRequest extends ApiCommonRequest {
     private String  orderId;
-
+    private String  custId;
     /**
      * 报告Id
      */
@@ -29,6 +29,14 @@ public class TongDunRequest extends ApiCommonRequest {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
+    }
+
+    public String getCustId() {
+        return custId;
+    }
+
+    public void setCustId(String custId) {
+        this.custId = custId;
     }
 
     @Override
