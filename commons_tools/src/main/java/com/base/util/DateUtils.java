@@ -95,6 +95,24 @@ public class DateUtils {
 		}
 		return null;
 	}
+
+	/**
+	 * 字符串类型转化为日期类型
+	 * @param str 时间字符串
+	 * @param pattern 格式字符串
+	 * @return 转换好的日期
+	 */
+	public static Date strConvertToDate(String str,String pattern){
+		if(StringUtils.isNotEmpty(str)){
+			try {
+				return sdfMap.get(pattern).parse(str);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
 	/**
 	 * 字符串类型转化为日期类型
 	 * @param str
