@@ -50,6 +50,9 @@ public class ApiResultServerImpl extends AbsServiceBase implements IApiResultSer
                 sql.append("AND ").append(BeanHump.camelToUnderline(entry.getKey())).append("='").append(entry.getValue()).append("' ");
             }
         }
+        if("".equals(result.getResultData())){
+            sql.append("AND ").append("result_data != '").append("'");
+        }
 
         return sunbmpDaoSupport.findForList(sql.toString());
     }
@@ -83,15 +86,33 @@ public class ApiResultServerImpl extends AbsServiceBase implements IApiResultSer
     @Override
     public Boolean updateByOnlyKey(ApiResult result) throws Exception {
         StringBuilder sql = new StringBuilder("update zw_api_result  set ");
-        final Map<String, Object> objectMap = BeanMapperUtil.converMap(result);
-        for (Map.Entry<String, Object> entry : objectMap.entrySet()) {
-            if(entry.getValue() != null &&  !"serialVersionUID".equals(entry.getKey())){
-                    sql.append(BeanHump.camelToUnderline(entry.getKey())).append(" = '").append(entry.getValue()).append("',");
-            }
+        if(result.getCode() != null){
+            sql.append(" code = '").append(result.getCode()).append("', ");
+        }
+        if(result.getMessage() != null){
+            sql.append(" message = '").append(result.getMessage()).append("', ");
+        }
+        if(result.getResultData() != null){
+            sql.append(" result_data = '").append(result.getResultData()).append("', ");
+        }
+        if(result.getApiReturnId() != null){
+            sql.append(" api_return_id = '").append(result.getApiReturnId()).append("', ");
+        }
+        if(result.getState() != null){
+            sql.append(" state = '").append(result.getState()).append("', ");
+        }
+        if(result.getSourceChildCode() != null){
+            sql.append(" source_child_code = '").append(result.getSourceChildCode()).append("', ");
+        }
+        if(result.getSourceChildName() != null){
+            sql.append(" source_child_name = '").append(result.getSourceChildName()).append("', ");
         }
         String  sqlStr = sql.toString();
         sql  = new StringBuilder(sqlStr.substring(0,sqlStr.lastIndexOf(",")));
         sql.append("where only_key = '").append(result.getOnlyKey()).append("'");
+        if(StringUtils.isNotBlank(result.getSourceCode())){
+            sql.append(" and source_code = '").append(result.getSourceCode()).append("' ");
+        }
         return sunbmpDaoSupport.executeSql(sql.toString()) > 0;
     }
 }
