@@ -11,6 +11,7 @@ import com.zw.service.base.AbsServiceBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.NumberFormat;
 import java.util.*;
 
 /**
@@ -266,18 +267,26 @@ public class ContractConfirmationServiceImpl extends AbsServiceBase implements C
     public Map getContractInfo(String orderId) {
         Map map = new HashMap();
         //查询订单
-        String orderSql="select id as orderId, order_no as orderNo, customer_id as customerId, amount, loan_amount as loanAmount, fee, periods as deadline, loan_purpose as useOfLoans from mag_order where id='"+orderId+"'";
+        String orderSql="select id as orderId, order_no as orderNo, customer_id as customerId, amount, loan_amount as loanAmount, fee, service_fee as serviceFee, periods as deadline, loan_purpose as useOfLoans from mag_order where id='"+orderId+"'";
         Map orderMap = sunbmpDaoSupport.findForMap(orderSql);
         map.putAll(orderMap);
+        double fee=Double.parseDouble(orderMap.get("fee").toString());
+        double serviceFee=Double.parseDouble(orderMap.get("serviceFee").toString())*100;
+        NumberFormat nbf=NumberFormat.getInstance();
+        nbf.setMinimumFractionDigits(2);
+        map.put("totalFee", nbf.format(fee+serviceFee));
         //查询客户
         String customerId=map.get("customerId").toString();
-        String customerSql = "SELECT id as customerId  , user_id as userId, person_name as cusName , card as cusCard ,tel as cusTel , card_register_address as cusReceiveAddress, residence_address as cusAddress FROM  mag_customer where id = '"+customerId+"'";
+        String customerSql = "SELECT mc.id as customerId  , mc.user_id as userId, mc.person_name as cusName , mc.card as cusCard , " +
+                "mc.tel as cusTel , mcl.nowaddress as cusAddress, mcj.company_address as cusCompanyAddress " +
+                "FROM  mag_customer mc left join mag_customer_live mcl on mc.id=mcl.customer_id " +
+                "left join mag_customer_job mcj on mc.id=mcj.customer_id where mc.id = '"+customerId+"'";
         Map customerMap = sunbmpDaoSupport.findForMap(customerSql);
         map.putAll(customerMap);
         //查询银行卡信息
         String bankSql="select cust_name as cusAccountName, bank_name as cusAccountBank, card_number as cusBankCard from sys_bank_card where cust_id='"+customerId+"'";
         Map bankMap = sunbmpDaoSupport.findForMap(bankSql);
-        map.putAll(customerMap);
+        map.putAll(bankMap);
 
         //查询该客户在今年的借款次数
         String currentDateStr=DateUtils.getCurrentTime(DateUtils.STYLE_3);

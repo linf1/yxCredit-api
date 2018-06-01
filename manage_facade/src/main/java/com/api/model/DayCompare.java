@@ -27,7 +27,45 @@ public class DayCompare {
         this.minutes = minutes;
     }
 
+    public Long getYear() {
+        return year;
+    }
 
+    public void setYear(Long year) {
+        this.year = year;
+    }
+
+    public Long getMonth() {
+        return month;
+    }
+
+    public void setMonth(Long month) {
+        this.month = month;
+    }
+
+    public Long getDay() {
+        return day;
+    }
+
+    public void setDay(Long day) {
+        this.day = day;
+    }
+
+    public Long getHours() {
+        return hours;
+    }
+
+    public void setHours(Long hours) {
+        this.hours = hours;
+    }
+
+    public Long getMinutes() {
+        return minutes;
+    }
+
+    public void setMinutes(Long minutes) {
+        this.minutes = minutes;
+    }
 
     /**
      * 计算2个日期之间相差的  相差多少年月日
@@ -52,4 +90,5 @@ public class DayCompare {
         DayCompare dayCompare = dayComparePrecise(toDate, fromDate);
         System.out.println(dayCompare.year+"年"+dayCompare.month+"月"+dayCompare.day+"天"+dayCompare.hours+"小时"+dayCompare.minutes+"分");
     }
+
 }
