@@ -1922,7 +1922,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                             "o.contract_amount AS contractAmount , " +
                             "o.repay_type AS repayType ,  o.Job AS job ,  o.Service_fee AS serviceFee ,  o.loan_purpose AS loanPurpose , " +
                             "o.PERIODS AS periods ,  o.Order_state AS orderState " +
-                        "FROM mag_order o WHERE o.USER_ID='"+userId+"' ORDER BY CREAT_TIME DESC  limit "+(( unm-1)*size+1)+","+(unm*size);
+                        "FROM mag_order o WHERE o.USER_ID='"+userId+"' ORDER BY CREAT_TIME DESC  limit "+((unm-1)*size)+","+size;
         List allOrderList = sunbmpDaoSupport.findForList(sql);
 
         returnMap.put("allOrderList",allOrderList);
