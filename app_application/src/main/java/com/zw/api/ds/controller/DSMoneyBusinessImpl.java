@@ -53,13 +53,13 @@ public class DSMoneyBusinessImpl implements IDSMoneyBusiness {
                 request.setBorrowerName(customer.get("custName").toString());
                 request.setBorrowerMobilePhone(customer.get("custPhone").toString());
                 request.setBorrowerThirdId(custId);
-                request.setBorrowerChannel("yxd");
+                request.setBorrowerChannel("YXD");
                 request.setBorrowerCardNo(customer.get("custCard").toString());
                 request.setAddress(customer.get("jobAddress").toString());
                 request.setAccountType("0");
                 request.setAccountName(customer.get("custName").toString());
                 request.setAccountIdCard(customer.get("custCard").toString());
-                request.setAccountChannel("yxd");
+                request.setAccountChannel("YXD");
                 request.setAccountThirdId(custId);
                 //获取银行卡信息
                 setBankInfo(custId, request);
