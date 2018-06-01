@@ -26,5 +26,5 @@ public interface IUserService {
      * @param orderId
      * @return
      */
-    Map getCustomerInfoByOrderId(String orderId);
+    Map getCustomerInfoByCustomerId(String orderId);
 }

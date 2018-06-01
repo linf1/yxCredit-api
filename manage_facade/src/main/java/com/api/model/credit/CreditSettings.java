@@ -5,7 +5,7 @@ import com.api.model.common.BaseSettings;
 
 /**
  * 征信配置信息
- * @author 陈清玉
+ * @author luochaofang
  */
 public class CreditSettings extends BaseSettings {
     /**
@@ -16,12 +16,12 @@ public class CreditSettings extends BaseSettings {
     /**
      * 个人征信回调 的url
      */
-    private String callbackUrl ;
+    private String callbackUrl;
 
     /**
      * 个人征信urlPath
      */
-    private String creditUrlPath ;
+    private String creditUrlPath;
 
     /**
      * 合作方标识  必填，权限校验用
@@ -42,6 +42,8 @@ public class CreditSettings extends BaseSettings {
      *任务类型 必填，权限校验用
      */
     private String taskType;
+
+    private Long effectiveDay;
 
     public String getRequestUrl() {
         return  creditUrl + creditUrlPath + "?appKey="+ appKey + "&taskType="+ taskType;

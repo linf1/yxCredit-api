@@ -1,12 +1,15 @@
 package com.zw.api.credit.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.api.model.DayCompare;
 import com.api.model.credit.CreditRequest;
 import com.api.model.credit.CreditResultAO;
+import com.api.model.credit.CreditSettings;
 import com.api.model.result.ApiResult;
 import com.api.service.credit.ICreditApiService;
 import com.api.service.result.IApiResultServer;
 import com.base.util.AppRouterSettings;
+import com.base.util.DateUtils;
 import com.base.util.GeneratePrimaryKeyUtils;
 import com.constants.ApiConstants;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;
@@ -19,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +48,9 @@ public class CreditApiController {
     @Autowired
     private IUserService userService;
 
+    @Autowired
+    private CreditSettings creditSettings;
+
     /**
      * 个人征信验证API调用入口
      * @param request 请求参数
@@ -51,56 +59,48 @@ public class CreditApiController {
     @PostMapping("/validateCreditApi")
     @ResponseBody
     public ResultVO validateCreditApi(CreditRequest request, @RequestHeader String token){
-        if (null == request || StringUtils.isBlank(request.getOrderId())) {
+        if (null == request || StringUtils.isBlank(request.getCustomerId())) {
             LOGGER.info("请求参数异常或不存在");
             return ResultVO.error("请求参数异常或不存在");
         }
         try {
-            Map userMap = userService.getCustomerInfoByOrderId(request.getOrderId());
-            if(null == userMap) {
-                LOGGER.info("该订单下的用户不存在：{}", request.getOrderId());
-                return ResultVO.error("用户不存在");
+            Map customerMap = userService.getCustomerInfoByOrderId(request.getCustomerId());
+            if(null == customerMap) {
+                LOGGER.info("该客户不存在：{}", request.getCustomerId());
+                return ResultVO.error("客户不存在");
             }
+            //根据客户信息更新征信报告
             ApiResult result = new ApiResult();
             result.setSourceCode(EApiSourceEnum.CREDIT.getCode());
-            result.setIdentityCode(userMap.get("card").toString());//身份证号码
-            result.setOnlyKey(request.getOrderId());//订单id
-            //result.setCode(ApiConstants.STATUS_SUCCESS);//操作成功
-            //result.setOnlyKey(request.getOrderId());
-            result.setState(ApiConstants.STATUS_CODE_STATE);//获取有效数据
-            //根据订单id获取当前用户是否存在征信报告
-            List<Map> apiResultMap = apiResultServer.selectApiResult(result);
+            result.setIdentityCode(customerMap.get("card").toString());//身份证号码
+            result.setOnlyKey(request.getCustomerId());//客户id
+            result.setState(ApiConstants.STATUS_CODE_NO_STATE);//改为无效数据
+            apiResultServer.updateByOnlyKey(result);
 
-            if(!CollectionUtils.isEmpty(apiResultMap) && apiResultMap.get(0).get("code") != null
-                && ApiConstants.STATUS_SUCCESS.equals(apiResultMap.get(0).get("code").toString())) {
-                LOGGER.info("个人征信-存在.");
-                return ResultVO.error(apiResultMap.get(0).get(ApiConstants.API_CODE_KEY).toString(), apiResultMap.get(0).get(ApiConstants.API_MESSAGE_KEY).toString());
-            } else{
-                //删除原来的数据
-                apiResultServer.deleteApiResult(result);
-                //重新调取获取报告接口
-                LOGGER.info("个人征信--获取报告信息 API调用开始.");
-                request.setToken(token);
-                CreditResultAO creditResultAO = creditApiService.validateAccount(request);
-                if("processing".equals(creditResultAO.getTaskStatus())) {
-                    try {
-                        Thread.sleep(5000);
-                        LOGGER.info("个人征信--获取报告信息 API调用参数：{}", request.toString());
-                        //从数据库中获取数据
-                        apiResultMap = apiResultServer.selectApiResult(result);
-                        if(!CollectionUtils.isEmpty(apiResultMap)) {
-                            LOGGER.info("个人征信-获取报告信息结束.");
-                            return ResultVO.error(apiResultMap.get(0).get(ApiConstants.API_CODE_KEY).toString(), apiResultMap.get(0).get(ApiConstants.API_MESSAGE_KEY).toString());
-                        } else {
-                            return ResultVO.error(ApiConstants.STATUS_CREDIT_INFO_ERROR, ApiConstants.STATUS_CREDIT_INFO_MSG);
-                        }
-                    } catch (Exception e) {
-                        LOGGER.info("个人征信-获取数据出错" + e);
-                        return ResultVO.error(ApiConstants.STATUS_DATASOURCE_INTERNAL_ERROR,ApiConstants.STATUS_DATASOURCE_INTERNAL_ERROR_MSG);
+            //重新调取获取报告接口
+            LOGGER.info("个人征信--获取报告信息 API调用开始.");
+            request.setToken(token);
+            CreditResultAO creditResultAO = creditApiService.validateAccount(request);
+            if("processing".equals(creditResultAO.getTaskStatus())) {
+                try {
+                    Thread.sleep(5000);
+                    LOGGER.info("个人征信--获取报告信息 API调用参数：{}", request.toString());
+                    //从数据库中获取数据
+                    result.setState(ApiConstants.STATUS_CODE_STATE);//有效数据
+                    List<Map> apiResultMap = apiResultServer.selectApiResult(result);
+                    if(!CollectionUtils.isEmpty(apiResultMap)) {
+                        Map map = apiResultMap.get(0);
+                        LOGGER.info("个人征信-获取报告信息结束.");
+                        return ResultVO.error(map.get(ApiConstants.API_CODE_KEY).toString(), map.get(ApiConstants.API_MESSAGE_KEY).toString());
+                    } else {
+                        return ResultVO.error(ApiConstants.STATUS_CREDIT_INFO_ERROR, ApiConstants.STATUS_CREDIT_INFO_MSG);
                     }
-                } else {
-                    return ResultVO.error(ApiConstants.STATUS_SYS_ERROR,"需要补充任务信息");
+                } catch (Exception e) {
+                    LOGGER.info("个人征信-获取数据出错" + e);
+                    return ResultVO.error(ApiConstants.STATUS_DATASOURCE_INTERNAL_ERROR,ApiConstants.STATUS_DATASOURCE_INTERNAL_ERROR_MSG);
                 }
+            } else {
+                return ResultVO.error(ApiConstants.STATUS_SYS_ERROR,"需要补充任务信息");
             }
         } catch (Exception e) {
             LOGGER.info("个人征信-获取数据出错" + e);
@@ -111,60 +111,58 @@ public class CreditApiController {
     /**
      * 获取个人征信信息回调入口
      * @param request 参数
-     * @param orderId 订单id
+     * @param customerId 客户id
      */
-    @RequestMapping("/getCreditApiInfo/{orderId}")
-    public void getCreditApiInfo(@RequestBody String request, @PathVariable String  orderId){
+    @RequestMapping("/getCreditApiInfo/{customerId}")
+    public void getCreditApiInfo(@RequestBody String request, @PathVariable String  customerId){
         LOGGER.info(request);
         LOGGER.info("--------------------------------回调成功   ------------------------");
         JSONObject jsonObject = JSONObject.parseObject(request);
         Map<String,Object> map = new HashMap<>();
-        Map userMap = userService.getCustomerInfoByOrderId(orderId);
-        ApiResult result = new ApiResult();
-        result.setState(ApiConstants.STATUS_CODE_STATE);
-        result.setResultData("");
-        result.setIdentityCode("");
-        result.setRealName("");
-        result.setUserMobile("");
-        result.setUserName("");
+        Map userMap = userService.getCustomerInfoByOrderId(customerId);
         if(null == userMap) {
-            LOGGER.info("该订单下的用户不存在：{}", orderId);
+            LOGGER.info("该客户不存在：{}", customerId);
         } else {
-            result.setRealName(userMap.get("realName").toString());
-            result.setUserName(userMap.get("realName").toString());
+            ApiResult result = new ApiResult();
+            result.setState(ApiConstants.STATUS_CODE_STATE);
+            result.setResultData("");
+            result.setRealName(userMap.get("customerName").toString());
+            result.setUserName(userMap.get("tel").toString());
             result.setIdentityCode(userMap.get("card").toString());
             result.setUserMobile(userMap.get("tel").toString());
-        }
-        try {
-            if(ApiConstants.API_SUCCESS_KEY.equals(jsonObject.getString(ApiConstants.API_TASK_STATUS_KEY))){
-                if(jsonObject.containsKey(ApiConstants.API_TASK_RESULT_KEY)){
-                    result.setResultData(jsonObject.getString(ApiConstants.API_TASK_RESULT_KEY));
-                }
-                map.put(ApiConstants.API_MESSAGE_KEY,ApiConstants.STATUS_SUCCESS_MSG);
-                map.put(ApiConstants.API_CODE_KEY,ApiConstants.STATUS_SUCCESS);
-            } else {
-                if(ApiConstants.API__PBC_1_CODE_KEY.equals(jsonObject.get(ApiConstants.API_CODE_KEY))) {
-                    map.put(ApiConstants.API_CODE_KEY,ApiConstants.STATUS_ACCOUNT_PASSWORD_ERROR);
-                } else if(ApiConstants.API__PBC_2_CODE_KEY.equals(jsonObject.getString(ApiConstants.API_CODE_KEY))) {
-                    map.put(ApiConstants.API_CODE_KEY,ApiConstants.STATUS_VERIF_CODE_ERROR);
+
+            try {
+                if(ApiConstants.API_SUCCESS_KEY.equals(jsonObject.getString(ApiConstants.API_TASK_STATUS_KEY))){
+                    if(jsonObject.containsKey(ApiConstants.API_TASK_RESULT_KEY)){
+                        result.setResultData(jsonObject.getString(ApiConstants.API_TASK_RESULT_KEY));
+                    }
+                    map.put(ApiConstants.API_MESSAGE_KEY,ApiConstants.STATUS_SUCCESS_MSG);
+                    map.put(ApiConstants.API_CODE_KEY,ApiConstants.STATUS_SUCCESS);
                 } else {
-                    map.put(ApiConstants.API_CODE_KEY,ApiConstants.STATUS_CREDIT_INFO_ERROR);
+                    if(ApiConstants.API__PBC_1_CODE_KEY.equals(jsonObject.get(ApiConstants.API_CODE_KEY))) {
+                        map.put(ApiConstants.API_CODE_KEY,ApiConstants.STATUS_ACCOUNT_PASSWORD_ERROR);
+                    } else if(ApiConstants.API__PBC_2_CODE_KEY.equals(jsonObject.getString(ApiConstants.API_CODE_KEY))) {
+                        map.put(ApiConstants.API_CODE_KEY,ApiConstants.STATUS_VERIF_CODE_ERROR);
+                    } else {
+                        map.put(ApiConstants.API_CODE_KEY,ApiConstants.STATUS_CREDIT_INFO_ERROR);
+                    }
+                    map.put(ApiConstants.API_MESSAGE_KEY,jsonObject.getString(ApiConstants.API_MESSAGE_KEY));
                 }
-                map.put(ApiConstants.API_MESSAGE_KEY,jsonObject.getString(ApiConstants.API_MESSAGE_KEY));
+                result.setId(GeneratePrimaryKeyUtils.getUUIDKey());
+                result.setOnlyKey(customerId);
+                result.setCode(map.get(ApiConstants.API_CODE_KEY).toString());
+                result.setMessage(map.get(ApiConstants.API_MESSAGE_KEY).toString());
+                result.setSourceName(EApiSourceEnum.CREDIT.getName());
+                result.setSourceCode(EApiSourceEnum.CREDIT.getCode());
+                result.setSourceChildName(EApiSourceEnum.CREDIT.getName());
+                result.setSourceChildCode(EApiSourceEnum.CREDIT.getCode());
+                result.setApiReturnId("");
+                LOGGER.info("个人征信--获取报告信息{}", result);
+                apiResultServer.insertApiResult(result);
+            } catch (Exception e) {
+                LOGGER.info("个人征信-返回数据解析出错" + e);
             }
-            result.setId(GeneratePrimaryKeyUtils.getUUIDKey());
-            result.setOnlyKey(orderId);
-            result.setCode(map.get(ApiConstants.API_CODE_KEY).toString());
-            result.setMessage(map.get(ApiConstants.API_MESSAGE_KEY).toString());
-            result.setSourceName(EApiSourceEnum.CREDIT.getName());
-            result.setSourceCode(EApiSourceEnum.CREDIT.getCode());
-            result.setSourceChildName(EApiSourceEnum.CREDIT.getName());
-            result.setSourceChildCode(EApiSourceEnum.CREDIT.getCode());
-            result.setApiReturnId("");
-            LOGGER.info("个人征信--获取报告信息{}", result);
-            apiResultServer.insertApiResult(result);
-        } catch (Exception e) {
-            LOGGER.info("个人征信-返回数据解析出错" + e);
         }
+
     }
 }
