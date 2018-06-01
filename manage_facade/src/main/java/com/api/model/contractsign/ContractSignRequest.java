@@ -28,7 +28,8 @@ public class ContractSignRequest implements Serializable {
 	private String realTemplateId;
 	/**未签署合同位置**/
 	private String unsignPath;
-	
+	/**业务系统id**/
+	private java.lang.Long bussinessId;
 	private List<ByxUserModel> userModelList;
 	
 	/**文件流接收,待签署的合同流**/
@@ -38,8 +39,15 @@ public class ContractSignRequest implements Serializable {
 	
 	/**是否外部系统调用,0:是;1:否**/
 	private Integer isOutSign;
-	
-	
+
+	public Long getBussinessId() {
+		return bussinessId;
+	}
+
+	public void setBussinessId(Long bussinessId) {
+		this.bussinessId = bussinessId;
+	}
+
 	public String getUnsignFileOrignName() {
 		return unsignFileOrignName;
 	}
