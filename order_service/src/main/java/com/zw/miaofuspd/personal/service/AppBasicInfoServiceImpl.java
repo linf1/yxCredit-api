@@ -1100,15 +1100,17 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         return sunbmpDaoSupport.executeSql(sql);
     }
     @Override
-    public Map getEmpowerStatus(String orderId,String customerId){
+    public Map getEmpowerStatus(String userId){
         Map<String,String> resultMap = new HashMap<String, String>(2);
         resultMap.put("mohe","0");
         resultMap.put("zhengxin","0");
-        Map customerMap = getThreeItems(customerId);
+        Map customerMap = getCustomerIdByid(userId);
+        String customerId = customerMap.get("id").toString();
+        //Map customerMap = getThreeItems(customerId);
         //获取魔盒授权状态
-        int moheCount = findEmpowerStatus(EApiSourceEnum.MOHE.getCode(),customerMap);
+        int moheCount = findEmpowerStatus(EApiSourceEnum.MOHE.getCode(),customerId);
         //获取个人征信授权状态
-        int creditCount = findEmpowerStatus(EApiSourceEnum.CREDIT.getCode(),customerMap);
+        int creditCount = findEmpowerStatus(EApiSourceEnum.CREDIT.getCode(),customerId);
         if(moheCount == 1){
             resultMap.put("mohe","1");
         }
@@ -1128,19 +1130,19 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     /**
      * 获取授权状态
      */
-    private  int findEmpowerStatus(String sourceCode,Map customerMap){
-        String sql = "SELECT count(1) from zw_api_result where source_code = '"+sourceCode+"' and state = "+ApiConstants.STATUS_CODE_STATE+" and code = "+ApiConstants.STATUS_SUCCESS+" and  created_time >= date_add(NOW(), interval -1 MONTH) and real_name = '"+customerMap.get("PERSON_NAME")+"' and user_mobile = '"+customerMap.get("TEL")+"' and identity_code = '"+customerMap.get("CARD")+"' ORDER BY created_time desc LIMIT 1";
+    private  int findEmpowerStatus(String sourceCode,String customerId){
+        String sql = "SELECT count(1) from zw_api_result where source_code = '"+sourceCode+"' and state = "+ApiConstants.STATUS_CODE_STATE+" and code = "+ApiConstants.STATUS_SUCCESS+" and  created_time >= date_add(NOW(), interval -1 MONTH) and only_key = '"+customerId+"' ORDER BY created_time desc LIMIT 1";
         return sunbmpDaoSupport.getCount(sql);
     }
 
     /**
-     * 获取用户三要素信息
-     * @param customerId
+     * 获取用户customerId
+     * @param userId
      * @return
      */
-    public Map getThreeItems(String customerId){
-        StringBuilder sql = new StringBuilder("select PERSON_NAME,TEL,CARD from mag_customer where id = '").append(customerId).append("'");
-        return  sunbmpDaoSupport.findForMap(sql.toString());
+    public Map getCustomerIdByid(String userId){
+        String sql = "select id from mag_customer where user_id = '"+userId+"'";
+        return  sunbmpDaoSupport.findForMap(sql);
     }
 
 
