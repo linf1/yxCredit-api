@@ -1917,6 +1917,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                             "DATE_FORMAT(STR_TO_DATE( o.CREAT_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS creatTime , " +
                             "DATE_FORMAT(STR_TO_DATE( o.ALTER_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS alterTime , " +
                             "DATE_FORMAT(STR_TO_DATE( o.loan_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS loanTime , " +
+                            "o.repay_date AS repayDate , " +
                             "o.contract_amount AS contractAmount , " +
                             "o.repay_type AS repayType ,  o.Job AS job ,  o.Service_fee AS serviceFee ,  o.loan_purpose AS loanPurpose , " +
                             "o.PERIODS AS periods ,  o.Order_state AS orderState " +
@@ -1971,6 +1972,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                                     "DATE_FORMAT(STR_TO_DATE( o.CREAT_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS creatTime , " +
                                     "DATE_FORMAT(STR_TO_DATE( o.ALTER_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS alterTime , " +
                                     "DATE_FORMAT(STR_TO_DATE( o.loan_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS loanTime , " +
+                                    "o.repay_date AS repayDate , " +
                                     " o.contract_amount AS contractAmount , " +
                                     " o.repay_type AS repayType ,  o.Job AS job ,  o.Service_fee AS serviceFee ,  o.loan_purpose AS loanPurpose , " +
                                     " o.PERIODS AS periods ,  o.Order_state AS orderStatus  ,wpd.payment AS payment " +
