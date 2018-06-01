@@ -55,7 +55,7 @@ public class DSMoneyBusinessImpl implements IDSMoneyBusiness {
                 request.setBorrowerThirdId(custId);
                 request.setBorrowerChannel("YXD");
                 request.setBorrowerCardNo(customer.get("custCard").toString());
-                request.setAddress(customer.get("jobAddress").toString());
+                request.setAddress(customer.get("nowaddress").toString());
                 request.setAccountType("0");
                 request.setAccountName(customer.get("custName").toString());
                 request.setAccountIdCard(customer.get("custCard").toString());
@@ -75,9 +75,9 @@ public class DSMoneyBusinessImpl implements IDSMoneyBusiness {
                                     resData.get("accountId").toString(),
                                     custId
                             );
+                            LOGGER.info("------借款人及放款账户数据同步更新个人信息到数据库成功------");
+                            return BYXResponse.ok(resData);
                         }
-                        LOGGER.info("------借款人及放款账户数据同步更新个人信息到数据库成功------");
-                       return BYXResponse.ok();
                     }
                 }else{
                     LOGGER.info("------借款人及放款账户数据同步更新个人信息到数据库失败------");
