@@ -147,12 +147,13 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         String sql = "select t3.contractor_name as contractor_name,t1.product_name as product_name,t1.product_name_name as product_name_name from mag_order t1 left join byx_white_list t2 on t1.customer_name = t2.real_name and t1.card = t2.card left join byx_contractor t3 on t2.contractor_id = t3.id where t1.id='"+orderId+"'";
         Map map1 = sunbmpDaoSupport.findForMap(sql);
         //插入产品的利率
-        String sql2 = "select t1.li_xi as lixi,t1.product_id as product_id,t1.zbs_jujian_fee as zbs_jujian_fee from mag_product_fee t1\n" +
+        String sql2 = "select t1.li_xi as lixi,t1.year_rate as year_rate,t1.product_id as product_id,t1.zbs_jujian_fee as zbs_jujian_fee from mag_product_fee t1\n" +
                 "inner join(\n" +
                 "select id,product_term_min,product_term_max from pro_working_product_detail where crm_product_id =(\n" +
                 "select id from  pro_crm_product where pro_name ='"+map1.get("product_name_name")+"' and pro_number = '"+map1.get("product_name")+"') and product_term_min*1 <= "+periods+" and product_term_max*1 >= "+periods+")t2 on t1.product_id = t2.id";
         Map map2 = sunbmpDaoSupport.findForMap(sql2);
         String lixi = map2.get("lixi")==null?"":map2.get("lixi").toString();
+        String yearRate = map2.get("year_rate")==null?"":map2.get("year_rate").toString();
         String product_detail = map2.get("product_id")==null?"":map2.get("product_id").toString();
         String zbs_jujian_fee = map2.get("zbs_jujian_fee") == null?"":map2.get("zbs_jujian_fee").toString();
         String contractorName = map1.get("contractor_name") == null?"":map1.get("contractor_name").toString();
@@ -161,7 +162,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             serviceFee = Double.valueOf(getServiceFee(contractorName, zbs_jujian_fee))/100;
         }
         String sql3 = "update mag_order set applay_money = " + applayMoney + "," + "PERIODS = '" + periods + "'," +
-                "loan_purpose = '" + loanPurpose + "',rate = '"+lixi+"',product_detail = '"+product_detail+"',Service_fee = '"+serviceFee+"'," +
+                "loan_purpose = '" + loanPurpose + "',rate = '"+lixi+"',year_rate = '"+yearRate+"',product_detail = '"+product_detail+"',Service_fee = '"+serviceFee+"'," +
                 "complete = '100' where id = '" + orderId + "'  ";
         int count = sunbmpDaoSupport.executeSql(sql3);
         //sunbmpDaoSupport.exeSql(sql);
