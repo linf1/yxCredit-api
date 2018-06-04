@@ -620,6 +620,7 @@ public class ContractConfirmationController extends AbsBaseController {
         List<ByxUserModel> userModelList = new ArrayList<ByxUserModel>();
         contractSignRequest.setUserModelList(userModelList);
 
+        /**甲方**/
         ByxUserModel byxUserModel = new ByxUserModel();
         byxUserModel.setPersonArea(0);
         byxUserModel.setPersonIdType(ByxUserModel.IDTYPE_ID);
@@ -632,8 +633,32 @@ public class ContractConfirmationController extends AbsBaseController {
         //关键字定位
         byxUserModel.setPosType(ByxUserModel.POS_TYPE_KEY);
 
-
         userModelList.add(byxUserModel);
+
+        if("居间服务协议".equals(title)){
+            contractSignRequest.setRealTemplateId("f86a9ff0-51c8-47aa-b61d-7a74d0dfccd7");
+            /**乙方**/
+            ByxUserModel byxUserModel2 = new ByxUserModel();
+//            byxUserModel2.setDefaultCompany();
+            byxUserModel2.setOrganizeName("华惠金服信息科技（北京）有限公司");
+            byxUserModel2.setOrganizeType(0);
+            byxUserModel2.setOrganizeUserType(2);
+            byxUserModel2.setOrganizeOrganCode("MA004T5A-1");
+            byxUserModel2.setOrganizeCreditCode("91110107MA004T5A1G");
+
+            byxUserModel2.setOrganizeLegalArea(0);
+            byxUserModel2.setOrganizeLegalIdno("430903198605190359");
+            byxUserModel2.setOrganizeLegalName("周煜琛");
+
+            //乙方
+            byxUserModel2.setSignatory(1);
+            //企业
+            byxUserModel2.setUserType(ByxUserModel.USERTYPE_COMPANY);
+            //关键字定位
+            byxUserModel2.setPosType(ByxUserModel.POS_TYPE_KEY);
+
+            userModelList.add(byxUserModel2);
+        }
 
         contractSignRequest.setUnsignPath(pdfPath);
 
