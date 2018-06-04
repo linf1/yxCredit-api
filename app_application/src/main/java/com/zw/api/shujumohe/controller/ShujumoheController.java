@@ -75,7 +75,7 @@ public class ShujumoheController {
                 asyncExecutor(request);
             }else{
                 LOGGER.info("--------------请先实名认证!---------------");
-                ResultVO.error("请先实名认证!");
+              return   ResultVO.error("请先实名认证!");
             }
 
         } catch (Exception e) {
