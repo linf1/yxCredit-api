@@ -271,9 +271,11 @@ public class ContractConfirmationServiceImpl extends AbsServiceBase implements C
         Map orderMap = sunbmpDaoSupport.findForMap(orderSql);
         map.putAll(orderMap);
         double fee=Double.parseDouble(orderMap.get("fee").toString());
-        double serviceFee=Double.parseDouble(orderMap.get("serviceFee").toString())*100;
+        double serviceFee=Double.parseDouble(orderMap.get("serviceFee").toString())*100*365;
         NumberFormat nbf=NumberFormat.getInstance();
-        nbf.setMinimumFractionDigits(2);
+        nbf.setMinimumFractionDigits(3);
+        map.put("fee", nbf.format(fee));
+        map.put("serviceFee", nbf.format(serviceFee));
         map.put("totalFee", nbf.format(fee+serviceFee));
         //查询客户
         String customerId=map.get("customerId").toString();

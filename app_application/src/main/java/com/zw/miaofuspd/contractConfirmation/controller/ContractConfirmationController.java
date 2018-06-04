@@ -528,7 +528,7 @@ public class ContractConfirmationController extends AbsBaseController {
         params.put("empName",request.getParameter("empName"));
         params.put("amount",request.getParameter("amount"));
         params.put("operationResult", 6);
-        params.put("orderState", 7);
+        params.put("orderState", 9);
         params.put("description", request.getParameter("description"));
         contractConfirmationService.updateOrderStatus(params);
 
