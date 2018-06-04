@@ -126,7 +126,6 @@ public class SmsApiController  {
      */
     @RequestMapping("captcha.jpg")
     public void captcha(HttpServletResponse response,MsgRequest msgRequest)throws Exception {
-        Thread.sleep(AppConstant.CAPTCHA_INTERVAL_TIME);
         response.setHeader("Cache-Control", "no-store, no-cache");
         response.setContentType("image/jpeg");
         //生成文字验证码
