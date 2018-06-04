@@ -60,8 +60,8 @@ public class TongDunProxy implements ITongDunApiService {
             final ReportAO reportAO = queryReportId(request);
             if (!reportAO.isSuccess()) {
                 LOGGER.info("同盾-查询获取reportId失败或参数验证不通过");
-                response.setResponseCode(ApiConstants.STATUS_INPUT_ERROR);
-                response.setResponseMsg(ApiConstants.STATUS_INPUT_ERROR_MSG);
+                response.setResponseCode(reportAO.getReasonCode());
+                response.setResponseMsg(reportAO.getReasonDesc());
                 return response;
             }
             Thread.sleep(3000);

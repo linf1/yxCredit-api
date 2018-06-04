@@ -379,7 +379,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
                 sql2.append("',alter_time='" + alterTime);
                 sql2.append("',complete='" + complete);
                 sql2.append("' where  id='" + id + "'");
-                sunbmpDaoSupport.exeSql(sql.toString());
+                sunbmpDaoSupport.exeSql(sql2.toString());
             } else {
                 id = GeneratePrimaryKeyUtils.getUUIDKey();
                 sql2 = new StringBuffer("insert into mag_customer_live (id,customer_id,address_detail,provinces,city,distric,provinces_id,city_id,distric_id,nowaddress,complete,alter_time) values ('");

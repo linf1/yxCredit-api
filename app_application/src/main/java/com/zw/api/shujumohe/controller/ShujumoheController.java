@@ -62,19 +62,25 @@ public class ShujumoheController {
             //把以前的数据更新成为失效
             apiResultServerImpl.updateByOnlyKey(resultParameter);
             Map custInfoMap = userService.getCustomerInfoByCustomerId(request.getCustomerId());
-            Map<String,Object>  param = new HashMap<>(5);
-            param.put("identity_code",custInfoMap.get("card"));
-            param.put("channel_type","");
-            param.put("real_name",custInfoMap.get("customerName"));
-            param.put("user_mobile",custInfoMap.get("tel"));
-            param.put("task_data","");
-            //默认数据成功
-            saveMoheInfo(request,param);
-            //异步更新数据
-            asyncExecutor(request);
+            if(custInfoMap != null) {
+                Map<String, Object> param = new HashMap<>(5);
+                param.put("identity_code", custInfoMap.get("card"));
+                param.put("channel_type", "");
+                param.put("real_name", custInfoMap.get("customerName"));
+                param.put("user_mobile", custInfoMap.get("tel"));
+                param.put("task_data", "");
+                //默认数据成功
+                saveMoheInfo(request,param);
+                //异步更新数据
+                asyncExecutor(request);
+            }else{
+                LOGGER.info("--------------请先实名认证!---------------");
+                return   ResultVO.error("请先实名认证!");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
-            ResultVO.error();
+            ResultVO.error(e.getMessage());
         }
         return  ResultVO.ok("验证成功！",null);
     }
