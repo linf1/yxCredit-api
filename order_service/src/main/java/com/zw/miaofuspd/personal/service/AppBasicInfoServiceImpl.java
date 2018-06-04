@@ -150,7 +150,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         String sql2 = "select t1.li_xi as lixi,t1.year_rate as year_rate,t1.product_id as product_id,t1.zbs_jujian_fee as zbs_jujian_fee from mag_product_fee t1\n" +
                 "inner join(\n" +
                 "select id,product_term_min,product_term_max from pro_working_product_detail where crm_product_id =(\n" +
-                "select id from  pro_crm_product where pro_name ='"+map1.get("product_name_name")+"' and pro_number = '"+map1.get("product_name")+"') and product_term_min*1 <= "+periods+" and product_term_max*1 >= "+periods+")t2 on t1.product_id = t2.id";
+                "select id from  pro_crm_product where pro_name ='"+map1.get("product_name_name")+"' and pro_number = '"+map1.get("product_name")+"') and product_term_min*1 <= "+periods+" and product_term_max*1 >= "+periods+")t2 on t1.product_id = t2.id where t1.state = '0'";
         Map map2 = sunbmpDaoSupport.findForMap(sql2);
         String lixi = map2.get("lixi")==null?"":map2.get("lixi").toString();
         String yearRate = map2.get("year_rate")==null?"":map2.get("year_rate").toString();
@@ -1151,7 +1151,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         Map reslutMap = new HashMap(3);
         String sql1 = "select t2.order_no as order_no,t2.product_name_name as product_name_name,t2.loan_amount as loan_amount,t2.rate as rate,t2.PERIODS as periods,date_format(str_to_date(t2.applay_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%i:%s') as applay_time," +
                 "t2.loan_purpose as loan_purpose,t2.customer_name as customer_name,t2.card as card ,t2.tel as tel,t1.zbs_jujian_fee  as zbs_jujian_fee,t1.li_xi as lixi,t3.repayment as repayment,t3.repayment_days as repayment_days" +
-                " from mag_product_fee t1 left join mag_order t2 on t1.product_id = t2.product_detail left join pro_working_product_detail t3 on t1.product_id = t3.id where t2.id = '"+orderId+"'";
+                " from mag_product_fee t1 left join mag_order t2 on t1.product_id = t2.product_detail left join pro_working_product_detail t3 on t1.product_id = t3.id where t2.id = '"+orderId+"' and t1.state = '0'";
         Map orderMap =sunbmpDaoSupport.findForMap(sql1);
 
         //根据用户id获取用户相关信息
