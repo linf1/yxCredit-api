@@ -44,7 +44,6 @@ public class AssetController {
      */
     @PostMapping("/thirdAssetsReceiver")
     public ResultVO thirdAssetsReceiver(String orderId,String customerId) {
-        //final Map resultMap = appBasicInfoServiceImpl.getOrderDetailById(request.getOrderId(),request.getCustomerId(),request.getContractorName());
         final Map resultMap = appBasicInfoServiceImpl.getOrderDetailById(orderId,customerId);
         AssetRequest request = new AssetRequest();
         Map orderMap = (Map) resultMap.get("orderMap");
@@ -62,7 +61,7 @@ public class AssetController {
                     syncAccountId =  runSyncDataMap.get("syncAccountId");
                 }else{
                     LOGGER.info("----借款人及放款账户数据同步失败----");
-                   return ResultVO.error("数据同步失败！");
+                   return ResultVO.error("借款人及放款账户数据同步失败！");
                 }
             }
               request.setAssetName(orderMap.get("product_name_name") == null? "" : orderMap.get("product_name_name").toString());
