@@ -1156,7 +1156,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
 
         //根据用户id获取用户相关信息
         String sql2 = "select t1.user_id as user_id,t4.contractor_name as contractor_name,t1.sync_user_id as sync_user_id,t1.sync_account_id as sync_account_id,t2.company_address as company_address  " +
-                "from mag_customer t1 left join mag_customer_job t2 on t1.id=t2.customer_id left join byx_white_list t3 on t1.person_name = t3. real_name " +
+                "from mag_customer t1 left join mag_customer_job t2 on t1.id=t2.customer_id left join byx_white_list t3 on t1.card = t3. card " +
                 "left join byx_contractor t4 on t3.contractor_id = t4.id where t1.id = '"+customerId+"'";
         Map customerMap =sunbmpDaoSupport.findForMap(sql2);
         String zbs_jujian_fee = orderMap.get("zbs_jujian_fee")==null?"":orderMap.get("zbs_jujian_fee").toString();
