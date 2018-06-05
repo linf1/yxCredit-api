@@ -1,6 +1,5 @@
 package com.zw.api.shujumohe.controller;
 
-import com.api.model.DayCompare;
 import com.api.model.result.ApiResult;
 import com.api.model.shujumohe.ShujumoheRequest;
 import com.api.service.result.IApiResultServer;
@@ -9,19 +8,15 @@ import com.base.util.AppRouterSettings;
 import com.base.util.GeneratePrimaryKeyUtils;
 import com.constants.ApiConstants;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;
-import com.zw.miaofuspd.facade.personal.service.AppBasicInfoService;
 import com.zw.miaofuspd.facade.user.service.IUserService;
 import com.zw.web.base.vo.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 
