@@ -964,9 +964,6 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     @Override
     public Map checkCustomerInfo(String costomerId,String card)  {
         Map resultMap = new HashMap(3);
-        Map workMap = null;
-        long workTimeDiff = -1L;
-
         try {
             //验证用户年龄
             Date age = DateUtils.strConvertToDateByType(card.substring(6,14),DateUtils.STYLE_3);
@@ -978,29 +975,10 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
                 resultMap.put("msg","您的年龄不符合申请条件");
                 return  resultMap;
             }
-            //验证工作时间是否满一个月
-            String sql = "select t2.contract_start_date as contract_start_date,t2.job as job from mag_customer t1 " +
-                    "left join byx_white_list t2 on t1.PERSON_NAME = t2.real_name and t1.card = t2.card where t1.ID = '"+costomerId+"'";
-            workMap = sunbmpDaoSupport.findForMap(sql);
-            String contractStartDate = workMap.get("contract_start_date") == null?"":workMap.get("contract_start_date").toString();
-            if(StringUtils.isNotEmpty(contractStartDate)){
-                Date workTime = DateUtils.strConvertToDateByType(contractStartDate,DateUtils.STYLE_3);
-                workTimeDiff = DateUtils.getDifferenceDays(now,workTime);
-            }
         } catch (Exception e) {
             e.printStackTrace();
             resultMap.put("flag",false);
             resultMap.put("msg","系统繁忙，请稍后重试");
-            return  resultMap;
-        }
-        if(workMap.get("job").toString().equals("3")){
-            resultMap.put("flag",false);
-            resultMap.put("msg","工地临时工不符合申请条件");
-            return  resultMap;
-        }
-        if(workTimeDiff < 30 && workTimeDiff != -1L){
-            resultMap.put("flag",false);
-            resultMap.put("msg","所在工地工作未满1个月");
             return  resultMap;
         }
         resultMap.put("flag",true);
