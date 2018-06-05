@@ -34,7 +34,7 @@ public class ActivityServiceImpl extends AbsServiceBase implements ActivityServi
                     "DATE_FORMAT(STR_TO_DATE(alter_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS alterTime," +
                     "DATE_FORMAT(STR_TO_DATE(release_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS releaseTime," +
                     "platform_type AS platformType,priority AS priority " +
-                    "FROM activity_manage WHERE activity_state='1' LIMIT 3 ";
+                    "FROM activity_manage WHERE activity_state='1' ORDER BY priority LIMIT 3 ";
 
             List bannerList = sunbmpDaoSupport.findForList(selectSql);
             if (bannerList!=null){
