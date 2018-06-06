@@ -1,0 +1,55 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+version '1.0'
+
+jar {
+    manifest {
+        attributes("Implementation-Title": project.name)
+        attributes("Implementation-Version": version)
+        attributes("Main-Class": "com.zw.manage.service.RedisServiceProvider",
+                "Implementation-Title": "Gradle")
+    }
+}
+
+task copyDependencies(type: Copy) {
+    from configurations.runtime
+    destinationDir = file('build/libs/lib')
+}
+jar.dependsOn += copyDependencies
+
+task copyShell(type: Copy) {
+    from "${rootDir}/start.sh"
+    from "${rootDir}/stop.sh"
+    into "build/libs"
+}
+jar.dependsOn += copyShell
+
+
+dependencies {
+
+    compile project(":commons_tools")
+    compile project(":redis_facade")
+    compile project(":service_base")
+    compile project(":erp_api")
+
+    compile 'log4j:log4j:1.2.17'
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'org.springframework:spring-core:4.3.2.RELEASE'
+    compile 'org.springframework:spring-jdbc:4.3.2.RELEASE'
+    compile 'org.springframework:spring-tx:4.3.2.RELEASE'
+    compile("com.alibaba:dubbo:2.5.3") {
+        exclude group: 'org.springframework'
+    }
+    compile 'org.apache.zookeeper:zookeeper:3.4.5'
+    compile "com.alibaba:fastjson:${fastJson_Version}"
+    compile 'org.aspectj:aspectjweaver:1.8.9'
+    compile 'javassist:javassist:3.12.1.GA'
+    compile 'com.101tec:zkclient:0.3'
+    compile 'commons-collections:commons-collections:3.2'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.8.4'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.4'
+    compile 'org.springframework.data:spring-data-redis:1.7.2.RELEASE'
+    compile 'redis.clients:jedis:2.8.1'
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+}

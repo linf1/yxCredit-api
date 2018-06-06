@@ -10,3 +10,7 @@ include "user_service"
 include 'erp_api'
 include "service_base"
 include "commons_tools"
+
+include 'redis_facade'
+include 'redis_service'
+
