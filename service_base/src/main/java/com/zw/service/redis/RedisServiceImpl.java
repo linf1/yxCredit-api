@@ -1,6 +1,5 @@
-package com.zw.redis.service;
+package com.zw.service.redis;
 
-import com.zw.redis.facade.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;

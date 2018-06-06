@@ -1,4 +1,4 @@
-package com.zw.redis.cache;
+package com.zw.service.redis.cache;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -11,6 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import java.io.*;
 import java.util.concurrent.Callable;
+
 /**
  * <p>Title: RedisCache </p>
  * <p>Description: redis缓存/p>

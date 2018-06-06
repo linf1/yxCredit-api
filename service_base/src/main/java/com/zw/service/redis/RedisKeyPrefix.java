@@ -1,4 +1,4 @@
-package com.zw.redis;
+package com.zw.service.redis;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

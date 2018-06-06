@@ -23,7 +23,7 @@
     <context:property-placeholder
             ignore-unresolvable="true"
             file-encoding="UTF-8"
-            location="classpath:jdbc.properties,classpath*:/zookeeper.properties,classpath*:/erpmq.properties,classpath*:/rabbitMQ.properties"/>
+            location="classpath*:properties/*.properties,classpath:jdbc.properties,classpath*:/*.properties,classpath*:/erpmq.properties,classpath*:/rabbitMQ.properties"/>
 
     <bean id="SpringContextUtil" class="com.zw.service.springcontext.SpringContextUtil"/>
 
@@ -35,4 +35,5 @@
     <import resource="sunbmp-mybatis.xml"/>
     <import resource="Task.xml"/>
     <import resource="classpath*:/boot/boot.xml"/>
+    <import resource="redis-persistence.xml"/>
 </beans>

@@ -1,4 +1,4 @@
-package com.zw.redis;
+package com.zw.service.redis;
 
 
 import com.base.util.StringUtils;
@@ -8,6 +8,7 @@ import com.exception.SystemException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 /**
  * <p>Title: RedisKeyResolver </p>
  * <p>Description: 根据@RedisKeyPrefix注解 解析</p>
