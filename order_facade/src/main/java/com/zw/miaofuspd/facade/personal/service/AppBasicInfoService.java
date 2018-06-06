@@ -207,4 +207,12 @@ public interface AppBasicInfoService {
      */
     void updateAssetStatus(String orderId,boolean flag);
 
+    /**
+     * @author 韩梅生
+     * @date 11:19 2018/6/6.
+     * 获取产品期限
+     */
+    List getPeriods(String productName);
+
+
 }
