@@ -1,7 +1,7 @@
-package com.zw.redis.lock;
+package com.zw.service.redis.lock;
 
-import com.zw.redis.facade.RedisService;
 import com.google.common.collect.Maps;
+import com.zw.service.redis.RedisService;
 import org.apache.log4j.Logger;
 
 import java.util.Random;
@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
+
 /**
  * <p>Title: RedisLock </p>
  * <p>Description: redis锁</p>

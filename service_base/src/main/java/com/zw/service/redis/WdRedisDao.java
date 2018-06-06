@@ -1,7 +1,6 @@
-package com.zw.redis;
+package com.zw.service.redis;
 
 import com.base.util.ObjectUtils;
-import com.zw.redis.facade.RedisService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.util.CollectionUtils;
@@ -9,6 +8,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
 /**
  * <p>Title: WdRedisDao </p>
  * <p>Description: 根据@RedisKeyPrefix注解 操作redis</p>

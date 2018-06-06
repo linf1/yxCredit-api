@@ -3,7 +3,6 @@ package com.zw.miaofuspd.user.service;
 import com.api.model.sortmsg.MsgRequest;
 import com.base.util.DateUtils;
 import com.base.util.GeneratePrimaryKeyUtils;
-import com.base.util.StringUtils;
 import com.zw.api.SendSmsApi;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
 import com.zw.miaofuspd.facade.dict.service.ISystemDictService;

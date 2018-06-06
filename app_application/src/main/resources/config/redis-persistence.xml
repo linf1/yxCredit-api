@@ -17,7 +17,7 @@
 	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
 		<property name="caches">
 			<set>
-				<bean class="com.zw.redis.cache.RedisCache">
+				<bean class="com.zw.service.redis.cache.RedisCache">
 					<property name="redisTemplate" ref="redisTemplate" />
 					<property name="name" value="default" />
 				</bean>
@@ -55,11 +55,11 @@
 		</property>
 	</bean>
 
-	<bean id="redisService" class="com.zw.redis.service.RedisServiceImpl">
+	<bean id="redisService" class="com.zw.service.redis.RedisServiceImpl">
 		<property name="redisTemplate" ref="redisTemplate" />
 	</bean>
 
-	<bean id="wdRedisDao" class="com.zw.redis.WdRedisDao">
+	<bean id="wdRedisDao" class="com.zw.service.redis.WdRedisDao">
 		<property name="redisService" ref="redisService" />
 	</bean>
 </beans>

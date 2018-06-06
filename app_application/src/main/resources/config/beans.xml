@@ -18,9 +18,15 @@
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
+    <!-- 读入配置属性文件 -->
+    <context:property-placeholder
+            ignore-unresolvable="true"
+            file-encoding="UTF-8"
+            location="classpath*:properties/*.properties"/>
 
     <!--  <bean id="customAuthenticationProvider" class="com.zw.security.authentication.CustomAuthenticationProvider"/>-->
     <import resource="dubbo-consumer.xml"/>
+    <import resource="redis-persistence.xml"/>
     <!-- 定时器 -->
     <import resource="spring-quartz.xml"/>
     <context:annotation-config/>
