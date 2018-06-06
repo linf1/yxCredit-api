@@ -151,12 +151,21 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
                 "inner join(\n" +
                 "select id,status from pro_working_product_detail where crm_product_id =(\n" +
                 "select id from  pro_crm_product where pro_name ='"+map1.get("product_name_name")+"' and pro_number = '"+map1.get("product_name")+"') and periods = '"+periods+"')t2 on t1.product_id = t2.id where t1.state = '0' and t2.status= '1'";
-        Map map2 = sunbmpDaoSupport.findForMap(sql2);
-        String lixi = map2.get("lixi")==null?"":map2.get("lixi").toString();
-        String yearRate = map2.get("year_rate")==null?"":map2.get("year_rate").toString();
-        String product_detail = map2.get("product_id")==null?"":map2.get("product_id").toString();
-        String zbs_jujian_fee = map2.get("zbs_jujian_fee") == null?"":map2.get("zbs_jujian_fee").toString();
-        String contractorName = map1.get("contractor_name") == null?"":map1.get("contractor_name").toString();
+        List<Map> forList = sunbmpDaoSupport.findForList(sql2);
+        String lixi = "";
+        String yearRate = "";
+        String product_detail = "";
+        String zbs_jujian_fee = "";
+        String contractorName = "";
+        if(forList.size()>0){
+            Map map2 = forList.get(0);
+             lixi = map2.get("lixi")==null?"":map2.get("lixi").toString();
+             yearRate = map2.get("year_rate")==null?"":map2.get("year_rate").toString();
+             product_detail = map2.get("product_id")==null?"":map2.get("product_id").toString();
+             zbs_jujian_fee = map2.get("zbs_jujian_fee") == null?"":map2.get("zbs_jujian_fee").toString();
+             contractorName = map1.get("contractor_name") == null?"":map1.get("contractor_name").toString();
+        }
+
         double serviceFee = 0.0;
         if(StringUtils.isNotEmpty(zbs_jujian_fee)){
             serviceFee = Double.valueOf(getServiceFee(contractorName, zbs_jujian_fee))/100;
