@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -200,6 +201,21 @@ public class BasicInfoController extends AbsBaseController {
         resultVO.setRetData(map);
         return resultVO;
     }
+
+    /**
+     * @author 韩梅生
+     * @date 11:17 2018/6/6
+     * 获取申请期限
+     */
+    @RequestMapping("/getPeriods")
+    @ResponseBody
+    public  ResultVO getPeriods(String productName) throws  Exception{
+        ResultVO resultVO = new ResultVO();
+        List list = appBasicInfoService.getPeriods(productName);
+        resultVO.setRetData(list);
+        return resultVO;
+    }
+
 
 
 }

@@ -25,7 +25,7 @@ public class ActivityServiceImpl extends AbsServiceBase implements ActivityServi
     public Map<String, String> getBannerList() throws Exception {
         Map resMap=new HashMap();
         try {
-            String selectSql="SELECT id AS activityId ,activity_title AS activityTitle," +
+            String selectSql="SELECT  id AS activityId ,activity_title AS activityTitle," +
                     "activity_content AS activityContent,activity_type AS activityType, " +
                     "activity_url AS activityUrl,activity_img_addr AS activityImgAddr," +
                     "activity_img_url AS activityImgUrl,activity_state AS activityState," +
@@ -34,7 +34,7 @@ public class ActivityServiceImpl extends AbsServiceBase implements ActivityServi
                     "DATE_FORMAT(STR_TO_DATE(alter_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS alterTime," +
                     "DATE_FORMAT(STR_TO_DATE(release_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS releaseTime," +
                     "platform_type AS platformType,priority AS priority " +
-                    "FROM activity_manage WHERE activity_state='1' ";
+                    "FROM activity_manage WHERE activity_state='1' ORDER BY priority LIMIT 3 ";
 
             List bannerList = sunbmpDaoSupport.findForList(selectSql);
             if (bannerList!=null){
