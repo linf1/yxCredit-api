@@ -23,7 +23,6 @@ public interface RedisService {
      *
      * @param keys
      * @return
-     * @author xiang_wang
      * 2015年12月1日下午1:21:47
      */
     long delete(String... keys);
@@ -34,7 +33,6 @@ public interface RedisService {
      * @param key
      * @param value
      * @param liveTime
-     * @author xiang_wang
      * 2015年12月1日下午1:21:58
      */
     boolean setNX(byte[] key, byte[] value, long liveTime, TimeUnit unit);
@@ -45,7 +43,6 @@ public interface RedisService {
      * @param key
      * @param value
      * @param liveTime
-     * @author xiang_wang
      * 2015年12月1日下午1:21:58
      */
     void set(byte[] key, byte[] value, long liveTime, TimeUnit unit);
@@ -64,7 +61,6 @@ public interface RedisService {
      * @param key
      * @param value
      * @param liveTime 单位秒
-     * @author xiang_wang
      * 2015年12月1日下午1:22:11
      */
     void set(String key, String value, long liveTime, TimeUnit unit);
@@ -74,7 +70,6 @@ public interface RedisService {
      *
      * @param key
      * @param value
-     * @author xiang_wang
      * 2015年12月1日下午1:22:30
      */
     void set(String key, String value);
@@ -87,7 +82,6 @@ public interface RedisService {
      *
      * @param key
      * @param value
-     * @author xiang_wang
      * 2015年12月1日下午1:22:40
      */
     void set(byte[] key, byte[] value);
@@ -97,7 +91,6 @@ public interface RedisService {
      *
      * @param key
      * @return
-     * @author xiang_wang
      * 2015年12月1日下午1:22:49
      */
     String get(String key);
@@ -109,7 +102,6 @@ public interface RedisService {
      *
      * @param key
      * @return
-     * @author xiang_wang
      * 2015年12月1日下午1:22:49
      */
     byte[] get(byte[] key);
@@ -119,7 +111,6 @@ public interface RedisService {
      *
      * @param pattern
      * @return
-     * @author xiang_wang
      * 2015年12月1日下午1:22:58
      */
     Set<String> keys(String pattern);
@@ -129,7 +120,6 @@ public interface RedisService {
      *
      * @param key
      * @return
-     * @author xiang_wang
      * 2015年12月1日下午1:23:45
      */
     boolean exists(String key);
@@ -138,7 +128,6 @@ public interface RedisService {
      * 清空redis 所有数据
      *
      * @return
-     * @author xiang_wang
      * 2015年12月1日下午1:23:55
      */
     String flushDB();
@@ -147,7 +136,6 @@ public interface RedisService {
      * 查看redis里有多少数据
      *
      * @return
-     * @author xiang_wang
      * 2015年12月1日下午1:24:05
      */
     long dbSize();
@@ -156,7 +144,6 @@ public interface RedisService {
      * 检查是否连接成功
      *
      * @return
-     * @author xiang_wang
      * 2015年12月1日下午1:24:12
      */
     String ping();
