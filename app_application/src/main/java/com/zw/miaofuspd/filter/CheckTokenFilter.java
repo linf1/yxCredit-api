@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * toekn校验过滤器，所有的API接口请求都要经过该过滤器(除了登陆接口)
+ * token校验过滤器，所有的API接口请求都要经过该过滤器(除了登陆接口)
  * @author 陈清玉 form https://github.com/bigmeow/JWT
  *
  */
