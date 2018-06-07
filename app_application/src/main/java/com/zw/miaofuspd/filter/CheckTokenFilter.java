@@ -19,6 +19,7 @@ import net.minidev.json.JSONObject;
 
 import com.jwt.Jwt;
 import com.jwt.TokenState;
+import org.apache.zookeeper.Login;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,9 +36,11 @@ public class CheckTokenFilter implements Filter {
 		HttpServletRequest request=(HttpServletRequest) argo;
 		HttpServletResponse response=(HttpServletResponse) arg1;
 		String cxt = request.getContextPath();
+		LOGGER.info("----------请求路径{}---------",request.getRequestURI());
 		String[] nonPath  ={cxt + AppRouterSettings.VERSION + "/login",cxt + AppRouterSettings.VERSION + "/sms",cxt + AppRouterSettings.VERSION + "/activity"};
 		for (String non : nonPath) {
-			if(request.getRequestURI().startsWith(non)){
+			LOGGER.info("-------------不验证路径{}---------------",non);
+			if(request.getRequestURI().contains(non)){
 				//登陆接口不校验token，直接放行
 				chain.doFilter(request, response);
 				return;
