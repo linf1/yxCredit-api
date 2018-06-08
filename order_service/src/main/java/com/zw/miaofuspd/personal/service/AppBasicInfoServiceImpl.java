@@ -170,7 +170,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         if(StringUtils.isNotEmpty(zbs_jujian_fee)){
             serviceFee = Double.valueOf(getServiceFee(contractorName, zbs_jujian_fee))/100;
         }
-        DecimalFormat df = new DecimalFormat("0.000000");
+        DecimalFormat df = new DecimalFormat("0.00000000");
         String fee = df.format(serviceFee);
         String sql3 = "update mag_order set applay_money = " + applayMoney + "," + "PERIODS = '" + periods + "'," +
                 "loan_purpose = '" + loanPurpose + "',rate = '"+lixi+"',fee = '"+yearRate+"',product_detail = '"+product_detail+"',Service_fee = '"+fee+"'," +
