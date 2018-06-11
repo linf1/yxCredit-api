@@ -39,7 +39,10 @@ public class ContractSignServiceImpl implements IContractSignService {
 
         File pdfFile = new File(request.getUnsignPath());
         try {
+            logger.info(TOP_TYPE + "读取文件流start:"+request.getUnsignPath());
+            logger.info(TOP_TYPE + "pdf文件:"+pdfFile.getAbsolutePath()+","+pdfFile.getName());
             byte[] unsignPdfStream = FileUtils.readFileToByteArray(pdfFile);
+            logger.info(TOP_TYPE + "读取文件流end:"+unsignPdfStream);
             //赋文件流
             request.setUnsignStream(unsignPdfStream);
             //赋源文件名
