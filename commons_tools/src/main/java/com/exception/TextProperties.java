@@ -25,7 +25,7 @@ import java.util.Properties;
 public class TextProperties {
     private static final Logger logger = LoggerFactory.getLogger(TextProperties.class);
 	
-	private static final String TEXT_PROPERTIES_FILE="text.properties";
+	private static final String TEXT_PROPERTIES_FILE="properties/text.properties";
 	private static final TextProperties _insstance = new TextProperties();
 	
 	public static TextProperties instance(){
@@ -58,6 +58,10 @@ public class TextProperties {
 	
 	public String get(String key){
 		return properties.getProperty(key);
+	}
+
+	public static void main(String[] args) {
+		System.out.println(TextProperties.instance().get("order.audit"));
 	}
 }
 

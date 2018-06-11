@@ -32,6 +32,7 @@ import java.util.Map;
 public class SmsApiController  {
 
     private final Logger LOGGER = LoggerFactory.getLogger(SmsApiController.class);
+    private static final  String CONTENT = "尊敬的用户，您的验证码为:${smsCode}";
 
     @Autowired
     private IMessageServer messageServer;
@@ -59,6 +60,7 @@ public class SmsApiController  {
         final String smsCode = RandomUtil.createRandomVcode(6);
         Map<String,String> parameters = new HashMap<>(2);
         parameters.put("smsCode",smsCode);
+        parameters.put("content",CONTENT);
         msgRequest.setSmsCode(smsCode);
         //设置为短信验证
         msgRequest.setType("0");
