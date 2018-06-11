@@ -34,7 +34,7 @@ public class MessageServerImpl extends AbsServiceBase implements IMessageServer 
         parameter.put("phone",request.getPhone());
         parameter.put("type",msgSettings.getType());
         parameter.put("channelUniqId",msgSettings.getChannelUniqId());
-        final String content = TemplateUtils.getContent(msgSettings.getContent(), smsParam);
+        final String content = TemplateUtils.getContent(smsParam.get("content"), smsParam);
         parameter.put("content",content);
         final String result = HttpClientUtil.post(msgSettings.getRequestUrl(),BYXRequest.getBYXRequest(parameter, byxSettings), byxSettings.getHeadRequest());
         return  BYXResponse.getBYXResponse(result,byxSettings);
