@@ -918,6 +918,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     @Override
     public Map oneClickApply(String orderId) {
         Map resultMap = new HashMap();
+        Map forMap;
         try {
             //查询订单相关的列表信息
             String sql = "select t2.order_no as order_no,t2.customer_id as customer_id,t1.user_id as user_id,t2.CUSTOMER_NAME as CUSTOMER_NAME,t2.product_name_name as product_name_name,t1.person_name as person_name,t1.card as card,t1.tel as tel,t1.marital_status as marital_status,t1.children_status as children_status," +
@@ -926,7 +927,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
                     "  t2.loan_purpose as loan_purpose from mag_customer t1  left join mag_order t2 on t1.id = t2.CUSTOMER_ID LEFT JOIN mag_customer_live t3 on t1.id = t3.customer_id" +
                     "  left join mag_customer_job t4 on t1.id = t4.customer_id " +
                     "  where t2.id='"+orderId+"'";
-            Map forMap = sunbmpDaoSupport.findForMap(sql);
+            forMap = sunbmpDaoSupport.findForMap(sql);
             //查询联系人信息
             String linkSql = "select link_name,contact,relationship_name from mag_customer_linkman where customer_id='"+forMap.get("customer_id")+"'";
             List<Map> list = sunbmpDaoSupport.findForList(linkSql);
@@ -961,6 +962,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         }
         resultMap.put("flag",true);
         resultMap.put("msg","一键申请提交成功");
+        resultMap.put("orderMap",forMap);
         return  resultMap;
     }
 
@@ -1217,6 +1219,12 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     @Override
     public List getPeriods(String productName) {
         String sql = "select periods from pro_working_product_detail t1 left join pro_crm_product t2 on t1.crm_product_id = t2.id where t1.status = '1' and t2.pro_name = '"+productName+"'";
-        return sunbmpDaoSupport.findForList(sql);
+        List<Map> forList = sunbmpDaoSupport.findForList(sql);
+        List list = new ArrayList();
+        for(Map map:forList){
+            list.add(Integer.valueOf(map.get("periods").toString()));
+        }
+        Collections.sort(list);
+        return list;
     }
 }
