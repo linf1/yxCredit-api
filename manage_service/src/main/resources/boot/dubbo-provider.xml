@@ -14,19 +14,12 @@
     <!-- 使用zookeeper注册中心暴露服务地址 -->
     <dubbo:registry protocol="zookeeper" address="${zk.host}"/>
 
-    <!--<dubbo:registry protocol="zookeeper" address="192.168.102.109:2181" />-->
-
     <!-- 用dubbo协议在20880端口暴露服务 -->
     <dubbo:protocol name="dubbo" port="20883" host="127.0.0.1"/>
     <dubbo:service interface="com.zw.miaofuspd.facade.dict.service.IDictService" timeout="30000"
                    ref="dictServiceImpl"/>
     <dubbo:service interface="com.zw.miaofuspd.facade.dict.service.ISystemDictService" timeout="30000"
                    ref="systemDictServiceImpl"/>
-    <dubbo:service interface="com.zw.miaofuspd.facade.log.service.IAppOrderLogService" timeout="30000"
-                   ref="appOrderLogServiceImpl"/>
-    <dubbo:service interface="com.junziqian.service.JunziqianService" timeout="30000"
-                   ref="junziqianServiceImpl"/>
-
     <dubbo:service interface="com.api.service.sortmsg.IMessageServer" timeout="30000"
                    ref="messageServerImpl"/>
     <dubbo:service interface="com.api.service.bankcard.IBankcardServer" timeout="30000"

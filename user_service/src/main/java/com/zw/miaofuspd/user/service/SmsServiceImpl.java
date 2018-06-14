@@ -19,52 +19,6 @@ public class SmsServiceImpl extends AbsServiceBase implements ISmsService {
     private ISystemDictService iSystemDictService;
     @Autowired
     private IDictService iDictService;
-    /**
-     * 向数据库中插入验证码
-     */
-    @Override
-    public boolean insertSms(Map inMap) throws Exception {
-        String tel=(String)inMap.get("tel");
-        String host ="";
-        String dxtdType = iDictService.getDictInfo("短信通道","DXTD");//短信地址
-        String varCode = ((int) ((Math.random() * 9 + 1) * 100000)) + "";
-        Map map = new HashMap();
-        if("0".equals(dxtdType)){//代表创蓝短信
-            host = iSystemDictService.getInfo("sms.app_sms_url");//短信地址
-            String account = iSystemDictService.getInfo("sms.app_sms_account");//短信模板。数据字典拿
-            String password = iSystemDictService.getInfo("sms.app_sms_password");//短信模板。数据字典拿
-            String type = inMap.get("type").toString();
-            String title = getSmsContent(type);
-            String msg = title.replace("$code$",":"+varCode+"");
-            inMap.put("varCode",varCode);
-            inMap.put("account",account);
-            inMap.put("password",password);
-            inMap.put("msg",msg);
-            map = (Map) SendSmsApi.sendSms(host,inMap);
-        }else if("1".equals(dxtdType)){//代表阿里云短信
-            host = iSystemDictService.getInfo("aliyunsms.host");//短信地址
-            String minute = iSystemDictService.getInfo("aliyunsms.minute");//短信时长
-            String appcode = iSystemDictService.getInfo("aliyunsms.appcode");//短信code
-            String tNum = iSystemDictService.getInfo("aliyunsms.tNum ");//短信模板
-            inMap.put("host",host);
-            inMap.put("minute",minute);
-            inMap.put("appcode",appcode);
-            inMap.put("tNum",tNum);
-            inMap.put("varCode",varCode);
-            inMap.put("phone",tel);
-            map = (Map) SendSmsApi.sendAliyun(host,inMap);
-        }
-        boolean success = (boolean) map.get("flag");
-       if (success==false) {//判断获取验证码是否成功
-           return false;
-       }
-        String id = UUID.randomUUID().toString();
-        String date = DateUtils.getDateString(new Date());
-        StringBuffer sql = new StringBuffer("INSERT INTO app_sms (id,type,tel,var_code,creat_time,alter_time) VALUES('");
-        sql.append(id + "','" + 0 + "','" + tel + "','" + varCode + "','" + date + "','" + date + "')");
-        sunbmpDaoSupport.exeSql(sql.toString());
-        return true;
-    }
 
     @Override
     public boolean saveSms(MsgRequest msgRequest) {

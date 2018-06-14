@@ -8,7 +8,6 @@ import java.util.Map;
  */
 
 public interface AppBasicInfoService {
-    Map getMiaofuBasicInfo(String customerId) throws Exception;
 
     /**
      * 获取联系人信息
@@ -62,7 +61,6 @@ public interface AppBasicInfoService {
     Map addBasicCustomerInfo(Map<String, String> map) throws Exception;
 
     Map getLinkMan(String customerId) throws Exception;
-    void saveTongXunLu(String customerId,String data) throws Exception;
 
     /**
      * 判断是否填写过草稿信息
@@ -150,13 +148,15 @@ public interface AppBasicInfoService {
     /**
      *  按id获取用户信息 create by 陈清玉 2018-05-16
      * @param orderId 用户ID
+     * @return 订单信息
      */
     Map findByOrderId(String orderId);
 
     /**
-     * 数据同步完成后更新个人信息
+     * 数据同步完成后更新个人信息 create by 陈清玉 2018-05-16
      * @param userID 同步接口返回userId
      * @param accountId 同步接口返回accountId
+     * @param custId 个人信息Id
      * @return 影响行数
      */
     int updateSynById(String userID,String accountId,String custId);

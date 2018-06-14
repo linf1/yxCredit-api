@@ -26,12 +26,6 @@ import java.util.Map;
  */
 public interface ContractConfirmationService {
 
-    /**
-     * 获取借款基本信息
-     * @param userId
-     * @return
-     */
-    Map getContractUserInfo(String userId);
 
     /**
      * 获取借款协议

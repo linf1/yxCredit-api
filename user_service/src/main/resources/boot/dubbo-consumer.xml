@@ -20,10 +20,6 @@
                      id="dictServiceImpl" check="false"/>
     <dubbo:reference interface="com.zw.miaofuspd.facade.dict.service.ISystemDictService"
                      id="systemDictServiceImpl" check="false"/>
-    <dubbo:reference interface="com.zw.miaofuspd.facade.log.service.IAppOrderLogService"
-                     id="appOrderLogServiceImpl" check="false"/>
-    <dubbo:reference interface="com.zw.miaofuspd.facade.order.service.IAppInsapplicationService"
-                     id="appInsapplicationServiceImpl" check="false"/>
     <dubbo:reference interface="com.zw.miaofuspd.facade.order.service.AppOrderService"
                      id="appOrderServiceImpl" check="false"/>
 </beans>

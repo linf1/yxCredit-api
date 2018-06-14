@@ -14,37 +14,16 @@
     <!-- 使用zookeeper注册中心暴露服务地址 -->
     <!-- 注册中心地址 -->
     <!--生产-->
-    <dubbo:registry protocol="zookeeper" address="10.139.33.121:2181"/>
+    <!--<dubbo:registry protocol="zookeeper" address="10.139.33.121:2181"/>-->
     <!--开发-->
-    <!--<dubbo:registry protocol="zookeeper" address="127.0.0.1:2181"/>-->
+    <dubbo:registry protocol="zookeeper" address="127.0.0.1:2181"/>
 
     <dubbo:reference interface="com.zw.miaofuspd.facade.dict.service.IDictService"
                      id="dictServiceImpl" check="false"/>
     <dubbo:reference interface="com.zw.miaofuspd.facade.dict.service.ISystemDictService"
                      id="systemDictServiceImpl" check="false"/>
-    <!--生成二维码接口-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.merchant.service.QrCodeService"
-                     id="qrCodeServiceImpl" check="false"/>
-    <!--商品接口-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.merchant.service.MerchandiseService"
-                     id="merchandiseServiceImpl" check="false"/>
-    <!--商户接口-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.merchant.service.MerchantService"
-                     id="merchantServiceImpl" check="false"/>
-    <!---->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.myset.service.IAppMessageService"
-                     id="appMessageServiceImpl" check="false"/>
-    <!--app忘记密码接口-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.myset.service.IAppEditPswService"
-                     id="appEditPswServiceImpl" check="false"/>
-    <!--办单员修改密码接口-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.myset.service.EmployeeModifyPswService"
-                     id="employeeModifyPswServiceImpl" check="false"/>
     <dubbo:reference interface="com.zw.miaofuspd.facade.personal.service.AppUserService"
                      id="appUserServiceImpl" check="false"/>
-    <!--易宝开户-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.openaccount.service.IAppYBOpenAccountService"
-                     id="appYBOpenAccountServiceImpl" check="false"/>
     <!--意见反馈接口-->
     <dubbo:reference interface="com.zw.miaofuspd.facade.myset.service.FeedBackService"
                      id="feedBackServiceImpl" check="false"/>
@@ -57,74 +36,23 @@
     <!--登录接口-->
     <dubbo:reference interface="com.zw.miaofuspd.facade.user.service.ILoginService"
                      id="loginServiceImpl" check="false"/>
-    <!--用户session处理-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.user.service.ISessionListenerService"
-                     id="sessionListenerServiceImpl" check="false"/>
     <!--短信接口-->
     <dubbo:reference interface="com.zw.miaofuspd.facade.user.service.ISmsService"
                      id="smsServiceImpl" check="false"/>
-    <!--消息接口-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.user.service.IMsgService"
-                     id="msgServiceImpl" check="false"/>
+
     <!--注册接口-->
     <dubbo:reference interface="com.zw.miaofuspd.facade.user.service.IRegisteredService"
                      id="registeredServiceImpl" check="false"/>
-    <!--身份认证接口-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.user.service.IAppIdentityService"
-                     id="appIdentityServiceImpl" check="false"/>
     <!--订单接口-->
     <dubbo:reference interface="com.zw.miaofuspd.facade.order.service.AppOrderService"
                      id="appOrderServiceImpl" check="false"/>
     <!-- 联系人-->
     <dubbo:reference interface="com.zw.miaofuspd.facade.personal.service.AppBasicInfoService"
                      id="appBasicInfoServiceImpl" check="false"/>
-    <!--重置密码接口-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.user.service.IAppResetPwService"
-                     id="appResetPwServiceImpl" check="false"/>
-    <!--提现接口-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.openaccount.service.IAppWithdrawalsService"
-                     id="appWithdrawalsServiceImpl"  check="false"/>
-    <!--宝付开户和主动还款接口-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.openaccount.service.IPayTreasureBindCardService"
-                     id="payTreasureBindCardServiceImpl"  check="false"/>
-    <!-- 获取利率方案接口-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.ratescheme.service.RateSchemeService"
-                     id="rateSchemeServiceImpl"  check="false"/>
-    <!-- 获取服务包接口-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.serpackage.service.SerPackageService"
-                     id="serPackageServiceImpl"  check="false"/>
-    <!-- 获取图片接口-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.order.service.AppImageService"
-                     id="appImageServiceImpl"  check="false"/>
-    <!-- 获取授权信息-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.personal.service.AppAuthorizationInfoService"
-                     id="appAuthorizationInfoServiceImpl"  check="false"/>
-    <!-- 查询还款计划表-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.openaccount.service.IRepayPlanService"
-                     id="repayPlanServiceImpl"  check="false"/>
-    <!-- 我的界面-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.home.service.HomeService"
-                     id="homeServiceImpl"  check="false"/>
-    <!-- 提交进件接口-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.order.service.IAppInsapplicationService"
-                     id="appInsapplicationServiceImpl"  check="false"/>
-    <!-- 红包接口-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.order.service.RedPacketService"
-                     id="redPacketServiceImpl"  check="false"/>
-    <!-- 分享接口-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.share.service.IShareService"
-                     id="shareServiceImpl"  check="false"/>
-    <!-- 91征信回调接口-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.trxcode.service.TrxCodeService"
-                     id="trxCodeServiceImpl"  check="false"/>
-    <!-- 红包接口-->
-    <dubbo:reference interface="com.zw.miaofuspd.facade.red.service.RedService"
-                     id="redServiceImpl"  check="false"/>
+
     <!-- 合同接口-->
     <dubbo:reference interface="com.zw.miaofuspd.facade.contractConfirmation.service.ContractConfirmationService"
                      id="contractConfirmationServiceImpl"  check="false"/>
-    <dubbo:reference interface="com.junziqian.service.JunziqianService"
-                     id="junziqianServiceImpl" check="false"/>
 
     <dubbo:reference interface="com.api.service.sortmsg.IMessageServer"
                      id="messageServerImpl" check="false"/>

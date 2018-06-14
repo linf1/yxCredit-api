@@ -8,7 +8,8 @@ subprojects {
     sourceCompatibility = 1.8
 
     repositories {
-        maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
+        maven { url "http://maven.aliyun.com/nexus/content/repositories/central/" }
+//        maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
         maven { url "http://36.33.216.230:8281/nexus/content/groups/public" }
         maven { url "http://repo.spring.io/libs-snapshot" }
         mavenCentral()
@@ -28,7 +29,8 @@ subprojects {
 
     buildscript {
         repositories {
-            maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
+            maven { url "http://maven.aliyun.com/nexus/content/repositories/central/" }
+//            maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
             maven { url "http://36.33.216.230:8281/nexus/content/groups/public" }
             maven { url "http://repo.spring.io/libs-snapshot" }
         }
