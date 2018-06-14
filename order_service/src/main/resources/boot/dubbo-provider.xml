@@ -14,41 +14,12 @@
     <!-- 使用zookeeper注册中心暴露服务地址 -->
     <dubbo:registry protocol="zookeeper" address="${zk.host}"/>
     <dubbo:protocol name="dubbo" port="20336" host="127.0.0.1"/>
-    <!-- 易宝开户接口 -->
-    <dubbo:service interface="com.zw.miaofuspd.facade.openaccount.service.IAppYBOpenAccountService" timeout="30000"
-                   ref="appYBOpenAccountServiceImpl"/>
+
     <dubbo:service interface="com.zw.miaofuspd.facade.order.service.AppOrderService" timeout="30000"
                    ref="appOrderServiceImpl"/>
     <!-- 联系人-->
     <dubbo:service interface="com.zw.miaofuspd.facade.personal.service.AppBasicInfoService" timeout="30000"
                    ref="appBasicInfoServiceImpl"/>
-    <!--提现接口-->
-    <dubbo:service interface="com.zw.miaofuspd.facade.openaccount.service.IAppWithdrawalsService" timeout="30000"
-                   ref="appWithdrawalsServiceImpl" />
-    <!-- 宝付开户接口 -->
-    <dubbo:service interface="com.zw.miaofuspd.facade.openaccount.service.IPayTreasureBindCardService" timeout="30000"
-                   ref="payTreasureBindCardServiceImpl"/>
-    <!-- 图片查询接口 -->
-    <dubbo:service interface="com.zw.miaofuspd.facade.order.service.AppImageService" timeout="30000"
-                   ref="appImageServiceImpl"/>
-    <!-- 授权信息接口-->
-    <dubbo:service interface="com.zw.miaofuspd.facade.personal.service.AppAuthorizationInfoService" timeout="30000"
-                   ref="appAuthorizationInfoServiceImpl"/>
-    <!-- 查询还款计划接口-->
-    <dubbo:service interface="com.zw.miaofuspd.facade.openaccount.service.IRepayPlanService" timeout="30000"
-                   ref="repayPlanServiceImpl"/>
-    <!-- 提交进件接口-->
-    <dubbo:service interface="com.zw.miaofuspd.facade.order.service.IAppInsapplicationService" timeout="30000"
-                   ref="appInsapplicationServiceImpl"/>
-    <!-- 红包接口-->
-    <dubbo:service interface="com.zw.miaofuspd.facade.order.service.RedPacketService" timeout="30000"
-                   ref="redPacketServiceImpl"/>
-    <!--91征信回调接口-->
-    <dubbo:service interface="com.zw.miaofuspd.facade.trxcode.service.TrxCodeService" timeout="30000"
-                   ref="trxCodeServiceImpl"/>
-    <!--红包接口-->
-    <dubbo:service interface="com.zw.miaofuspd.facade.red.service.RedService" timeout="30000"
-                   ref="redServiceImpl"/>
     <!--合同接口-->
     <dubbo:service interface="com.zw.miaofuspd.facade.contractConfirmation.service.ContractConfirmationService" timeout="30000"
                    ref="contractConfirmationServiceImpl"/>

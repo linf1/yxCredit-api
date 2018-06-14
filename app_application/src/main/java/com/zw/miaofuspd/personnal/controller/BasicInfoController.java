@@ -1,13 +1,9 @@
 package com.zw.miaofuspd.personnal.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.api.model.common.BYXResponse;
-import com.api.model.ds.DSMoneyRequest;
 import com.api.service.ds.IDSMoneyServer;
 import com.base.util.AppRouterSettings;
-import com.base.util.DateUtils;
 import com.zw.miaofuspd.facade.personal.service.AppBasicInfoService;
-import com.zw.miaofuspd.facade.user.service.IUserService;
 import com.zw.web.base.AbsBaseController;
 import com.zw.web.base.vo.ResultVO;
 import com.zw.web.base.vo.VOConst;
@@ -32,8 +28,6 @@ public class BasicInfoController extends AbsBaseController {
 
     @Autowired
     AppBasicInfoService appBasicInfoService;
-    @Autowired
-    private IUserService userService;
 
     @Autowired
     private AppBasicInfoService appBasicInfoServiceImpl;

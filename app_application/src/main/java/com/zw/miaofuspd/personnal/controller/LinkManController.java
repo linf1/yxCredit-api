@@ -114,19 +114,7 @@ public class LinkManController extends AbsBaseController {
         resultVO.setRetData(map);
         return resultVO;
     }
-    /**
-     * 保存通讯录信息
-     * @author 韩梅生
-     * @return
-     */
-    @RequestMapping("/saveTongXunLu")
-    @ResponseBody
-    public ResultVO saveTongXunLu(String data) throws Exception {
-        ResultVO resultVO = new ResultVO();
-        AppUserInfo userInfo = (AppUserInfo) this.getHttpSession().getAttribute(AppConstant.APP_USER_INFO);
-        appBasicInfoService.saveTongXunLu(userInfo.getCustomer_id(),data);
-        return resultVO;
-    }
+
     /**
      * 获取直属关系
      * @return  ResultVO

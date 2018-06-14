@@ -60,15 +60,9 @@ public class AssetRequest implements Serializable {
      */
     private String assetBorrowApplication;
     /**
-     *Y	String	借款还款方式（1.一次性还本付息
-     * 2.按月付息，到期还本付息
-     * 3.按三月付息，到期还本付息
-     * 4.按六月付息，到期还本付息
-     * 5.等本等息
-     * 6等额本息
-     * 7.等额本金）
+     *Y	String	借款还款方式（0按月分期还款;1 按月等额本息还款 2一次性还款;3每月还息到期还本;4提前付息到期还本;5每月提前还息到期还本；6分期（每3月）还息到期还本；）
      */
-    private String assetRepaymentStyle = "1";
+    private String assetRepaymentStyle = "2";
     /**
      *Y	String	是否允许提前还款(0是，1否)
      */

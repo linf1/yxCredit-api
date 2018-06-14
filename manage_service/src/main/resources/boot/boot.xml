@@ -19,15 +19,6 @@
             location="classpath*:/config/*.properties"/>
 
     <import resource="classpath*:/boot/dubbo-provider.xml"/>
-    <!--<import resource="classpath*:/config/applicationContext_rabbitmq.xml"/>-->
-    <!--<import resource="classpath*:/config/applicationContext_rabbitmq_client.xml"/>-->
-
-    <bean id="confirmLoanTask" class="com.zw.miaofuspd.timedTask.service.ConfirmLoanTask" p:taskName="定时跑批（确认放款计算）"
-          p:cron="0 0/30 * * * ?"/>
-    <!--<bean id="confirmLoanTask" class="com.zw.miaofuspd.timedTask.service.ConfirmLoanTask" p:taskName="定时跑批（确认放款计算）" p:cron="*/30 * * * * ?" />-->
-    <bean id="AutomaticRepaymentTask" class="com.zw.miaofuspd.timedTask.service.InterestReductionTask"
-          p:taskName="定时跑批（利息、费用、逾期计算）" p:cron="0 0 2 * * ?"/>
-    <!--<bean id="interestReductionTask" class="com.zw.miaofuspd.timedTask.service.InterestReductionTask" p:taskName="定时跑批（利息、费用、逾期计算）" p:cron="*/5 * * * * ?" />-->
 
 
     <!-- 同盾配置BEAN create by 陈清玉-->

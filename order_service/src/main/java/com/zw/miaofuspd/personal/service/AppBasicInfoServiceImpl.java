@@ -10,17 +10,11 @@ import com.constants.CommonConstant;
 import com.enums.EIsIdentityEnum;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;
 import com.zw.api.HttpUtil;
-import com.zw.miaofuspd.facade.dict.service.IDictService;
-import com.zw.miaofuspd.facade.dict.service.ISystemDictService;
 import com.zw.miaofuspd.facade.entity.CustomerLinkmanBean;
-import com.zw.miaofuspd.facade.entity.CustomerLogBean;
-import com.zw.miaofuspd.facade.order.service.AppOrderService;
-import com.zw.miaofuspd.facade.order.service.IAppInsapplicationService;
 import com.zw.miaofuspd.facade.personal.service.AppBasicInfoService;
 import com.zw.service.base.AbsServiceBase;
 import com.zw.service.exception.DAOException;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -30,15 +24,6 @@ import java.util.*;
 
 @Service
 public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicInfoService {
-    @Autowired
-    private IDictService dictServiceImpl;
-    @Autowired
-    private IAppInsapplicationService iAppInsapplicationService;
-    @Autowired
-    private AppOrderService appOrderService;
-    @Autowired
-    private ISystemDictService iSystemDictService;
-
     @Override
     public Map updateLinkManInfo( String customer_id, Map map1) throws Exception {
         Map retMap = new HashMap();
@@ -78,10 +63,6 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     }
 
 
-
-
-
-
     //根据传来的值来新增或修改联系人
     public void insertOrUpdate(CustomerLinkmanBean customerLinkmanBean, String userId, String orderId) {
         if (customerLinkmanBean.getRelationShip() != null) {
@@ -93,8 +74,6 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
                 String sql = "update mag_customer_linkman set relationship = '" + customerLinkmanBean.getRelationShip() + "'," +"relationship_name =' "+customerLinkmanBean.getRelationshipName()+
                         "',contact = '" + customerLinkmanBean.getContact() + "'," + "link_name='" + customerLinkmanBean.getLinkName() + "' where ID = '" + customerLinkmanBean.getId() + "'";
                 sunbmpDaoSupport.exeSql(sql);
-                //插入修改日志
-                CustomerLogBean customer = new CustomerLogBean();
                 StringBuffer value = new StringBuffer();
                 //关系
                 String serialNo = customerLinkmanBean.getId();
@@ -572,126 +551,6 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         resultMap.put("msg","新增订单!");
         resultMap.put("resMap",resMap);
         return resultMap;
-    }
-
-    @Override
-    public void saveTongXunLu(String customerId, String data) throws Exception {
-        data = data.replaceAll("[\ud800\udc00-\udbff\udfff\ud800-\udfff]", "");
-        String updateSql = "update mag_customer set phoneBookList='" + data + "' where id ='" + customerId + "'";
-        sunbmpDaoSupport.exeSql(updateSql);
-    }
-
-    /**
-     * 秒付金服获取个人信息
-     *
-     * @param customerId
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public Map getMiaofuBasicInfo(String customerId) throws Exception {
-        List linkManList = dictServiceImpl.getDictJson("联系人关系");
-        List otherLinkManList = dictServiceImpl.getDictJson("其他联系人");
-        Map resutMap = new HashMap();
-        //获取基本信息
-        String basicSql = "SELECT marry,educational,educational_name,marry_name from mag_customer_person where customer_id='" + customerId + "'";
-        Map basicMap = sunbmpDaoSupport.findForMap(basicSql);
-        //获取职业信息
-        String OccupationSql = "SELECT company_name,company_phone,address,province_name,city_name,district_name,province_id,city_id,district_id from mag_customer_job where customer_id='" + customerId + "'";
-        Map OccupationMap = sunbmpDaoSupport.findForMap(OccupationSql);
-        //获取联系人信息
-        String linkManSql = "SELECT id,link_name,contact,relationship,relationship_name,main_sign from mag_customer_linkman where CUSTOMER_ID='" + customerId + "'";
-        List olist = sunbmpDaoSupport.findForList(linkManSql);
-        resutMap.put("linkManList", linkManList);
-        resutMap.put("olist", olist);
-        resutMap.put("basicMap", basicMap);
-        resutMap.put("OccupationMap", OccupationMap);
-        resutMap.put("otherLinkManList", otherLinkManList);
-        resutMap.put("flag", true);
-        return resutMap;
-    }
-
-    //保存客户居住信息
-    public String saveLiveInfo(Map<String, String> paramMap) {
-//        String customerId = paramMap.get("customerId");
-//        String alterTime = DateUtils.getDateString(new Date());
-//        //客户职业信息
-//        String address = paramMap.get("liveAddress");//居住地址
-//        String address_code = paramMap.get("liveAddressId");//省市区code
-//        String pname = "";//省名称
-//        String cname = "";//市名称
-//        String dname = "";//区名称
-//        if (address != null && !"".equals(address)) {
-//            String[] str = address.split("/");
-//            switch (str.length) {
-//                case 1:
-//                    pname = address.split("/")[0];
-//                    break;
-//                case 2:
-//                    pname = address.split("/")[0];
-//                    cname = address.split("/")[1];
-//                    break;
-//                case 3:
-//                    pname = address.split("/")[0];
-//                    cname = address.split("/")[1];
-//                    dname = address.split("/")[2];
-//                    break;
-//            }
-//        }
-//        String pid = "";//省code
-//        String cid = "";//市code
-//        String did = "";//区code
-//        if (address_code != null && !"".equals(address_code)) {
-//            String[] str = address_code.split("/");
-//            switch (str.length) {
-//                case 1:
-//                    pid = address_code.split("/")[0];
-//                    break;
-//                case 2:
-//                    pid = address_code.split("/")[0];
-//                    cid = address_code.split("/")[1];
-//                    break;
-//                case 3:
-//                    pid = address_code.split("/")[0];
-//                    cid = address_code.split("/")[1];
-//                    did = address_code.split("/")[2];
-//                    break;
-//            }
-//        }
-//        String addressDetail = paramMap.get("addressDetail");//居住详细地址
-//        String id = "";
-//        String complete = "1";
-//        try {
-//            //检查是否已经存在客户资料
-//            StringBuffer sql = new StringBuffer("select ID,nowaddress,address_detail,complete from mag_customer_live where customer_id='" + customerId + "' and type ='1'");
-//            List<Map> list = sunbmpDaoSupport.findForList(sql.toString());
-//            if (list.size() > 0) {
-//                //更新证件资料
-//                Map map = (Map) list.get(0);
-//                id = map.get("ID") + "";
-//                sql = new StringBuffer("update mag_customer_live set ");
-//                sql.append("provinces='" + pname);
-//                sql.append("',city='" + cname);
-//                sql.append("',distric='" + dname);
-//                sql.append("',provinces_id='" + pid);
-//                sql.append("',city_id='" + cid);
-//                sql.append("',distric_id='" + did);
-//                sql.append("',address_detail='" + addressDetail);
-//                sql.append("',ALTER_TIME='" + alterTime);
-//                sql.append("',complete='" + complete);
-//                sql.append("' where  id='" + id + "'");
-//                sunbmpDaoSupport.exeSql(sql.toString());
-//            } else {
-//                id = UUID.randomUUID() + "";
-//                sql = new StringBuffer("insert into mag_customer_live (ID,type,customer_id,provinces,city,distric,provinces_id,city_id,distric_id,address_detail,complete,CREAT_TIME,ALTER_TIME) VALUES('");
-//                sql.append(id + "','1','" + customerId + "','" + pname + "','" + cname + "','" + dname + "','" + pid + "','" + cid + "','" + did + "','" + addressDetail + "','" + complete + "','" + alterTime + "','" + alterTime +
-//                        "')");
-//                sunbmpDaoSupport.exeSql(sql.toString());
-//            }
-//        } catch (Exception e) {
-//            TraceLoggerUtil.error("保存客户信息表出错！", e);
-//        }
-        return null;
     }
 
     //保存客户联系人信息
