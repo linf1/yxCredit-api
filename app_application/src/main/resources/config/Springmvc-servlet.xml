@@ -35,12 +35,12 @@
           p:prefix="/WEB-INF/page/"
           p:suffix=".jsp"/>
 
-    <!--&lt;!&ndash; 多部分文件上传 &ndash;&gt;-->
-    <!--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->
-        <!--<property name="maxUploadSize" value="104857600" />-->
-        <!--<property name="maxInMemorySize" value="4096" />-->
-        <!--<property name="defaultEncoding" value="UTF-8"></property>-->
-    <!--</bean>-->
+    <!-- 多部分文件上传 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="104857600" />
+        <property name="maxInMemorySize" value="4096" />
+        <property name="defaultEncoding" value="UTF-8"></property>
+    </bean>
 
 
     <!-- 	如果使用了<mvc:annotation-driven />(这个是使用requestbody和responseBody必须使用的标签)， 它会自动注册DefaultAnnotationHandlerMapping 与AnnotationMethodHandlerAdapter 这两个bean -->

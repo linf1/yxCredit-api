@@ -813,6 +813,11 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             String sql5 = "insert into order_operation_record (id,operation_node,operation_result,order_id,operation_time,amount,emp_id,emp_name,description) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"'," +
                     "1,1,'"+orderId+"','"+applyTime+"','"+forMap.get("applay_money")+"','"+forMap.get("user_id")+"','"+forMap.get("CUSTOMER_NAME")+"','已申请')";
             sunbmpDaoSupport.exeSql(sql5);
+            //新增站内信
+            String creatTime = DateUtils.getNowDate();
+            String content = "您申请的蓝领贷产品金额"+applayMoney+"元，期限"+forMap.get("periods")+"日，已成功提交申请，请等待审核。";
+            String sql6 = "insert into app_message (id,user_id,title,content,creat_time,alter_time,state,order_state,order_id) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+forMap.get("user_id")+"','提交申请','"+content+"','"+creatTime+"','"+creatTime+"','0','2','"+orderId+"')";
+            sunbmpDaoSupport.exeSql(sql6);
         } catch (DAOException e) {
             e.printStackTrace();
             resultMap.put("flag",false);
@@ -1085,5 +1090,74 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         }
         Collections.sort(list);
         return list;
+    }
+
+    @Override
+    public List getImageInfos(String customerId) {
+        String sql = "select id,img_url from mag_customer_image where customer_id = '"+customerId+"'";
+        return sunbmpDaoSupport.findForList(sql);
+    }
+
+    @Override
+    public Map uploadImageInfos(String customerId,List<String> MultipartFileList) {
+        Map reslutMap = new HashMap(2);
+        //String[] files = fileName.split(",");
+        //deleteImages(customerId);
+        String createTime = DateUtils.getCurrentTime();
+        String sql;
+        try{
+            for(String str:MultipartFileList){
+                sql = "insert into mag_customer_image (id,img_url,customer_id,creat_time) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+str+"','"+customerId+"','"+createTime+"')";
+                sunbmpDaoSupport.exeSql(sql);
+            }
+            updateImageComplete(customerId);
+        }catch (Exception e){
+            e.printStackTrace();
+            reslutMap.put("flag",false);
+            reslutMap.put("msg","上传失败");
+            return  reslutMap;
+        }
+        reslutMap.put("flag",true);
+        reslutMap.put("msg","上传成功");
+        return reslutMap;
+    }
+
+    /**
+     * 更新影像资料完成度
+     * @param customerId
+     */
+    private  void  updateImageComplete(String customerId){
+        String sql = "update mag_customer set imageinfo_complete = '100' where id='"+customerId+"'";
+        sunbmpDaoSupport.exeSql(sql);
+    }
+
+    private  void  deleteImages(String customerId){
+        String sql = "delete from mag_customer_image where customer_id = '"+customerId+"'";
+        sunbmpDaoSupport.exeSql(sql);
+    }
+
+
+    @Override
+    public List getInstationMsg(String userId) {
+        String sql = "select * from app_message where user_id = '"+userId+"'";
+        return sunbmpDaoSupport.findForList(sql);
+    }
+
+    @Override
+    public boolean getInstationStatus(String userId) {
+        String sql = "select count(1) from app_message where user_id = '"+userId+"' and state = '0'";
+        return sunbmpDaoSupport.getCount(sql) == 0 ? false:true;
+    }
+
+    @Override
+    public void updateInstationMsg(String userId) {
+        String sql = "update app_message set state='2' where user_id = '"+userId+"'";
+        sunbmpDaoSupport.exeSql(sql);
+    }
+
+    @Override
+    public void deleteImageInfos(String id) {
+        String sql = "delete from mag_customer_image where id = '"+id+"'";
+        sunbmpDaoSupport.exeSql(sql);
     }
 }

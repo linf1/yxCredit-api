@@ -215,4 +215,35 @@ public interface AppBasicInfoService {
     List getPeriods(String productName);
 
 
+    /**
+     * @author 韩梅生
+     * @date 14:24 2018/6/19
+     * 获取影像资料
+     */
+    List getImageInfos(String custoemrId);
+    /**
+     * @author 韩梅生
+     * @date 14:24 2018/6/19
+     * 上传影像资料
+     */
+    Map uploadImageInfos(String customerId,List<String> MultipartFileList);
+
+    /**
+     * @author 韩梅生
+     * @date 13:40 2018/6/20
+     * 获取站内信
+     */
+
+    List getInstationMsg(String userId);
+
+    boolean getInstationStatus(String userId);
+
+    void  updateInstationMsg(String userId);
+
+    void deleteImageInfos(String id);
+
+
+
+
+
 }
