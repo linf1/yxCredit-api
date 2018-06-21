@@ -2,6 +2,7 @@ package com.zw.miaofuspd.personal.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.base.util.ByxFileUploadUtils;
 import com.base.util.DateUtils;
 import com.base.util.GeneratePrimaryKeyUtils;
 import com.base.util.TraceLoggerUtil;
@@ -10,11 +11,13 @@ import com.constants.CommonConstant;
 import com.enums.EIsIdentityEnum;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;
 import com.zw.api.HttpUtil;
+import com.zw.miaofuspd.facade.dict.service.ISystemDictService;
 import com.zw.miaofuspd.facade.entity.CustomerLinkmanBean;
 import com.zw.miaofuspd.facade.personal.service.AppBasicInfoService;
 import com.zw.service.base.AbsServiceBase;
 import com.zw.service.exception.DAOException;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -24,6 +27,11 @@ import java.util.*;
 
 @Service
 public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicInfoService {
+
+
+    @Autowired
+    private ISystemDictService iSystemDictService;
+
     @Override
     public Map updateLinkManInfo( String customer_id, Map map1) throws Exception {
         Map retMap = new HashMap();
@@ -1101,8 +1109,6 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     @Override
     public Map uploadImageInfos(String customerId,List<String> MultipartFileList) {
         Map reslutMap = new HashMap(2);
-        //String[] files = fileName.split(",");
-        //deleteImages(customerId);
         String createTime = DateUtils.getCurrentTime();
         String sql;
         try{
@@ -1131,11 +1137,6 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         sunbmpDaoSupport.exeSql(sql);
     }
 
-    private  void  deleteImages(String customerId){
-        String sql = "delete from mag_customer_image where customer_id = '"+customerId+"'";
-        sunbmpDaoSupport.exeSql(sql);
-    }
-
 
     @Override
     public List getInstationMsg(String userId) {
@@ -1157,7 +1158,23 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
 
     @Override
     public void deleteImageInfos(String id) {
+        //删除服务器文件
+        deleteRemoteImageInfos(id);
+        //删除数据库记录
         String sql = "delete from mag_customer_image where id = '"+id+"'";
         sunbmpDaoSupport.exeSql(sql);
+    }
+
+    private  void deleteRemoteImageInfos(String id){
+        String infoSql = "select img_url from mag_customer_image where id ='"+id+"'";
+        Map forMap = sunbmpDaoSupport.findForMap(infoSql);
+        String imgUrl = forMap.get("img_url")==null?"":forMap.get("img_url").toString();
+        try {
+            String host = iSystemDictService.getInfo("upload.url");
+            String url = host.substring(0, host.lastIndexOf("/")) + imgUrl.substring(imgUrl.lastIndexOf("/"));
+            ByxFileUploadUtils.deleteFile(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

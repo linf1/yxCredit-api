@@ -5,17 +5,17 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 
 public class ByxFileUploadUtils {
@@ -48,6 +48,20 @@ public class ByxFileUploadUtils {
             httpClient.getConnectionManager().shutdown();
         }
         return result;
+    }
+
+    public static boolean deleteFile(String path){
+        HttpDelete httpRequest = new HttpDelete(path);
+        HttpClient httpClient = HttpClients.createDefault();
+        try {
+            HttpResponse httpResponse = httpClient.execute(httpRequest);
+            if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                return true;
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public static void main(String[] args) {
