@@ -1140,7 +1140,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
 
     @Override
     public List getInstationMsg(String userId) {
-        String sql = "select id,user_id,title,content,creat_time,state,order_state,order_id as orderId from app_message where user_id = '"+userId+"'";
+        String sql = "select id,user_id,title,content,creat_time,state,order_state,order_id as orderId from app_message where user_id = '"+userId+"' order by creat_time DESC";
         return sunbmpDaoSupport.findForList(sql);
     }
 
