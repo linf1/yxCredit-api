@@ -511,7 +511,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         List<Map> staList = sunbmpDaoSupport.findForList(sql2);
         //申请主页面的相关信息
         String sql3 = "select date_format(str_to_date(t2.CREAT_TIME,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%i:%s') as creat_time,t1.id as customerId,t1.card as card,t2.applay_money as applay_money,t1.tel as tel,t1.PERSON_NAME as personName,t1.Baseinfo_complete as baseinfoComplete" +
-                ",t2.complete as applyComplete,t2.id as orderId,t1.is_identity as is_identity,t1.authorization_complete as authorization_complete,t1.link_man_complete as link_man_complete  from mag_customer t1 left join  mag_order t2 on t1.id = t2.CUSTOMER_ID " +
+                ",t2.complete as applyComplete,t2.id as orderId,t1.is_identity as is_identity,t1.authorization_complete as authorization_complete,t1.imageinfo_complete as imageinfo_complete,t1.link_man_complete as link_man_complete  from mag_customer t1 left join  mag_order t2 on t1.id = t2.CUSTOMER_ID " +
                 " where t1.user_id = '" +id+ "'and t2.product_name_name= '"+productName+"'and t2.order_state='1'";
         for(Map map:staList){
             //未完成订单
