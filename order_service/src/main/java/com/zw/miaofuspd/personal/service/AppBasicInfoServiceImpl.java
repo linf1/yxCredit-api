@@ -1102,7 +1102,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
 
     @Override
     public List getImageInfos(String customerId) {
-        String sql = "select id,img_url from mag_customer_image where customer_id = '"+customerId+"'";
+        String sql = "select id,img_url from mag_customer_image where customer_id = '"+customerId+"' ORDER BY creat_time";
         return sunbmpDaoSupport.findForList(sql);
     }
 
