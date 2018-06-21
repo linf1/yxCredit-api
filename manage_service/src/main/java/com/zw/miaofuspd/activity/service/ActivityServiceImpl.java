@@ -38,10 +38,10 @@ public class ActivityServiceImpl extends AbsServiceBase implements ActivityServi
 
             List bannerList = sunbmpDaoSupport.findForList(selectSql);
             if (bannerList!=null){
-                String host = iSystemDictService.getInfo("contract.host");
+                //String host = iSystemDictService.getInfo("contract.host");
                 resMap.put("res_code",1);
                 resMap.put("res_msg","Banner已上线列表获取成功！");
-                resMap.put("host",host);
+                //resMap.put("host",host);
                 resMap.put("bannerList",bannerList);
 
             }else {
