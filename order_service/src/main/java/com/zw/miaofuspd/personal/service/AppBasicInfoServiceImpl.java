@@ -2,12 +2,10 @@ package com.zw.miaofuspd.personal.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.base.util.ByxFileUploadUtils;
-import com.base.util.DateUtils;
-import com.base.util.GeneratePrimaryKeyUtils;
-import com.base.util.TraceLoggerUtil;
+import com.base.util.*;
 import com.constants.ApiConstants;
 import com.constants.CommonConstant;
+import com.enums.DictEnum;
 import com.enums.EIsIdentityEnum;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;
 import com.zw.api.HttpUtil;
@@ -823,9 +821,12 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             sunbmpDaoSupport.exeSql(sql5);
             //新增站内信
             String creatTime = DateUtils.getNowDate();
-            String content = "您申请的蓝领贷产品金额"+applayMoney+"元，期限"+forMap.get("periods")+"日，已成功提交申请，请等待审核。";
-            String sql6 = "insert into app_message (id,user_id,title,content,creat_time,alter_time,state,order_state,order_id) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+forMap.get("user_id")+"','提交申请','"+content+"','"+creatTime+"','"+creatTime+"','0','2','"+orderId+"')";
-            sunbmpDaoSupport.exeSql(sql6);
+            Map instationMap = new HashMap();
+            instationMap.put("applyMoney",forMap.get("applay_money").toString());
+            instationMap.put("periods",forMap.get("periods").toString());
+            Map instationMsg = addInstationMsg(instationMap);
+            String sql7 = "insert into app_message (id,user_id,title,content,creat_time,alter_time,state,order_state,order_id) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+forMap.get("user_id")+"','"+instationMsg.get("title")+"','"+instationMsg.get("content")+"','"+creatTime+"','"+creatTime+"','0','2','"+orderId+"')";
+            sunbmpDaoSupport.exeSql(sql7);
         } catch (DAOException e) {
             e.printStackTrace();
             resultMap.put("flag",false);
@@ -836,6 +837,17 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         resultMap.put("msg","一键申请提交成功");
         resultMap.put("orderMap",forMap);
         return  resultMap;
+    }
+
+    private Map addInstationMsg(Map map){
+        String sql = "SELECT name,description  from  mag_dict_detail where code = '"+DictEnum.SUB_APPLY.getCode() +"' and dict_name = '"+DictEnum.SUB_APPLY.getName()+"' and state = '1'";
+        Map instationMsg = sunbmpDaoSupport.findForMap(sql);
+        String content = instationMsg.get("name")==null?"":instationMsg.get("name").toString();
+        String content1 = TemplateUtils.getContent(content, map);
+        String title = instationMsg.get("description")==null?"":instationMsg.get("description").toString();
+        map.put("title",title);
+        map.put("content",content1);
+        return  map;
     }
 
     /**
@@ -1133,8 +1145,16 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
      * @param customerId
      */
     private  void  updateImageComplete(String customerId){
-        String sql = "update mag_customer set imageinfo_complete = '100' where id='"+customerId+"'";
-        sunbmpDaoSupport.exeSql(sql);
+        //判断是否有资料照片
+        String sql = "select count(1) from mag_customer_image where customer_id ='"+customerId+"'";
+        int count = sunbmpDaoSupport.getCount(sql);
+        String sql2 = "";
+        if(count>0){
+            sql2  = "update mag_customer set imageinfo_complete = '100' where id='"+customerId+"'";
+        }else {
+            sql2  = "update mag_customer set imageinfo_complete = '0' where id='"+customerId+"'";
+        }
+        sunbmpDaoSupport.exeSql(sql2);
     }
 
 
@@ -1157,13 +1177,16 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     }
 
     @Override
-    public void deleteImageInfos(String id) {
+    public void deleteImageInfos(String id,String customerId) {
         //删除服务器文件
         deleteRemoteImageInfos(id);
         //删除数据库记录
         String sql = "delete from mag_customer_image where id = '"+id+"'";
         sunbmpDaoSupport.exeSql(sql);
+        //更新完成度
+        updateImageComplete(customerId);
     }
+
 
     private  void deleteRemoteImageInfos(String id){
         String infoSql = "select img_url from mag_customer_image where id ='"+id+"'";

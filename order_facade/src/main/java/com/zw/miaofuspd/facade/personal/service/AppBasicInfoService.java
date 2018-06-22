@@ -240,7 +240,7 @@ public interface AppBasicInfoService {
 
     void  updateInstationMsg(String userId);
 
-    void deleteImageInfos(String id);
+    void deleteImageInfos(String id,String customerId);
 
 
 
