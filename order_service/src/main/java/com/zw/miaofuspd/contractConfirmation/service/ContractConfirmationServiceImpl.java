@@ -1,5 +1,8 @@
 package com.zw.miaofuspd.contractConfirmation.service;
 
+import com.api.model.common.BYXResponse;
+import com.api.model.sortmsg.MsgRequest;
+import com.api.service.sortmsg.IMessageServer;
 import com.base.util.DateUtils;
 import com.zw.miaofuspd.facade.contractConfirmation.service.ContractConfirmationService;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
@@ -40,7 +43,6 @@ public class ContractConfirmationServiceImpl extends AbsServiceBase implements C
     private AppOrderService appOrderService;
     @Autowired
     private IDictService iDictService;
-
 
     @Override
     public Map getContractAgreement(Map mapInfo) {
@@ -253,5 +255,12 @@ public class ContractConfirmationServiceImpl extends AbsServiceBase implements C
     public void updateAssetStatus(String orderId, String assetState) {
         String updateStatusSql = "update mag_order set asset_state='"+assetState+"' where id = '"+orderId+"'";
         sunbmpDaoSupport.exeSql(updateStatusSql);
+    }
+    @Override
+    public Map getByxOrderInfo(String orderId){
+        //查询订单
+        String orderSql="select mc.tel, mo.applay_money, mo.periods, mo.product_name_name from mag_order mo left join mag_customer mc on mo.customer_id=mc.id where mo.id='"+orderId+"'";
+        Map orderMap = sunbmpDaoSupport.findForMap(orderSql);
+        return orderMap;
     }
 }

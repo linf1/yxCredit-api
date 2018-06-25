@@ -1,12 +1,16 @@
 
 package com.zw.miaofuspd.contractConfirmation.controller;
 
+import com.api.model.common.BYXResponse;
 import com.api.model.contractsign.ByxUserModel;
 import com.api.model.contractsign.ContractSignRequest;
 import com.api.model.contractsign.ContractSignResponse;
 import com.api.model.contractsign.ResData;
+import com.api.model.sortmsg.MsgRequest;
 import com.api.service.contractsign.IContractSignService;
+import com.api.service.sortmsg.IMessageServer;
 import com.base.util.AppRouterSettings;
+import com.exception.TextProperties;
 import com.google.gson.Gson;
 import com.zw.api.ds.controller.AssetController;
 import com.zw.miaofuspd.facade.contractConfirmation.service.ContractConfirmationService;
@@ -68,6 +72,9 @@ public class ContractConfirmationController extends AbsBaseController {
 
     @Autowired
     private AssetController assetController;
+
+    @Autowired
+    private IMessageServer messageServer;
 
     /*****************************碧有信合同模块开始***************************/
 
@@ -217,7 +224,9 @@ public class ContractConfirmationController extends AbsBaseController {
         params.put("orderState", 9);
         params.put("description", request.getParameter("description"));
         contractConfirmationService.updateOrderStatus(params);
-
+        if(Boolean.valueOf(TextProperties.instance().get("order.isSend"))){
+            sendOperateMsg(orderId,TextProperties.instance().get("order.getupSignContract"));
+        }
         return ResultVO.ok(params);
     }
 
@@ -283,6 +292,10 @@ public class ContractConfirmationController extends AbsBaseController {
         ResultVO resultVO = assetController.thirdAssetsReceiver(orderId,customerId);
         if("SUCCESS".equals(resultVO.getRetCode())){
             contractConfirmationService.updateAssetStatus(orderId,"1");
+            if(Boolean.valueOf(TextProperties.instance().get("order.isSend"))){
+                sendOperateMsg(orderId,TextProperties.instance().get("order.agreeSignContract"));
+            }
+
         }
 
         return ResultVO.ok(map);
@@ -373,6 +386,31 @@ public class ContractConfirmationController extends AbsBaseController {
         returnMap.put("res_code",res_code);
         returnMap.put("res_msg",res_msg);
         return returnMap;
+    }
+
+    /**
+     * @author hwn
+     * @date 16:16 2018/6/11
+     * 操作同步发送短信
+     * @
+     */
+    public  void sendOperateMsg(String orderId,String text){
+
+        Map orderMap = contractConfirmationService.getByxOrderInfo(orderId);
+
+        MsgRequest msgRequest = new MsgRequest();
+        Map<String,String> parameters = new HashMap<>(2);
+        msgRequest.setPhone(orderMap.get("tel").toString());
+        msgRequest.setType("0");
+        parameters.put("applyMoney",orderMap.get("applay_money").toString());
+        parameters.put("periods",orderMap.get("periods").toString());
+        parameters.put("productName",orderMap.get("product_name_name").toString());
+        parameters.put("content", text);
+        try {
+            final BYXResponse byxResponse = messageServer.sendSms(msgRequest, parameters);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

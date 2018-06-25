@@ -87,4 +87,5 @@ public interface ContractConfirmationService {
      */
     void updateAssetStatus(String orderId, String assetState);
 
+    Map getByxOrderInfo(String orderId);
 }
