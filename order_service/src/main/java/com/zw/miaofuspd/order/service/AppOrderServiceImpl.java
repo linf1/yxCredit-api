@@ -143,24 +143,55 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
      * @return
      */
     @Override
-    public Map getAllOrderByUserId(String userId ,String pageNumber,String pageSize) {
+    public Map getAllOrderByUserId(String userId ,String pageNumber,String pageSize,String orderType) {
         Map returnMap = new HashMap();
         int unm= Integer.parseInt(pageNumber);
         int size= Integer.parseInt(pageSize);
+        String sql;
+        if (orderType.equals("1")){
+            sql = "SELECT o.ID AS orderId ,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
+                    "o.product_name_name AS productName , o.applay_money AS applayMoney ,  " +
+                    "o.loan_amount AS loanAmount ,  o.repay_money AS repayMoney , " +
+                    "date_format(str_to_date( o.applay_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS applayTime , " +
+                    "date_format(str_to_date( o.Examine_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS examineTime , " +
+                    "DATE_FORMAT(STR_TO_DATE( o.CREAT_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS creatTime , " +
+                    "DATE_FORMAT(STR_TO_DATE( o.ALTER_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS alterTime , " +
+                    "DATE_FORMAT(STR_TO_DATE( o.loan_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS loanTime , " +
+                    "o.repay_date AS repayDate , " +
+                    "o.contract_amount AS contractAmount , " +
+                    "o.repay_type AS repayType ,  o.Job AS job ,  o.Service_fee AS serviceFee ,  o.loan_purpose AS loanPurpose , " +
+                    "o.PERIODS AS periods ,  o.Order_state AS orderState " +
+                    "FROM mag_order o WHERE o.USER_ID='"+userId+"' AND o.Order_state IN (2,3,4) ORDER BY CREAT_TIME DESC  limit "+((unm-1)*size)+","+size;
+        }else if (orderType.equals("2")){
+            sql = "SELECT o.ID AS orderId ,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
+                    "o.product_name_name AS productName , o.applay_money AS applayMoney ,  " +
+                    "o.loan_amount AS loanAmount ,  o.repay_money AS repayMoney , " +
+                    "date_format(str_to_date( o.applay_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS applayTime , " +
+                    "date_format(str_to_date( o.Examine_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS examineTime , " +
+                    "DATE_FORMAT(STR_TO_DATE( o.CREAT_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS creatTime , " +
+                    "DATE_FORMAT(STR_TO_DATE( o.ALTER_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS alterTime , " +
+                    "DATE_FORMAT(STR_TO_DATE( o.loan_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS loanTime , " +
+                    "o.repay_date AS repayDate , " +
+                    "o.contract_amount AS contractAmount , " +
+                    "o.repay_type AS repayType ,  o.Job AS job ,  o.Service_fee AS serviceFee ,  o.loan_purpose AS loanPurpose , " +
+                    "o.PERIODS AS periods ,  o.Order_state AS orderState " +
+                    "FROM mag_order o WHERE o.USER_ID='"+userId+"' AND o.Order_state='5' ORDER BY CREAT_TIME DESC  limit "+((unm-1)*size)+","+size;
+        }else {
+             sql = "SELECT o.ID AS orderId ,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
+                    "o.product_name_name AS productName , o.applay_money AS applayMoney ,  " +
+                    "o.loan_amount AS loanAmount ,  o.repay_money AS repayMoney , " +
+                    "date_format(str_to_date( o.applay_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS applayTime , " +
+                    "date_format(str_to_date( o.Examine_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS examineTime , " +
+                    "DATE_FORMAT(STR_TO_DATE( o.CREAT_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS creatTime , " +
+                    "DATE_FORMAT(STR_TO_DATE( o.ALTER_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS alterTime , " +
+                    "DATE_FORMAT(STR_TO_DATE( o.loan_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS loanTime , " +
+                    "o.repay_date AS repayDate , " +
+                    "o.contract_amount AS contractAmount , " +
+                    "o.repay_type AS repayType ,  o.Job AS job ,  o.Service_fee AS serviceFee ,  o.loan_purpose AS loanPurpose , " +
+                    "o.PERIODS AS periods ,  o.Order_state AS orderState " +
+                    "FROM mag_order o WHERE o.USER_ID='"+userId+"' ORDER BY CREAT_TIME DESC  limit "+((unm-1)*size)+","+size;
+        }
 
-        String sql = "SELECT o.ID AS orderId ,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
-                            "o.product_name_name AS productName , o.applay_money AS applayMoney ,  " +
-                            "o.loan_amount AS loanAmount ,  o.repay_money AS repayMoney , " +
-                            "date_format(str_to_date( o.applay_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS applayTime , " +
-                            "date_format(str_to_date( o.Examine_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS examineTime , " +
-                            "DATE_FORMAT(STR_TO_DATE( o.CREAT_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS creatTime , " +
-                            "DATE_FORMAT(STR_TO_DATE( o.ALTER_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS alterTime , " +
-                            "DATE_FORMAT(STR_TO_DATE( o.loan_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS loanTime , " +
-                            "o.repay_date AS repayDate , " +
-                            "o.contract_amount AS contractAmount , " +
-                            "o.repay_type AS repayType ,  o.Job AS job ,  o.Service_fee AS serviceFee ,  o.loan_purpose AS loanPurpose , " +
-                            "o.PERIODS AS periods ,  o.Order_state AS orderState " +
-                        "FROM mag_order o WHERE o.USER_ID='"+userId+"' ORDER BY CREAT_TIME DESC  limit "+((unm-1)*size)+","+size;
         List allOrderList = sunbmpDaoSupport.findForList(sql);
 
         returnMap.put("allOrderList",allOrderList);

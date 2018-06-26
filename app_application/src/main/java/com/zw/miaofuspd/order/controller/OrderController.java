@@ -28,11 +28,11 @@ public class  OrderController extends AbsBaseController {
      */
     @RequestMapping("/getAllOrder")
     @ResponseBody
-    public ResultVO getAllOrder(String userId,String pageNumber,String pageSize) {
+    public ResultVO getAllOrder(String userId,String pageNumber,String pageSize,String orderType) {
         ResultVO resultVO = new ResultVO();
 
         //根据userId获取全部订单
-        Map map  = appOrderService.getAllOrderByUserId(userId,pageNumber,pageSize);
+        Map map  = appOrderService.getAllOrderByUserId(userId,pageNumber,pageSize,orderType);
 
         resultVO.setRetData(map);
 

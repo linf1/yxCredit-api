@@ -51,7 +51,7 @@ public interface AppOrderService {
      * @param userId
      * @return
      */
-    Map getAllOrderByUserId(String userId,String pageNumber,String pageSize);
+    Map getAllOrderByUserId(String userId,String pageNumber,String pageSize,String orderType);
 
     /**
      * 根据orderId获取待放款订单信息
