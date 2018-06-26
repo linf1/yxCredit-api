@@ -225,7 +225,9 @@ public class ContractConfirmationController extends AbsBaseController {
         params.put("description", request.getParameter("description"));
         contractConfirmationService.updateOrderStatus(params);
         if(Boolean.valueOf(TextProperties.instance().get("order.isSend"))){
-            sendOperateMsg(orderId,TextProperties.instance().get("order.getupSignContract"));
+            Map orderMap = contractConfirmationService.getByxOrderInfo(orderId);
+            sendOperateSMS(orderMap,TextProperties.instance().get("order.getupSignContract"));
+            sendOperateMsg(orderMap,"fqqy");
         }
         return ResultVO.ok(params);
     }
@@ -293,7 +295,9 @@ public class ContractConfirmationController extends AbsBaseController {
         if("SUCCESS".equals(resultVO.getRetCode())){
             contractConfirmationService.updateAssetStatus(orderId,"1");
             if(Boolean.valueOf(TextProperties.instance().get("order.isSend"))){
-                sendOperateMsg(orderId,TextProperties.instance().get("order.agreeSignContract"));
+                Map orderMap = contractConfirmationService.getByxOrderInfo(orderId);
+                sendOperateSMS(orderMap,TextProperties.instance().get("order.agreeSignContract"));
+                sendOperateMsg(orderMap,"tyqy");
             }
 
         }
@@ -394,10 +398,7 @@ public class ContractConfirmationController extends AbsBaseController {
      * 操作同步发送短信
      * @
      */
-    public  void sendOperateMsg(String orderId,String text){
-
-        Map orderMap = contractConfirmationService.getByxOrderInfo(orderId);
-
+    public  void sendOperateSMS(Map orderMap,String templateContent){
         MsgRequest msgRequest = new MsgRequest();
         Map<String,String> parameters = new HashMap<>(2);
         msgRequest.setPhone(orderMap.get("tel").toString());
@@ -405,12 +406,26 @@ public class ContractConfirmationController extends AbsBaseController {
         parameters.put("applyMoney",orderMap.get("applay_money").toString());
         parameters.put("periods",orderMap.get("periods").toString());
         parameters.put("productName",orderMap.get("product_name_name").toString());
-        parameters.put("content", text);
+        parameters.put("content", templateContent);
         try {
             final BYXResponse byxResponse = messageServer.sendSms(msgRequest, parameters);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    /**
+     * @author hwn
+     * @date 16:16 2018/6/11
+     * 操作同步发送站内信
+     * @
+     */
+    public  void sendOperateMsg(Map orderMap,String msgCode){
+
+        Map<String,String> parameters = new HashMap<>(2);
+        parameters.put("applyMoney",orderMap.get("applay_money").toString());
+        parameters.put("periods",orderMap.get("periods").toString());
+        parameters.put("productName",orderMap.get("product_name_name").toString());
+        contractConfirmationService.insertAppMsg(orderMap,msgCode);
     }
 
 }

@@ -88,4 +88,6 @@ public interface ContractConfirmationService {
     void updateAssetStatus(String orderId, String assetState);
 
     Map getByxOrderInfo(String orderId);
+
+    void insertAppMsg(Map orderMap, String msgCode);
 }

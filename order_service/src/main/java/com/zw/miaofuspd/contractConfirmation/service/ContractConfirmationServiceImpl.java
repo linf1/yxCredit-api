@@ -4,6 +4,9 @@ import com.api.model.common.BYXResponse;
 import com.api.model.sortmsg.MsgRequest;
 import com.api.service.sortmsg.IMessageServer;
 import com.base.util.DateUtils;
+import com.base.util.GeneratePrimaryKeyUtils;
+import com.base.util.TemplateUtils;
+import com.enums.DictEnum;
 import com.zw.miaofuspd.facade.contractConfirmation.service.ContractConfirmationService;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
 import com.zw.miaofuspd.facade.order.service.AppOrderService;
@@ -259,8 +262,20 @@ public class ContractConfirmationServiceImpl extends AbsServiceBase implements C
     @Override
     public Map getByxOrderInfo(String orderId){
         //查询订单
-        String orderSql="select mc.tel, mo.applay_money, mo.periods, mo.product_name_name from mag_order mo left join mag_customer mc on mo.customer_id=mc.id where mo.id='"+orderId+"'";
+        String orderSql="select mo.id as order_id, mo.user_id, mc.tel, mo.applay_money, mo.periods, mo.product_name_name, mo.loan_amount from mag_order mo left join mag_customer mc on mo.customer_id=mc.id where mo.id='"+orderId+"'";
         Map orderMap = sunbmpDaoSupport.findForMap(orderSql);
         return orderMap;
     }
+    public void insertAppMsg(Map orderMap, String msgCode){
+        String sql = "SELECT name,description  from  mag_dict_detail where code = '"+ msgCode +"' and dict_name = '消息内容' and state = '1'";
+        Map msgTemplateMap = sunbmpDaoSupport.findForMap(sql);
+
+        String creatTime = DateUtils.getNowDate();
+        String title = msgTemplateMap.get("description")==null?"":msgTemplateMap.get("description").toString();
+        String content = msgTemplateMap.get("name")==null?"":msgTemplateMap.get("name").toString();
+        content = TemplateUtils.getContent(content, orderMap);
+        String sql7 = "insert into app_message (id,user_id,title,content,creat_time,alter_time,state,order_state,order_id) values ('"+ GeneratePrimaryKeyUtils.getUUIDKey()+"','"+orderMap.get("user_id")+"','"+title+"','"+content+"','"+creatTime+"','"+creatTime+"','0','2','"+orderMap.get("order_id")+"')";
+        sunbmpDaoSupport.exeSql(sql7);
+    }
+
 }
