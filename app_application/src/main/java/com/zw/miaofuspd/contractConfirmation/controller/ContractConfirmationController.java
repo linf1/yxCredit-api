@@ -291,15 +291,14 @@ public class ContractConfirmationController extends AbsBaseController {
         params.put("contract_no", contractNo);
         contractConfirmationService.updateOrderStatus(params);
 
+        if(Boolean.valueOf(TextProperties.instance().get("order.isSend"))){
+            Map orderMap = contractConfirmationService.getByxOrderInfo(orderId);
+            sendOperateSMS(orderMap,TextProperties.instance().get("order.agreeSignContract"));
+            sendOperateMsg(orderMap,"tyqy");
+        }
         ResultVO resultVO = assetController.thirdAssetsReceiver(orderId,customerId);
         if("SUCCESS".equals(resultVO.getRetCode())){
             contractConfirmationService.updateAssetStatus(orderId,"1");
-            if(Boolean.valueOf(TextProperties.instance().get("order.isSend"))){
-                Map orderMap = contractConfirmationService.getByxOrderInfo(orderId);
-                sendOperateSMS(orderMap,TextProperties.instance().get("order.agreeSignContract"));
-                sendOperateMsg(orderMap,"tyqy");
-            }
-
         }
 
         return ResultVO.ok(map);
@@ -421,10 +420,9 @@ public class ContractConfirmationController extends AbsBaseController {
      */
     public  void sendOperateMsg(Map orderMap,String msgCode){
 
-        Map<String,String> parameters = new HashMap<>(2);
-        parameters.put("applyMoney",orderMap.get("applay_money").toString());
-        parameters.put("periods",orderMap.get("periods").toString());
-        parameters.put("productName",orderMap.get("product_name_name").toString());
+        orderMap.put("applyMoney",orderMap.get("applay_money").toString());
+        orderMap.put("periods",orderMap.get("periods").toString());
+        orderMap.put("productName",orderMap.get("product_name_name").toString());
         contractConfirmationService.insertAppMsg(orderMap,msgCode);
     }
 
