@@ -40,7 +40,25 @@ public class  OrderController extends AbsBaseController {
     }
 
     /**
-     * 获取订单所有信息详情
+     * 根据订单ID获取订单信息
+     * @author 仙海峰
+     * @param orderId
+     * @return
+     */
+    @RequestMapping("/getOrder")
+    @ResponseBody
+    public ResultVO getOrder(String orderId ) throws Exception{
+        ResultVO resultVO = new ResultVO();
+
+        //根据orderId获取订单信息
+        Map map  = appOrderService.getOrderInfoByOrderId(orderId);
+        resultVO.setRetData(map);
+
+        return resultVO;
+    }
+
+    /**
+     * 获取订单所有信息详情（订单信息+订单审核记录）
      * @author 仙海峰
      * @param orderId
      * @return
