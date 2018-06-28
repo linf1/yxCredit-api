@@ -548,9 +548,13 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
                 return resultMap;
             }
         }
+        //获取产品id
+        String productSql = "select id from pro_crm_product where pro_name='"+productName+"' and pro_number = 'BYX0001'";
+        Map proMap = sunbmpDaoSupport.findForMap(productSql);
+        String product_id = proMap.get("id")==null?"":proMap.get("id").toString();
         //新增订单信息
-        String sql4 = "insert into mag_order (ID,USER_ID,order_no,CUSTOMER_ID,order_state,product_name,product_name_name,CUSTOMER_NAME,TEL,CARD,CREAT_TIME) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+id+"'," +
-                "'"+GeneratePrimaryKeyUtils.getOrderNum()+"','"+cusmap.get("id")+"','1','BYX0001','"+productName+"','"+cusmap.get("PERSON_NAME")+"','"+cusmap.get("TEL")+"','"+cusmap.get("CARD")+"','"+DateUtils.getCurrentTime(DateUtils.STYLE_10)+"')";
+        String sql4 = "insert into mag_order (ID,USER_ID,order_no,CUSTOMER_ID,order_state,product_id,product_name,product_name_name,CUSTOMER_NAME,TEL,CARD,CREAT_TIME) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+id+"'," +
+                "'"+GeneratePrimaryKeyUtils.getOrderNum()+"','"+cusmap.get("id")+"','1','"+product_id+"','BYX0001','"+productName+"','"+cusmap.get("PERSON_NAME")+"','"+cusmap.get("TEL")+"','"+cusmap.get("CARD")+"','"+DateUtils.getCurrentTime(DateUtils.STYLE_10)+"')";
         sunbmpDaoSupport.exeSql(sql4);
         resMap = sunbmpDaoSupport.findForMap(sql3);
         resultMap.put("code","4");
@@ -839,7 +843,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         return  resultMap;
     }
 
-    private Map addInstationMsg(Map map){
+    private Map addInstationMsg(Map<String,String> map){
         String sql = "SELECT name,description  from  mag_dict_detail where code = '"+DictEnum.SUB_APPLY.getCode() +"' and dict_name = '"+DictEnum.SUB_APPLY.getName()+"' and state = '1'";
         Map instationMsg = sunbmpDaoSupport.findForMap(sql);
         String content = instationMsg.get("name")==null?"":instationMsg.get("name").toString();
