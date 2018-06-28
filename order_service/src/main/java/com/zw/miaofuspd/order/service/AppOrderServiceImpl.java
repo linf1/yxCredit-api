@@ -3,11 +3,13 @@ package com.zw.miaofuspd.order.service;
 import com.base.util.DateUtils;
 import com.base.util.GeneratePrimaryKeyUtils;
 import com.zhiwang.zwfinance.app.jiguang.util.api.util.OrderStateEnum;
+import com.zhiwang.zwfinance.app.jiguang.util.api.util.OrderTypeEnum;
 import com.zw.miaofuspd.facade.order.service.AppOrderService;
 import com.zw.service.base.AbsServiceBase;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,9 +63,40 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
     public Map getOrderInfoByOrderId(String orderId){
 
         Map returnMap = new HashMap();
-        String sql ="SELECT ID AS orderId , product_name_name AS productName , applay_money AS applayMoney , PERIODS AS periods , CREAT_TIME AS creatTime , Order_state AS orderState  " +
+        String sql ="SELECT  ID AS orderId , order_no AS orderNo,USER_ID AS userId, CUSTOMER_ID AS customerId," +
+                    "CUSTOMER_NAME AS customerName,sex_name AS sexName,TEL AS tel,CARD AS card, PERIODS AS periods," +
+                    "DATE_FORMAT(STR_TO_DATE( applay_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS applayTime , " +
+                    "DATE_FORMAT(STR_TO_DATE( Examine_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS examineTime , " +
+                    "DATE_FORMAT(STR_TO_DATE( CREAT_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS creatTime , " +
+                    "DATE_FORMAT(STR_TO_DATE( ALTER_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS alterTime , " +
+                    "DATE_FORMAT(STR_TO_DATE( loan_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS loanTime , " +
+                    "repay_date AS repayDate , " +
+                    "rate AS rate ,product_name_name AS productName , applay_money AS applayMoney," +
+                    "loan_amount AS loanAmount ,contract_amount AS contractAmount , repay_money AS repayMoney , " +
+                    "Order_state AS orderState,pay_back_user AS payBackUser ,pay_back_card AS payBackCard " +
                     "FROM mag_order WHERE ID='"+orderId+"'";
         Map map =sunbmpDaoSupport.findForMap(sql);
+        //日利率
+        Double rate = Double.parseDouble(map.get("rate").toString());
+
+        //合同金额
+        Double contractAmount = Double.parseDouble(map.get("contractAmount").toString());
+
+        //期限
+        Double periods = Double.parseDouble(map.get("periods").toString());
+
+        //利息（利息=日利率＊合同金额＊借款期限（日））
+        Double money = rate*contractAmount*periods/100;
+        DecimalFormat df = new DecimalFormat("0.00");
+        String interest = df.format(money);
+
+        //罚息
+        Double defaultInterest=0.00;
+        //已还金额
+        Double alreadyRepaid=0.00;
+        map.put("interest",interest);
+        map.put("defaultInterest",defaultInterest);
+        map.put("alreadyRepaid",alreadyRepaid);
         returnMap.put("orderInfo",map);
         return returnMap;
     }
@@ -147,8 +180,9 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
         Map returnMap = new HashMap();
         int unm= Integer.parseInt(pageNumber);
         int size= Integer.parseInt(pageSize);
+
         String sql;
-        if (orderType.equals("1")){
+        if (OrderTypeEnum.HAVE_IN_HAND.getCode().equals(orderType)){
             sql = "SELECT o.ID AS orderId ,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
                     "o.product_name_name AS productName , o.applay_money AS applayMoney ,  " +
                     "o.loan_amount AS loanAmount ,  o.repay_money AS repayMoney , " +
@@ -162,7 +196,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                     "o.repay_type AS repayType ,  o.Job AS job ,  o.Service_fee AS serviceFee ,  o.loan_purpose AS loanPurpose , " +
                     "o.PERIODS AS periods ,  o.Order_state AS orderState " +
                     "FROM mag_order o WHERE o.USER_ID='"+userId+"' AND o.Order_state IN (2,3,4) ORDER BY CREAT_TIME DESC  limit "+((unm-1)*size)+","+size;
-        }else if (orderType.equals("2")){
+        }else if (OrderTypeEnum.REPAYMENT.getCode().equals(orderType)){
             sql = "SELECT o.ID AS orderId ,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
                     "o.product_name_name AS productName , o.applay_money AS applayMoney ,  " +
                     "o.loan_amount AS loanAmount ,  o.repay_money AS repayMoney , " +
@@ -176,6 +210,20 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                     "o.repay_type AS repayType ,  o.Job AS job ,  o.Service_fee AS serviceFee ,  o.loan_purpose AS loanPurpose , " +
                     "o.PERIODS AS periods ,  o.Order_state AS orderState " +
                     "FROM mag_order o WHERE o.USER_ID='"+userId+"' AND o.Order_state='5' ORDER BY CREAT_TIME DESC  limit "+((unm-1)*size)+","+size;
+        }else if (OrderTypeEnum.CONTRACT.getCode().equals(orderType)){
+            sql = "SELECT o.ID AS orderId ,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
+                    "o.product_name_name AS productName , o.applay_money AS applayMoney ,  " +
+                    "o.loan_amount AS loanAmount ,  o.repay_money AS repayMoney , " +
+                    "date_format(str_to_date( o.applay_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS applayTime , " +
+                    "date_format(str_to_date( o.Examine_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS examineTime , " +
+                    "DATE_FORMAT(STR_TO_DATE( o.CREAT_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS creatTime , " +
+                    "DATE_FORMAT(STR_TO_DATE( o.ALTER_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS alterTime , " +
+                    "DATE_FORMAT(STR_TO_DATE( o.loan_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS loanTime , " +
+                    "o.repay_date AS repayDate , " +
+                    "o.contract_amount AS contractAmount , " +
+                    "o.repay_type AS repayType ,  o.Job AS job ,  o.Service_fee AS serviceFee ,  o.loan_purpose AS loanPurpose , " +
+                    "o.PERIODS AS periods ,  o.Order_state AS orderState " +
+                    "FROM mag_order o WHERE o.USER_ID='"+userId+"' AND o.Order_state IN (4,5,6) ORDER BY CREAT_TIME DESC  limit "+((unm-1)*size)+","+size;
         }else {
              sql = "SELECT o.ID AS orderId ,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
                     "o.product_name_name AS productName , o.applay_money AS applayMoney ,  " +
