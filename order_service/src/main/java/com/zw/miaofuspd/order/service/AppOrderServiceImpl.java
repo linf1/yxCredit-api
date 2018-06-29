@@ -63,7 +63,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
     public Map getOrderInfoByOrderId(String orderId){
 
         Map returnMap = new HashMap();
-        String sql ="SELECT  ID AS orderId , order_no AS orderNo,USER_ID AS userId, CUSTOMER_ID AS customerId," +
+        String orderSql ="SELECT  ID AS orderId , order_no AS orderNo,USER_ID AS userId, CUSTOMER_ID AS customerId," +
                     "CUSTOMER_NAME AS customerName,sex_name AS sexName,TEL AS tel,CARD AS card, PERIODS AS periods," +
                     "DATE_FORMAT(STR_TO_DATE( applay_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS applayTime , " +
                     "DATE_FORMAT(STR_TO_DATE( Examine_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS examineTime , " +
@@ -73,25 +73,48 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                     "repay_date AS repayDate , " +
                     "rate AS rate ,product_name_name AS productName , applay_money AS applayMoney," +
                     "loan_amount AS loanAmount ,contract_amount AS contractAmount , repay_money AS repayMoney , " +
-                    "Order_state AS orderState,pay_back_user AS payBackUser ,pay_back_card AS payBackCard " +
+                    "Order_state AS orderState,pay_back_user AS payBackUser ,pay_back_card AS payBackCard, " +
+                    "DATEDIFF(NOW(),DATE(repay_date)) AS days "+
                     "FROM mag_order WHERE ID='"+orderId+"'";
-        Map map =sunbmpDaoSupport.findForMap(sql);
+        Map map =sunbmpDaoSupport.findForMap(orderSql);
+
+        String feeSql="SELECT f.yuqi_fee AS yuQiFee " +
+                    "FROM mag_order o INNER JOIN mag_product_fee f ON o.product_detail=f.product_id " +
+                    "WHERE o.ID='"+orderId+"'";
+        Map feeMap =sunbmpDaoSupport.findForMap(feeSql);
+
         //日利率
         Double rate = Double.parseDouble(map.get("rate").toString());
+
+        //逾期利率
+        Double yuQiFee = Double.parseDouble(feeMap.get("yuQiFee").toString());
 
         //合同金额
         Double contractAmount = Double.parseDouble(map.get("contractAmount").toString());
 
+        //还款金额
+        Double repayMoney = Double.parseDouble(map.get("repayMoney").toString());
+
         //期限
         Double periods = Double.parseDouble(map.get("periods").toString());
 
-        //利息（利息=日利率＊合同金额＊借款期限（日））
-        Double money = rate*contractAmount*periods/100;
+        //逾期天数（当前日期-还款日期）
+        Double days = Double.parseDouble(map.get("days").toString());
+
+        //利息（利息=日利率＊合同金额＊借款期限（日）/100）
         DecimalFormat df = new DecimalFormat("0.00");
+        Double money = (rate*contractAmount*periods)/100;
         String interest = df.format(money);
 
         //罚息
-        Double defaultInterest=0.00;
+        String defaultInterest="0";
+        if (days>0){
+            //罚息(罚息费用＝应还本金＊逾期费率＊逾期天数/100)
+            Double money2 = (repayMoney*yuQiFee*days)/100;
+            defaultInterest= df.format(money2);;
+        }
+
+
         //已还金额
         Double alreadyRepaid=0.00;
         map.put("interest",interest);
