@@ -117,7 +117,9 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
         //已还金额
         Double alreadyRepaid=0.00;
 
+        //重新计算应还金额
         map.put("repayMoney",(repayMoney+defaultInterest));
+
         map.put("interest",interest);
         map.put("defaultInterest",defaultInterest);
         map.put("alreadyRepaid",alreadyRepaid);
