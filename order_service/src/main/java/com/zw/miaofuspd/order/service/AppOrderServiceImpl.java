@@ -118,8 +118,9 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
         Double alreadyRepaid=0.00;
 
         //重新计算应还金额
-        map.put("repayMoney",(repayMoney+defaultInterest));
+        String finalRepaymentAmount =df.format(repayMoney+defaultInterest);
 
+        map.put("repayMoney",finalRepaymentAmount);
         map.put("interest",interest);
         map.put("defaultInterest",defaultInterest);
         map.put("alreadyRepaid",alreadyRepaid);
@@ -267,6 +268,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
         }
 
         List allOrderList = sunbmpDaoSupport.findForList(sql);
+
 
         returnMap.put("allOrderList",allOrderList);
         return returnMap;
