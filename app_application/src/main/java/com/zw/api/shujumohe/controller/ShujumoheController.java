@@ -6,6 +6,7 @@ import com.api.service.result.IApiResultServer;
 import com.api.service.shujumohe.IShujumoheServer;
 import com.base.util.AppRouterSettings;
 import com.base.util.GeneratePrimaryKeyUtils;
+import com.base.util.StringUtils;
 import com.constants.ApiConstants;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiChildSourceEnum;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;
@@ -49,6 +50,10 @@ public class ShujumoheController {
      */
     @RequestMapping("/callBackShujumohe")
     public ResultVO callBackShujumohe(ShujumoheRequest request){
+        if(null == request || StringUtils.isBlank(request.getTask_id())){
+            LOGGER.info("=======数据魔盒回调接参数taskId:为空");
+            return ResultVO.error("参数taskId缺失");
+        }
         LOGGER.info("=======数据魔盒回调接参数request:{}",request.toString());
         try {
             ApiResult resultParameter = new ApiResult();
