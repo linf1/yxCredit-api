@@ -9,6 +9,7 @@ import com.api.service.result.IApiResultServer;
 import com.base.util.AppRouterSettings;
 import com.base.util.GeneratePrimaryKeyUtils;
 import com.constants.ApiConstants;
+import com.zhiwang.zwfinance.app.jiguang.util.api.EApiChildSourceEnum;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;
 import com.zw.miaofuspd.facade.user.service.IUserService;
 import com.zw.web.base.vo.ResultVO;
@@ -145,8 +146,8 @@ public class CreditApiController {
                 result.setMessage(map.get(ApiConstants.API_MESSAGE_KEY).toString());
                 result.setSourceName(EApiSourceEnum.CREDIT.getName());
                 result.setSourceCode(EApiSourceEnum.CREDIT.getCode());
-                result.setSourceChildName(EApiSourceEnum.CREDIT.getName());
-                result.setSourceChildCode(EApiSourceEnum.CREDIT.getCode());
+                result.setSourceChildName(EApiChildSourceEnum.CREDIT_CHILD.getName());
+                result.setSourceChildCode(EApiChildSourceEnum.CREDIT_CHILD.getCode());
                 result.setApiReturnId("");
                 LOGGER.info("个人征信--获取报告信息{}", result);
                 apiResultServer.insertApiResult(result);

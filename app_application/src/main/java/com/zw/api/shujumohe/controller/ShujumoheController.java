@@ -7,6 +7,7 @@ import com.api.service.shujumohe.IShujumoheServer;
 import com.base.util.AppRouterSettings;
 import com.base.util.GeneratePrimaryKeyUtils;
 import com.constants.ApiConstants;
+import com.zhiwang.zwfinance.app.jiguang.util.api.EApiChildSourceEnum;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;
 import com.zw.miaofuspd.facade.user.service.IUserService;
 import com.zw.web.base.vo.ResultVO;
@@ -92,8 +93,8 @@ public class ShujumoheController {
         apiResult.setCode(ApiConstants.STATUS_SUCCESS);
         apiResult.setIdentityCode(data.get("identity_code").toString());
         apiResult.setMessage(ApiConstants.STATUS_SUCCESS_MSG);
-        apiResult.setSourceChildName(ApiConstants.API_MOHE_YYS);
-        apiResult.setSourceChildCode(data.get("channel_type").toString());
+        apiResult.setSourceChildName(EApiChildSourceEnum.MOHE_YYS.getName());
+        apiResult.setSourceChildCode(EApiChildSourceEnum.MOHE_YYS.getCode());
         apiResult.setOnlyKey(request.getCustomerId());
         apiResult.setRealName(data.get("real_name").toString());
         apiResult.setSourceName(EApiSourceEnum.MOHE.getName());

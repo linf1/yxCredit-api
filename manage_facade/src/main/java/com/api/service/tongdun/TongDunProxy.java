@@ -8,6 +8,7 @@ import com.base.util.GeneratePrimaryKeyUtils;
 import com.constants.ApiConstants;
 import com.api.model.tongdun.ReportAO;
 import com.api.model.tongdun.TongDunRequest;
+import com.zhiwang.zwfinance.app.jiguang.util.api.EApiChildSourceEnum;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,8 +103,8 @@ public class TongDunProxy implements ITongDunApiService {
         apiResult.setCode(ApiConstants.STATUS_SUCCESS);
         apiResult.setIdentityCode(request.getIdNo());
         apiResult.setMessage(ApiConstants.STATUS_SUCCESS_MSG);
-        apiResult.setSourceChildName(EApiSourceEnum.TODONG.getName());
-        apiResult.setSourceChildCode(EApiSourceEnum.TODONG.getCode());
+        apiResult.setSourceChildName(EApiChildSourceEnum.TODONG_CHILD.getName());
+        apiResult.setSourceChildCode(EApiChildSourceEnum.TODONG_CHILD.getCode());
         apiResult.setOnlyKey(request.getCustomerId());
         apiResult.setRealName(request.getName());
         apiResult.setSourceName(EApiSourceEnum.TODONG.getName());

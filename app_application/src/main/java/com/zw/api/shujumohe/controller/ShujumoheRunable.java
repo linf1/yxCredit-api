@@ -7,6 +7,7 @@ import com.api.service.result.IApiResultServer;
 import com.api.service.shujumohe.IShujumoheServer;
 import com.base.util.StringUtils;
 import com.constants.ApiConstants;
+import com.zhiwang.zwfinance.app.jiguang.util.api.EApiChildSourceEnum;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,9 +49,7 @@ public class ShujumoheRunable implements Runnable {
                 final Map data = (Map) jsonObject.get("data");
                 if(data != null) {
                     ApiResult apiResult = new ApiResult();
-                    apiResult.setSourceChildCode(data.get("channel_type").toString());
                     apiResult.setOnlyKey(request.getCustomerId());
-                    apiResult.setSourceCode(EApiSourceEnum.MOHE.getCode());
                     apiResult.setResultData(data.get("task_data").toString());
                     //吧获取的数据更新到数据库
                     apiResultServer.updateByOnlyKey(apiResult);
