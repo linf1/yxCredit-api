@@ -83,6 +83,7 @@ public class ApiConstants {
     public static final String API_SUCCESS_KEY="success";
     public static final String API_MESSAGE_KEY="message";
     public static final String API_CODE_KEY="code";
+    public static final String API_TOKEN_KEY="token";
     public static final String API_TASK_STATUS_KEY="taskStatus";
     public static final String API_TASK_RESULT_KEY = "taskResult";
     public static final String API__PBC_1_CODE_KEY = "pbc_1";
