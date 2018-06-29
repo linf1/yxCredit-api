@@ -10,44 +10,14 @@ import java.io.Serializable;
  */
 public class CreditRequest implements Serializable {
 
-    /**  征信账号 */
-    private String account;
-
-    /**  征信密码 */
-    private String password;
-
-    /**  验证码 */
-    private String smsCode;
-
     /** 校验登录 */
     private String token;
 
+    /** h5返回地址 */
+    private String callbackUrl;
+
     /** 客户id */
     private String customerId;
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getSmsCode() {
-        return smsCode;
-    }
-
-    public void setSmsCode(String smsCode) {
-        this.smsCode = smsCode;
-    }
 
     public String getToken() {
         return token;
@@ -63,5 +33,13 @@ public class CreditRequest implements Serializable {
 
     public void setCustomerId(String customerId) {
         this.customerId = customerId;
+    }
+
+    public String getCallbackUrl() {
+        return callbackUrl;
+    }
+
+    public void setCallbackUrl(String callbackUrl) {
+        this.callbackUrl = callbackUrl;
     }
 }

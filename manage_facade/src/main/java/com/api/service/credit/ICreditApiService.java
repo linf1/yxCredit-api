@@ -20,9 +20,9 @@ public interface ICreditApiService {
     String BEAN_ID = "creditApiServiceImpl";
     /**
      * 征信账号验证
-     * @param request 请求对象 {@link CreditRequest}
      * @throws  IOException 调用异常
      * @return 返回对象
      */
-    CreditResultAO validateAccount(CreditRequest request) throws IOException;
+    CreditResultAO getCreditToken(CreditRequest request) throws IOException;
+
 }

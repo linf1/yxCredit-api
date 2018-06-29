@@ -29,6 +29,45 @@ public class CreditResultAO implements Serializable {
      */
     private String message;
 
+    /**
+     * token
+     */
+    private String token;
+
+    /**
+     * pbc_token
+     */
+    private String pbc_token;
+
+    /**
+     * 个人征信h5页面
+     */
+    private String creditH5Url;
+
+    public String getPbc_token() {
+        return pbc_token;
+    }
+
+    public void setPbc_token(String pbc_token) {
+        this.pbc_token = pbc_token;
+    }
+
+    public String getCreditH5Url() {
+        return creditH5Url;
+    }
+
+    public void setCreditH5Url(String creditH5Url) {
+        this.creditH5Url = creditH5Url;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public String getTaskNo() {
         return taskNo;
     }
