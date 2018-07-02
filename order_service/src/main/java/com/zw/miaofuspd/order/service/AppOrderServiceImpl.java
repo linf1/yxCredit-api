@@ -104,19 +104,23 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
         //利息（利息=日利率＊合同金额＊借款期限（日）/100）
         DecimalFormat df = new DecimalFormat("0.00");
         Double money = (rate*contractAmount*periods)/100;
-        String interest = df.format(money);
+        Double interest =Double.parseDouble(df.format(money)) ;
 
         //罚息
-        String defaultInterest="0";
+        Double defaultInterest=0.00;
         if (days>0){
-            //罚息(罚息费用＝应还本金＊逾期费率＊逾期天数/100)
-            Double money2 = (repayMoney*yuQiFee*days)/100;
-            defaultInterest= df.format(money2);;
+            //罚息(罚息费用＝合同金额＊逾期费率＊逾期天数/100)
+            Double money2 = ((repayMoney-interest)*yuQiFee*days)/100;
+            defaultInterest=Double.parseDouble(df.format(money2));
         }
-
 
         //已还金额
         Double alreadyRepaid=0.00;
+
+        //重新计算应还金额
+        String finalRepaymentAmount =df.format(repayMoney+defaultInterest);
+
+        map.put("repayMoney",finalRepaymentAmount);
         map.put("interest",interest);
         map.put("defaultInterest",defaultInterest);
         map.put("alreadyRepaid",alreadyRepaid);
@@ -264,6 +268,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
         }
 
         List allOrderList = sunbmpDaoSupport.findForList(sql);
+
 
         returnMap.put("allOrderList",allOrderList);
         return returnMap;
