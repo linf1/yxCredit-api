@@ -108,7 +108,7 @@ public class CreditApiController {
                                 apiResultServer.updateByOnlyKey(oldResult);
 
                                 ApiResult result = new ApiResult();
-                                result.setState(ApiConstants.STATUS_CODE_STATE);
+                                result.setState(ApiConstants.STATUS_CODE_NO_STATE);
                                 result.setResultData("");
                                 result.setRealName(userMap.get("customerName").toString());
                                 result.setUserName(userMap.get("tel").toString());
@@ -117,6 +117,7 @@ public class CreditApiController {
                                 if(ApiConstants.API_SUCCESS_KEY.equals(jsonObject.getString(ApiConstants.API_TASK_STATUS_KEY))){
                                     if(jsonObject.containsKey(ApiConstants.API_TASK_RESULT_KEY)){
                                         result.setResultData(jsonObject.getString(ApiConstants.API_TASK_RESULT_KEY));
+                                        result.setState(ApiConstants.STATUS_CODE_STATE);
                                     }
                                     map.put(ApiConstants.API_MESSAGE_KEY,ApiConstants.STATUS_SUCCESS_MSG);
                                     map.put(ApiConstants.API_CODE_KEY,ApiConstants.STATUS_SUCCESS);
