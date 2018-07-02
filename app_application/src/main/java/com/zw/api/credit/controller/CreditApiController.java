@@ -108,7 +108,7 @@ public class CreditApiController {
                                 apiResultServer.updateByOnlyKey(oldResult);
 
                                 ApiResult result = new ApiResult();
-                                result.setState(ApiConstants.STATUS_CODE_STATE);
+                                result.setState(ApiConstants.STATUS_CODE_NO_STATE);
                                 result.setResultData("");
                                 result.setRealName(userMap.get("customerName").toString());
                                 result.setUserName(userMap.get("tel").toString());
@@ -117,6 +117,7 @@ public class CreditApiController {
                                 if(ApiConstants.API_SUCCESS_KEY.equals(jsonObject.getString(ApiConstants.API_TASK_STATUS_KEY))){
                                     if(jsonObject.containsKey(ApiConstants.API_TASK_RESULT_KEY)){
                                         result.setResultData(jsonObject.getString(ApiConstants.API_TASK_RESULT_KEY));
+                                        result.setState(ApiConstants.STATUS_CODE_STATE);
                                     }
                                     map.put(ApiConstants.API_MESSAGE_KEY,ApiConstants.STATUS_SUCCESS_MSG);
                                     map.put(ApiConstants.API_CODE_KEY,ApiConstants.STATUS_SUCCESS);
@@ -136,8 +137,8 @@ public class CreditApiController {
                                 result.setMessage(map.get(ApiConstants.API_MESSAGE_KEY).toString());
                                 result.setSourceName(EApiSourceEnum.CREDIT.getName());
                                 result.setSourceCode(EApiSourceEnum.CREDIT.getCode());
-                                result.setSourceChildName(EApiSourceEnum.CREDIT.getName());
-                                result.setSourceChildCode(EApiSourceEnum.CREDIT.getCode());
+                                result.setSourceChildName(EApiChildSourceEnum.CREDIT_CHILD.getName());
+                                result.setSourceChildCode(EApiChildSourceEnum.CREDIT_CHILD.getCode());
                                 result.setApiReturnId("");
                                 LOGGER.info("个人征信--获取报告信息成功{}", result);
                                 apiResultServer.insertApiResult(result);
