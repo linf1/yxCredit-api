@@ -57,7 +57,7 @@ public class CreditApiController {
     @ResponseBody
     public ResultVO getCreditToken(CreditRequest request) {
         try {
-            if (null == request || StringUtils.isBlank(request.getCustomerId())) {
+            if (null == request || StringUtils.isBlank(request.getCustomerId()) || StringUtils.isBlank(request.getCallbackUrl())) {
                 LOGGER.info("请求参数异常或不存在");
                 return ResultVO.error("请求参数异常或不存在");
             }
