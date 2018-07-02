@@ -978,24 +978,22 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     }
     @Override
     public Map getEmpowerStatus(String userId){
-        Map<String,String> resultMap = new HashMap<String, String>(2);
+        Map resultMap = new HashMap<>(2);
+        String moheCode = EApiSourceEnum.MOHE.getCode();
+        String creditCode = EApiSourceEnum.CREDIT.getCode();
+        String[] codes = {moheCode,creditCode};
         resultMap.put("mohe","0");
         resultMap.put("zhengxin","0");
         Map customerMap = getCustomerIdByid(userId);
         String customerId = customerMap.get("id").toString();
         //Map customerMap = getThreeItems(customerId);
-        //获取魔盒授权状态
-        int moheCount = findEmpowerStatus(EApiSourceEnum.MOHE.getCode(),customerId);
-        //获取个人征信授权状态
-        int creditCount = findEmpowerStatus(EApiSourceEnum.CREDIT.getCode(),customerId);
-        if(moheCount == 1){
-            resultMap.put("mohe","1");
-        }
-        if(creditCount == 1){
-            resultMap.put("zhengxin","1");
+        for(int i = 0;i < codes.length;i++){
+            List<Map> empowerStatus = findEmpowerStatus(codes[i], customerId);
+            Map expireDays = getExpireDays(codes[i]);
+            resultMap = updateEmpStatus(resultMap,empowerStatus,expireDays,codes[i]);
         }
         String sql2;
-        if(moheCount + creditCount == 2 ){
+        if("1".equals(resultMap.get("mohe")) && "1".equals(resultMap.get("zhengxin")) ){
             sql2 = "update mag_customer set authorization_complete = '100' where id = '"+customerId+"'";
         }else {
             sql2 = "update mag_customer set authorization_complete = '0' where id = '"+customerId+"'";
@@ -1005,11 +1003,39 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     }
 
     /**
+     * 根据授权状态更新返回信息
+     */
+    private  Map updateEmpStatus(Map<String,String> resultMap,List<Map> empStatus,Map expireDays,String code){
+        Map<String,String> codeMap = new HashMap();
+        codeMap.put("1","mohe");
+        codeMap.put("3","zhengxin");
+        if(!empStatus.isEmpty()){
+            int days = Integer.valueOf(empStatus.get(0).get("days").toString());
+            int expireday = Integer.valueOf(expireDays.get("value")==""?"9999":expireDays.get("value").toString());
+            if(days - expireday <0){
+                resultMap.put(codeMap.get(code),"1");
+            }else {
+                resultMap.put(codeMap.get(code),"2");
+            }
+        }
+        return resultMap;
+
+    }
+
+    /**
      * 获取授权状态
      */
-    private  int findEmpowerStatus(String sourceCode,String customerId){
-        String sql = "SELECT count(1) from zw_api_result where source_code = '"+sourceCode+"' and state = "+ApiConstants.STATUS_CODE_STATE+" and code = "+ApiConstants.STATUS_SUCCESS+" and  created_time >= date_add(NOW(), interval -1 MONTH) and only_key = '"+customerId+"' ORDER BY created_time desc LIMIT 1";
-        return sunbmpDaoSupport.getCount(sql);
+    private  List<Map> findEmpowerStatus(String sourceCode,String customerId){
+        String sql = "SELECT created_time,DATEDIFF(NOW(),created_time) as days from zw_api_result where source_code = '"+sourceCode+"' and state = "+ApiConstants.STATUS_CODE_STATE+" and code = "+ApiConstants.STATUS_SUCCESS+" and only_key = '"+customerId+"' ORDER BY created_time desc LIMIT 1";
+        return sunbmpDaoSupport.findForList(sql);
+    }
+
+    /**
+     * 获取字典表授权过期日期
+     */
+    private Map getExpireDays(String code){
+        String sql = "SELECT t2.value as value from zw_sys_dict t1 inner join zw_sys_dict t2 on t1.id =t2.parent_id and t1.`code`='wcp' and t2.code ='"+code+"'";
+        return sunbmpDaoSupport.findForMap(sql);
     }
 
     /**
