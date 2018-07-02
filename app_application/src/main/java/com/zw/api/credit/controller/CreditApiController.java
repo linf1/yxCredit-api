@@ -137,8 +137,8 @@ public class CreditApiController {
                                 result.setMessage(map.get(ApiConstants.API_MESSAGE_KEY).toString());
                                 result.setSourceName(EApiSourceEnum.CREDIT.getName());
                                 result.setSourceCode(EApiSourceEnum.CREDIT.getCode());
-                                result.setSourceChildName(EApiSourceEnum.CREDIT.getName());
-                                result.setSourceChildCode(EApiSourceEnum.CREDIT.getCode());
+                                result.setSourceChildName(EApiChildSourceEnum.CREDIT_CHILD.getName());
+                                result.setSourceChildCode(EApiChildSourceEnum.CREDIT_CHILD.getCode());
                                 result.setApiReturnId("");
                                 LOGGER.info("个人征信--获取报告信息成功{}", result);
                                 apiResultServer.insertApiResult(result);
