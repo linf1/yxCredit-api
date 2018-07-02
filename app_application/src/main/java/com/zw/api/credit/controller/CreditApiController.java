@@ -114,21 +114,19 @@ public class CreditApiController {
                                 result.setUserName(userMap.get("tel").toString());
                                 result.setIdentityCode(userMap.get("card").toString());
                                 result.setUserMobile(userMap.get("tel").toString());
-                                if(ApiConstants.API_SUCCESS_KEY.equals(jsonObject.getString(ApiConstants.API_TASK_STATUS_KEY))){
-                                    if(jsonObject.containsKey(ApiConstants.API_TASK_RESULT_KEY)){
-                                        result.setResultData(jsonObject.getString(ApiConstants.API_TASK_RESULT_KEY));
+                                if(jsonObject.containsKey(ApiConstants.API_DATA_KEY)){
+                                    String resultData = jsonObject.getString(ApiConstants.API_DATA_KEY);
+                                    if(StringUtils.isNotBlank(resultData)) {
+                                        result.setResultData(resultData);
                                         result.setState(ApiConstants.STATUS_CODE_STATE);
-                                    }
-                                    map.put(ApiConstants.API_MESSAGE_KEY,ApiConstants.STATUS_SUCCESS_MSG);
-                                    map.put(ApiConstants.API_CODE_KEY,ApiConstants.STATUS_SUCCESS);
-                                } else {
-                                    if(ApiConstants.API__PBC_1_CODE_KEY.equals(jsonObject.get(ApiConstants.API_CODE_KEY))) {
-                                        map.put(ApiConstants.API_CODE_KEY,ApiConstants.STATUS_ACCOUNT_PASSWORD_ERROR);
-                                    } else if(ApiConstants.API__PBC_2_CODE_KEY.equals(jsonObject.getString(ApiConstants.API_CODE_KEY))) {
-                                        map.put(ApiConstants.API_CODE_KEY,ApiConstants.STATUS_VERIF_CODE_ERROR);
+                                        map.put(ApiConstants.API_MESSAGE_KEY,ApiConstants.STATUS_SUCCESS_MSG);
+                                        map.put(ApiConstants.API_CODE_KEY,ApiConstants.STATUS_SUCCESS);
                                     } else {
-                                        map.put(ApiConstants.API_CODE_KEY,ApiConstants.STATUS_CREDIT_INFO_ERROR);
+                                        map.put(ApiConstants.API_MESSAGE_KEY,ApiConstants.STATUS_INFO_NOT_FOUND_MSG);
+                                        map.put(ApiConstants.API_CODE_KEY,ApiConstants.STATUS_INFO_NOT_FOUND);
                                     }
+                                } else {
+                                    map.put(ApiConstants.API_CODE_KEY,ApiConstants.STATUS_CREDIT_INFO_ERROR);
                                     map.put(ApiConstants.API_MESSAGE_KEY,jsonObject.getString(ApiConstants.API_MESSAGE_KEY));
                                 }
                                 result.setId(GeneratePrimaryKeyUtils.getUUIDKey());
