@@ -61,14 +61,15 @@ public class TongDunApiController {
             if (isLoseEfficacy(request.getCustomerId())) {
                 TongDunProxy tongDunProxy = new TongDunProxy(tongDunApiService,apiResultServer);
                 final ApiCommonResponse apiCommonResponse = tongDunProxy.invokeTongDunApi(request);
-                if(apiCommonResponse != null){
-                    return  ResultVO.ok(apiCommonResponse.getResponseMsg());
+                if(apiCommonResponse == null){
+                    return  ResultVO.error();
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return ResultVO.ok("同盾调用失败:" + e.getMessage());
         }
-        return ResultVO.error();
+        return ResultVO.ok("同盾调用成功");
     }
 
     /**
