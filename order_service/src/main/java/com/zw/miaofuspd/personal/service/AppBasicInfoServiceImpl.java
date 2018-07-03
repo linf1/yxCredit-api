@@ -1007,7 +1007,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         if(!empStatus.isEmpty()){
             int days = Integer.valueOf(empStatus.get(0).get("days").toString());
             int expireday = Integer.valueOf(expireDays.get("value")==""?"9999":expireDays.get("value").toString());
-            if(days - expireday <0){
+            if(days <= expireday ){
                 resultMap.put(codeMap.get(code),"1");
             }else {
                 resultMap.put(codeMap.get(code),"2");
