@@ -13,14 +13,7 @@
 
     <!-- 使用zookeeper注册中心暴露服务地址 -->
     <!-- 注册中心地址 -->
-    <!--pro-->
-    <!--<dubbo:registry protocol="zookeeper" address="10.139.33.121:2181"/>-->
-    <!--uat-->
-    <!--<dubbo:registry protocol="zookeeper" address="192.168.1.239:2181"/>-->
-    <!--sit-->
-    <dubbo:registry protocol="zookeeper" address="127.0.0.1:2181"/>
-    <!--dev-->
-    <!--<dubbo:registry protocol="zookeeper" address="127.0.0.1:2181"/>-->
+    <dubbo:registry protocol="zookeeper" address="${zk.host}"/>
 
     <dubbo:reference interface="com.zw.miaofuspd.facade.dict.service.IDictService"
                      id="dictServiceImpl" check="false"/>
