@@ -12,18 +12,14 @@ import com.constants.ApiConstants;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiChildSourceEnum;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;
 import com.zw.miaofuspd.facade.user.service.IUserService;
-import com.zw.service.redis.RedisService;
 import com.zw.web.base.vo.ResultVO;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.ognl.TokenMgrError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,9 +41,6 @@ public class CreditApiController {
 
     @Autowired
     private IUserService userService;
-
-    @Autowired
-    private RedisService redisService;
 
     /**
      * 个人征信验证获取token
@@ -85,14 +78,7 @@ public class CreditApiController {
             if(jsonObject.containsKey(ApiConstants.API_TOKEN_KEY)) {
                 String token = jsonObject.getString(ApiConstants.API_TOKEN_KEY);
                 if(StringUtils.isNotBlank(token)) {
-                    //验证token是否正确
-                    String customerId = "";
-                    try {
-                        customerId = redisService.get(token);
-                        LOGGER.info("redis客户存在：{}", customerId);
-                    } catch (Exception e) {
-                        LOGGER.info("个人征信-redis获取数据出错" + e);
-                    }
+                    String customerId = creditApiService.getCustomerByToken(token);
                     if(StringUtils.isNotBlank(customerId)) {
                         Map<String,Object> map = new HashMap<>();
                         Map userMap = userService.getCustomerInfoByCustomerId(customerId);
@@ -140,17 +126,13 @@ public class CreditApiController {
                                 result.setApiReturnId("");
                                 LOGGER.info("个人征信--获取报告信息成功{}", result);
                                 apiResultServer.insertApiResult(result);
-                                redisService.delete(token);
                             } catch (Exception e) {
                                 LOGGER.info("个人征信-返回数据解析出错" + e);
                             }
                         }
                     }
-
                 }
             }
-
         }
-
     }
 }
