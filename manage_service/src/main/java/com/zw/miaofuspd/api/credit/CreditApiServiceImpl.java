@@ -3,11 +3,8 @@ package com.zw.miaofuspd.api.credit;
 import com.alibaba.fastjson.JSONObject;
 import com.api.model.credit.CreditRequest;
 import com.api.model.credit.CreditResultAO;
-import com.api.model.credit.CreditResultRequest;
 import com.api.model.credit.CreditSettings;
-import com.api.model.result.ApiResult;
 import com.api.service.credit.ICreditApiService;
-import com.base.util.DateUtils;
 import com.base.util.TokenHelper;
 import com.zw.api.HttpUtil;
 import com.zw.service.redis.RedisService;
@@ -17,8 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.print.attribute.standard.RequestingUserName;
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -39,6 +34,22 @@ public class CreditApiServiceImpl implements ICreditApiService {
 
     @Autowired
     private RedisService redisService;
+
+    @Override
+    public String getCustomerByToken(String token) {
+        //验证token是否正确
+        String customerId = "";
+        try {
+            customerId = redisService.get(token);
+            LOGGER.info("redis客户存在：{}", customerId);
+        } catch (Exception e) {
+            LOGGER.info("个人征信-redis获取数据出错" + e);
+        }
+        if(StringUtils.isNotBlank(customerId)) {
+            redisService.delete(token);
+        }
+        return customerId;
+    }
 
     @Override
     public CreditResultAO getCreditToken(CreditRequest request){
