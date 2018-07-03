@@ -43,6 +43,8 @@ public class TongDunRequest extends ApiCommonRequest {
     public String toString() {
         return "TongDunRequest{" +
                 "orderId='" + orderId + '\'' +
+                ", customerId='" + customerId + '\'' +
+                ", reportId='" + reportId + '\'' +
                 '}';
     }
 }

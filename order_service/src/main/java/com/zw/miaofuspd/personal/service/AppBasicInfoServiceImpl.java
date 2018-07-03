@@ -1025,7 +1025,8 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     /**
      * 获取授权状态
      */
-    private  List<Map> findEmpowerStatus(String sourceCode,String customerId){
+    @Override
+    public List<Map> findEmpowerStatus(String sourceCode,String customerId){
         String sql = "SELECT created_time,DATEDIFF(NOW(),created_time) as days from zw_api_result where source_code = '"+sourceCode+"' and state = "+ApiConstants.STATUS_CODE_STATE+" and code = "+ApiConstants.STATUS_SUCCESS+" and only_key = '"+customerId+"' ORDER BY created_time desc LIMIT 1";
         return sunbmpDaoSupport.findForList(sql);
     }
@@ -1033,7 +1034,8 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     /**
      * 获取字典表授权过期日期
      */
-    private Map getExpireDays(String code){
+    @Override
+    public Map getExpireDays(String code){
         String sql = "SELECT t2.value as value from zw_sys_dict t1 inner join zw_sys_dict t2 on t1.id =t2.parent_id and t1.`code`='wcp' and t2.code ='"+code+"'";
         return sunbmpDaoSupport.findForMap(sql);
     }

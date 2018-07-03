@@ -242,7 +242,20 @@ public interface AppBasicInfoService {
 
     void deleteImageInfos(String id,String customerId);
 
+    /**
+     * 根据code获取获取时间
+     * @param code
+     * @return
+     */
+    Map getExpireDays(String code);
 
+    /**
+     * 查询个人风控信息
+     * @param sourceCode 风控来源类别
+     * @param customerId 个人id
+     * @return 一条风控信息
+     */
+    List<Map> findEmpowerStatus(String sourceCode,String customerId);
 
 
 
