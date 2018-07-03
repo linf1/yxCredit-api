@@ -3,20 +3,17 @@ package com.api.service.tongdun;
 import com.alibaba.fastjson.JSONObject;
 import com.api.model.common.ApiCommonResponse;
 import com.api.model.result.ApiResult;
+import com.api.model.tongdun.ReportAO;
+import com.api.model.tongdun.TongDunRequest;
 import com.api.service.result.IApiResultServer;
 import com.base.util.GeneratePrimaryKeyUtils;
 import com.constants.ApiConstants;
-import com.api.model.tongdun.ReportAO;
-import com.api.model.tongdun.TongDunRequest;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiChildSourceEnum;
 import com.zhiwang.zwfinance.app.jiguang.util.api.EApiSourceEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 同盾代理层
@@ -113,7 +110,7 @@ public class TongDunProxy implements ITongDunApiService {
         apiResult.setUserName(request.getPhone());
         apiResult.setResultData(jsonStr);
         apiResult.setApiReturnId(request.getReportId());
-        apiResult.setState(1);
+        apiResult.setState(ApiConstants.STATUS_CODE_STATE);
         apiResultServerImpl.insertApiResult(apiResult);
     }
 

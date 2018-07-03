@@ -25,4 +25,10 @@ public interface ICreditApiService {
      */
     CreditResultAO getCreditToken(CreditRequest request) throws IOException;
 
+    /**
+     * 根据token获取客户id
+     * @param token
+     * @return
+     */
+    String  getCustomerByToken(String token);
 }

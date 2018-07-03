@@ -108,7 +108,7 @@ public class ShujumoheController {
         apiResult.setUserName(request.getPhone());
         apiResult.setResultData(data.get("task_data").toString());
         apiResult.setApiReturnId(request.getTask_id());
-        apiResult.setState(1);
+        apiResult.setState(ApiConstants.STATUS_CODE_STATE);
         apiResultServerImpl.insertApiResult(apiResult);
     }
 
