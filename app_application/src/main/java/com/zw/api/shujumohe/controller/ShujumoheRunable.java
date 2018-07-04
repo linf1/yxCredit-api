@@ -50,6 +50,7 @@ public class ShujumoheRunable implements Runnable {
                 if(data != null) {
                     ApiResult apiResult = new ApiResult();
                     apiResult.setOnlyKey(request.getCustomerId());
+                    apiResult.setSourceCode(EApiSourceEnum.MOHE.getCode());
                     apiResult.setResultData(data.get("task_data").toString());
                     //吧获取的数据更新到数据库
                     apiResultServer.updateByOnlyKey(apiResult);
