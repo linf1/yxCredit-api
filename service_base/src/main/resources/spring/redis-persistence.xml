@@ -30,7 +30,7 @@
 		  class="org.springframework.data.redis.connection.RedisClusterConfiguration">
 		<property name="maxRedirects" value="6"></property>
 		<!-- 节点配置 -->
-		<<property name="clusterNodes">
+		<property name="clusterNodes">
 			<set>
 				<bean class="org.springframework.data.redis.connection.RedisClusterNode">
 					<constructor-arg name="host" value="${redis.host1}"></constructor-arg>
