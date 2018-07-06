@@ -257,6 +257,19 @@ public interface AppBasicInfoService {
      */
     List<Map> findEmpowerStatus(String sourceCode,String customerId);
 
+    /**
+     * 新增银行卡信息
+     * @param map
+     */
+    boolean addBankInfo(Map map);
+
+    /**
+     * 获取银行卡信息
+     * @param customerId 个人id
+     * @return 银行卡列表
+     */
+    List<Map> getBankInfo(String customerId);
+
 
 
 }

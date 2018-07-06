@@ -159,7 +159,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         String fee = df.format(serviceFee);
         String sql3 = "update mag_order set applay_money = " + applayMoney + "," + "PERIODS = '" + periods + "'," +
                 "loan_purpose = '" + loanPurpose + "',rate = '"+lixi+"',fee = '"+yearRate+"',product_detail = '"+product_detail+"',Service_fee = '"+fee+"'," +
-                "complete = '100' where id = '" + orderId + "'  ";
+                "complete = '100',bankId = '"+paramMap.get("bankId")+"' where id = '" + orderId + "'  ";
         int count = sunbmpDaoSupport.executeSql(sql3);
         //sunbmpDaoSupport.exeSql(sql);
         if(count == 0){
@@ -170,6 +170,45 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         resturnMap.put("msg", "保存客户基本信息成功");
         resturnMap.put("flag", true);
         return resturnMap;
+    }
+    /**
+     * 更新银行卡信息
+     */
+    @Override
+    public boolean addBankInfo(Map map){
+        String id = GeneratePrimaryKeyUtils.getUUIDKey();
+        String sql;
+        String customerId = "";
+        List<Map> list = getCustomerIdByid(map.get("userId").toString());
+        if(!list.isEmpty()){
+            customerId = list.get(0).get("id").toString();
+        }
+        try{
+            if("2".equals(map.get("bank_type"))){
+                sql = "insert into sys_bank_card (id,bank_name,bank_number,bank_subbranch_id,bank_subbranch,bank_type,is_authcard,card_number,cust_id,cust_name,prov_id,prov_name,city_id,city_name,create_time,update_time) values ('"+id+"','"+map.get("bank_name")+"'," +
+                        "'"+map.get("bank_number")+"','"+map.get("bank_subbranch_id")+"','"+map.get("bank_subbranch")+"','"+map.get("bank_type")+"','0','"+map.get("card_number")+"','"+customerId+"','"+map.get("cust_name")+"'," +
+                        "'"+map.get("prov_id")+"','"+map.get("prov_name")+"','"+map.get("city_id")+"','"+map.get("city_name")+"','"+DateUtils.getNowDate()+"','"+DateUtils.getNowDate()+"')";
+
+            }else{
+                sql = "insert into sys_bank_card (id,bank_type,cust_name,card,tel,bank_name,is_authcard,card_number,cust_id,create_time,update_time) values ('"+id+"','"+map.get("bank_type")+"'," +
+                        "'"+map.get("cust_name")+"','"+map.get("card")+"','"+map.get("tel")+"','"+map.get("bank_name")+"','0','"+map.get("card_number")+"','"+customerId+"'," +
+                        "'"+DateUtils.getNowDate()+"','"+DateUtils.getNowDate()+"')";
+            }
+            sunbmpDaoSupport.exeSql(sql);
+        }catch (Exception e){
+            e.printStackTrace();
+            return  false;
+        }
+        return true;
+
+    }
+
+    @Override
+    public List<Map> getBankInfo(String userId) {
+        List<Map> list = getCustomerIdByid(userId);
+        String customerId = list.isEmpty()?"":list.get(0).get("id").toString();
+        String sql = "select id as bankId,bank_name,card_number,cust_name from sys_bank_card where cust_id = '"+customerId+"' order by create_time desc";
+        return sunbmpDaoSupport.findForList(sql);
     }
 
     /**
@@ -197,7 +236,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         //根据订单id获取客户基本信息
         String customerSql = "select t1.applay_money as apply_money,t1.PERIODS as PERIODS," +
                 "t2.surplus_contract_amount as surplus_contract_amount,t3.latest_pay as latest_pay," +
-                "t1.loan_purpose as loan_purpose from mag_order t1 left join mag_customer t2 on t1.CUSTOMER_ID = t2.id left join byx_white_list t3 on t3.real_name = t2.PERSON_NAME and t2.CARD = t3.card" +
+                "t1.loan_purpose as loan_purpose,t4.bank_name as bank_name,t4.card_number as card_number,t4.cust_name as cust_name,t1.bankId as bankId from mag_order t1 left join mag_customer t2 on t1.CUSTOMER_ID = t2.id left join byx_white_list t3 on t3.real_name = t2.PERSON_NAME and t2.CARD = t3.card left join sys_bank_card t4 on t1.bankId = t4.id" +
                 " where t1.id = '" + orderId + "'";
         Map resutMap = sunbmpDaoSupport.findForMap(customerSql);
         return resutMap;
@@ -502,7 +541,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
      */
     @Override
     public Map getHomeApplyInfo(String id,String productName) throws Exception {
-        Map resMap = new HashMap();
+         Map resMap = new HashMap();
         Map resultMap = new HashMap(4);
         //根据登录用户id获取客户信息表id
         String sql1 = "select t2.white_status as whiteStatus,t1.id as id,t1.PERSON_NAME as PERSON_NAME,t1.TEL as TEL,t1.CARD as CARD from mag_customer t1 left join byx_white_list t2 on t1.PERSON_NAME=t2.real_name and t1.card=t2.card where t1.USER_ID = '" + id + "'";
@@ -903,7 +942,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         Map resultMap = new HashMap();
         String sql = "select t1.id as customerId,t1.PERSON_NAME as cust_name,t1.card as card,t1.tel as tel,t2.bank_name as bank_name,t2.bank_number as bank_number,t2.bank_subbranch_id as bank_subbranch_id," +
                 "t2.bank_subbranch as bank_subbranch,t2.card_number as card_number,t2.prov_id as prov_id,t2.prov_name as prov_name,t2.city_id as city_id," +
-                "t2.city_name as city_name from mag_customer t1 left join sys_bank_card t2 on t1.id = t2.cust_id where t1.user_id = '"+userId+"'";
+                "t2.city_name as city_name from mag_customer t1 left join sys_bank_card t2 on t1.id = t2.cust_id where t1.user_id = '"+userId+"' and t2.is_authcard='1'";
         List<Map> forList = sunbmpDaoSupport.findForList(sql);
         return forList.isEmpty()?null:forList.get(0);
     }
@@ -920,8 +959,8 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         String id = GeneratePrimaryKeyUtils.getUUIDKey();
         try {
                 //新增银行卡信息
-                String sql2 = "insert into sys_bank_card values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+map.get("bank_name")+"'," +
-                        "'"+map.get("bank_number")+"','"+map.get("bank_subbranch_id")+"','"+map.get("bank_subbranch")+"','"+map.get("card_number")+"','"+id+"','"+map.get("cust_name")+"'," +
+                String sql2 = "insert into sys_bank_card (id,bank_name,bank_number,bank_subbranch_id,bank_subbranch,bank_type,is_authcard,card_number,cust_id,cust_name,prov_id,prov_name,city_id,city_name,create_time,update_time) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+map.get("bank_name")+"'," +
+                        "'"+map.get("bank_number")+"','"+map.get("bank_subbranch_id")+"','"+map.get("bank_subbranch")+"','1','1','"+map.get("card_number")+"','"+id+"','"+map.get("cust_name")+"'," +
                         "'"+map.get("prov_id")+"','"+map.get("prov_name")+"','"+map.get("city_id")+"','"+map.get("city_name")+"','"+DateUtils.getNowDate()+"','"+DateUtils.getNowDate()+"')";
                 sunbmpDaoSupport.exeSql(sql2);
 
@@ -979,8 +1018,8 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         String[] codes = {moheCode,creditCode};
         resultMap.put("mohe","0");
         resultMap.put("zhengxin","0");
-        Map customerMap = getCustomerIdByid(userId);
-        String customerId = customerMap.get("id").toString();
+        List<Map> list = getCustomerIdByid(userId);
+        String customerId = list.isEmpty()?"":list.get(0).get("id").toString();
         //Map customerMap = getThreeItems(customerId);
         for(int i = 0;i < codes.length;i++){
             List<Map> empowerStatus = findEmpowerStatus(codes[i], customerId);
@@ -1006,7 +1045,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         codeMap.put("3","zhengxin");
         if(!empStatus.isEmpty()){
             int days = Integer.valueOf(empStatus.get(0).get("days").toString());
-            int expireday = Integer.valueOf(expireDays.get("value")==""?"9999":expireDays.get("value").toString());
+            int expireday = Integer.valueOf(expireDays.get("value") == "" ? "9999" : expireDays.get("value").toString());
             if(days <= expireday ){
                 resultMap.put(codeMap.get(code),"1");
             }else {
@@ -1040,9 +1079,9 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
      * @param userId
      * @return
      */
-    public Map getCustomerIdByid(String userId){
+    public List<Map> getCustomerIdByid(String userId){
         String sql = "select id from mag_customer where user_id = '"+userId+"'";
-        return  sunbmpDaoSupport.findForMap(sql);
+        return  sunbmpDaoSupport.findForList(sql);
     }
 
 
