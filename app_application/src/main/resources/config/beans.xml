@@ -25,7 +25,6 @@
             location="classpath*:properties/*.properties"/>
 
     <import resource="dubbo-consumer.xml"/>
-    <import resource="redis-persistence.xml"/>
     <context:annotation-config/>
 
 
