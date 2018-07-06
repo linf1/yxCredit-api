@@ -101,20 +101,21 @@ public class DSMoneyBusinessImpl implements IDSMoneyBusiness {
          LOGGER.info("----银行卡信息为录入同步数据失败----");
             return;
         }
-        request.setProvinceCode(String.valueOf(sysBankcardInfoMap.get("prov_id")));
-        request.setProvinceName(sysBankcardInfoMap.get("prov_name").toString());
-        request.setCityCode(String.valueOf(sysBankcardInfoMap.get("city_id")));
-        request.setCityName(sysBankcardInfoMap.get("city_name").toString());
         request.setBankCode(String.valueOf(sysBankcardInfoMap.get("bank_number")));
         request.setOtherFlag(getOtherFlag(sysBankcardInfoMap.get("bank_number").toString()));
         request.setBankName(sysBankcardInfoMap.get("bank_name").toString());
         request.setBankCardNo(sysBankcardInfoMap.get("card_number").toString());
-        request.setBankBranchName(sysBankcardInfoMap.get("bank_subbranch").toString());
-        request.setCnapsCode(sysBankcardInfoMap.get("bank_subbranch_id").toString());
+
+        request.setProvinceCode(sysBankcardInfoMap.get("prov_id") == null ? "" : String.valueOf(sysBankcardInfoMap.get("prov_id")));
+        request.setProvinceName(sysBankcardInfoMap.get("prov_name") == null ? "" : sysBankcardInfoMap.get("prov_name").toString());
+        request.setCityCode(sysBankcardInfoMap.get("city_id") == null ? "" : String.valueOf(sysBankcardInfoMap.get("city_id")));
+        request.setCityName(sysBankcardInfoMap.get("city_name") == null ? "" : sysBankcardInfoMap.get("city_name").toString());
+        request.setBankBranchName(sysBankcardInfoMap.get("bank_subbranch") == null ? "" : sysBankcardInfoMap.get("bank_subbranch").toString());
+        request.setCnapsCode(sysBankcardInfoMap.get("bank_subbranch_id") == null ? "" : sysBankcardInfoMap.get("bank_subbranch_id").toString());
     }
 
     /**
-     * 根据银行code判断是否是他行（0：浙商；1：非浙商）
+     * 根据开户行银行code判断是否是他行（0：浙商；1：非浙商）
      * @param bankCode 银行code
      * @return （0：浙商；1：非浙商）
      */
@@ -122,4 +123,5 @@ public class DSMoneyBusinessImpl implements IDSMoneyBusiness {
         String code = "316";
         return code.equals(bankCode) ? "0" : "1";
     }
+
 }
