@@ -210,6 +210,38 @@ public class BasicInfoController extends AbsBaseController {
         return resultVO;
     }
 
+    /**
+     * @author 韩梅生
+     * @date 11:17 2018/6/6
+     * 新增银行卡信息
+     */
+    @RequestMapping("/addBankInfo")
+    @ResponseBody
+    public  ResultVO addBankInfo(String data) throws  Exception{
+        ResultVO resultVO = new ResultVO();
+        Map map = JSONObject.parseObject(data);
+        boolean b = appBasicInfoService.addBankInfo(map);
+        if(!b){
+            resultVO.setErrorMsg(VOConst.FAIL,(String)(map.get("msg")));
+        }
+        return resultVO;
+    }
+    /**
+     * @author 韩梅生
+     * @date 11:17 2018/6/6
+     * 获取银行卡信息
+     */
+    @RequestMapping("/getBankInfo")
+    @ResponseBody
+    public  ResultVO getBankInfo(String userId) throws  Exception{
+        ResultVO resultVO = new ResultVO();
+        List<Map> bankInfo = appBasicInfoService.getBankInfo(userId);
+        resultVO.setRetData(bankInfo);
+        return resultVO;
+    }
+
+
+
 
 
 }
