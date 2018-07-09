@@ -18,6 +18,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
@@ -516,10 +517,142 @@ public class HttpUtil {
     }
 
     /**
+     * 发送 SSL POST 请求（HTTPS），JSON形式
+     *
+     * @param url API接口URL
+     * @param param 参数map
+     * @param headerList 头参数
+     * @return
+     */
+    public static String postSSL(String url, String param,List<Header> headerList) {
+        CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(createSSLConnSocketFactory()).setConnectionManager(connMgr).setDefaultRequestConfig(requestConfig).build();
+        HttpPost httpPost = new HttpPost(url);
+        CloseableHttpResponse response = null;
+        //请求参数为JSON格式
+        httpPost.addHeader(HTTP.CONTENT_TYPE, "application/json;charset=utf-8");
+
+        //添加头部信息
+        for(int i=0;i<headerList.size();i++){
+            httpPost.addHeader(headerList.get(i));
+        }
+
+        String content = "";
+        try {
+            httpPost.setConfig(requestConfig);
+            StringEntity entity = new StringEntity(param, "UTF-8");
+            httpPost.setEntity(entity);
+            response = httpClient.execute(httpPost);
+            if (response.getStatusLine().getStatusCode() == 200) {
+                HttpEntity respEntity = response.getEntity();
+                if (respEntity != null)
+                    content = EntityUtils.toString(respEntity, "UTF-8");
+                System.out.println("#####content:"+content);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            if (response != null) {
+                try {
+                    EntityUtils.consume(response.getEntity());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return content;
+    }
+
+    /**
+     * 发送 POST 请求（HTTP)，JSON形式
+     * @param url API接口URL
+     * @param param 参数map
+     * @param headerList 头参数
+     * @return
+     */
+    public static String post(String url, String param,List<Header> headerList) {
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.addHeader(HTTP.CONTENT_TYPE, "application/json;charset=utf-8");//请求参数为JSON格式
+
+        //添加头部信息
+        for(int i=0;i<headerList.size();i++){
+            httpPost.addHeader(headerList.get(i));
+        }
+
+        String content = "";
+        try {
+            StringEntity entity = new StringEntity(param, "UTF-8");
+            httpPost.setEntity(entity);
+            CloseableHttpResponse response = httpclient.execute(httpPost);
+            try {
+                if (response.getStatusLine().getStatusCode() == 200) {
+                    HttpEntity respEntity = response.getEntity();
+                    if (respEntity != null)
+                        content = EntityUtils.toString(respEntity, "UTF-8");
+                    System.out.println("#####content:"+content);
+                }
+            } finally {
+                response.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                httpclient.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return content;
+    }
+
+    /**
+     * 发送 SSL GET 请求（HTTPS），JSON形式
+     *
+     * @param url API接口URL
+     * @param headerList 头参数
+     * @return
+     */
+    public static String getSSL(String url,List<Header> headerList) {
+        CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(createSSLConnSocketFactory()).setConnectionManager(connMgr).setDefaultRequestConfig(requestConfig).build();
+        HttpGet httpGet = new HttpGet(url);
+        CloseableHttpResponse response = null;
+        if (headerList != null) {
+            //添加头部信息
+            for (Header header : headerList) {
+                httpGet.addHeader(header);
+            }
+        }
+        String content = "";
+        try {
+            httpGet.setConfig(requestConfig);
+            response = httpClient.execute(httpGet);
+            if (response.getStatusLine().getStatusCode() == 200) {
+                HttpEntity respEntity = response.getEntity();
+                if (respEntity != null)
+                    content = EntityUtils.toString(respEntity, "UTF-8");
+                System.out.println("#####content:" + content);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (response != null) {
+                try {
+                    EntityUtils.consume(response.getEntity());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return content;
+    }
+    /**
      * 测试方法
      *
      * @param args
      */
-    public static void main(String[] args) throws Exception {
+    public static void main (String[]args) throws Exception {
+
     }
+
 }
