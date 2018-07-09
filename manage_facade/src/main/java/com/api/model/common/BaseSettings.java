@@ -19,6 +19,19 @@ public class BaseSettings implements Serializable {
      */
     private String requestType;
 
+    /**
+     * https or http
+     */
+    private String  protocol;
+
+    public String getProtocol() {
+        return protocol;
+    }
+
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
+    }
+
     public String getRequestUrl() {
         return requestUrl;
     }
