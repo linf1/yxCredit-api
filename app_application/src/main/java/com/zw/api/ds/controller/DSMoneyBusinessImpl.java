@@ -3,6 +3,7 @@ package com.zw.api.ds.controller;
 import com.api.model.common.BYXResponse;
 import com.api.model.ds.DSMoneyRequest;
 import com.api.service.bankcard.IBankcardServer;
+import com.api.service.ds.AbsDSBaseServer;
 import com.api.service.ds.IDSMoneyBusiness;
 import com.api.service.ds.IDSMoneyServer;
 import com.zw.miaofuspd.facade.personal.service.AppBasicInfoService;
@@ -19,7 +20,7 @@ import java.util.Map;
  * @author 陈清玉
  */
 @Component(IDSMoneyBusiness.BEAN_KEY)
-public class DSMoneyBusinessImpl implements IDSMoneyBusiness {
+public class DSMoneyBusinessImpl  implements IDSMoneyBusiness{
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
@@ -102,7 +103,6 @@ public class DSMoneyBusinessImpl implements IDSMoneyBusiness {
             return;
         }
         request.setBankCode(String.valueOf(sysBankcardInfoMap.get("bank_number")));
-        request.setOtherFlag(getOtherFlag(sysBankcardInfoMap.get("bank_number").toString()));
         request.setBankName(sysBankcardInfoMap.get("bank_name").toString());
         request.setBankCardNo(sysBankcardInfoMap.get("card_number").toString());
 
@@ -114,14 +114,5 @@ public class DSMoneyBusinessImpl implements IDSMoneyBusiness {
         request.setCnapsCode(sysBankcardInfoMap.get("bank_subbranch_id") == null ? "" : sysBankcardInfoMap.get("bank_subbranch_id").toString());
     }
 
-    /**
-     * 根据开户行银行code判断是否是他行（0：浙商；1：非浙商）
-     * @param bankCode 银行code
-     * @return （0：浙商；1：非浙商）
-     */
-    private String getOtherFlag(String bankCode){
-        String code = "316";
-        return code.equals(bankCode) ? "0" : "1";
-    }
 
 }
