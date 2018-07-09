@@ -28,15 +28,16 @@ public class ApiProxy {
      * @return 返回信息
      */
     public String  apiInvoke(String param,List<Header> headerList){
-        if(StringUtils.isEmpty(settings.getRequestUrl()) || StringUtils.isEmpty(settings.getRequestType())){return "";}
-        if(POST.equalsIgnoreCase(settings.getRequestType())){
-            if (isHttps(settings.getRequestUrl())) {
-                return HttpUtil.postSSL(settings.getRequestUrl(),param,headerList);
-            }else{
-                return HttpUtil.post(settings.getRequestUrl(),param,headerList);
+        if(StringUtils.isNotBlank(settings.getRequestUrl()) && StringUtils.isNotBlank(settings.getRequestType())){
+            if (POST.equalsIgnoreCase(settings.getRequestType())) {
+                if (isHttps(settings.getRequestUrl())) {
+                    return HttpUtil.postSSL(settings.getRequestUrl(), param, headerList);
+                } else {
+                    return HttpUtil.post(settings.getRequestUrl(), param, headerList);
+                }
+            } else if (GET.equalsIgnoreCase(settings.getRequestType())) {
+                return HttpUtil.getSSL(settings.getRequestUrl(), headerList);
             }
-        }else if(GET.equalsIgnoreCase(settings.getRequestType())){
-           return HttpUtil.getSSL(settings.getRequestUrl(),headerList);
         }
         return "";
     }
