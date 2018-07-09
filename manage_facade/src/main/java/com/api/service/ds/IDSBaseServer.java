@@ -15,7 +15,7 @@ public  interface IDSBaseServer {
      * @param bankCode 银行code
      * @return （0：浙商；1：非浙商）
      */
-    default String getOtherFlag(String bankCode){
+    static String getOtherFlag(String bankCode){
         return ZS_CODE.equals(bankCode) ? "0" : "1";
     }
 }
