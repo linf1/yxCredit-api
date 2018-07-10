@@ -42,5 +42,7 @@
                    ref="assetServerImpl"/>
     <dubbo:service interface="com.zw.activity.service.ActivityService" timeout="30000"
     ref="activityServiceImpl"/>
+    <dubbo:service interface="com.api.service.ds.IPFLoanServer" timeout="30000"
+                   ref="pFLoanServerImpl"/>
 
 </beans>

@@ -270,6 +270,15 @@ public interface AppBasicInfoService {
      */
     List<Map> getBankInfo(String customerId);
 
+    /**
+     * 获取借款人主键
+     * @param userId
+     * @return 借款人主键
+     */
+    String getUserBorrowerId(String userId);
+
+    List<Map> getCustomerIdByid(String userId);
+
 
 
 }

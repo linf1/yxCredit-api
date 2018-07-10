@@ -184,7 +184,8 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             customerId = list.get(0).get("id").toString();
         }
         try{
-            if("2".equals(map.get("bank_type"))){
+            //1表示企业用户
+            if("1".equals(map.get("bank_type"))){
                 sql = "insert into sys_bank_card (id,bank_name,bank_number,bank_subbranch_id,bank_subbranch,bank_type,is_authcard,card_number,cust_id,cust_name,prov_id,prov_name,city_id,city_name,create_time,update_time) values ('"+id+"','"+map.get("bank_name")+"'," +
                         "'"+map.get("bank_number")+"','"+map.get("bank_subbranch_id")+"','"+map.get("bank_subbranch")+"','"+map.get("bank_type")+"','0','"+map.get("card_number")+"','"+customerId+"','"+map.get("cust_name")+"'," +
                         "'"+map.get("prov_id")+"','"+map.get("prov_name")+"','"+map.get("city_id")+"','"+map.get("city_name")+"','"+DateUtils.getNowDate()+"','"+DateUtils.getNowDate()+"')";
@@ -947,6 +948,11 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         return forList.isEmpty()?null:forList.get(0);
     }
 
+    private Map getBankInfoByOrderId(String bankId){
+        String sql = "select cust_name,bank_name,bank_type,bank_subbranch_id,card_number,prov_name,city_name,card from sys_bank_card where id = '"+bankId+"'";
+        return  sunbmpDaoSupport.findForMap(sql);
+    }
+
     /**
      * @author:韩梅生
      * @Description 保存用户的实名信息
@@ -1079,6 +1085,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
      * @param userId
      * @return
      */
+    @Override
     public List<Map> getCustomerIdByid(String userId){
         String sql = "select id from mag_customer where user_id = '"+userId+"'";
         return  sunbmpDaoSupport.findForList(sql);
@@ -1088,7 +1095,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     @Override
     public Map getOrderDetailById(String orderId,String customerId) {
         Map reslutMap = new HashMap(3);
-        String sql1 = "select t2.order_no as order_no,t2.product_name_name as product_name_name,t2.loan_amount as loan_amount,t2.rate as rate,t2.PERIODS as periods,date_format(str_to_date(t2.applay_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%i:%s') as applay_time," +
+        String sql1 = "select t2.bankId as bankId,t2.order_no as order_no,t2.product_name_name as product_name_name,t2.loan_amount as loan_amount,t2.rate as rate,t2.PERIODS as periods,date_format(str_to_date(t2.applay_time,'%Y%m%d%H%i%s'),'%Y-%m-%d %H:%i:%s') as applay_time," +
                 "t2.loan_purpose as loan_purpose,t2.customer_name as customer_name,t2.card as card ,t2.tel as tel,t1.zbs_jujian_fee  as zbs_jujian_fee,t1.li_xi as lixi,t3.repayment as repayment,t3.repayment_days as repayment_days" +
                 " from mag_product_fee t1 left join mag_order t2 on t1.product_id = t2.product_detail left join pro_working_product_detail t3 on t1.product_id = t3.id where t2.id = '"+orderId+"' and t1.state = '0' and t3.status = '1'";
         Map orderMap =sunbmpDaoSupport.findForMap(sql1);
@@ -1119,7 +1126,8 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         orderMap.put("assetServiceRate",assetServiceRate);
 
         //获取银行卡信息
-        Map bankMap = getRealName(customerMap.get("user_id").toString());
+        //Map bankMap = getRealName(customerMap.get("user_id").toString());
+        Map bankMap = getBankInfoByOrderId(orderMap.get("bankId").toString());
         reslutMap.put("orderMap",orderMap);
         reslutMap.put("customerMap",customerMap);
         reslutMap.put("bankMap",bankMap);
@@ -1265,5 +1273,10 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    @Override
+   public String getUserBorrowerId(String userId){
+        String sql = "select sync_user_id from mag_customer where user_id ='"+userId+"'";
+        return sunbmpDaoSupport.findForMap(sql).get("sync_user_id").toString();
     }
 }

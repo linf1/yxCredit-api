@@ -1,7 +1,10 @@
 package com.zw.miaofuspd.personnal.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.api.model.common.BYXResponse;
+import com.api.model.ds.PFLoanRequest;
 import com.api.service.ds.IDSMoneyServer;
+import com.api.service.ds.IPFLoanServer;
 import com.base.util.AppRouterSettings;
 import com.zw.miaofuspd.facade.personal.service.AppBasicInfoService;
 import com.zw.web.base.AbsBaseController;
@@ -32,8 +35,11 @@ public class BasicInfoController extends AbsBaseController {
     @Autowired
     private AppBasicInfoService appBasicInfoServiceImpl;
 
+
     @Autowired
-    private IDSMoneyServer idsMoneyServer;
+    private IPFLoanServer ipfLoanServer;
+
+
 
     /**
      * @author 韩梅生
@@ -223,8 +229,10 @@ public class BasicInfoController extends AbsBaseController {
         boolean b = appBasicInfoService.addBankInfo(map);
         if(!b){
             resultVO.setErrorMsg(VOConst.FAIL,(String)(map.get("msg")));
+            return resultVO;
         }
-        return resultVO;
+
+        return saveAccoutCard(map);
     }
     /**
      * @author 韩梅生
@@ -240,8 +248,45 @@ public class BasicInfoController extends AbsBaseController {
         return resultVO;
     }
 
+    /**
+     * 保存放款账户.
+     * @author  韩梅生
+     */
+    private ResultVO saveAccoutCard(Map map){
+        PFLoanRequest request = new PFLoanRequest();
+        String customerId = appBasicInfoService.getCustomerIdByid(map.get("userId").toString()).get(0).get("id").toString();
+        request.setAccountChannel("YXD");
+        request.setAccountIdCard(map.get("card") == null ? "" : map.get("card").toString());
+        request.setAccountName(map.get("cust_name") == null ? "" : map.get("cust_name").toString());
+        request.setAccountThirdId(customerId);
+        request.setAccountType(map.get("bank_type") == null ? "" : map.get("bank_type").toString());
+        request.setBankBranchName(map.get("bank_subbranch") == null ? "" : map.get("bank_subbranch").toString());
+        request.setBankCardNo(map.get("card_number") == null ? "" : map.get("card_number").toString());
+        request.setBankCode(map.get("bank_number") == null ? "" : map.get("bank_number").toString());
+        request.setBankName(map.get("bank_name") == null ? "" : map.get("bank_name").toString());
+        request.setBorrowerThirdId(customerId);
+        request.setCityCode(map.get("city_id") == null ? "" : map.get("city_id").toString());
+        request.setCityName(map.get("city_name") == null ? "" : map.get("city_name").toString());
+        request.setCnapsCode(map.get("bank_subbranch_id") == null ? "" : map.get("bank_subbranch_id").toString());
+        request.setProvinceCode(map.get("prov_id") == null ? "" : map.get("prov_id").toString());
+        request.setProvinceName(map.get("prov_name") == null ? "" : map.get("prov_name").toString());
+        //request.setOtherFlag(getOtherFlag(map.get("bank_number").toString()));
+        request.setUserBorrowerId(Long.valueOf(appBasicInfoService.getUserBorrowerId(map.get("userId").toString())));
+        try {
+            BYXResponse byxResponse = ipfLoanServer.saveLoanMoney(request);
+            if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
+                return ResultVO.ok(byxResponse.getRes_data());
+            }
+            ResultVO.error(byxResponse.getRes_msg());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResultVO.error();
+    }
 
-
-
+    private String getOtherFlag(String bankCode){
+        String code = "316";
+        return code.equals(bankCode) ? "0" : "1";
+    }
 
 }

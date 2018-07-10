@@ -95,5 +95,10 @@
         <property name="requestType" value="${asset.requestType}"/>
         <property name="requestUrl" value="${asset.requestUrl}"/>
     </bean>
+    <!-- 数据同步BEAN create by 韩梅生-->
+    <bean id="pfLoanSettings" class="com.api.model.ds.PFLoanSettings">
+        <property name="requestType" value="${pfLoan.requestType}"/>
+        <property name="requestUrl" value="${pfLoan.requestUrl}"/>
+    </bean>
 
 </beans>

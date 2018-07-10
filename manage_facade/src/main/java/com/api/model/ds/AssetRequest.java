@@ -138,7 +138,7 @@ public class AssetRequest implements Serializable {
     /**
      *Y	String	放款账号类型（1.个人 2 企业）
      */
-    private String assetBankType = "1";
+    private String assetBankType;
     /**
      *Y	String	账号名称
      */

@@ -20,12 +20,12 @@ import java.util.Map;
 
 
 /**
- * 第三方资产接口同步控制器
+ * 保存放款账户控制器
  * @author 韩梅生
  */
 @RestController
 @RequestMapping(AppRouterSettings.VERSION + "/asset")
-public class AssetController {
+public class PFLoanController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     @Autowired
@@ -42,9 +42,9 @@ public class AssetController {
      * @param
      * @return
      */
-    @PostMapping("/thirdAssetsReceiver")
-    public ResultVO thirdAssetsReceiver(String orderId,String customerId) {
-        final Map resultMap = appBasicInfoServiceImpl.getOrderDetailById(orderId,customerId);
+    @PostMapping("/saveAccountCard")
+    public ResultVO saveAccountCard(String orderId) {
+        final Map resultMap = appBasicInfoServiceImpl.getOrderDetailById(orderId,null);
         AssetRequest request = new AssetRequest();
         Map orderMap = (Map) resultMap.get("orderMap");
         Map customerMap = (Map) resultMap.get("customerMap");
@@ -53,17 +53,6 @@ public class AssetController {
             Object syncAccountId = customerMap.get("sync_account_id");
             Object syncUserId = customerMap.get("sync_user_id");
 
-            //如果一键申请时候同步借款人数据失败 这里补救（继续请求）create by 陈清玉
-            if(syncAccountId == null || syncUserId == null ) {
-                Map<String, Object> runSyncDataMap = runSyncData(orderId);
-                if(runSyncDataMap != null){
-                    syncUserId = runSyncDataMap.get("syncUserId");
-                    syncAccountId =  runSyncDataMap.get("syncAccountId");
-                }else{
-                    LOGGER.info("----借款人及放款账户数据同步失败----");
-                   return ResultVO.error("借款人及放款账户数据同步失败！");
-                }
-            }
               request.setAssetName(orderMap.get("product_name_name") == null? "" : orderMap.get("product_name_name").toString());
               request.setAssetAmount(orderMap.get("loan_amount") == null?"":orderMap.get("loan_amount").toString());
               request.setAssetFinanceCost(orderMap.get("assetFinanceCost") == null?"":orderMap.get("assetFinanceCost").toString());
@@ -80,7 +69,6 @@ public class AssetController {
               request.setAssetPersonMobilePhone(orderMap.get("tel") == null?"":orderMap.get("tel").toString());
               request.setAssetPersonAddress(customerMap.get("company_address") == null?"":customerMap.get("company_address").toString());
               request.setByxBankId(syncAccountId == null?"": syncAccountId.toString());
-              request.setAssetBankType(bankMap.get("bank_type") == null?"":bankMap.get("bank_type").toString());
               request.setAssetBankUserName(bankMap.get("cust_name") == null?"":bankMap.get("cust_name").toString());
               request.setAssetBankName(bankMap.get("bank_name") == null?"":bankMap.get("bank_name").toString());
               request.setAssetBankCnapsCode(bankMap.get("bank_subbranch_id") == null?"":bankMap.get("bank_subbranch_id").toString());
@@ -107,27 +95,7 @@ public class AssetController {
         return ResultVO.error();
    }
 
-    /**
-     * 如果syncAccountId == null || syncUserId == null 证明数据同步失败 ， create by 陈清玉。
-     * @param orderId 订单id
-     * @return 同不数据的map
-     *                      - syncAccountId 同步是保存在数据库里面 账户ID
-     *                      - syncUserId 同步是保存在数据库里面 用户ID
-     */
-   public  Map<String,Object> runSyncData(String orderId){
-        Map<String,Object> resultMap = null;
-           BYXResponse byxResponse = idsMoneyBusiness.syncData(orderId);
-           if(byxResponse != null) {
-               if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
-                   final Map resData = (Map) byxResponse.getRes_data();
-                   resultMap = new HashMap<>(2);
-                   resultMap.put("syncUserId",resData.get("userId"));
-                   resultMap.put("syncAccountId",resData.get("accountId"));
-                   LOGGER.info("----借款人及放款账户数据同步成功----");
-               }
-           }
-         return resultMap;
-   }
+
 
 
 }
