@@ -261,7 +261,7 @@ public interface AppBasicInfoService {
      * 新增银行卡信息
      * @param map
      */
-    boolean addBankInfo(Map map);
+    Map addBankInfo(Map map);
 
     /**
      * 获取银行卡信息

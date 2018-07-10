@@ -230,11 +230,12 @@ public class BasicInfoController extends AbsBaseController {
         if(VOConst.SUCCESS.equals(resultVO.getRetCode())){
             Map map1= JSONObject.parseObject(resultVO.getRetData().toString());
             map.put("accountId",map1.get("accountId"));
-            boolean b = appBasicInfoService.addBankInfo(map);
-            if(!b){
-                resultVO.setErrorMsg(VOConst.FAIL,(String)(map.get("msg")));
+            Map resultMap = appBasicInfoService.addBankInfo(map);
+            if(!(Boolean)resultMap.get("flag")){
+                resultVO.setErrorMsg(VOConst.FAIL,(String)(resultMap.get("msg")));
                 return resultVO;
             }
+            resultVO.setRetMsg(resultMap.get("msg").toString());
         }
         return resultVO;
     }
@@ -281,16 +282,12 @@ public class BasicInfoController extends AbsBaseController {
             if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
                 return ResultVO.ok(byxResponse.getRes_data());
             }
-            ResultVO.error(byxResponse.getRes_msg());
+            return ResultVO.error(byxResponse.getRes_msg());
         } catch (Exception e) {
             e.printStackTrace();
         }
         return ResultVO.error();
     }
 
-    private String getOtherFlag(String bankCode){
-        String code = "316";
-        return code.equals(bankCode) ? "0" : "1";
-    }
 
 }

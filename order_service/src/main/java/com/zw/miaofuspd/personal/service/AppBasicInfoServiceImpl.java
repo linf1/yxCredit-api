@@ -175,7 +175,8 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
      * 更新银行卡信息
      */
     @Override
-    public boolean addBankInfo(Map map){
+    public Map addBankInfo(Map map){
+        Map resultMap = new HashMap();
         String id = GeneratePrimaryKeyUtils.getUUIDKey();
         String sql;
         String customerId = "";
@@ -198,9 +199,13 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             sunbmpDaoSupport.exeSql(sql);
         }catch (Exception e){
             e.printStackTrace();
-            return  false;
+            resultMap.put("flag",false);
+            resultMap.put("msg","保存银行卡信息失败");
+            return  resultMap;
         }
-        return true;
+        resultMap.put("flag",true);
+        resultMap.put("msg","保存银行卡信息成功");
+        return resultMap;
 
     }
 
