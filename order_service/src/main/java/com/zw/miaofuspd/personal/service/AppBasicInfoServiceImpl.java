@@ -186,14 +186,14 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         try{
             //1表示企业用户
             if("1".equals(map.get("bank_type"))){
-                sql = "insert into sys_bank_card (id,bank_name,bank_number,bank_subbranch_id,bank_subbranch,bank_type,is_authcard,card_number,cust_id,cust_name,prov_id,prov_name,city_id,city_name,create_time,update_time) values ('"+id+"','"+map.get("bank_name")+"'," +
+                sql = "insert into sys_bank_card (id,bank_name,bank_number,bank_subbranch_id,bank_subbranch,bank_type,is_authcard,card_number,cust_id,cust_name,prov_id,prov_name,city_id,city_name,create_time,update_time,accountId) values ('"+id+"','"+map.get("bank_name")+"'," +
                         "'"+map.get("bank_number")+"','"+map.get("bank_subbranch_id")+"','"+map.get("bank_subbranch")+"','"+map.get("bank_type")+"','0','"+map.get("card_number")+"','"+customerId+"','"+map.get("cust_name")+"'," +
-                        "'"+map.get("prov_id")+"','"+map.get("prov_name")+"','"+map.get("city_id")+"','"+map.get("city_name")+"','"+DateUtils.getNowDate()+"','"+DateUtils.getNowDate()+"')";
+                        "'"+map.get("prov_id")+"','"+map.get("prov_name")+"','"+map.get("city_id")+"','"+map.get("city_name")+"','"+DateUtils.getNowDate()+"','"+DateUtils.getNowDate()+"','"+map.get("accountId")+"')";
 
             }else{
-                sql = "insert into sys_bank_card (id,bank_type,cust_name,card,tel,bank_name,is_authcard,card_number,cust_id,create_time,update_time) values ('"+id+"','"+map.get("bank_type")+"'," +
+                sql = "insert into sys_bank_card (id,bank_type,cust_name,card,tel,bank_name,is_authcard,card_number,cust_id,create_time,update_time,accountId) values ('"+id+"','"+map.get("bank_type")+"'," +
                         "'"+map.get("cust_name")+"','"+map.get("card")+"','"+map.get("tel")+"','"+map.get("bank_name")+"','0','"+map.get("card_number")+"','"+customerId+"'," +
-                        "'"+DateUtils.getNowDate()+"','"+DateUtils.getNowDate()+"')";
+                        "'"+DateUtils.getNowDate()+"','"+DateUtils.getNowDate()+"','"+map.get("accountId")+"')";
             }
             sunbmpDaoSupport.exeSql(sql);
         }catch (Exception e){

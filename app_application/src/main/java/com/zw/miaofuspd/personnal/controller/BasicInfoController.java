@@ -224,15 +224,19 @@ public class BasicInfoController extends AbsBaseController {
     @RequestMapping("/addBankInfo")
     @ResponseBody
     public  ResultVO addBankInfo(String data) throws  Exception{
-        ResultVO resultVO = new ResultVO();
+        //ResultVO resultVO = new ResultVO();
         Map map = JSONObject.parseObject(data);
-        boolean b = appBasicInfoService.addBankInfo(map);
-        if(!b){
-            resultVO.setErrorMsg(VOConst.FAIL,(String)(map.get("msg")));
-            return resultVO;
+        ResultVO  resultVO = saveAccoutCard(map);
+        if(VOConst.SUCCESS.equals(resultVO.getRetCode())){
+            Map map1= JSONObject.parseObject(resultVO.getRetData().toString());
+            map.put("accountId",map1.get("accountId"));
+            boolean b = appBasicInfoService.addBankInfo(map);
+            if(!b){
+                resultVO.setErrorMsg(VOConst.FAIL,(String)(map.get("msg")));
+                return resultVO;
+            }
         }
-
-        return saveAccoutCard(map);
+        return resultVO;
     }
     /**
      * @author 韩梅生
