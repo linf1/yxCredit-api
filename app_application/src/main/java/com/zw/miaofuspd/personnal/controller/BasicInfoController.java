@@ -263,7 +263,7 @@ public class BasicInfoController extends AbsBaseController {
         request.setAccountChannel("YXD");
         request.setAccountIdCard(map.get("card") == null ? "" : map.get("card").toString());
         request.setAccountName(map.get("cust_name") == null ? "" : map.get("cust_name").toString());
-        request.setAccountThirdId(customerId);
+        request.setAccountThirdId("");
         request.setAccountType(map.get("bank_type") == null ? "" : map.get("bank_type").toString());
         request.setBankBranchName(map.get("bank_subbranch") == null ? "" : map.get("bank_subbranch").toString());
         request.setBankCardNo(map.get("card_number") == null ? "" : map.get("card_number").toString());
