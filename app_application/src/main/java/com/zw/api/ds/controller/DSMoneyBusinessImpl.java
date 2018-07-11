@@ -11,7 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -69,13 +71,15 @@ public class DSMoneyBusinessImpl  implements IDSMoneyBusiness{
 
     @Override
     public BYXResponse syncData(DSMoneyRequest request){
-        Map customer = appBasicInfoService.findCustomerById(request.getBorrowerThirdId());
-        if (customer != null) {
-            if (isSync(customer)) {
+        List<Map> customerMap = appBasicInfoService.getCustomerIdByid(request.getAppUserId());
+        if (!CollectionUtils.isEmpty(customerMap)) {
+            Map map = customerMap.get(0);
+            if (isSync(map)) {
                 LOGGER.info("------借款人及放款账户数据已经同步过了------");
                 return BYXResponse.ok();
             }
             try {
+                request.setBorrowerThirdId(map.get("id").toString());
                 return doSyncData(request);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -93,8 +97,7 @@ public class DSMoneyBusinessImpl  implements IDSMoneyBusiness{
      */
     private BYXResponse  doSyncData(DSMoneyRequest request) throws Exception {
         //app登录手机号码
-        Map appUserMap = appBasicInfoService.getUserIdCustomerId(request.getBorrowerThirdId());
-        request.setBorrowerUserName(appUserService.getPhoneById(appUserMap.get("user_id").toString()));
+        request.setBorrowerUserName(appUserService.getPhoneById(request.getAppUserId()));
         //获取银行卡信息
         setBankInfo(request);
         BYXResponse byxResponse = idsMoneyServer.saveBorrowerAndAccountCard(request);

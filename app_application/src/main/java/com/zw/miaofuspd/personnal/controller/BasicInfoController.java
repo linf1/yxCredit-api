@@ -314,7 +314,7 @@ public class BasicInfoController extends AbsBaseController {
      */
     private BYXResponse syncData(Map map){
         DSMoneyRequest request = new DSMoneyRequest();
-        request.setBorrowerThirdId(map.get("customerId").toString());
+        request.setAppUserId(map.get("userId").toString());
         request.setAddress(map.get("cardRegisterDetailAddress").toString());
         return dsMoneyBusiness.syncData(request);
     }

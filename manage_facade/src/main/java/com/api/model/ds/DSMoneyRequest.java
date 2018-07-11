@@ -106,6 +106,16 @@ public class DSMoneyRequest implements Serializable {
      */
     private String accountThirdId;
 
+    private String appUserId;
+
+    public String getAppUserId() {
+        return appUserId;
+    }
+
+    public void setAppUserId(String appUserId) {
+        this.appUserId = appUserId;
+    }
+
     public String getBorrowerUserName() {
         return borrowerUserName;
     }
