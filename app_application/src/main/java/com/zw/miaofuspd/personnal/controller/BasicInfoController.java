@@ -2,6 +2,7 @@ package com.zw.miaofuspd.personnal.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.api.model.common.BYXResponse;
+import com.api.model.ds.DSMoneyRequest;
 import com.api.model.ds.PFLoanRequest;
 import com.api.service.ds.IDSMoneyBusiness;
 import com.api.service.ds.IPFLoanServer;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.*;
 
 /**
  * Created by 韩梅生 on 2018/05/09 0028.
