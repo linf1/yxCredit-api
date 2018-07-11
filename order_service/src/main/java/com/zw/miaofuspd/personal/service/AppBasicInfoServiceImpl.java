@@ -308,7 +308,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
      * @return
      */
     @Override
-    public Map getBasicInfo(String customerId){
+    public Map getBasicInfo(String userId){
         Map resultMap = new HashMap();
         String  sql="select t5.contractor_name as contractor_name,t1.marital_status as marital_status,t1.children_status as children_status" +
                 ",t2.province_name as jobProvince_name,t2.province_id as jobProvince_id,t2.city_name as jobCity_name,t2.city_id as jobCity_id,t2.district_name as jobDistrict_name,t2.district_id as jobDistrict_id,t2.address as jobDetailAddress," +
@@ -316,7 +316,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
                 " left join mag_customer_job t2 on t1.id = t2.customer_id" +
                 " left join mag_customer_live t3 on t1.id = t3.customer_id" +
                 " left join byx_white_list t4 on t1.person_name = t4.real_name and t1.card = t4.card" +
-                " left join byx_contractor t5 on t5.id = t4.contractor_id where t1.id = '"+customerId+"'";
+                " left join byx_contractor t5 on t5.id = t4.contractor_id where t1.user_id = '"+userId+"'";
 
         List<Map> list = sunbmpDaoSupport.findForList(sql);
         if(list.size()==0){
@@ -342,7 +342,8 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     @Override
     public Map addBasicInfo(Map<String, String> paramMap) {
         Map resturnMap = new HashMap();
-        String customerId = paramMap.get("customerId");
+        List<Map> userList = getCustomerIdByid(paramMap.get("userId"));
+        String customerId = userList.get(0).get("id").toString();
 
         String alterTime = DateUtils.getDateString(new Date());
         //婚姻状况

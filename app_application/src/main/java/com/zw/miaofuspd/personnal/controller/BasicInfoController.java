@@ -107,9 +107,9 @@ public class BasicInfoController extends AbsBaseController {
      * @return
      */
     @RequestMapping("/getBasicInfo")
-    public ResultVO getBasicInfo(String customerId) throws Exception{
+    public ResultVO getBasicInfo(String userId) throws Exception{
         ResultVO resultVO = new ResultVO();
-        Map map = appBasicInfoService.getBasicInfo(customerId);
+        Map map = appBasicInfoService.getBasicInfo(userId);
         if(!(Boolean)(map.get("flag"))){
             resultVO.setErrorMsg(VOConst.FAIL,(String)(map.get("msg")));
             return resultVO;

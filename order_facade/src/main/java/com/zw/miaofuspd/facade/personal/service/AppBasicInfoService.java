@@ -49,7 +49,7 @@ public interface AppBasicInfoService {
      * @Date 14:10 2018/5/12
      * @param
      */
-    Map getBasicInfo(String customerId) throws Exception;
+    Map getBasicInfo(String userId) throws Exception;
 
 
     /**
