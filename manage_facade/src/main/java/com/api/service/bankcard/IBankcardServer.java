@@ -83,6 +83,6 @@ public interface IBankcardServer {
      * @param custId 个人信息ID
      * @return 银行卡信息
      */
-    Map findSysBankcardInfoByCustId(String  custId);
+    List<Map> findSysBankcardInfoByCustId(String  custId);
 
 }

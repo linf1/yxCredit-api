@@ -99,7 +99,10 @@ public class DSMoneyBusinessImpl  implements IDSMoneyBusiness{
         //app登录手机号码
         request.setBorrowerUserName(appUserService.getPhoneById(request.getAppUserId()));
         //获取银行卡信息
-        setBankInfo(request);
+        boolean flag = setBankInfo(request);
+        if(!flag){
+            return BYXResponse.error("找不到对应银行卡信息");
+        }
         BYXResponse byxResponse = idsMoneyServer.saveBorrowerAndAccountCard(request);
         //数据同步接口一个相同的实名只会同步一次，所以不用判断是否成功
         if(byxResponse != null) {
@@ -126,12 +129,13 @@ public class DSMoneyBusinessImpl  implements IDSMoneyBusiness{
      * 获取银行卡信息 并返回数据
      * @param request 请求数据实体
      */
-    private void setBankInfo(DSMoneyRequest request) {
-        Map bankInfo = bankcardServer.findSysBankcardInfoByCustId(request.getBorrowerThirdId());
-        if(bankInfo == null){
+    private boolean setBankInfo(DSMoneyRequest request) {
+        List<Map> bankcardInfoList = bankcardServer.findSysBankcardInfoByCustId(request.getBorrowerThirdId());
+        if(CollectionUtils.isEmpty(bankcardInfoList)){
             LOGGER.info("----银行卡信息为空---");
-            return;
+            return false;
         }
+        Map bankInfo = bankcardInfoList.get(0);
         request.setBorrowerName(bankInfo.get("cust_name").toString());
         request.setBorrowerMobilePhone(bankInfo.get("tel").toString());
         request.setBorrowerThirdId(request.getBorrowerThirdId());
@@ -153,6 +157,7 @@ public class DSMoneyBusinessImpl  implements IDSMoneyBusiness{
         request.setCityName(bankInfo.get("city_name") == null ? "" : bankInfo.get("city_name").toString());
         request.setBankBranchName(bankInfo.get("bank_subbranch") == null ? "" : bankInfo.get("bank_subbranch").toString());
         request.setCnapsCode(bankInfo.get("bank_subbranch_id") == null ? "" : bankInfo.get("bank_subbranch_id").toString());
+        return true;
     }
 
     /**
