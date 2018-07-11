@@ -279,6 +279,11 @@ public interface AppBasicInfoService {
 
     List<Map> getCustomerIdByid(String userId);
 
+    /**
+     * 判断是否填写个人信息
+     */
+    boolean checkPersonalInfo(String userId);
+
 
 
 }

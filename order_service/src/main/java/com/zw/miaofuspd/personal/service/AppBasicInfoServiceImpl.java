@@ -564,6 +564,12 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             checkCustomerInfoMap.put("code","3");
             return checkCustomerInfoMap;
         }
+        String addressSql = "select count(1) from mag_customer_live where customer_id = '"+customerId+"'";
+        if(sunbmpDaoSupport.getCount(addressSql)==0){
+            resultMap.put("code","5");
+            resultMap.put("msg","请先完善个人信息!");
+            return resultMap;
+        }
         //获取当前用户的所有订单状态
         String  sql2 = "select order_state as state from mag_order where user_id = '"+id+"' and product_name_name = '"+productName+"' and order_state in ('1','2','3','4','5')";
         List<Map> staList = sunbmpDaoSupport.findForList(sql2);
@@ -614,6 +620,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         resultMap.put("resMap",resMap);
         return resultMap;
     }
+
 
     //保存客户联系人信息
     public Map saveLinkManInfo(Map<String, String> paramMap) {
@@ -1283,5 +1290,15 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
    public String getUserBorrowerId(String userId){
         String sql = "select sync_user_id from mag_customer where user_id ='"+userId+"'";
         return sunbmpDaoSupport.findForMap(sql).get("sync_user_id").toString();
+    }
+
+    @Override
+    public boolean checkPersonalInfo(String userId) {
+        List<Map> list = getCustomerIdByid(userId);
+        if(!list.isEmpty()){
+            String sql = "select count(1) from mag_customer_live where customer_id = '"+list.get(0).get("id")+"'";
+            return sunbmpDaoSupport.getCount(sql) != 0;
+        }
+        return  false;
     }
 }

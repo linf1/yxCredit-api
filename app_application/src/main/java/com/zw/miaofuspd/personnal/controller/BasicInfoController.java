@@ -289,5 +289,19 @@ public class BasicInfoController extends AbsBaseController {
         return ResultVO.error();
     }
 
+    /**
+     * @author 韩梅生
+     * @date 11:17 2018/7/6
+     * 判断是否填写个人信息
+     */
+    @RequestMapping("/checkPersonalInfo")
+    @ResponseBody
+    public  ResultVO checkPersonalInfo(String userId) throws  Exception{
+        ResultVO resultVO = new ResultVO();
+        boolean b = appBasicInfoService.checkPersonalInfo(userId);
+        resultVO.setRetData(b);
+        return resultVO;
+    }
+
 
 }
