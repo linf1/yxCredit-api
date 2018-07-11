@@ -962,7 +962,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     }
 
     private Map getBankInfoByOrderId(String bankId){
-        String sql = "select cust_name,bank_name,bank_type,bank_subbranch_id,card_number,prov_name,city_name,card from sys_bank_card where id = '"+bankId+"'";
+        String sql = "select accountId,cust_name,bank_name,bank_type,bank_subbranch_id,card_number,prov_name,city_name,card from sys_bank_card where id = '"+bankId+"'";
         return  sunbmpDaoSupport.findForMap(sql);
     }
 

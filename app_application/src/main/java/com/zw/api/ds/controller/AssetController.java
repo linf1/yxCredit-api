@@ -79,7 +79,7 @@ public class AssetController {
               request.setAssetPersonIdcard(orderMap.get("card") == null?"":orderMap.get("card").toString());
               request.setAssetPersonMobilePhone(orderMap.get("tel") == null?"":orderMap.get("tel").toString());
               request.setAssetPersonAddress(customerMap.get("company_address") == null?"":customerMap.get("company_address").toString());
-              request.setByxBankId(syncAccountId == null?"": syncAccountId.toString());
+              request.setByxBankId(bankMap.get("accountId") == null?"":bankMap.get("accountId").toString());
               request.setAssetBankType(bankMap.get("bank_type") == null?"":bankMap.get("bank_type").toString());
               request.setAssetBankUserName(bankMap.get("cust_name") == null?"":bankMap.get("cust_name").toString());
               request.setAssetBankName(bankMap.get("bank_name") == null?"":bankMap.get("bank_name").toString());
