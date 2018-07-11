@@ -92,7 +92,7 @@ public class BasicInfoController extends AbsBaseController {
         if(!(Boolean)(resultMap.get("flag"))){
             resultVO.setErrorMsg(VOConst.FAIL,(String)(resultMap.get("msg")));
         }
-        resultVO.setRetData(resultMap);
+        resultVO.setRetMsg((String)(resultMap.get("msg")));
         return resultVO;
     }
 
