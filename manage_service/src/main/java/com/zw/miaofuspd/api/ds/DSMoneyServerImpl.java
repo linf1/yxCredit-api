@@ -30,10 +30,12 @@ public class DSMoneyServerImpl extends AbsDSBaseServer implements IDSMoneyServer
         if (request != null){
             //设置浙商
             request.setOtherFlag(getOtherFlag(request.getBankCode()));
+            request.setBorrowerChannel(ACCOUNT_CHANNEL);
+            request.setAccountChannel(ACCOUNT_CHANNEL);
             final String result = HttpClientUtil.post(dsMoneySettings.getRequestUrl(), BYXRequest.getBYXRequest(request, byxSettings), byxSettings.getHeadRequest());
             return BYXResponse.getBYXResponse(result, byxSettings);
         }
-        return  BYXResponse.error();
+        return  BYXResponse.error("参数缺失");
     }
 
 }

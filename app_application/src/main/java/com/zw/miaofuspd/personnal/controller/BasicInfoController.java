@@ -3,7 +3,7 @@ package com.zw.miaofuspd.personnal.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.api.model.common.BYXResponse;
 import com.api.model.ds.PFLoanRequest;
-import com.api.service.ds.IDSMoneyServer;
+import com.api.service.ds.IDSMoneyBusiness;
 import com.api.service.ds.IPFLoanServer;
 import com.base.util.AppRouterSettings;
 import com.zw.miaofuspd.facade.personal.service.AppBasicInfoService;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.*;
 
 /**
  * Created by 韩梅生 on 2018/05/09 0028.
@@ -30,11 +31,10 @@ public class BasicInfoController extends AbsBaseController {
     private final  Logger LOGGER =  LoggerFactory.getLogger(BasicInfoController.class);
 
     @Autowired
-    AppBasicInfoService appBasicInfoService;
+    private AppBasicInfoService appBasicInfoService;
 
     @Autowired
-    private AppBasicInfoService appBasicInfoServiceImpl;
-
+    private IDSMoneyBusiness dsMoneyBusiness;
 
     @Autowired
     private IPFLoanServer ipfLoanServer;
@@ -82,9 +82,13 @@ public class BasicInfoController extends AbsBaseController {
      */
     @RequestMapping("/addBasicInfo")
     public ResultVO addBasicInfo(String data) throws Exception{
-        Map map = JSONObject.parseObject(data);
+        Map bankInfo = JSONObject.parseObject(data);
         ResultVO resultVO = new ResultVO();
-        Map resultMap = appBasicInfoService.addBasicInfo(map);
+        BYXResponse response = syncData(bankInfo);
+        if (BYXResponse.resCode.fail.getCode().equals(response.getRes_code())) {
+            return  ResultVO.error(response.getRes_msg());
+        }
+        Map resultMap = appBasicInfoService.addBasicInfo(bankInfo);
         if(!(Boolean)(resultMap.get("flag"))){
             resultVO.setErrorMsg(VOConst.FAIL,(String)(resultMap.get("msg")));
         }
@@ -303,5 +307,16 @@ public class BasicInfoController extends AbsBaseController {
         return resultVO;
     }
 
+    /**
+     * 同步借款人账户信息
+     * @param map 添加信息
+     * @return 结果
+     */
+    private BYXResponse syncData(Map map){
+        DSMoneyRequest request = new DSMoneyRequest();
+        request.setBorrowerThirdId(map.get("customerId").toString());
+        request.setAddress(map.get("cardRegisterDetailAddress").toString());
+        return dsMoneyBusiness.syncData(request);
+    }
 
 }

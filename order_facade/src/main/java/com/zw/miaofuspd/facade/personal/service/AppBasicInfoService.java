@@ -153,6 +153,13 @@ public interface AppBasicInfoService {
     Map findByOrderId(String orderId);
 
     /**
+     *  按id获取用户信息 create by 陈清玉 2018-05-16
+     * @param id 用户ID
+     * @return 订单信息
+     */
+    Map findCustomerById(String id);
+
+    /**
      * 数据同步完成后更新个人信息 create by 陈清玉 2018-05-16
      * @param userID 同步接口返回userId
      * @param accountId 同步接口返回accountId
@@ -283,6 +290,13 @@ public interface AppBasicInfoService {
      * 判断是否填写个人信息
      */
     boolean checkPersonalInfo(String userId);
+
+    /**
+     * 获取登录用户Id create by 陈淸玉
+     * @param customerId 用户ID
+     * @return 登录用户Id
+     */
+    Map getUserIdCustomerId(String customerId);
 
 
 

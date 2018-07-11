@@ -1008,11 +1008,17 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     @Override
     public Map findByOrderId(String orderId)  {
         StringBuilder sql = new StringBuilder("SELECT magorder.USER_ID as userId,cust.id custId,cust.PERSON_NAME as custName,cust.TEL as custPhone,cust.CARD as custCard,");
-        sql.append("live.nowaddress as nowaddress,live.address_detail as addressDetail,cust.sync_account_id as syncAccountId,sync_user_id as syncUserId ");
+        sql.append("live.nowaddress as nowaddress,live.address_detail as addressDetail,cust.sync_account_id as sync_account_id,sync_user_id as sync_user_id ");
         sql.append("FROM mag_order magOrder INNER JOIN mag_customer cust ON magOrder.CUSTOMER_ID = cust.id ");
         sql.append("INNER JOIN mag_customer_live live ON live.customer_id = cust.id ");
         sql.append("where magOrder.id = '").append(orderId).append("'");
         return sunbmpDaoSupport.findForMap(sql.toString());
+    }
+
+    @Override
+    public Map findCustomerById(String id) {
+        String sql = "select * from mag_customer where id = '"+id+"'";
+        return  sunbmpDaoSupport.findForMap(sql);
     }
 
     @Override
@@ -1300,5 +1306,12 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             return sunbmpDaoSupport.getCount(sql) != 0;
         }
         return  false;
+    }
+
+
+    @Override
+    public Map getUserIdCustomerId(String customerId) {
+        String sql  = "SELECT user_id FROM mag_customer  WHERE  id ='"+customerId+"'";
+        return sunbmpDaoSupport.findForMap(sql);
     }
 }

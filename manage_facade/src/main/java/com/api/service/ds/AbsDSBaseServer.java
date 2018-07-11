@@ -8,12 +8,12 @@ public  abstract  class AbsDSBaseServer {
     /**
      * 浙商 code
      */
-     final String ZS_CODE = "316";
+    protected final String ZS_CODE = "316";
 
     /**
      * 账户渠道
      */
-    String ACCOUNT_CHANNEL = "YXD";
+    protected final String ACCOUNT_CHANNEL = "YXD";
 
     /**
      * 根据开户行银行code判断是否是他行（0：浙商；1：非浙商）

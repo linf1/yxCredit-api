@@ -3,10 +3,8 @@ package com.zw.api.ds.controller;
 import com.api.model.common.BYXResponse;
 import com.api.model.ds.DSMoneyRequest;
 import com.api.service.ds.IDSMoneyBusiness;
-import com.api.service.ds.IDSMoneyServer;
 import com.base.util.AppRouterSettings;
 import com.base.util.StringUtils;
-import com.zw.miaofuspd.facade.personal.service.AppBasicInfoService;
 import com.zw.web.base.vo.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
 
 
 /**
@@ -38,11 +34,11 @@ public class DsMoneyController {
      * @return {@link ResultVO}
      */
     @PostMapping("/dsBorrowerAndAccountCard")
-    public ResultVO dsBorrowerAndAccountCard(String  orderId) {
-        LOGGER.info("==============借款人及放款账户数据同步开始========参数：{}",orderId);
-        if (StringUtils.isNotBlank(orderId)) {
+    public ResultVO dsBorrowerAndAccountCard(DSMoneyRequest request) {
+        LOGGER.info("==============借款人及放款账户数据同步开始========参数：{}",request.toString());
+        if (StringUtils.isNotBlank(request.getBorrowerThirdId())) {
             try {
-                BYXResponse  byxResponse = idsMoneyBusiness.syncData(orderId);
+                BYXResponse  byxResponse = idsMoneyBusiness.syncData(request);
                 if(byxResponse != null) {
                     if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
                         return ResultVO.ok("借款人及放款账户数据同步成功");
