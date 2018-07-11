@@ -971,7 +971,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         try {
                 //新增银行卡信息
                 String sql2 = "insert into sys_bank_card (id,bank_name,bank_number,bank_subbranch_id,bank_subbranch,bank_type,is_authcard,card_number,cust_id,cust_name,prov_id,prov_name,city_id,city_name,create_time,update_time) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"','"+map.get("bank_name")+"'," +
-                        "'"+map.get("bank_number")+"','"+map.get("bank_subbranch_id")+"','"+map.get("bank_subbranch")+"','1','1','"+map.get("card_number")+"','"+id+"','"+map.get("cust_name")+"'," +
+                        "'"+map.get("bank_number")+"','"+map.get("bank_subbranch_id")+"','"+map.get("bank_subbranch")+"','0','1','"+map.get("card_number")+"','"+id+"','"+map.get("cust_name")+"'," +
                         "'"+map.get("prov_id")+"','"+map.get("prov_name")+"','"+map.get("city_id")+"','"+map.get("city_name")+"','"+DateUtils.getNowDate()+"','"+DateUtils.getNowDate()+"')";
                 sunbmpDaoSupport.exeSql(sql2);
 
