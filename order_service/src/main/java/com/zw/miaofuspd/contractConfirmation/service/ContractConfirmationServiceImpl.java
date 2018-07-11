@@ -119,7 +119,7 @@ public class ContractConfirmationServiceImpl extends AbsServiceBase implements C
     public Map getContractInfo(String orderId) {
         Map map = new HashMap();
         //查询订单
-        String orderSql="select id as orderId, order_no as orderNo, customer_id as customerId, amount, loan_amount as loanAmount, fee, service_fee as serviceFee, periods as deadline, loan_purpose as useOfLoans from mag_order where id='"+orderId+"'";
+        String orderSql="select id as orderId, order_no as orderNo, customer_id as customerId, amount, loan_amount as loanAmount, fee, service_fee as serviceFee, periods as deadline, loan_purpose as useOfLoans, bankId from mag_order where id='"+orderId+"'";
         Map orderMap = sunbmpDaoSupport.findForMap(orderSql);
         map.putAll(orderMap);
         double fee=Double.parseDouble(orderMap.get("fee").toString());
@@ -138,7 +138,7 @@ public class ContractConfirmationServiceImpl extends AbsServiceBase implements C
         Map customerMap = sunbmpDaoSupport.findForMap(customerSql);
         map.putAll(customerMap);
         //查询银行卡信息
-        String bankSql="select cust_name as cusAccountName, bank_name as cusAccountBank, card_number as cusBankCard from sys_bank_card where cust_id='"+customerId+"' and is_authcard ='1'";
+        String bankSql="select cust_name as cusAccountName, bank_name as cusAccountBank, card_number as cusBankCard from sys_bank_card where id='"+orderMap.get("bankId")+"'";
         Map bankMap = sunbmpDaoSupport.findForMap(bankSql);
         map.putAll(bankMap);
 
