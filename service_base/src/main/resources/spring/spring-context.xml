@@ -23,7 +23,7 @@
     <context:property-placeholder
             ignore-unresolvable="true"
             file-encoding="UTF-8"
-            location="classpath*:properties/*.properties,classpath:jdbc.properties,classpath*:/*.properties"/>
+            location="classpath*:properties/*.properties"/>
 
     <bean id="SpringContextUtil" class="com.zw.service.springcontext.SpringContextUtil"/>
 

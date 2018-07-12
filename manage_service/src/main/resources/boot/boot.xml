@@ -16,7 +16,7 @@
     <context:property-placeholder
             ignore-unresolvable="true"
             file-encoding="UTF-8"
-            location="classpath*:/config/*.properties"/>
+            location="classpath*:/properties/*.properties"/>
 
     <import resource="classpath*:/boot/dubbo-provider.xml"/>
 
