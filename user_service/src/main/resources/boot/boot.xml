@@ -12,6 +12,11 @@
            http://www.springframework.org/schema/context  
            http://www.springframework.org/schema/context/spring-context-3.2.xsd"
        default-autowire="byName" default-lazy-init="false">
+    <!-- 读入配置属性文件 -->
+    <context:property-placeholder
+            ignore-unresolvable="true"
+            file-encoding="UTF-8"
+            location="classpath*:/properties/*.properties"/>
 
     <import resource="classpath*:/boot/dubbo-provider.xml"/>
     <import resource="classpath*:/boot/dubbo-consumer.xml"/>
