@@ -56,7 +56,7 @@ public class SystemDictServiceImpl extends AbsServiceBase implements ISystemDict
 
     public String getInfo(String key)throws Exception{
         //将properties文件加载到输入字节流中
-        InputStream is = PropertyUtil.class.getClassLoader().getResourceAsStream("config/config.properties");
+        InputStream is = PropertyUtil.class.getClassLoader().getResourceAsStream("properties/config.properties");
         //创建一个Properties容器
         Properties prop = new Properties();
         //从流中加载properties文件信息
