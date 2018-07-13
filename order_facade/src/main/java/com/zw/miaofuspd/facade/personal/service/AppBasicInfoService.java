@@ -99,7 +99,7 @@ public interface AppBasicInfoService {
      * @return java.util.Map
      */
 
-    List<Map> getCityList(String provinceId) throws Exception;
+    List<Map> getCityList() throws Exception;
 
     /**
      * @author:韩梅生
@@ -109,7 +109,7 @@ public interface AppBasicInfoService {
      * @return java.util.Map
      */
 
-    List<Map> getDistrictList(String cityId) throws Exception;
+    List<Map> getDistrictList() throws Exception;
     /**
      * @author:韩梅生
      * @Description 一键申请
@@ -298,6 +298,10 @@ public interface AppBasicInfoService {
      */
     Map getUserIdCustomerId(String customerId);
 
+    /**
+     * 获取省市区列表
+     */
+    List getProCityDisList();
 
 
 }

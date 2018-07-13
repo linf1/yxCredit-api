@@ -135,6 +135,21 @@ public class BasicInfoController extends AbsBaseController {
     }
 
     /**
+     * @author:韩梅生
+     * @Description  获取省市区信息
+     * @Date 13:40 2018/7/12
+     * @param
+     * @return com.zw.web.base.vo.ResultVO
+     */
+    @RequestMapping("/getProCityDisList")
+    public ResultVO getProCityDisList() throws Exception{
+        ResultVO resultVO = new ResultVO();
+        List list = appBasicInfoService.getProCityDisList();
+        resultVO.setRetData(list);
+        return resultVO;
+    }
+
+    /**
      * @author 韩梅生
      * @date 15:38 2018/5/21
      * 获取市列表
@@ -143,7 +158,7 @@ public class BasicInfoController extends AbsBaseController {
     @RequestMapping("/getCityList")
     public ResultVO getCityList(String provinceId) throws Exception{
         ResultVO resultVO = new ResultVO();
-        List list = appBasicInfoService.getCityList(provinceId);
+        List list = appBasicInfoService.getCityList();
         resultVO.setRetData(list);
         return resultVO;
     }
@@ -158,7 +173,7 @@ public class BasicInfoController extends AbsBaseController {
     @RequestMapping("/getDistrictList")
     public ResultVO getDistrictList(String cityId) throws Exception{
         ResultVO resultVO = new ResultVO();
-        List list = appBasicInfoService.getDistrictList(cityId);
+        List list = appBasicInfoService.getDistrictList();
         resultVO.setRetData(list);
         return resultVO;
     }

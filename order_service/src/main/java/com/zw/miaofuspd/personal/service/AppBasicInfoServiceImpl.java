@@ -811,13 +811,13 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
      * @author:hanmeisheng
      * @Description  获取市信息
      * @Date 13:37 2018/5/12
-     * @param privinceId 省id
+     * @param
      * @return java.util.List<java.util.Map>
      */
 
     @Override
-    public List<Map> getCityList(String privinceId) {
-        String sql="select id,city_name as name from zw_sys_city where province_id='"+privinceId+"'";
+    public List<Map> getCityList() {
+        String sql="select id,city_name as name from zw_sys_city";
         List<Map> list = sunbmpDaoSupport.findForList(sql);
         return list;
     }
@@ -826,13 +826,13 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
      * @author:hanmeisheng
      * @Description  获取区信息
      * @Date 13:37 2018/5/12
-     * @param cityId 市的id
+     * @param
      * @return java.util.List<java.util.Map>
      */
 
     @Override
-    public List<Map> getDistrictList(String cityId) {
-        String sql="select id,district_name as name from zw_sys_district where city_id='"+cityId+"'";
+    public List<Map> getDistrictList() {
+        String sql="select id,district_name as name from zw_sys_district";
         List<Map> list = sunbmpDaoSupport.findForList(sql);
         return list;
     }
@@ -1315,4 +1315,51 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         String sql  = "SELECT user_id FROM mag_customer  WHERE  id ='"+customerId+"'";
         return sunbmpDaoSupport.findForMap(sql);
     }
+
+    @Override
+    public List getProCityDisList() {
+        List list = new ArrayList();
+        Map pdcMap;
+        Map dcMap;
+        Map cMap;
+        String proId;
+        String cityId;
+        String disId;
+        List<Map> citys;
+        List<Map> districts;
+        List<Map> provinceList = getProvinceList();
+        List<Map> cityList = getCityList();
+        List<Map> districtList = getDistrictList();
+        for(Map proMap : provinceList){
+            pdcMap = new HashMap();
+            proId = proMap.get("id").toString();
+            pdcMap.put("id",proId);
+            pdcMap.put("name",proMap.get("name"));
+            citys = new ArrayList<>();
+            for(Map cityMap : cityList){
+               cityId = cityMap.get("id").toString();
+               if(cityId.substring(0,2).equals(proId.substring(0,2))){
+                   dcMap = new HashMap();
+                   dcMap.put("id",cityId);
+                   dcMap.put("name",cityMap.get("name"));
+                   districts = new ArrayList<>();
+                   for(Map disMap : districtList){
+                       disId = disMap.get("id").toString();
+                       if(disId.substring(0,4).equals(cityId.substring(0,4))){
+                           cMap = new HashMap();
+                           cMap.put("id",disId);
+                           cMap.put("name",disMap.get("name"));
+                           districts.add(cMap);
+                       }
+                   }
+                   dcMap.put("districts",districts);
+                   citys.add(dcMap);
+               }
+           }
+           pdcMap.put("citys",citys);
+           list.add(pdcMap);
+        }
+        return  list;
+    }
+
 }
