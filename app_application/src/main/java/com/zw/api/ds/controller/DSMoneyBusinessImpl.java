@@ -153,6 +153,7 @@ public class DSMoneyBusinessImpl  implements IDSMoneyBusiness{
         request.setBorrowerType(Integer.valueOf(bankInfo.get("bank_type").toString()));
         //银行编号
         request.setBankCode(String.valueOf(bankInfo.get("bank_number")));
+        //银行名称
         request.setBankName(bankInfo.get("bank_name").toString());
         //银行卡号
         request.setBankCardNo(bankInfo.get("card_number").toString());
