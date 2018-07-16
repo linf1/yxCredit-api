@@ -182,18 +182,18 @@ public class ContractConfirmationServiceImpl extends AbsServiceBase implements C
         String updateSql="update mag_order set contract_time='"+time+"' where id='"+orderId+"'";
         sunbmpDaoSupport.exeSql(updateSql);
 
-        try {
-            String cjName = iDictService.getDictInfo("出借人", "cjrxm");
-            String cjCard = iDictService.getDictInfo("出借人", "cjsfz");
-            //防止合同底部签名变形
-            while (cjName.length() < 8) {
-                cjName += " ";
-            }
-            map.put("cjName", cjName);
-            map.put("cjCard", cjCard);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            String cjName = iDictService.getDictInfo("出借人", "cjrxm");
+//            String cjCard = iDictService.getDictInfo("出借人", "cjsfz");
+//            //防止合同底部签名变形
+//            while (cjName.length() < 8) {
+//                cjName += " ";
+//            }
+//            map.put("cjName", cjName);
+//            map.put("cjCard", cjCard);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         return map;
     }
