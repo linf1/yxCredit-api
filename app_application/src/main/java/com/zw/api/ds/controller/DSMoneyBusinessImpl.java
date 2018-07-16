@@ -136,20 +136,25 @@ public class DSMoneyBusinessImpl  implements IDSMoneyBusiness{
             return false;
         }
         Map bankInfo = bankcardInfoList.get(0);
+        //借款人名称
         request.setBorrowerName(bankInfo.get("cust_name").toString());
+        //借款人手机号
         request.setBorrowerMobilePhone(bankInfo.get("tel").toString());
         request.setBorrowerThirdId(request.getBorrowerThirdId());
-        request.setBorrowerCardNo(bankInfo.get("card_number").toString());
+        //借款人证件号
+        request.setBorrowerCardNo(bankInfo.get("card").toString());
         request.setAccountName(bankInfo.get("cust_name").toString());
         request.setAccountIdCard(bankInfo.get("card").toString());
+        //放款人证件号
         request.setAccountThirdId(request.getBorrowerThirdId());
         //个人
         request.setAccountType(bankInfo.get("bank_type").toString());
         //个人
         request.setBorrowerType(Integer.valueOf(bankInfo.get("bank_type").toString()));
-
+        //银行编号
         request.setBankCode(String.valueOf(bankInfo.get("bank_number")));
         request.setBankName(bankInfo.get("bank_name").toString());
+        //银行卡号
         request.setBankCardNo(bankInfo.get("card_number").toString());
         request.setProvinceCode(bankInfo.get("prov_id") == null ? "" : String.valueOf(bankInfo.get("prov_id")));
         request.setProvinceName(bankInfo.get("prov_name") == null ? "" : bankInfo.get("prov_name").toString());
