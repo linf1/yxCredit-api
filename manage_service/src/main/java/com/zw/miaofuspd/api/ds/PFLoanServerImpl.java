@@ -30,8 +30,8 @@ public class PFLoanServerImpl extends AbsDSBaseServer implements IPFLoanServer {
     public BYXResponse saveLoanMoney(PFLoanRequest request ) throws Exception {
         if (request != null){
             request.setOtherFlag(getOtherFlag(request.getBankCode()));
-            //final String result = HttpClientUtil.post(pFLoanSettings.getRequestUrl(), BYXRequest.getBYXRequest(request, byxSettings), byxSettings.getHeadRequest());
-            final String result = new ApiProxy(pFLoanSettings).apiInvoke(BYXRequest.getBYXRequest(request, byxSettings), byxSettings.getHeadRequest());
+            final String result = HttpClientUtil.post(pFLoanSettings.getRequestUrl(), BYXRequest.getBYXRequest(request, byxSettings), byxSettings.getHeadRequest());
+            //final String result = new ApiProxy(pFLoanSettings).apiInvoke(BYXRequest.getBYXRequest(request, byxSettings), byxSettings.getHeadRequest());
             return BYXResponse.getBYXResponse(result, byxSettings);
         }
         return  BYXResponse.error();
