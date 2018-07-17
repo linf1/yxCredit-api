@@ -5,6 +5,7 @@ import com.api.model.common.BYXResponse;
 import com.api.service.bankcard.IBankcardServer;
 import com.base.util.AppRouterSettings;
 import com.base.util.GeneratePrimaryKeyUtils;
+import com.base.util.StringUtils;
 import com.constants.ApiConstants;
 import com.zw.web.base.vo.ResultVO;
 import org.slf4j.Logger;
@@ -44,6 +45,13 @@ public class BankcardController {
     public ResultVO authsms(BankcardRequest bankcardRequest) {
         if(bankcardRequest == null){
             return ResultVO.error("参数异常");
+        }
+        if(StringUtils.isBlank(bankcardRequest.getCardId())) {
+            return ResultVO.error("缺少参数");
+        }
+        List<Map> bankCardList = bankcardServer.findSysBankCardInfo(bankcardRequest);
+        if(!CollectionUtils.isEmpty(bankCardList)){
+            return ResultVO.error("该银行卡用户已被实名认证");
         }
         LOGGER.info("进入银行卡四要素认证发送短信,参数为：{}",bankcardRequest.toString());
         final String orderNum = "O" + GeneratePrimaryKeyUtils.getSnowflakeKey();

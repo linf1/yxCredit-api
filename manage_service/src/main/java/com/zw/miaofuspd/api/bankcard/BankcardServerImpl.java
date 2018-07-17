@@ -128,4 +128,14 @@ public class BankcardServerImpl extends AbsServiceBase implements IBankcardServe
         sql.append("FROM sys_bank_card where is_authcard = '1' and cust_id = '").append(custId).append("'");
         return  sunbmpDaoSupport.findForList(sql.toString());
     }
+
+    @Override
+    public List<Map> findSysBankCardInfo(BankcardRequest bankcardRequest) {
+        StringBuilder sql = new StringBuilder("SELECT id, bank_name, bank_number, bank_subbranch_id, bank_subbranch,tel,card,card_number, cust_name, prov_id, prov_name, city_id, city_name ,create_time,bank_type ");
+        sql.append("FROM sys_bank_card where is_authcard = '1' ");
+        if(StringUtils.isNotBlank(bankcardRequest.getCardId())){
+            sql.append(" and card = '").append(bankcardRequest.getCardId()).append("'");
+        }
+        return  sunbmpDaoSupport.findForList(sql.toString());
+    }
 }

@@ -85,4 +85,12 @@ public interface IBankcardServer {
      */
     List<Map> findSysBankcardInfoByCustId(String  custId);
 
+    /**
+     * 查询银行卡信息
+     * @param bankcardRequest 查询实体
+     *                        cardId - 身份证号
+     * @return 返回结果集
+     */
+    List<Map> findSysBankCardInfo(BankcardRequest bankcardRequest);
+
 }
