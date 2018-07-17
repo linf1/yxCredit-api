@@ -46,13 +46,6 @@ public class BankcardController {
         if(bankcardRequest == null){
             return ResultVO.error("参数异常");
         }
-        if(StringUtils.isBlank(bankcardRequest.getCardId())) {
-            return ResultVO.error("缺少参数");
-        }
-        List<Map> bankCardList = bankcardServer.findSysBankCardInfo(bankcardRequest);
-        if(!CollectionUtils.isEmpty(bankCardList)){
-            return ResultVO.error("该银行卡用户已被实名认证");
-        }
         LOGGER.info("进入银行卡四要素认证发送短信,参数为：{}",bankcardRequest.toString());
         final String orderNum = "O" + GeneratePrimaryKeyUtils.getSnowflakeKey();
         final String orderNo = "N" + GeneratePrimaryKeyUtils.getSnowflakeKey();
@@ -193,6 +186,29 @@ public class BankcardController {
             e.printStackTrace();
             return ResultVO.error(e.getMessage());
         }
+    }
+
+
+    /**
+     * 实名认证时检查银行卡是否进行过实名认证
+     * @param bankcardRequest 银行卡请求参数
+     *                         cardId	string	身份证号
+     * @return 成功：可以进行实名认证 失败：不可进行实名认证
+     */
+    @GetMapping("/isRealName")
+    public ResultVO isRealName(BankcardRequest bankcardRequest){
+        if(bankcardRequest == null){
+            return ResultVO.error("参数异常");
+        }
+        if(StringUtils.isBlank(bankcardRequest.getCardId())) {
+            return ResultVO.error("缺少参数");
+        }
+        LOGGER.info("进入实名认证时检查银行卡是否进行过实名认证,参数为：{}",bankcardRequest.toString());
+        List<Map> bankCardList = bankcardServer.findSysBankCardInfo(bankcardRequest);
+        if(!CollectionUtils.isEmpty(bankCardList)){
+            return ResultVO.error("该银行卡用户已被实名认证");
+        }
+        return ResultVO.ok("该银行卡未被实名认证",null);
     }
 
 }
