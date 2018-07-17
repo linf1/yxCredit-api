@@ -53,17 +53,6 @@ public class AssetController {
             Object syncAccountId = customerMap.get("sync_account_id");
             Object syncUserId = customerMap.get("sync_user_id");
 
-            //如果一键申请时候同步借款人数据失败 这里补救（继续请求）create by 陈清玉
-            if(syncAccountId == null || syncUserId == null ) {
-                Map<String, Object> runSyncDataMap = runSyncData(orderId);
-                if(runSyncDataMap != null){
-                    syncUserId = runSyncDataMap.get("syncUserId");
-                    syncAccountId =  runSyncDataMap.get("syncAccountId");
-                }else{
-                    LOGGER.info("----借款人及放款账户数据同步失败----");
-                   return ResultVO.error("借款人及放款账户数据同步失败！");
-                }
-            }
               request.setAssetName(orderMap.get("product_name_name") == null? "" : orderMap.get("product_name_name").toString());
               request.setAssetAmount(orderMap.get("loan_amount") == null?"":orderMap.get("loan_amount").toString());
               request.setAssetFinanceCost(orderMap.get("assetFinanceCost") == null?"":orderMap.get("assetFinanceCost").toString());
@@ -79,7 +68,7 @@ public class AssetController {
               request.setAssetPersonIdcard(orderMap.get("card") == null?"":orderMap.get("card").toString());
               request.setAssetPersonMobilePhone(orderMap.get("tel") == null?"":orderMap.get("tel").toString());
               request.setAssetPersonAddress(customerMap.get("company_address") == null?"":customerMap.get("company_address").toString());
-              request.setByxBankId(bankMap.get("accountId") == null?"":bankMap.get("accountId").toString());
+              request.setByxBankId(bankMap.get("accountId") == null ? syncAccountId.toString() : bankMap.get("accountId").toString());
               request.setAssetBankType(bankMap.get("bank_type") == null?"":bankMap.get("bank_type").toString());
               request.setAssetBankUserName(bankMap.get("cust_name") == null?"":bankMap.get("cust_name").toString());
               request.setAssetBankName(bankMap.get("bank_name") == null?"":bankMap.get("bank_name").toString());
