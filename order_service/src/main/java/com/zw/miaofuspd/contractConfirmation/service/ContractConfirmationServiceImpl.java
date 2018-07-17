@@ -138,7 +138,7 @@ public class ContractConfirmationServiceImpl extends AbsServiceBase implements C
         Map customerMap = sunbmpDaoSupport.findForMap(customerSql);
         map.putAll(customerMap);
         //查询银行卡信息
-        String bankSql="select cust_name as cusAccountName, bank_name as cusAccountBank, card_number as cusBankCard from sys_bank_card where id='"+orderMap.get("bankId")+"'";
+        String bankSql="select cust_name as cusAccountName, bank_name as cusAccountBank, card_number as cusBankCard, bank_subbranch as subBankName from sys_bank_card where id='"+orderMap.get("bankId")+"'";
         Map bankMap = sunbmpDaoSupport.findForMap(bankSql);
         map.putAll(bankMap);
 
