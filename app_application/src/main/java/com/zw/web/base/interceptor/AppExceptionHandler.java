@@ -24,6 +24,7 @@ public class AppExceptionHandler implements HandlerExceptionResolver {
             return new ModelAndView("comm/error");
         } else {// JSON格式返回*/
             try (PrintWriter writer = response.getWriter()) {
+                response.setHeader("Content-type", "text/html;charset=UTF-8");
                 response.setCharacterEncoding("UTF-8");
                 // 返回客户端系统异常
                 ResultVO resultVO = new ResultVO();
