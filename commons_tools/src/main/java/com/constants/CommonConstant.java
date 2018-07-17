@@ -50,4 +50,10 @@ public interface CommonConstant {
     String WHITE_STATUS_ON = "1";
 
     String WHITE_STATUS_OFF = "0";
+
+    /**
+     * 银行卡实名信息 1已实名
+     */
+    String IS_AUTHCARD_YES= "1";
+
 }
