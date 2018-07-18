@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,7 +69,7 @@ public class AssetController {
               request.setAssetPersonIdcard(orderMap.get("card") == null?"":orderMap.get("card").toString());
               request.setAssetPersonMobilePhone(orderMap.get("tel") == null?"":orderMap.get("tel").toString());
               request.setAssetPersonAddress(customerMap.get("company_address") == null?"":customerMap.get("company_address").toString());
-              request.setByxBankId(bankMap.get("accountId") == null ? syncAccountId.toString() : bankMap.get("accountId").toString());
+              request.setByxBankId(StringUtils.isEmpty(bankMap.get("accountId")) ? syncAccountId.toString() : bankMap.get("accountId").toString());
               request.setAssetBankType(bankMap.get("bank_type") == null?"":bankMap.get("bank_type").toString());
               request.setAssetBankUserName(bankMap.get("cust_name") == null?"":bankMap.get("cust_name").toString());
               request.setAssetBankName(bankMap.get("bank_name") == null?"":bankMap.get("bank_name").toString());
