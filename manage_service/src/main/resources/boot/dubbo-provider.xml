@@ -44,5 +44,7 @@
     ref="activityServiceImpl"/>
     <dubbo:service interface="com.api.service.ds.IPFLoanServer" timeout="30000"
                    ref="pFLoanServerImpl"/>
+    <dubbo:service interface="com.api.service.repayment.IRepaymentServer" timeout="30000"
+                   ref="repaymentServerImpl"/>
 
 </beans>

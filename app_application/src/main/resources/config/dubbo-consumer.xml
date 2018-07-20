@@ -13,7 +13,10 @@
 
     <!-- 使用zookeeper注册中心暴露服务地址 -->
     <!-- 注册中心地址 -->
-    <dubbo:registry protocol="zookeeper" address="${zk.host}"/>
+    <!--生产-->
+    <!--<dubbo:registry protocol="zookeeper" address="10.139.33.121:2181"/>-->
+    <!--开发-->
+    <dubbo:registry protocol="zookeeper" address="127.0.0.1:2181"/>
 
     <dubbo:reference interface="com.zw.miaofuspd.facade.dict.service.IDictService"
                      id="dictServiceImpl" check="false"/>
@@ -77,5 +80,7 @@
                      id="activityServiceImpl"/>
     <dubbo:reference interface="com.api.service.ds.IPFLoanServer" timeout="30000"
                      id="pFLoanServerImpl"/>
+    <dubbo:reference interface="com.api.service.repayment.IRepaymentServer" timeout="30000"
+                     id="repaymentServerImpl"/>
 
 </beans>

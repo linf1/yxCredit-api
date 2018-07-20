@@ -86,38 +86,41 @@ public class AssetController {
             try {
                 BYXResponse  byxResponse = iassetServer.thirdAssetsReceiver(request);
                 if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
-                    appBasicInfoServiceImpl.updateAssetStatus(orderId,true);
+                    appBasicInfoServiceImpl.updateAssetStatus(orderId,true,"1");
                     return ResultVO.ok(byxResponse.getRes_data());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        appBasicInfoServiceImpl.updateAssetStatus(orderId,false);
+        appBasicInfoServiceImpl.updateAssetStatus(orderId,false,"1");
+        return ResultVO.error();
+   }
+    /**
+     *
+     * @param
+     * @return
+     */
+    @PostMapping("/getByBusinessId")
+    public ResultVO getByBusinessId(String orderId) {
+           final Map paramMap = new HashMap<String,String>(2);
+           paramMap.put("businessId",orderId);
+            try {
+                BYXResponse  byxResponse = iassetServer.getByBusinessId(paramMap);
+                if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
+                    appBasicInfoServiceImpl.updateAssetStatus(orderId,true,"2");
+                    return ResultVO.ok(byxResponse.getRes_data());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                appBasicInfoServiceImpl.updateAssetStatus(orderId,false,"2");
+                ResultVO.error(e.getMessage());
+            }
+        appBasicInfoServiceImpl.updateAssetStatus(orderId,false,"2");
         return ResultVO.error();
    }
 
-    /**
-     * 如果syncAccountId == null || syncUserId == null 证明数据同步失败 ， create by 陈清玉。
-     * @param orderId 订单id
-     * @return 同不数据的map
-     *                      - syncAccountId 同步是保存在数据库里面 账户ID
-     *                      - syncUserId 同步是保存在数据库里面 用户ID
-     */
-   public  Map<String,Object> runSyncData(String orderId){
-        Map<String,Object> resultMap = null;
-           BYXResponse byxResponse = idsMoneyBusiness.syncData(orderId);
-           if(byxResponse != null) {
-               if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
-                   final Map resData = (Map) byxResponse.getRes_data();
-                   resultMap = new HashMap<>(2);
-                   resultMap.put("syncUserId",resData.get("userId"));
-                   resultMap.put("syncAccountId",resData.get("accountId"));
-                   LOGGER.info("----借款人及放款账户数据同步成功----");
-               }
-           }
-         return resultMap;
-   }
+
 
 
 }

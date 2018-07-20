@@ -106,5 +106,28 @@
         <property name="requestType" value="${pfLoan.requestType}"/>
         <property name="requestUrl" value="${pfLoan.requestUrl}"/>
     </bean>
+    <!-- 提前预算数据同步 韩梅生-->
+    <bean id="trialRepaymentSettings" class="com.api.model.repayment.TrialRepaymentSettings">
+        <property name="requestType" value="${trialRepayment.requestType}"/>
+        <property name="requestUrl" value="${trialRepayment.requestUrl}"/>
+    </bean>
+    <!-- 确认提前还款数据同步 韩梅生-->
+    <bean id="prepaymentRecodeSettings" class="com.api.model.repayment.PrepaymentRecodeSettings">
+        <property name="requestType" value="${prepaymentRecode.requestType}"/>
+        <property name="requestUrl" value="${prepaymentRecode.requestUrl}"/>
+    </bean>
+
+    <!-- 有信贷查询资产数据同步 韩梅生-->
+    <bean id="businessSettings" class="com.api.model.repayment.BusinessSettings">
+        <property name="requestType" value="${getBusiness.requestType}"/>
+        <property name="requestUrl" value="${getBusiness.requestUrl}"/>
+    </bean>
+
+    <!-- 查询还款账号数据同步 韩梅生-->
+    <bean id="loanSettings" class="com.api.model.repayment.LoanSettings">
+        <property name="requestType" value="${getLoan.requestType}"/>
+        <property name="requestUrl" value="${getLoan.requestUrl}"/>
+    </bean>
+
 
 </beans>
