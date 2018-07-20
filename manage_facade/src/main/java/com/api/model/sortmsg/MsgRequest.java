@@ -20,7 +20,7 @@ public class MsgRequest implements Serializable {
 
     private String smsCode;
 
-    private Long timeOut;
+    private int overTime;
     /**
      * 时间戳
      */
@@ -50,12 +50,12 @@ public class MsgRequest implements Serializable {
         return smsCode;
     }
 
-    public Long getTimeOut() {
-        return timeOut;
+    public int getOverTime() {
+        return overTime;
     }
 
-    public void setTimeOut(Long timeOut) {
-        this.timeOut = timeOut;
+    public void setOverTime(int overTime) {
+        this.overTime = overTime;
     }
 
     public void setSmsCode(String smsCode) {

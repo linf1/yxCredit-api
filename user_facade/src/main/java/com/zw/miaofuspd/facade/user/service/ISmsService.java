@@ -20,5 +20,19 @@ public interface ISmsService {
     boolean updateSms(MsgRequest request);
 
 
+    /**
+     * 保存验证码信息到Redis 便于验证
+     * @param request
+     * @return
+     */
+    boolean saveSmsForRedis(MsgRequest request);
+
+    /**
+     * 根据验证码验证
+     * @param inMap
+     * @return
+     */
+    Map checkSmsForRedis(Map inMap) ;
+
 
 }

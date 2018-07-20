@@ -38,12 +38,13 @@
         <property name="configLocation" value="classpath:mybatis/mybatis-config.xml"/>
         <property name="dataSource" ref="sunbmpDataSource"/>
         <!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
-        <!--<property name="typeAliasesPackage" value="com.zw.facade.entity"/>-->
+        <property name="typeAliasesPackage" value="com.zw.miaofuspd.facade.pojo"/>
         <!-- 显式指定Mapper文件位置 -->
         <!--    <property name="mapperLocations" value="classpath:mybatis/mapper/sunbmp/*.xml"/>-->
         <property name="mapperLocations">
             <list>
                 <value>classpath:mybatis/mapper/DaoSupportMapper.xml</value>
+                <value>classpath:/boot/mapper/**/*.xml</value>
                 <value>classpath*:/boot/mapper/sumbmp/*.xml</value>
             </list>
         </property>
@@ -69,10 +70,10 @@
         /> </bean> -->
 
     <!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口 -->
-<!--    <bean id="sunbmpMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.zw.service.sunbmp.dao"/>
+    <bean id="sunbmpMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.zw.miaofuspd.mapper"/>
         <property name="sqlSessionFactoryBeanName" value="sunbmpSqlSessionFactory"/>
-    </bean>-->
+    </bean>
 
     <!--======= 事务配置 Begin ================= -->
     <!-- 事务管理器（由Spring管理MyBatis的事务） -->
@@ -80,7 +81,6 @@
           class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <!-- 关联数据源 -->
         <property name="dataSource" ref="sunbmpDataSource"></property>
-        <qualifier value="issunbmp"/>
     </bean>
 
     <!-- 注解方式配置事物 -->

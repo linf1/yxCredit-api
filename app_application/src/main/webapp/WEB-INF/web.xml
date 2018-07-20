@@ -87,49 +87,13 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <filter>
-        <filter-name>Filter1_CheckToken</filter-name>
-        <filter-class>com.zw.miaofuspd.filter.CheckTokenFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>Filter1_CheckToken</filter-name>
-        <url-pattern>/1.0.0/*</url-pattern>
-    </filter-mapping>
-
-
     <!--<filter>-->
-        <!--<filter-name>TokenFilter</filter-name>-->
-        <!--<filter-class>com.zw.miaofu.filter.TokenFilter</filter-class>-->
+        <!--<filter-name>Filter1_CheckToken</filter-name>-->
+        <!--<filter-class>com.zw.miaofuspd.filter.CheckTokenFilter</filter-class>-->
     <!--</filter>-->
     <!--<filter-mapping>-->
-        <!--<filter-name>TokenFilter</filter-name>-->
-        <!--<url-pattern>/authorization/*</url-pattern>-->
-        <!--<url-pattern>/imgCode/*</url-pattern>-->
-        <!--<url-pattern>/logout/*</url-pattern>-->
-        <!--<url-pattern>/msg/*</url-pattern>-->
-        <!--<url-pattern>/carousel/*</url-pattern>-->
-        <!--<url-pattern>/platform/*</url-pattern>-->
-        <!--<url-pattern>/customer/*</url-pattern>-->
-        <!--<url-pattern>/editPw/*</url-pattern>-->
-        <!--<url-pattern>/feedback/*</url-pattern>-->
-        <!--<url-pattern>/problem/*</url-pattern>-->
-        <!--<url-pattern>/uniBindCardPay/*</url-pattern>-->
-        <!--<url-pattern>/ybCard/*</url-pattern>-->
-        <!--<url-pattern>/withdrawal/*</url-pattern>-->
-        <!--<url-pattern>/order/*</url-pattern>-->
-        <!--<url-pattern>/orderMessage/*</url-pattern>-->
-        <!--<url-pattern>/basicinfo/*</url-pattern>-->
-        <!--<url-pattern>/miaofuOrder/*</url-pattern>-->
-        <!--<url-pattern>/product/*</url-pattern>-->
-        <!--<url-pattern>/repay/*</url-pattern>-->
-        <!--<url-pattern>/oss/*</url-pattern>-->
+        <!--<filter-name>Filter1_CheckToken</filter-name>-->
+        <!--<url-pattern>/1.0.0/*</url-pattern>-->
     <!--</filter-mapping>-->
-    <!--<filter>-->
-         <!--<filter-name>springSessionRepositoryFilter</filter-name>-->
-         <!--<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>-->
-     <!--</filter>-->
-    <!--<filter-mapping>-->
-         <!--<filter-name>springSessionRepositoryFilter</filter-name>-->
-         <!--<url-pattern>/*</url-pattern>-->
-     <!--</filter-mapping>-->
+
 </web-app>

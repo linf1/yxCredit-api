@@ -23,4 +23,10 @@
     <!--合同接口-->
     <dubbo:service interface="com.zw.miaofuspd.facade.contractConfirmation.service.ContractConfirmationService" timeout="30000"
                    ref="contractConfirmationServiceImpl"/>
+    <!--操作记录-->
+    <dubbo:service interface="com.zw.miaofuspd.facade.order.service.IOrderOperationRecordService" timeout="30000"
+                   ref="orderOperationRecordServiceImpl"/>
+    <!--订单-->
+    <dubbo:service interface="com.zw.miaofuspd.facade.order.service.AppOrderService" timeout="30000"
+                   ref="appOrderServiceImpl"/>
 </beans>

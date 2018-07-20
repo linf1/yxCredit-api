@@ -79,4 +79,7 @@ dependencies {
     compile 'com.zw:yop-sdk-1.2.1:1.2.1'
     compile 'com.zw:json-lib-2.4-jdk15:2.4'
 
+    // https://mvnrepository.com/artifact/org.springframework/spring-jms
+    compile group: 'org.springframework', name: 'spring-jms', version: '4.3.14.RELEASE'
+
 }

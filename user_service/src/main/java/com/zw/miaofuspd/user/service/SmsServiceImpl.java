@@ -8,10 +8,12 @@ import com.zw.miaofuspd.facade.dict.service.IDictService;
 import com.zw.miaofuspd.facade.dict.service.ISystemDictService;
 import com.zw.miaofuspd.facade.user.service.ISmsService;
 import com.zw.service.base.AbsServiceBase;
+import com.zw.service.redis.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class SmsServiceImpl extends AbsServiceBase implements ISmsService {
@@ -19,6 +21,9 @@ public class SmsServiceImpl extends AbsServiceBase implements ISmsService {
     private ISystemDictService iSystemDictService;
     @Autowired
     private IDictService iDictService;
+    @Autowired
+    private RedisService redisService;
+
 
     @Override
     public boolean saveSms(MsgRequest msgRequest) {
@@ -81,5 +86,33 @@ public class SmsServiceImpl extends AbsServiceBase implements ISmsService {
         sql.append("and tel = '").append(phone);
         sql.append("' and type = '").append(request.getType()).append("'");
         return sunbmpDaoSupport.executeSql(sql.toString()) > 0;
+    }
+
+    @Override
+    public boolean saveSmsForRedis(MsgRequest request) {
+        redisService.set(request.getPhone(),request.getSmsCode(),request.getOverTime() ,TimeUnit.SECONDS);
+        return true;
+    }
+
+    @Override
+    public Map checkSmsForRedis(Map inMap) {
+        //先查询验证码和用户是否正确
+        Map outMap=new HashMap(2);
+        String tel = inMap.get("tel") == null ? "" : (String)inMap.get("tel");
+        String smsCode=(String)inMap.get("smsCode");
+        String redisValue = redisService.get(tel);
+        if(redisValue == null){
+            outMap.put("flag",false);
+            outMap.put("msg","验证码已失效，请重新获取");
+            return outMap;
+        }
+        else if(!smsCode.equals(redisValue)){
+            outMap.put("flag",false);
+            outMap.put("msg","验证码输入有误，请重新输入");
+            return outMap;
+        }
+        redisService.delete(tel);
+        outMap.put("flag",true);
+        return outMap;
     }
 }

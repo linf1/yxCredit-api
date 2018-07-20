@@ -48,9 +48,13 @@ public class AppConstant {
      */
     public static final int CAPTCHA_INTERVAL_TIME = 1000;
     /**
-     * 验证码超时时间 5分钟以后超时
+     * 图片验证码超时时间 5分钟以后超时
      */
     public static final int SMS_CODE_OVERTIME = 60 * 5;
+    /**
+     * 手机验证码超时时间 1分钟以后超时
+     */
+    public static final int SMS_CODE_PHONE_OVERTIME = 60;
 
 
 

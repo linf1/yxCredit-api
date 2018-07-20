@@ -30,13 +30,13 @@ public class DsMoneyController {
 
     /**
      * 根据订单ID同步借款人信息
-     * @param orderId 订单ID
+     * @param request 订单ID
      * @return {@link ResultVO}
      */
     @PostMapping("/dsBorrowerAndAccountCard")
     public ResultVO dsBorrowerAndAccountCard(DSMoneyRequest request) {
         LOGGER.info("==============借款人及放款账户数据同步开始========参数：{}",request.toString());
-        if (StringUtils.isNotBlank(request.getBorrowerThirdId())) {
+        if (StringUtils.isNotBlank(request.getAppUserId())) {
             try {
                 BYXResponse  byxResponse = idsMoneyBusiness.syncData(request);
                 if(byxResponse != null) {

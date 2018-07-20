@@ -64,11 +64,13 @@ public class SmsApiController  {
         msgRequest.setSmsCode(smsCode);
         //设置为短信验证
         msgRequest.setType("0");
+        //设置超时时间
+        msgRequest.setOverTime(AppConstant.SMS_CODE_PHONE_OVERTIME);
         try {
             final BYXResponse byxResponse = messageServer.sendSms(msgRequest, parameters);
             if (byxResponse != null) {
                 if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
-                    smsService.saveSms(msgRequest);
+                    smsService.saveSmsForRedis(msgRequest);
                     LOGGER.info("短信发送成功", byxResponse.toString());
                     return ResultVO.ok(byxResponse.getRes_msg(), null);
                 }else{
@@ -101,10 +103,8 @@ public class SmsApiController  {
             Map inMap=new HashMap(2);
             inMap.put("tel",msgRequest.getPhone());
             inMap.put("smsCode",msgRequest.getSmsCode().toLowerCase());
-            //设置
-            inMap.put("errortime",String.valueOf(AppConstant.SMS_CODE_OVERTIME));
             inMap.put("type",msgRequest.getType());
-            final Map resData  = smsService.checkSms(inMap);
+            final Map resData  = smsService.checkSmsForRedis(inMap);
             if(resData != null){
                 Boolean flag = (Boolean) resData.get("flag");
                 if(flag ){
@@ -135,13 +135,12 @@ public class SmsApiController  {
         msgRequest.setSmsCode(text.toLowerCase());
         //设置为图片验证码
         msgRequest.setType("1");
-        //如果更新不成功就添加一条
-        if (!smsService.updateSms(msgRequest)) {
-            smsService.saveSms(msgRequest);
-        }
+        msgRequest.setOverTime(AppConstant.SMS_CODE_OVERTIME);
+        //保存到到redis数据库 便于验证
+        smsService.saveSmsForRedis(msgRequest);
         //生成图片验证码
         BufferedImage image = captchaProducer.createImage(text);
-        //保存到到数据库 便于验证
+
         ServletOutputStream out = response.getOutputStream();
         ImageIO.write(image, "jpg", out);
         out.flush();
