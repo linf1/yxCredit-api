@@ -125,4 +125,17 @@ public class BYXResponse implements Serializable {
         if(StringUtils.isEmpty(byxResponseJson)){return error();}
         return JSONObject.parseObject(byxResponseJson, BYXResponse.class);
     }
+
+
+    /**
+     * 解析内容返回结果
+     * @param byxResponseJson 密文
+     * @return BYXResponse
+     */
+    public static BYXResponse getBYXResponseJson(String byxResponseJson,BYXSettings byxSettings) throws Exception {
+        if(StringUtils.isEmpty(byxResponseJson)){return error();}
+        CryptoTools cryptoTools = new CryptoTools(byxSettings.getDesKey(),byxSettings.getVi());
+        final String decode = cryptoTools.decode(byxResponseJson);
+        return BYXResponse.ok(JSONObject.parseObject(decode));
+    }
 }
