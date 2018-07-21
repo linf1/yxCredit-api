@@ -49,18 +49,18 @@ public interface MagOrderMapper {
 
 
     /**
-     * 按id更新订单信息
+     * 按订单编号更新订单信息
      * @author 陈淸玉 create on 2018-07-19
      * @param order 订单实体
      * @return 影响行数
      */
-    int updateOrderById(MagOrder order);
+    int updateOrderByNo(MagOrder order);
 
     /**
-     * 按id获取订单信息
+     * 按订单编号获取订单编号信息
      * @author 陈淸玉 create on 2018-07-19
-     * @param orderId 订单Id
+     * @param orderNo 订单Id
      * @return 一条订单数据
      */
-    MagOrder getOrderInfoById(@Param("orderId") String orderId);
+    MagOrder getOrderInfoByNo(@Param("orderNo") String orderNo);
 }

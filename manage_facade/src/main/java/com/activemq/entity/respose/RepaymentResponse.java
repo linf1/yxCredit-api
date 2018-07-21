@@ -25,9 +25,9 @@ public class RepaymentResponse {
      */
     private Long userId;
     /**
-     * 订单Id（订单ID，唯一性关联）
+     * 订单编号（订单编号，唯一性关联）
      */
-    private String orderId;
+    private String orderNo;
     /**
      * 起息日
      */
@@ -149,12 +149,12 @@ public class RepaymentResponse {
         this.userId = userId;
     }
 
-    public String getOrderId() {
-        return orderId;
+    public String getOrderNo() {
+        return orderNo;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 
     public Date getInterestStartTime() {
@@ -340,7 +340,7 @@ public class RepaymentResponse {
                 ", status='" + status + '\'' +
                 ", period=" + period +
                 ", userId=" + userId +
-                ", orderId='" + orderId + '\'' +
+                ", orderNo='" + orderNo + '\'' +
                 ", interestStartTime=" + interestStartTime +
                 ", repaymentTime=" + repaymentTime +
                 ", repaymentYesTime=" + repaymentYesTime +

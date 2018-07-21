@@ -5,12 +5,11 @@ import com.activemq.entity.respose.RepaymentResponse;
 import com.api.model.common.BYXResponse;
 
 /**
- * 放款服务
- *
+ * 放款业务服务
  * @author 陈淸玉 create on 2018-07-20
  */
-public interface IRepaymentService {
-    String BEAN_KEY = "repaymentServiceImpl";
+public interface IRepaymentBusiness {
+    String BEAN_KEY = "repaymentBusinessImpl";
 
     /**
      * 放款
@@ -25,6 +24,14 @@ public interface IRepaymentService {
      * @return 是否成功
      */
     boolean saveRepaymentInfo(RepaymentResponse repaymentResponse);
+
+    /**
+     * 设置放款账户信息
+     * @param loanDetailResponse 放款账户信息
+     * @return 是否成功
+     */
+    boolean setLoanInfo(LoanDetailResponse loanDetailResponse);
+
     /**
      * 更新还款信息
      * @param repaymentResponse 还款信息实体
@@ -38,5 +45,18 @@ public interface IRepaymentService {
      * @return 处理结果
      */
     boolean repaymentHandel(BYXResponse byxResponse);
+
+
+    /**
+     * 网贷发生还款，正常还款 or 提前还款消息 主要处理方法
+     * @param byxResponse 获得的信息
+     * @return 处理结果
+     */
+    boolean repaymentPushAssentHandel(BYXResponse byxResponse);
+
+    /**
+     * 发送信息（短信，站内信）
+     */
+    void sendMessage() throws Exception;
 
 }

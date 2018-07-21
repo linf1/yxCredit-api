@@ -360,7 +360,7 @@
     from mag_order
   </select>
 
-  <update id="updateOrderById" parameterType="com.zw.miaofuspd.facade.pojo.MagOrder" >
+  <update id="updateOrderByNo" parameterType="com.zw.miaofuspd.facade.pojo.MagOrder" >
     UPDATE mag_order
     <set>
       <if test="amount!=null and amount!=''">
@@ -414,11 +414,14 @@
       <if test="payBackCard != null and payBackCard != ''">
         pay_back_card=#{payBackCard},
       </if>
+      <if test="loanTime != null ">
+        loan_time=#{loanTime},
+      </if>
     </set>
-    where id = #{id}
+    where order_no = #{orderNo}
   </update>
 
-  <select id="getOrderInfoById"  resultMap="BaseResultMap">
-    select contract_amount,PERIODS from mag_order where id = #{orderId}
+  <select id="getOrderInfoByNo"  resultMap="BaseResultMap">
+    select contract_amount,PERIODS,user_id,tel,applay_money from mag_order where order_no = #{orderNo}
   </select>
 </mapper>
