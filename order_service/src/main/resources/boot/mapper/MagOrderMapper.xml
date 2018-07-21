@@ -419,6 +419,6 @@
   </update>
 
   <select id="getOrderInfoById"  resultMap="BaseResultMap">
-    select contract_amount from mag_order where id = #{orderId}
+    select contract_amount,PERIODS from mag_order where id = #{orderId}
   </select>
 </mapper>

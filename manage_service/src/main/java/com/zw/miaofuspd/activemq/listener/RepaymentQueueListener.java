@@ -1,11 +1,7 @@
 package com.zw.miaofuspd.activemq.listener;
 
 
-import com.activemq.entity.respose.LoanDetailResponse;
-import com.activemq.entity.respose.RepaymentListResponse;
 import com.activemq.service.IRepaymentService;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.api.model.BYXSettings;
 import com.api.model.common.BYXResponse;
 import org.slf4j.Logger;

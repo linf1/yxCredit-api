@@ -1,9 +1,10 @@
 package com.zw.miaofuspd.activemq.service;
 
 import com.activemq.entity.respose.LoanDetailResponse;
-import com.activemq.entity.respose.RepaymentListResponse;
+import com.activemq.entity.respose.RepaymentResponse;
 import com.activemq.service.IRepaymentService;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.api.model.common.BYXResponse;
 import com.base.util.BeanMapperUtil;
@@ -21,10 +22,8 @@ import com.zw.pojo.BusinessRepayment;
 import com.zw.service.IBusinessRepaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -73,15 +72,18 @@ public class RepaymentServiceImpl implements IRepaymentService {
     }
 
     @Override
-    public boolean saveRepaymentInfo(RepaymentListResponse repaymentListResponse) {
-        BusinessRepayment businessRepayment = BeanMapperUtil.objConvert(repaymentListResponse, BusinessRepayment.class);
+    public boolean saveRepaymentInfo(RepaymentResponse repaymentResponse) {
+        BusinessRepayment businessRepayment = BeanMapperUtil.objConvert(repaymentResponse, BusinessRepayment.class);
         businessRepayment.setCreateUserId("admin");
+        businessRepayment.setPeriods(0);
+        businessRepayment.setId(GeneratePrimaryKeyUtils.getUUIDKey());
+        businessRepayment.setUpdateUserId("");
         return businessRepaymentService.saveRepayment(businessRepayment);
     }
 
     @Override
-    public boolean updateRepaymentInfo(RepaymentListResponse repaymentListResponse) {
-        BusinessRepayment businessRepayment = BeanMapperUtil.objConvert(repaymentListResponse, BusinessRepayment.class);
+    public boolean updateRepaymentInfo(RepaymentResponse repaymentResponse) {
+        BusinessRepayment businessRepayment = BeanMapperUtil.objConvert(repaymentResponse, BusinessRepayment.class);
         businessRepayment.setUpdateUserId("admin");
         return businessRepaymentService.updateByOrderIdAndPeriod(businessRepayment) > 0;
     }
@@ -95,9 +97,16 @@ public class RepaymentServiceImpl implements IRepaymentService {
             if(loanDetail != null ){
                 loanDetail.setBusinessId("0d8a7369b7ee454b993817456a65e421");
                 loanMoney(loanDetail);
-                RepaymentListResponse repaymentList = JSONObject.toJavaObject((JSON) resData.get("repaymentList"),RepaymentListResponse.class);
+                JSONArray repaymentList = (JSONArray) resData.get("repaymentList");
+                //批量生产还款计划（多期的情况）
                 if( repaymentList != null){
-                    saveRepaymentInfo(repaymentList);
+                    for (Object item : repaymentList) {
+                        RepaymentResponse repayment = JSONObject.toJavaObject((JSON)item,RepaymentResponse.class);
+                        if(repayment != null){
+                            repayment.setOrderId(loanDetail.getBusinessId());
+                            saveRepaymentInfo(repayment);
+                        }
+                    }
                     return  true;
                 }
             }

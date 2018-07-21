@@ -7,7 +7,7 @@ import java.util.Date;
  * 还款计划接口请求实体
  * @author 陈淸玉 create 2018-07-10
  */
-public class RepaymentListResponse {
+public class RepaymentResponse {
     /**
      * 还款主键
      */

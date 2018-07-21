@@ -1,7 +1,7 @@
 package com.activemq.service;
 
 import com.activemq.entity.respose.LoanDetailResponse;
-import com.activemq.entity.respose.RepaymentListResponse;
+import com.activemq.entity.respose.RepaymentResponse;
 import com.api.model.common.BYXResponse;
 
 /**
@@ -15,19 +15,22 @@ public interface IRepaymentService {
     /**
      * 放款
      * @param loanDetailResponse 放款实体
+     * @return 是否成功
      */
     boolean loanMoney(LoanDetailResponse loanDetailResponse);
 
     /**
      * 保存还款信息
-     * @param repaymentListResponse 还款信息实体
+     * @param repaymentResponse 还款信息实体
+     * @return 是否成功
      */
-    boolean saveRepaymentInfo(RepaymentListResponse repaymentListResponse);
+    boolean saveRepaymentInfo(RepaymentResponse repaymentResponse);
     /**
      * 更新还款信息
-     * @param repaymentListResponse 还款信息实体
+     * @param repaymentResponse 还款信息实体
+     * @return 是否成功
      */
-    boolean updateRepaymentInfo(RepaymentListResponse repaymentListResponse);
+    boolean updateRepaymentInfo(RepaymentResponse repaymentResponse);
 
     /**
      * 推送放款及还款计划 主要处理方法
