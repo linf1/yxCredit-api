@@ -82,5 +82,6 @@
                      id="pFLoanServerImpl"/>
     <dubbo:reference interface="com.api.service.repayment.IRepaymentServer" timeout="30000"
                      id="repaymentServerImpl"/>
+    <dubbo:reference interface="com.activemq.service.IRepaymentBusiness" timeout="30000"  id="repaymentBusinessImpl"/>
 
 </beans>
