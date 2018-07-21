@@ -24,9 +24,17 @@ public interface IAssetServer {
     /**
      * 有信贷查询资产是否存在
      * @param paramMap
-     * @return
+     * @return BYXResponse
+     * @exception
      */
     BYXResponse getByBusinessId(Map paramMap) throws Exception;
+
+    /**
+     * 根据推送信息更新资产同步状态
+     * @param byxResponse
+     * @return 结果
+     */
+    void updateAssetStatus(BYXResponse byxResponse);
 
 
 

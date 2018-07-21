@@ -457,4 +457,15 @@ public class DateUtils {
 		return  betweenTime/(1000*60*60*24L);
 	}
 
+	/**
+	 * 获取指定的天数
+	 * @author  韩梅生
+	 * @return  date
+	 */
+	public static Date getSpecifyDate(int day){
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.DAY_OF_MONTH,day);
+		return c.getTime();
+	}
+
 }

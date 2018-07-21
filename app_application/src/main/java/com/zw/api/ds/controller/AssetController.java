@@ -86,38 +86,36 @@ public class AssetController {
             try {
                 BYXResponse  byxResponse = iassetServer.thirdAssetsReceiver(request);
                 if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
-                    appBasicInfoServiceImpl.updateAssetStatus(orderId,true,"1");
                     return ResultVO.ok(byxResponse.getRes_data());
                 }
+                return   ResultVO.error(byxResponse.getRes_msg());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        appBasicInfoServiceImpl.updateAssetStatus(orderId,false,"1");
         return ResultVO.error();
    }
     /**
-     *
-     * @param
-     * @return
+     *有信贷查询资产是否存在
+     * @param orderNo 订单编号
+     * @return 结果集
      */
     @PostMapping("/getByBusinessId")
-    public ResultVO getByBusinessId(String orderId) {
+    public ResultVO getByBusinessId(String orderNo) {
            final Map paramMap = new HashMap<String,String>(2);
-           paramMap.put("businessId",orderId);
+           paramMap.put("businessId",orderNo);
             try {
                 BYXResponse  byxResponse = iassetServer.getByBusinessId(paramMap);
                 if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
-                    appBasicInfoServiceImpl.updateAssetStatus(orderId,true,"2");
+                    appBasicInfoServiceImpl.updateAssetStatus(orderNo,true,"2");
                     return ResultVO.ok(byxResponse.getRes_data());
                 }
+                appBasicInfoServiceImpl.updateAssetStatus(orderNo,false,"2");
+                return ResultVO.error(byxResponse.getRes_msg());
             } catch (Exception e) {
                 e.printStackTrace();
-                appBasicInfoServiceImpl.updateAssetStatus(orderId,false,"2");
-                ResultVO.error(e.getMessage());
+                return ResultVO.error(e.getMessage());
             }
-        appBasicInfoServiceImpl.updateAssetStatus(orderId,false,"2");
-        return ResultVO.error();
    }
 
 

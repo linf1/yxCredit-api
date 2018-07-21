@@ -212,7 +212,7 @@ public interface AppBasicInfoService {
      * @date 9:33 2018/5/25 type 1推送2同步
      * 更新资产推送状态
      */
-    void updateAssetStatus(String orderId,boolean flag,String type);
+    void updateAssetStatus(String orderNo,boolean flag,String type);
 
     /**
      * @author 韩梅生

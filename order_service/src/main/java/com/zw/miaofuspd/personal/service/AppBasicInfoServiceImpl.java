@@ -875,11 +875,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
             //修改订单状态为已提交
             String sql3 = "update mag_order set Order_state = '2',applay_time = '"+applyTime+"' where id = '"+orderId+"'";
             sunbmpDaoSupport.exeSql(sql3);
-
-            //根据订单编号获取订单id
-//            String sql4 = "select id,applay_money from mag_order where id = '"+orderId+"'";
-//            Map orderMap = sunbmpDaoSupport.findForMap(sql4);
-            //新增操作表订单信息
+            
             String sql5 = "insert into order_operation_record (id,operation_node,operation_result,order_id,operation_time,amount,emp_id,emp_name,description) values ('"+GeneratePrimaryKeyUtils.getUUIDKey()+"'," +
                     "1,1,'"+orderId+"','"+applyTime+"','"+forMap.get("applay_money")+"','"+forMap.get("user_id")+"','"+forMap.get("CUSTOMER_NAME")+"','已申请')";
             sunbmpDaoSupport.exeSql(sql5);
@@ -1181,7 +1177,7 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     }
 
     @Override
-    public void updateAssetStatus(String orderId,boolean flag,String type) {
+    public void updateAssetStatus(String orderNo,boolean flag,String type) {
         StringBuilder sql = new StringBuilder("update mag_order set asset_state =");
         if(flag && "1".equals(type)){
             sql.append("'1'");
@@ -1192,8 +1188,8 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
         }else if(!flag && "2".equals(type)){
             sql.append("'4'");
         }
-        sql.append(" where id = '");
-        sql.append(orderId).append("' ");
+        sql.append(" where order_no = '");
+        sql.append(orderNo).append("' ");
         sunbmpDaoSupport.exeSql(sql.toString());
     }
 

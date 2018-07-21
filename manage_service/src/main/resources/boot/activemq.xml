@@ -29,8 +29,16 @@
 		<constructor-arg value="${repayment.queue}"/>
 	</bean>
 
+	<!--接受有信贷资产信息MQ队列目的地-->
+	<bean id="assetQueue" class="com.zw.miaofuspd.activemq.queue.AssetQueue">
+		<constructor-arg value="${assetQueue.queue}"/>
+	</bean>
+
 	<!-- 推送放款及还款计划信息MQ队列监听 -->
 	<bean id="repaymentQueueListener" class="com.zw.miaofuspd.activemq.listener.RepaymentQueueListener"/>
+
+	<!-- 接受有信贷资产信息MQ队列监听 -->
+	<bean id="assetQueueListener" class="com.zw.miaofuspd.activemq.listener.AssetQueueListener"/>
 
 	<!-- 消息监听容器 -->
 	<bean id="jmsContainer"
@@ -38,6 +46,13 @@
 		<property name="connectionFactory" ref="connectionFactory" />
 		<property name="destination" ref="repaymentQueue" />
 		<property name="messageListener" ref="repaymentQueueListener" />
+	</bean>
+	<!-- 资产消息监听容器 -->
+	<bean id="assetContainer"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="assetQueue" />
+		<property name="messageListener" ref="assetQueueListener" />
 	</bean>
 
 

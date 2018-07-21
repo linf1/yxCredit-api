@@ -9,9 +9,10 @@ import com.zw.web.base.vo.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +42,8 @@ public class RepaymentController {
             return ResultVO.error("参数异常");
         }
         LOGGER.info("进入预算提前还款,参数为：{}",data);
-        Map map = JSONObject.parseObject(data);
+        Map<String,Object> map = JSONObject.parseObject(data);
+        map.put("interestYesTime",DateUtils.getDateString(DateUtils.getSpecifyDate(1),DateUtils.STYLE_1));
         try {
             BYXResponse  byxResponse = repaymentServer.trialRepayment(map);
             if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
@@ -67,8 +69,8 @@ public class RepaymentController {
             return ResultVO.error("参数异常");
         }
         LOGGER.info("进入确定提前还款,参数为：{}",data);
-        Map map = JSONObject.parseObject(data);
-        map.put("interestYesTime",DateUtils.getDateString(new Date(),DateUtils.STYLE_1));
+        Map<String,Object> map = JSONObject.parseObject(data);
+        map.put("interestYesTime",DateUtils.getDateString(DateUtils.getSpecifyDate(1),DateUtils.STYLE_1));
         try {
             BYXResponse  byxResponse = repaymentServer.prepaymentRecode(map);
             if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
