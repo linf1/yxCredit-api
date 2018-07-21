@@ -1,5 +1,8 @@
 package com.zw.miaofuspd.repayment.controller;
 
+import com.activemq.entity.respose.LoanDetailResponse;
+import com.activemq.service.IRepaymentBusiness;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.api.model.common.BYXResponse;
 import com.api.service.repayment.IRepaymentServer;
@@ -25,6 +28,9 @@ import java.util.Map;
 public class RepaymentController {
     @Autowired
     private IRepaymentServer repaymentServer;
+
+    @Autowired
+    private IRepaymentBusiness repaymentBusiness;
 
     private final Logger LOGGER = LoggerFactory.getLogger(RepaymentController.class);
 
@@ -92,11 +98,14 @@ public class RepaymentController {
             return ResultVO.error("参数异常");
         }
         LOGGER.info("进入查询还款账号,参数为：{}",orderId);
-        Map map = new HashMap();
+        Map<String,String> map = new HashMap<>(1);
         map.put("businessId",orderId);
         try {
             BYXResponse  byxResponse = repaymentServer.getLoan(map);
             if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
+                Map resData = (Map)byxResponse.getRes_data();
+                LoanDetailResponse loanDetail = JSONObject.toJavaObject((JSON) resData.get("loanDetail"),LoanDetailResponse.class);
+                repaymentBusiness.setLoanInfo(loanDetail);
                 return ResultVO.ok(byxResponse.getRes_data());
             }
             return ResultVO.error(byxResponse.getRes_msg());

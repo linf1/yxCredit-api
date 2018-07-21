@@ -37,7 +37,7 @@ public interface IBusinessRepaymentService {
     /**
      * 更新某个订单某期的还款计划
      * @param record
-     *              orderId 订单id
+     *              orderNo 订单编号
      *              period 期数
      * @return 影响行数
      */

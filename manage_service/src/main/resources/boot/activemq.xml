@@ -28,12 +28,32 @@
 	<bean id="repaymentQueue" class="com.zw.miaofuspd.activemq.queue.RepaymentQueue">
 		<constructor-arg value="${repayment.queue}"/>
 	</bean>
+	<!--推送放款及还款计划信息异常MQ队列目的地-->
+	<bean id="repaymentErrorQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="${repayment.error.queue}"/>
+	</bean>
+
+	<!--网贷发生还款，正常还款 or 提前还款MQ队列目的地-->
+	<bean id="repaymentPushAssentQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="${repayment.push.asset.queue}"/>
+	</bean>
+	<!--网贷发生还款，正常还款 or 提前还款异常MQ队列目的地-->
+	<bean id="repaymentPushAssentErrorQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="${repayment.push.asset.error.queue}"/>
+	</bean>
 
 	<!-- 推送放款及还款计划信息MQ队列监听 -->
-	<bean id="repaymentQueueListener" class="com.zw.miaofuspd.activemq.listener.RepaymentQueueListener"/>
+	<bean id="repaymentQueueListener" class="com.zw.miaofuspd.activemq.listener.RepaymentQueueListener">
+		<property name="repaymentErrorQueue" ref="repaymentErrorQueue"/>
+	</bean>
 
-	<!-- 消息监听容器 -->
-	<bean id="jmsContainer"
+	<!-- 网贷发生还款，正常还款 or 提前还款MQ队列监听 -->
+	<bean id="repaymentPushAssentQueueListener" class="com.zw.miaofuspd.activemq.listener.RepaymentPushAssentQueueListener">
+		<property name="repaymentPushAssentErrorQueue" ref="repaymentPushAssentErrorQueue"/>
+	</bean>
+
+	<!-- 推送放款及还款计划信息监听容器 -->
+	<bean id="repaymentJmsContainer"
 		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
 		<property name="connectionFactory" ref="connectionFactory" />
 		<property name="destination" ref="repaymentQueue" />
@@ -41,4 +61,11 @@
 	</bean>
 
 
+	<!-- 网贷发生还款，正常还款 or 提前还款消息监听容器 -->
+	<bean id="repaymentPushAssentJmsContainer"
+		  class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="repaymentPushAssentQueue" />
+		<property name="messageListener" ref="repaymentPushAssentQueueListener" />
+	</bean>
 </beans>
