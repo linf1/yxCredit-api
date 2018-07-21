@@ -230,7 +230,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                     "o.PERIODS AS periods ,  o.Order_state AS orderState " +
                     "FROM mag_order o WHERE o.USER_ID='"+userId+"' AND o.Order_state IN (2,3,4) ORDER BY CREAT_TIME DESC  limit "+((unm-1)*size)+","+size;
         }else if (OrderTypeEnum.REPAYMENT.getCode().equals(orderType)){
-            sql = "SELECT o.ID AS orderId ,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
+            sql = "SELECT o.ID AS orderId ,o.order_no as orderNo,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
                     "o.product_name_name AS productName , o.applay_money AS applayMoney ,  " +
                     "o.loan_amount AS loanAmount ,  o.repay_money AS repayMoney , " +
                     "date_format(str_to_date( o.applay_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS applayTime , " +
@@ -244,7 +244,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                     "o.PERIODS AS periods ,  o.Order_state AS orderState " +
                     "FROM mag_order o WHERE o.USER_ID='"+userId+"' AND o.Order_state='5' ORDER BY CREAT_TIME DESC  limit "+((unm-1)*size)+","+size;
         }else if (OrderTypeEnum.CONTRACT.getCode().equals(orderType)){
-            sql = "SELECT o.ID AS orderId ,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
+            sql = "SELECT o.ID AS orderId ,o.order_no as orderNo,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
                     "o.product_name_name AS productName , o.applay_money AS applayMoney ,  " +
                     "o.loan_amount AS loanAmount ,  o.repay_money AS repayMoney , " +
                     "date_format(str_to_date( o.applay_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS applayTime , " +
@@ -258,7 +258,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                     "o.PERIODS AS periods ,  o.Order_state AS orderState " +
                     "FROM mag_order o WHERE o.USER_ID='"+userId+"' AND o.Order_state IN (4,5,6) ORDER BY CREAT_TIME DESC  limit "+((unm-1)*size)+","+size;
         }else {
-             sql = "SELECT o.ID AS orderId ,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
+             sql = "SELECT o.ID AS orderId ,o.order_no as orderNo,  o.CUSTOMER_NAME AS customerName ,  o.TEL AS tel ,  o.CARD AS card , " +
                     "o.product_name_name AS productName , o.applay_money AS applayMoney ,  " +
                     "o.loan_amount AS loanAmount ,  o.repay_money AS repayMoney , " +
                     "date_format(str_to_date( o.applay_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS applayTime , " +
