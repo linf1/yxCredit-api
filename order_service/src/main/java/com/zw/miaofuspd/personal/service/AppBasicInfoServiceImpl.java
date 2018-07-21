@@ -1181,12 +1181,16 @@ public class AppBasicInfoServiceImpl extends AbsServiceBase implements AppBasicI
     }
 
     @Override
-    public void updateAssetStatus(String orderId,boolean flag) {
+    public void updateAssetStatus(String orderId,boolean flag,String type) {
         StringBuilder sql = new StringBuilder("update mag_order set asset_state =");
-        if(flag){
+        if(flag && "1".equals(type)){
             sql.append("'1'");
-        }else{
+        }else if(!flag && "1".equals(type)){
             sql.append("'2'");
+        }else if(flag && "2".equals(type)){
+            sql.append("'3'");
+        }else if(!flag && "2".equals(type)){
+            sql.append("'4'");
         }
         sql.append(" where id = '");
         sql.append(orderId).append("' ");

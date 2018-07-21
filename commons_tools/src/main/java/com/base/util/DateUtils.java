@@ -359,6 +359,15 @@ public class DateUtils {
 		return s.format(date);
 	}
 	/**
+	 * 时间格式化为：
+	 * @param date
+	 * @return 返回已格式化的字符串
+	 */
+	public static String getDateString(Date date,String sdf){
+		SimpleDateFormat s = new SimpleDateFormat(sdf);
+		return s.format(date);
+	}
+	/**
 	 * 判断验证码是否失效
 	 * @param date1 ： 数据库中的时间
 	 * @param code：数据字典中的子健code
