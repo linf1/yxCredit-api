@@ -3,6 +3,7 @@ package com.zw.miaofuspd.facade.order.service;
 
 import com.zw.miaofuspd.facade.pojo.MagOrder;
 
+import java.util.List;
 import java.util.Map;
 /**
  * Created by Administrator on 2017/2/20 0020.
@@ -93,9 +94,6 @@ public interface AppOrderService {
      * @return 一条订单数据
      */
     MagOrder getOrderById(String id);
-
-
-
 
 
 }

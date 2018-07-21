@@ -177,4 +177,40 @@
    where order_no = #{orderNo,jdbcType=VARCHAR} and  period = #{period,jdbcType=INTEGER}
   </update>
 
+    <select id="findListByOrderId" parameterType="com.zw.pojo.BusinessRepayment" resultMap="BaseResultMap">
+      SELECT
+        id,
+        order_no,
+        repayment_id,
+        STATUS,
+        period,
+        interest_start_time,
+        repayment_time,
+        repayment_yes_time,
+        repayment_account,
+        repayment_yes_account,
+        capital,
+        yes_capital,
+        rate,
+        interest,
+        repayment_yes_interest,
+        is_repayment,
+        repayment_type,
+        late_days,
+        late_rate,
+        late_interest,
+        derate_amount,
+        periods,
+        channel_type,
+        remark,
+        create_time,
+        create_user_id,
+        update_user_id,
+        update_time,
+        is_deleted
+      FROM business_repayment
+      where
+          order_no = #{record.orderNo,jdbcType=VARCHAR} ORDER BY period desc
+    </select>
+
 </mapper>

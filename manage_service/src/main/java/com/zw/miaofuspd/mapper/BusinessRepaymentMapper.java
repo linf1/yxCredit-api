@@ -1,6 +1,7 @@
 package com.zw.miaofuspd.mapper;
 
 import com.zw.pojo.BusinessRepayment;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -63,4 +64,10 @@ public interface BusinessRepaymentMapper {
      */
     int updateByOrderIdAndPeriod(BusinessRepayment record);
 
+    /**
+     * 根据订单id获取当前期数信息
+     * @param record
+     * @return
+     */
+    List<BusinessRepayment> findListByOrderId(@Param("record") BusinessRepayment record);
 }

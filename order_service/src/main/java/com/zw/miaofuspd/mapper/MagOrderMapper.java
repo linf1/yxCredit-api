@@ -63,4 +63,5 @@ public interface MagOrderMapper {
      * @return 一条订单数据
      */
     MagOrder getOrderInfoByNo(@Param("orderNo") String orderNo);
-}
+
+    }

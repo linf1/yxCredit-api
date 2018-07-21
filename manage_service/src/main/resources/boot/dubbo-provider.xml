@@ -47,6 +47,9 @@
     <dubbo:service interface="com.api.service.repayment.IRepaymentServer" timeout="30000"
                    ref="repaymentServerImpl"/>
 
+    <dubbo:service interface="com.zw.service.IBusinessRepaymentService" timeout="30000"
+                   ref="businessRepaymentServiceImpl"/>
+
     <dubbo:service interface="com.activemq.service.IRepaymentBusiness" timeout="30000"    ref="repaymentBusinessImpl"/>
 
 

@@ -2,6 +2,9 @@ package com.zw.service;
 
 import com.zw.pojo.BusinessRepayment;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 还款信息服务
  * @author 陈清玉
@@ -42,4 +45,18 @@ public interface IBusinessRepaymentService {
      * @return 影响行数
      */
     int updateByOrderIdAndPeriod(BusinessRepayment record);
+
+    /**
+     * 根据订单id获取还款计划
+     * @param record
+     * @return
+     */
+    Map getRepaymentByOrderId(BusinessRepayment record);
+
+    /**
+     * 根据订单id获取还款期数
+     * @param record
+     * @return
+     */
+    List<Map> findListByOrderId(BusinessRepayment record);
 }

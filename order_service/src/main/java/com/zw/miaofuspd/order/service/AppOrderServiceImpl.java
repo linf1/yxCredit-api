@@ -77,7 +77,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
                     "DATE_FORMAT(STR_TO_DATE( ALTER_TIME,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS alterTime , " +
                     "DATE_FORMAT(STR_TO_DATE( loan_time,'%Y%m%d%H%i%s'),'%Y-%c-%d %H:%i:%s') AS loanTime , " +
                     "repay_date AS repayDate , " +
-                    "rate AS rate ,product_name_name AS productName , applay_money AS applayMoney," +
+                    "rate AS rate ,product_name_name AS productName ,loan_time AS loanTime, applay_money AS applayMoney," +
                     "loan_amount AS loanAmount ,contract_amount AS contractAmount , repay_money AS repayMoney , " +
                     "Order_state AS orderState,pay_back_user AS payBackUser ,pay_back_card AS payBackCard, " +
                     "DATEDIFF(NOW(),DATE(repay_date)) AS days "+
@@ -401,4 +401,5 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
     public MagOrder getOrderById(String id) {
         return magOrderMapper.getOrderInfoByNo(id);
     }
+
 }

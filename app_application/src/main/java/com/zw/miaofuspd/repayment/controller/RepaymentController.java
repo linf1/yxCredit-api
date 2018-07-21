@@ -8,15 +8,19 @@ import com.api.model.common.BYXResponse;
 import com.api.service.repayment.IRepaymentServer;
 import com.base.util.AppRouterSettings;
 import com.base.util.DateUtils;
+import com.zw.pojo.BusinessRepayment;
+import com.zw.service.IBusinessRepaymentService;
 import com.zw.web.base.vo.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -29,6 +33,9 @@ import java.util.Map;
 public class RepaymentController {
     @Autowired
     private IRepaymentServer repaymentServer;
+
+    @Autowired
+    private IBusinessRepaymentService businessRepaymentService;
 
     @Autowired
     private IRepaymentBusiness repaymentBusiness;
@@ -117,5 +124,46 @@ public class RepaymentController {
         }
     }
 
+    /**
+     * 查询还款账单信息
+     * @param orderId 订单编号
+     * @return 成功失败
+     */
+    @GetMapping("/getRepaymentByOrderId")
+    public ResultVO getRepaymentByOrderId(String orderId) {
+        if(orderId == null){
+            return ResultVO.error("参数异常");
+        }
+        BusinessRepayment businessRepayment = new BusinessRepayment();
+        businessRepayment.setOrderNo(orderId);
+        try {
+            Map map = businessRepaymentService.getRepaymentByOrderId(businessRepayment);
+            return ResultVO.ok(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVO.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 查询还款期数列表
+     * @param orderNo 订单编号
+     * @return 成功失败
+     */
+    @GetMapping("/findListByOrderId")
+    public ResultVO findListByOrderId(String orderNo) {
+        if(orderNo == null){
+            return ResultVO.error("参数异常");
+        }
+        BusinessRepayment businessRepayment = new BusinessRepayment();
+        businessRepayment.setOrderNo(orderNo);
+        try {
+            List<Map> businessRepaymentList = businessRepaymentService.findListByOrderId(businessRepayment);
+            return ResultVO.ok(businessRepaymentList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVO.error(e.getMessage());
+        }
+    }
 
 }
