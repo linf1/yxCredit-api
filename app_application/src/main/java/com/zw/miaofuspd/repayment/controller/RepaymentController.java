@@ -130,7 +130,7 @@ public class RepaymentController {
      */
     @GetMapping("/getRepaymentByOrderNo")
     public ResultVO getRepaymentByOrderId(String orderNo) {
-        if(orderNo == null){
+        if(StringUtils.isBlank(orderNo)){
             return ResultVO.error("参数异常");
         }
         BusinessRepayment businessRepayment = new BusinessRepayment();
@@ -151,7 +151,7 @@ public class RepaymentController {
      */
     @GetMapping("/findListByOrderNo")
     public ResultVO findListByOrderId(String orderNo) {
-        if(orderNo == null){
+        if(StringUtils.isBlank(orderNo)){
             return ResultVO.error("参数异常");
         }
         BusinessRepayment businessRepayment = new BusinessRepayment();
@@ -202,7 +202,7 @@ public class RepaymentController {
      */
     @GetMapping("/findListRecordByOrderNo")
     public ResultVO findListRecordByOrderNo(String orderNo) {
-        if(orderNo == null){
+        if(StringUtils.isBlank(orderNo)){
             return ResultVO.error("参数异常");
         }
         BusinessRepayment businessRepayment = new BusinessRepayment();
