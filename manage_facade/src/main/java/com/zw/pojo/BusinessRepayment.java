@@ -1,5 +1,6 @@
 package com.zw.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zw.base.BaseEntity;
 
 import java.io.Serializable;
@@ -339,6 +340,7 @@ public class BusinessRepayment extends BaseEntity implements Serializable {
      *
      * @mbggenerated Fri Jul 20 14:24:23 CST 2018
      */
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     public Date getRepaymentTime() {
         return repaymentTime;
     }

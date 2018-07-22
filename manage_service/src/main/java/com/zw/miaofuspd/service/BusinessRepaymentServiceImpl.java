@@ -68,7 +68,7 @@ public class BusinessRepaymentServiceImpl implements IBusinessRepaymentService {
                         map.put("repaymentTime",businessRepayment.getRepaymentTime());
                         map.put("status",businessRepayment.getStatus());//还款状态  1、还款中、2还款处理中、3已还款
                         map.put("repaymentType",businessRepayment.getRepaymentType());//还款类型，0未还款,1 正常还款; 2 提前还款;3 部分提前还款;4逾期还款，5逾期未还;
-                       // map.put("repaymentTime", DateUtils.getDateString());
+                        map.put("repaymentTime",businessRepayment.getRepaymentTime());
                     }
             }
         }
