@@ -112,7 +112,7 @@ public class RepaymentController {
             if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
                 Map resData = (Map)byxResponse.getRes_data();
                 LoanDetailResponse loanDetail = JSONObject.toJavaObject((JSON) resData.get("loanDetail"),LoanDetailResponse.class);
-                repaymentBusiness.setLoanInfo(loanDetail);
+                repaymentBusiness.loanMoney(loanDetail);
                 return ResultVO.ok(byxResponse.getRes_data());
             }
             return ResultVO.error(byxResponse.getRes_msg());
