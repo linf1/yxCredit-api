@@ -8,10 +8,11 @@ import com.api.model.common.BYXResponse;
 import com.api.service.repayment.IRepaymentServer;
 import com.base.util.AppRouterSettings;
 import com.base.util.DateUtils;
+import com.enums.RepaymentStatusEnum;
 import com.zw.pojo.BusinessRepayment;
 import com.zw.service.IBusinessRepaymentService;
-import com.zw.web.base.AbsBaseController;
 import com.zw.web.base.vo.ResultVO;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,16 +125,16 @@ public class RepaymentController {
 
     /**
      * 查询还款账单信息
-     * @param orderId 订单编号
+     * @param orderNo 订单编号
      * @return 成功失败
      */
-    @GetMapping("/getRepaymentByOrderId")
-    public ResultVO getRepaymentByOrderId(String orderId) {
-        if(orderId == null){
+    @GetMapping("/getRepaymentByOrderNo")
+    public ResultVO getRepaymentByOrderId(String orderNo) {
+        if(orderNo == null){
             return ResultVO.error("参数异常");
         }
         BusinessRepayment businessRepayment = new BusinessRepayment();
-        businessRepayment.setOrderNo(orderId);
+        businessRepayment.setOrderNo(orderNo);
         try {
             Map map = businessRepaymentService.getRepaymentByOrderId(businessRepayment);
             return ResultVO.ok(map);
@@ -148,7 +149,7 @@ public class RepaymentController {
      * @param orderNo 订单编号
      * @return 成功失败
      */
-    @GetMapping("/findListByOrderId")
+    @GetMapping("/findListByOrderNo")
     public ResultVO findListByOrderId(String orderNo) {
         if(orderNo == null){
             return ResultVO.error("参数异常");
@@ -161,6 +162,58 @@ public class RepaymentController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVO.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 更新还款计划表状态
+     * @param data 还款数据
+     * @return 成功失败
+     */
+    @PostMapping("/updateRepaymentStatus")
+    public ResultVO updateRepaymentStatus(String data) {
+        try {
+           if(StringUtils.isNotBlank(data)){
+                Map map = JSONObject.parseObject(data);
+                if(map.containsKey("id") && null != map.get("id")
+                        && map.containsKey("repayType") && null != map.get("repayType")) {
+                    BusinessRepayment  businessRepayment = new BusinessRepayment();
+                    businessRepayment.setId(map.get("id").toString());
+                    businessRepayment.setStatus(RepaymentStatusEnum.REPAYMENT_PROCESSING.getCode());
+                    businessRepayment.setRepaymentType(Integer.parseInt(map.get("repayType").toString()));
+                    int repaymentNum = businessRepaymentService.updateRepaymentById(businessRepayment);
+                    if(repaymentNum > 0) {
+                        return ResultVO.ok("更新还款计划成功",null);
+                    }
+                    return ResultVO.error("更新还款计划失败");
+                }
+            }
+            return ResultVO.error("参数异常");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVO.error("系统异常,请联系管理员。");
+        }
+    }
+
+    /**
+     * 查询还款记录列表
+     * @param orderNo 订单编号
+     * @return 成功失败
+     */
+    @GetMapping("/findListRecordByOrderNo")
+    public ResultVO findListRecordByOrderNo(String orderNo) {
+        if(orderNo == null){
+            return ResultVO.error("参数异常");
+        }
+        BusinessRepayment businessRepayment = new BusinessRepayment();
+        businessRepayment.setOrderNo(orderNo);
+        businessRepayment.setStatus(RepaymentStatusEnum.REPAYMENT.getCode());
+        try {
+            List<Map> businessRepaymentList = businessRepaymentService.findListRecordByOrderNo(businessRepayment);
+            return ResultVO.ok(businessRepaymentList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVO.error("系统异常,请联系管理员。");
         }
     }
 

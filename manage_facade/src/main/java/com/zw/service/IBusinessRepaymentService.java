@@ -55,6 +55,15 @@ public interface IBusinessRepaymentService {
     List<BusinessRepayment> findRepaymentInfoByStatus(String status);
 
     /**
+     * 根据主键更新某期的还款计划
+     * @param record
+     *              id 主键
+     *              record 还款信息
+     * @return 影响行数
+     */
+    int updateRepaymentById(BusinessRepayment record);
+
+    /**
      * 根据订单id获取还款计划
      * @param record
      * @return
@@ -67,4 +76,11 @@ public interface IBusinessRepaymentService {
      * @return
      */
     List<Map> findListByOrderId(BusinessRepayment record);
+
+    /**
+     * 根据订单id获取还款期数
+     * @param record
+     * @return
+     */
+    List<Map> findListRecordByOrderNo(BusinessRepayment record);
 }
