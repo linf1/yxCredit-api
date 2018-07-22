@@ -9,7 +9,19 @@ public enum DictEnum {
     /**
      *提交申请
      */
-    SUB_APPLY("jksq","消息内容");
+    SUB_APPLY("jksq","消息内容"),
+    /**
+     *提交申请
+     */
+    JJDQ("jjdq","消息内容"),
+    /**
+     *放款通过
+     */
+    FKCG("fkcg","消息内容"),
+    /**
+     * 已逾期
+     */
+    YYQ("yyq"," 消息内容");
 
     DictEnum(String code, String name){
         this.code = code;

@@ -72,7 +72,7 @@ public class BusinessRepaymentServiceImpl implements IBusinessRepaymentService {
                     }
             }
         }
-        MagOrder magOrder = appOrderService.getOrderById(record.getOrderNo());
+        MagOrder magOrder = appOrderService.getOrderByNo(record.getOrderNo());
         map.put("loanTime",magOrder.getLoanTime());
         map.put("payBackUser",magOrder.getPayBackUser());
         map.put("payBackCard",magOrder.getPayBackCard());
@@ -98,5 +98,10 @@ public class BusinessRepaymentServiceImpl implements IBusinessRepaymentService {
             return listMap;
         }
         return null;
+    }
+
+    @Override
+    public List<BusinessRepayment> findRepaymentInfoByStatus(String status) {
+        return businessRepaymentMapper.findRepaymentInfoByStatus(status);
     }
 }

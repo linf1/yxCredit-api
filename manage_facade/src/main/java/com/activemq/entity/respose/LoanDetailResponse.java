@@ -13,11 +13,11 @@ public class LoanDetailResponse {
     /**
      * string	项目虚拟户账号
      */
-    private String virtualAccount;
+    private String loanNo;
     /**
      * String	项目虚拟户户名
      */
-    private String virtualAccName;
+    private String loanName;
     /**
      * 	String	放款状态 0：失败，1：成功
      */
@@ -35,20 +35,20 @@ public class LoanDetailResponse {
         this.businessId = businessId;
     }
 
-    public String getVirtualAccount() {
-        return virtualAccount;
+    public String getLoanNo() {
+        return loanNo;
     }
 
-    public void setVirtualAccount(String virtualAccount) {
-        this.virtualAccount = virtualAccount;
+    public void setLoanNo(String loanNo) {
+        this.loanNo = loanNo;
     }
 
-    public String getVirtualAccName() {
-        return virtualAccName;
+    public String getLoanName() {
+        return loanName;
     }
 
-    public void setVirtualAccName(String virtualAccName) {
-        this.virtualAccName = virtualAccName;
+    public void setLoanName(String loanName) {
+        this.loanName = loanName;
     }
 
     public String getStatus() {
@@ -75,11 +75,10 @@ public class LoanDetailResponse {
     public String toString() {
         return "LoanDetailResponse{" +
                 "businessId='" + businessId + '\'' +
-                ", virtualAccount='" + virtualAccount + '\'' +
-                ", virtualAccName='" + virtualAccName + '\'' +
+                ", loanNo='" + loanNo + '\'' +
+                ", loanName='" + loanName + '\'' +
                 ", status='" + status + '\'' +
                 ", statusMsg='" + statusMsg + '\'' +
                 '}';
     }
-
 }

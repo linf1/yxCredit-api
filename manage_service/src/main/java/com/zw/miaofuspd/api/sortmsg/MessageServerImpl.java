@@ -7,6 +7,7 @@ import com.api.model.sortmsg.MsgRequest;
 import com.api.model.sortmsg.MsgSettings;
 import com.api.service.sortmsg.IMessageServer;
 import com.base.util.DateUtils;
+import com.base.util.GeneratePrimaryKeyUtils;
 import com.base.util.TemplateUtils;
 import com.zw.api.HttpClientUtil;
 import com.zw.miaofuspd.mapper.AppMessageMapper;
@@ -66,6 +67,7 @@ public class MessageServerImpl extends AbsServiceBase implements IMessageServer 
         appMessage.setState("1");
         appMessage.setPushState("0");
         appMessage.setJpushState("0");
+        appMessage.setId(GeneratePrimaryKeyUtils.getUUIDKey());
         return messageMapper.insertSelective(appMessage) > 0;
     }
 

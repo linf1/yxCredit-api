@@ -90,10 +90,10 @@ public interface AppOrderService {
     /**
      * 按id获取订单信息
      * @author 陈淸玉 create on 2018-07-19
-     * @param id 订单id
+     * @param id 订单编号
      * @return 一条订单数据
      */
-    MagOrder getOrderById(String id);
+    MagOrder getOrderByNo(String id);
 
 
 }

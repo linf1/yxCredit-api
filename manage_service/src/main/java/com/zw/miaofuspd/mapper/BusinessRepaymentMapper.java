@@ -70,4 +70,11 @@ public interface BusinessRepaymentMapper {
      * @return
      */
     List<BusinessRepayment> findListByOrderId(@Param("record") BusinessRepayment record);
+    /**
+     * 根据还款状态获取还款信息
+     * @param status 还款状态
+     * @return 还款信息
+     */
+    List<BusinessRepayment> findRepaymentInfoByStatus(@Param("status") String status);
+
 }

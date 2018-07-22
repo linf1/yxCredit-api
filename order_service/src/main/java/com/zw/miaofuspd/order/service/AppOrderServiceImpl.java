@@ -398,7 +398,7 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
     }
 
     @Override
-    public MagOrder getOrderById(String id) {
+    public MagOrder getOrderByNo(String id) {
         return magOrderMapper.getOrderInfoByNo(id);
     }
 

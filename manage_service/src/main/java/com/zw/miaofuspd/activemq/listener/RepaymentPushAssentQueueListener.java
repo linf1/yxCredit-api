@@ -39,8 +39,8 @@ public class RepaymentPushAssentQueueListener implements SessionAwareMessageList
                 boolean isOk = repaymentBusiness.repaymentPushAssentHandel(byxResponse);
                 //如果失败放入异常队列
                 if(!isOk){
-                    MessageProducer producer = session.createProducer(this.repaymentPushAssentErrorQueue);
-                    producer.send(session.createTextMessage(text.getText()));
+                    //MessageProducer producer = session.createProducer(this.repaymentPushAssentErrorQueue);
+                    //producer.send(session.createTextMessage(text.getText()));
                     LOGGER.info("{}消息MQ处理失败--------------",LOG_TITLE);
                 }
             }else{

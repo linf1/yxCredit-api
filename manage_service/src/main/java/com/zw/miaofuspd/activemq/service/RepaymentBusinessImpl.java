@@ -63,7 +63,7 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
     @Override
     public boolean loanMoney(LoanDetailResponse loanDetailResponse) {
         String currentTime = DateUtils.getCurrentTime();
-        order = appOrderService.getOrderById(loanDetailResponse.getBusinessId());
+        order = appOrderService.getOrderByNo(loanDetailResponse.getBusinessId());
         OrderOperationRecord orderOperationRecord = new OrderOperationRecord();
         orderOperationRecord.setId(GeneratePrimaryKeyUtils.getUUIDKey());
         orderOperationRecord.setOperationTime(currentTime);
@@ -89,8 +89,8 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
         magOrder.setId(loanDetailResponse.getBusinessId());
         //设置为未还款状态
         magOrder.setOrderState(String.valueOf(OrderStateEnum.PENDING_REPAYMENT.getCode()));
-        magOrder.setPayBackCard(loanDetailResponse.getVirtualAccount());
-        magOrder.setPayBackUser(loanDetailResponse.getVirtualAccName());
+        magOrder.setPayBackCard(loanDetailResponse.getLoanNo());
+        magOrder.setPayBackUser(loanDetailResponse.getLoanName());
         magOrder.setAlterTime(DateUtils.getCurrentTime());
         magOrder.setLoanTime(DateUtils.getCurrentTime());
         return appOrderService.updateOrderById(magOrder) > 0;
@@ -163,7 +163,7 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
 
     @Override
     public void sendMessage() throws Exception {
-        String contentTemplate = dictService.getDictInfo(DictEnum.SUB_APPLY.getName(),DictEnum.SUB_APPLY.getCode());
+        String contentTemplate = dictService.getDictInfo(DictEnum.FKCG.getName(),DictEnum.FKCG.getCode());
         if(StringUtils.isEmpty(contentTemplate)){
             LOGGER.info("--------缺少放款短信模板配置-----------");
              return;

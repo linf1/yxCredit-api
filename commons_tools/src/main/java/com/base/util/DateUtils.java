@@ -5,10 +5,7 @@ import org.apache.commons.lang.StringUtils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -458,7 +455,7 @@ public class DateUtils {
 	}
 
 	/**
-	 * 获取指定的天数
+	 * 获取指定的天数（当前时间 + day）
 	 * @author  韩梅生
 	 * @return  date
 	 */
@@ -467,5 +464,19 @@ public class DateUtils {
 		c.add(Calendar.DAY_OF_MONTH,day);
 		return c.getTime();
 	}
+
+	/**
+	 * 获取指定的天数（date + day） yyyy-MM-dd
+	 * @author  韩梅生
+	 * @return  date
+	 */
+	public static Date getSpecifyDate(Date date,int day){
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.DAY_OF_MONTH,day);
+		c.setTime(date);
+		c.add(Calendar.DAY_OF_MONTH,(day));
+		return c.getTime();
+	}
+
 
 }

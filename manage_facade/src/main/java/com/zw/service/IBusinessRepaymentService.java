@@ -46,6 +46,14 @@ public interface IBusinessRepaymentService {
      */
     int updateByOrderIdAndPeriod(BusinessRepayment record);
 
+
+    /**
+     * 根据还款状态获取还款信息
+     * @param status 还款状态
+     * @return 还款信息
+     */
+    List<BusinessRepayment> findRepaymentInfoByStatus(String status);
+
     /**
      * 根据订单id获取还款计划
      * @param record

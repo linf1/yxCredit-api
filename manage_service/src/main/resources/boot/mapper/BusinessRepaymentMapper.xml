@@ -65,9 +65,11 @@
         channel_type, remark, create_time,
         create_user_id, update_user_id, update_time,
         is_deleted)
-        values (#{id,jdbcType=VARCHAR},#{orderNo,jdbcType=VARCHAR}, #{repaymentId,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
+        values (#{id,jdbcType=VARCHAR},#{orderNo,jdbcType=VARCHAR}, #{repaymentId,jdbcType=VARCHAR},
+        #{status,jdbcType=VARCHAR},
         #{period,jdbcType=INTEGER}, #{interestStartTime,jdbcType=TIMESTAMP}, #{repaymentTime,jdbcType=TIMESTAMP},
-        #{repaymentYesTime,jdbcType=TIMESTAMP}, #{repaymentAccount,jdbcType=DECIMAL}, #{repaymentYesAccount,jdbcType=DECIMAL},
+        #{repaymentYesTime,jdbcType=TIMESTAMP}, #{repaymentAccount,jdbcType=DECIMAL},
+        #{repaymentYesAccount,jdbcType=DECIMAL},
         #{capital,jdbcType=DECIMAL}, #{yesCapital,jdbcType=DECIMAL}, #{rate,jdbcType=DECIMAL},
         #{interest,jdbcType=DECIMAL}, #{repaymentYesInterest,jdbcType=DECIMAL}, #{isRepayment,jdbcType=INTEGER},
         #{repaymentType,jdbcType=INTEGER}, #{lateDays,jdbcType=INTEGER}, #{lateRate,jdbcType=DECIMAL},
@@ -213,4 +215,7 @@
           order_no = #{record.orderNo,jdbcType=VARCHAR} ORDER BY period desc
     </select>
 
+  <select id="findRepaymentInfoByStatus"  resultMap="BaseResultMap">
+      SELECT order_no,DATE(repayment_time)as repaymentTime  FROM business_repayment  WHERE status = #{status}
+  </select>
 </mapper>

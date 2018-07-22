@@ -40,6 +40,7 @@ public abstract class AbsTask extends AbsServiceBase implements ITask, SimpleJob
 
     private boolean elasticJob = true;
 
+    @Override
     public final void execute(ShardingContext shardingContext) {
         try {
             setContext();
