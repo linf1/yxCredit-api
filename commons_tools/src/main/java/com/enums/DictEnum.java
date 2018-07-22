@@ -21,7 +21,7 @@ public enum DictEnum {
     /**
      * 已逾期
      */
-    YYQ("yyq"," 消息内容");
+    YYQ("yyq","消息内容");
 
     DictEnum(String code, String name){
         this.code = code;

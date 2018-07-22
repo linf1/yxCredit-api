@@ -57,10 +57,10 @@ public class RepaymentPushTask extends AbsTask {
                     //正常还款最后一天
                     Date normalDate = DateUtils.getSpecifyDate(info.getRepaymentTime(), -day);
                     //逾期还款第一天
-                    Date exceedDate = DateUtils.getSpecifyDate(info.getRepaymentTime(), 1);
+                    Date exceedDate = DateUtils.getSpecifyDate(currentDate, 1);
 
                     if (normalDate.getTime() == currentDate.getTime()) {
-                        String normalTemplate  = dictService.getDictInfo(DictEnum.JJDQ.getName(),DictEnum.JJDQ.getCode());
+                        String normalTemplate  = dictService.getDictInfo(DictEnum.JJDQ.getName().trim(),DictEnum.JJDQ.getCode().trim());
                         order = appOrderService.getOrderByNo(info.getOrderNo());
                         Map<String,String> parameter = new HashMap<>(5);
                         parameter.put("lastDate",DateUtils.getDateString(info.getRepaymentTime(),DateUtils.STYLE_2));
@@ -68,8 +68,8 @@ public class RepaymentPushTask extends AbsTask {
                         sendMessage(normalTemplate,parameter);
                         LOGGER.info("订单ID为:{}马上就到期：推送站内信息------------",info.getOrderNo());
 
-                    }else if(exceedDate.getTime() == currentDate.getTime() ){
-                        String exceedTemplate  = dictService.getDictInfo(DictEnum.YYQ.getName(),DictEnum.YYQ.getCode());
+                    }else if(exceedDate.getTime() == info.getRepaymentTime().getTime() ){
+                        String exceedTemplate  = dictService.getDictInfo(DictEnum.YYQ.getName().trim(),DictEnum.YYQ.getCode().trim());
                         order = appOrderService.getOrderByNo(info.getOrderNo());
                         Map<String,String> parameter = new HashMap<>(5);
                         parameter.put("lastDate",DateUtils.getDateString(info.getRepaymentTime(),DateUtils.STYLE_2));
@@ -90,7 +90,7 @@ public class RepaymentPushTask extends AbsTask {
                 LOGGER.info("--------缺少短信模板配置-----------");
                 return;
             }
-            parameter.put("applayMoney",order.getApplayMoney().toString());
+            parameter.put("applyMoney",order.getApplayMoney().toString());
             parameter.put("periods",order.getPeriods());
             parameter.put("productName","蓝领贷");
             String content = TemplateUtils.getContent(template, parameter);
