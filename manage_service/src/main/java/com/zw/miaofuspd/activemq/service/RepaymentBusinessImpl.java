@@ -122,10 +122,9 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
             Map resData = (Map)byxResponse.getRes_data();
             LoanDetailResponse loanDetail = JSONObject.toJavaObject((JSON) resData.get("loanDetail"),LoanDetailResponse.class);
             if(loanDetail != null ){
-                loanDetail.setBusinessId("453601127108182016");
                 loanMoney(loanDetail);
                 JSONArray repaymentList = (JSONArray) resData.get("repaymentList");
-                //批量生产还款计划（多期的情况）
+                //批量生成还款计划（多期的情况）
                 if( repaymentList != null ){
                     for (Object item : repaymentList) {
                         RepaymentResponse repayment = JSONObject.toJavaObject((JSON)item,RepaymentResponse.class);
@@ -146,12 +145,12 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
         if(BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
             Map resData = (Map)byxResponse.getRes_data();
                 JSONArray repaymentList = (JSONArray) resData.get("repaymentList");
-                //批量生产还款计划（多期的情况）
+                //批量更新还款计划（多期的情况）
                 if( repaymentList != null){
                     for (Object item : repaymentList) {
                         RepaymentResponse repayment = JSONObject.toJavaObject((JSON)item,RepaymentResponse.class);
                         if(repayment != null){
-                            repayment.setOrderNo("453601127108182016");
+                            repayment.setOrderNo(resData.get("businessId").toString());
                             updateRepaymentInfo(repayment);
                         }
                     }
@@ -182,7 +181,7 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
         messageServer.sendLetter(appMessage);
 
         MsgRequest msgRequest = new MsgRequest();
-        msgRequest.setPhone(order.getTel());
+        msgRequest.setPhone("xxxxx");
         msgRequest.setContent(content);
         //发送短信
         messageServer.sendSms(msgRequest);
