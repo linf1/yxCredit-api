@@ -1,14 +1,17 @@
 package com.zw.miaofuspd.repayment.controller;
 
 import com.activemq.entity.respose.LoanDetailResponse;
+import com.activemq.entity.respose.RepaymentResponse;
 import com.activemq.service.IRepaymentBusiness;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.api.model.common.BYXResponse;
 import com.api.service.repayment.IRepaymentServer;
 import com.base.util.AppRouterSettings;
 import com.base.util.DateUtils;
 import com.enums.RepaymentStatusEnum;
+import com.enums.RepaymentTypeEnum;
 import com.zw.pojo.BusinessRepayment;
 import com.zw.service.IBusinessRepaymentService;
 import com.zw.web.base.vo.ResultVO;
@@ -113,13 +116,41 @@ public class RepaymentController {
             if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
                 Map resData = (Map)byxResponse.getRes_data();
                 LoanDetailResponse loanDetail = JSONObject.toJavaObject((JSON) resData.get("loanDetail"),LoanDetailResponse.class);
+                //更新订单放款信息
                 repaymentBusiness.loanMoney(loanDetail);
+                //生成对应还款计划
+                addRepayment(orderId);
                 return ResultVO.ok(byxResponse.getRes_data());
             }
             return ResultVO.error(byxResponse.getRes_msg());
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVO.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 远程获取还款计划并持久化到本地数据库 create on 陈淸玉
+     * @param orderNo 订单编号
+     * @throws Exception http 异常
+     */
+    private void addRepayment(String orderNo) throws Exception {
+        BusinessRepayment repayment = new BusinessRepayment();
+        repayment.setOrderNo(orderNo);
+        //未还款的状态
+        repayment.setRepaymentType(RepaymentTypeEnum.REPAYMENT_NO.getCode());
+        //调远程API获取还款计划
+        BYXResponse repaymentInfo = repaymentServer.getRepaymentListByProjectId(repayment);
+        if (BYXResponse.resCode.success.getCode().equals(repaymentInfo.getRes_code())) {
+            //多期产品会有多期还款计划
+            JSONArray repaymentList = (JSONArray)repaymentInfo.getRes_data();
+            for (Object item : repaymentList) {
+                RepaymentResponse repaymentResponse = JSONObject.toJavaObject((JSON)item,RepaymentResponse.class);
+                if(repaymentResponse != null){
+                    repaymentResponse.setOrderNo(orderNo);
+                    repaymentBusiness.saveRepaymentInfo(repaymentResponse);
+                }
+            }
         }
     }
 

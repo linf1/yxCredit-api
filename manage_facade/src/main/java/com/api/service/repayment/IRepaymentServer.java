@@ -35,8 +35,11 @@ public interface IRepaymentServer {
     /**
      * 查询还款计划
      * @param record
+     *               businessId - 订单编号
+     *               repaymentType 类 -1 全部；0未还款；1 正常还款; 2 提前还款;3 部分提前还款
+     *
      * @return 返回结果
-     * @exception Exception 异常
+     * @throws Exception 异常
      */
     BYXResponse getRepaymentListByProjectId(BusinessRepayment record) throws Exception;
 }
