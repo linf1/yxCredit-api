@@ -75,7 +75,7 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
         orderOperationRecord.setEmpId("admin");
         orderOperationRecord.setEmpName("admin");
         //订单id
-        orderOperationRecord.setOrderId(loanDetailResponse.getBusinessId());
+        orderOperationRecord.setOrderId(order.getId());
         orderOperationRecord.setAmount(order.getContractAmount());
         orderOperationRecord.setStatus(SysConstant.INVALID);
 
@@ -85,15 +85,15 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
 
     @Override
     public boolean setLoanInfo(LoanDetailResponse loanDetailResponse) {
-        Order Order = new Order();
-        Order.setOrderNo(loanDetailResponse.getBusinessId());
+        Order order = new Order();
+        order.setOrderNo(loanDetailResponse.getBusinessId());
         //设置为未还款状态
-        Order.setOrderState(String.valueOf(OrderStateEnum.PENDING_REPAYMENT.getCode()));
-        Order.setPayBackCard(loanDetailResponse.getLoanNo());
-        Order.setPayBackUser(loanDetailResponse.getLoanName());
-        Order.setAlterTime(DateUtils.getCurrentTime());
-        Order.setLoanTime(DateUtils.getCurrentTime());
-        return orderService.updateOrderById(Order) > 0;
+        order.setOrderState(String.valueOf(OrderStateEnum.PENDING_REPAYMENT.getCode()));
+        order.setPayBackCard(loanDetailResponse.getLoanNo());
+        order.setPayBackUser(loanDetailResponse.getLoanName());
+        order.setAlterTime(DateUtils.getCurrentTime());
+        order.setLoanTime(DateUtils.getCurrentTime());
+        return orderService.updateOrderById(order) > 0;
     }
 
     @Override
@@ -122,7 +122,6 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
             Map resData = (Map)byxResponse.getRes_data();
             LoanDetailResponse loanDetail = JSONObject.toJavaObject((JSON) resData.get("loanDetail"),LoanDetailResponse.class);
             if(loanDetail != null ){
-                loanDetail.setBusinessId("453601127108182016");
                 loanMoney(loanDetail);
                 JSONArray repaymentList = (JSONArray) resData.get("repaymentList");
                 //批量生成还款计划（多期的情况）
@@ -151,7 +150,7 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
                     for (Object item : repaymentList) {
                         RepaymentResponse repayment = JSONObject.toJavaObject((JSON)item,RepaymentResponse.class);
                         if(repayment != null){
-                            repayment.setOrderNo("453601127108182016");
+                            repayment.setOrderNo(resData.get("businessId").toString());
                             updateRepaymentInfo(repayment);
                         }
                     }
