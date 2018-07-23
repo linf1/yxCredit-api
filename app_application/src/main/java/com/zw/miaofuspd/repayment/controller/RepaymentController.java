@@ -115,13 +115,14 @@ public class RepaymentController {
             BYXResponse  byxResponse = repaymentServer.getLoan(map);
             if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
                 Map resData = (Map)byxResponse.getRes_data();
-                LoanDetailResponse loanDetail = JSONObject.toJavaObject((JSON) resData.get("loanDetail"),LoanDetailResponse.class);
+                LoanDetailResponse loanDetail = JSONObject.toJavaObject((JSON) resData,LoanDetailResponse.class);
                 //更新订单放款信息
                 repaymentBusiness.loanMoney(loanDetail);
                 //生成对应还款计划
                 addRepayment(orderId);
                 return ResultVO.ok(byxResponse.getRes_data());
             }
+            LOGGER.info("查询还款账号异常：{}",byxResponse.getRes_msg());
             return ResultVO.error(byxResponse.getRes_msg());
         } catch (Exception e) {
             e.printStackTrace();

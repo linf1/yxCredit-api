@@ -1,11 +1,14 @@
 package com.activemq.entity.respose;
 
+import java.io.Serializable;
+
 /**
  * 放款信息返回实体
  * @author 陈淸玉 create by 2018-07-09
  */
-public class LoanDetailResponse {
+public class LoanDetailResponse implements Serializable {
 
+    private static final long serialVersionUID = -8909919356148912182L;
     /**
      * string	友信贷主键ID
      */
