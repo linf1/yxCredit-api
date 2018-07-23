@@ -1,6 +1,7 @@
 package com.zw.miaofuspd.service;
 
 import com.base.util.DateUtils;
+import com.enums.RepaymentTypeEnum;
 import com.zw.miaofuspd.facade.order.service.AppOrderService;
 import com.zw.miaofuspd.facade.pojo.MagOrder;
 import com.zw.miaofuspd.mapper.BusinessRepaymentMapper;
@@ -42,41 +43,55 @@ public class BusinessRepaymentServiceImpl implements IBusinessRepaymentService {
     }
 
     @Override
+    public int updateRepaymentById(BusinessRepayment record) {
+        return businessRepaymentMapper.updateRepaymentById(record);
+    }
+
+    @Override
     public Map getRepaymentByOrderId(BusinessRepayment record) {
-        HashMap map =  new HashMap();
         List<BusinessRepayment> businessRepaymentList = businessRepaymentMapper.findListByOrderId(record);
-        if(null != businessRepaymentList) {
-            Date currentDate = new Date();
+        if(null != businessRepaymentList && businessRepaymentList.size() > 0) {
+            Map<String,Object> map =  new HashMap<String,Object>();
+            String currentTime = DateUtils.getCurrentTime(DateUtils.STYLE_2);
+            Date currentDate = DateUtils.strConvertToDate(currentTime,DateUtils.STYLE_2);
             for(BusinessRepayment businessRepayment : businessRepaymentList) {
                 //起息日小于当前时间
-                if(DateUtils.getDifferenceDays(businessRepayment.getInterestStartTime(), currentDate) < 0
-                        && businessRepayment.getRepaymentType() == 5) {
+                if(currentDate.getTime() > businessRepayment.getInterestStartTime().getTime()
+                        && RepaymentTypeEnum.OVERDUE.getCode().equals(businessRepayment.getRepaymentType())) {
+                    map.put("id", businessRepayment.getId());
+                    map.put("repaymentId",businessRepayment.getRepaymentId());
+                    map.put("period", businessRepayment.getPeriod());//当前期数
                     map.put("repaymentTime", businessRepayment.getRepaymentTime());
-                    map.put("repaymentAccount",businessRepayment.getRepaymentAccount());
-                    map.put("repaymentTime",businessRepayment.getRepaymentTime());
-                    map.put("statue",businessRepayment.getStatus());//还款状态  1、还款中、2还款处理中、3已还款
-                    map.put("repaymentType",businessRepayment.getRepaymentType());//还款类型，0未还款,1 正常还款; 2 提前还款;3 部分提前还款;4逾期还款，5逾期未还;
+                    map.put("repaymentAccount", businessRepayment.getRepaymentAccount());
+                    map.put("repaymentTime", businessRepayment.getRepaymentTime());
+                    map.put("status", businessRepayment.getStatus());//还款状态  1、还款中、2还款处理中、3已还款
+                    map.put("repaymentType", businessRepayment.getRepaymentType());//还款类型，0未还款,1 正常还款; 2 提前还款;3 部分提前还款;4逾期还款，5逾期未还;
+                    map.put("repaymentTime", DateUtils.getDateString(businessRepayment.getRepaymentTime(),DateUtils.STYLE_1));
                 }
             }
             if(map.isEmpty()) {
                 //起息日小于当前时间
                 for(BusinessRepayment businessRepayment : businessRepaymentList)
-                    if (DateUtils.getDifferenceDays(businessRepayment.getInterestStartTime(), currentDate) < 0) {
-                        map = new HashMap();
+                    if (currentDate.getTime() > businessRepayment.getInterestStartTime().getTime()) {
+                        map.put("id",businessRepayment.getId());
+                        map.put("repaymentId",businessRepayment.getRepaymentId());
+                        map.put("period", businessRepayment.getPeriod());//当前期数
                         map.put("repaymentTime", businessRepayment.getRepaymentTime());
                         map.put("repaymentAccount",businessRepayment.getRepaymentAccount());
                         map.put("repaymentTime",businessRepayment.getRepaymentTime());
                         map.put("status",businessRepayment.getStatus());//还款状态  1、还款中、2还款处理中、3已还款
                         map.put("repaymentType",businessRepayment.getRepaymentType());//还款类型，0未还款,1 正常还款; 2 提前还款;3 部分提前还款;4逾期还款，5逾期未还;
-                        map.put("repaymentTime",businessRepayment.getRepaymentTime());
+                        map.put("repaymentTime",DateUtils.getDateString(businessRepayment.getRepaymentTime(),DateUtils.STYLE_1));
+                        break;
                     }
             }
+            MagOrder magOrder = appOrderService.getOrderByNo(record.getOrderNo());
+            map.put("loanTime",magOrder.getLoanTime());
+            map.put("payBackUser",magOrder.getPayBackUser());
+            map.put("payBackCard",magOrder.getPayBackCard());
+            return map;
         }
-        MagOrder magOrder = appOrderService.getOrderByNo(record.getOrderNo());
-        map.put("loanTime",magOrder.getLoanTime());
-        map.put("payBackUser",magOrder.getPayBackUser());
-        map.put("payBackCard",magOrder.getPayBackCard());
-        return map;
+        return null;
     }
 
     @Override
@@ -85,14 +100,33 @@ public class BusinessRepaymentServiceImpl implements IBusinessRepaymentService {
         if(null != businessRepaymentList && businessRepaymentList.size() > 0) {
             List<Map> listMap = new ArrayList<>();
             for (BusinessRepayment businessRepayment : businessRepaymentList){
-                Map map = new HashMap();
+                Map<String,Object> map =  new HashMap<String,Object>();
+                map.put("id", businessRepayment.getId());
+                map.put("openDetails",false);
                 map.put("period", businessRepayment.getPeriod());//当前期数
                 map.put("repaymentAccount", businessRepayment.getRepaymentAccount());//应还金额
-                map.put("repaymentTime", businessRepayment.getRepaymentTime());//还款日
+                map.put("repaymentTime",DateUtils.getDateString(businessRepayment.getRepaymentTime(),DateUtils.STYLE_1));
                 map.put("capital", businessRepayment.getCapital());//本金
                 map.put("interest", businessRepayment.getInterest());//利息
                 map.put("repaymentType", businessRepayment.getRepaymentType());
                 map.put("status", businessRepayment.getStatus());
+                listMap.add(map);
+            }
+            return listMap;
+        }
+        return null;
+    }
+
+    @Override
+    public List<Map> findListRecordByOrderNo(BusinessRepayment record) {
+        List<BusinessRepayment> businessRepaymentList = businessRepaymentMapper.findListByOrderId(record);
+        if(null != businessRepaymentList && businessRepaymentList.size() > 0) {
+            List<Map> listMap = new ArrayList<>();
+            for (BusinessRepayment businessRepayment : businessRepaymentList){
+                Map<String,Object> map =  new HashMap<String,Object>();
+                map.put("id", businessRepayment.getId());
+                map.put("repaymentAccount", businessRepayment.getRepaymentAccount());//应还金额
+                map.put("repaymentTime",DateUtils.getDateString(businessRepayment.getRepaymentTime(),DateUtils.STYLE_1));
                 listMap.add(map);
             }
             return listMap;
