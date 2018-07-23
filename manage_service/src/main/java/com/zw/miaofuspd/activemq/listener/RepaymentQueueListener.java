@@ -40,10 +40,13 @@ public class RepaymentQueueListener implements SessionAwareMessageListener {
                     //成功发送站内信息及短信
                     repaymentBusiness.sendMessage();
                 }else{
+                    //TODO 失败可把消息放到异常队列
+                    //MessageProducer producer = session.createProducer(this.repaymentErrorQueue);
+                    // producer.send(session.createTextMessage(text.getText()));
                     LOGGER.info("推送放款及还款计划信息消息MQ处理失败--------------");
                 }
-                MessageProducer producer = session.createProducer(this.repaymentErrorQueue);
-                producer.send(session.createTextMessage(text.getText()));
+
+
             }else{
                 LOGGER.info("推送放款及还款计划信息消息:不支持的消息类型--------------");
             }

@@ -5,12 +5,16 @@ import com.api.model.common.BYXRequest;
 import com.api.model.common.BYXResponse;
 import com.api.model.repayment.LoanSettings;
 import com.api.model.repayment.PrepaymentRecodeSettings;
+import com.api.model.repayment.RepaymentSettings;
 import com.api.model.repayment.TrialRepaymentSettings;
 import com.api.service.repayment.IRepaymentServer;
 import com.zw.api.HttpClientUtil;
+import com.zw.pojo.BusinessRepayment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,6 +32,9 @@ public class RepaymentServerImpl implements IRepaymentServer {
 
     @Autowired
     private LoanSettings loanSettings;
+
+    @Autowired
+    private RepaymentSettings repaymentSettings;
 
     @Autowired
     private BYXSettings byxSettings;
@@ -57,5 +64,17 @@ public class RepaymentServerImpl implements IRepaymentServer {
             return BYXResponse.getBYXResponse(result, byxSettings);
         }
         return  BYXResponse.error();
+    }
+
+    @Override
+    public BYXResponse getRepaymentListByProjectId(BusinessRepayment record) throws Exception {
+        Map<String,Object> paramMap = new HashMap<>(2);
+        if(record != null){
+            paramMap.put("businessId",record.getOrderNo());
+            paramMap.put("repaymentType",record.getRepaymentType());
+            final String result = HttpClientUtil.post(repaymentSettings.getRequestUrl(), BYXRequest.getBYXRequest(paramMap, byxSettings), byxSettings.getHeadRequest());
+            return BYXResponse.getArrayBYXResponse(result, byxSettings);
+        }
+        return null;
     }
 }
