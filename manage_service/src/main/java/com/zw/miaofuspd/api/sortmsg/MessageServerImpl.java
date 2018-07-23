@@ -38,6 +38,10 @@ public class MessageServerImpl extends AbsServiceBase implements IMessageServer 
 
     @Override
     public BYXResponse sendSms(MsgRequest request, Map<String,String> smsParam) throws Exception {
+        //如果短信不可用就不发短信
+        if (!msgSettings.isUsable()) {
+            return BYXResponse.ok();
+        }
         Map<String,Object> parameter = new HashMap<>(5);
         parameter.put("phone",request.getPhone());
         parameter.put("type",msgSettings.getType());
@@ -50,6 +54,10 @@ public class MessageServerImpl extends AbsServiceBase implements IMessageServer 
     }
     @Override
     public BYXResponse sendSms(MsgRequest request) throws Exception {
+        //如果短信不可用就不发短信
+        if (!msgSettings.isUsable()) {
+            return   BYXResponse.ok();
+        }
         Map<String,Object> parameter = new HashMap<>(5);
         parameter.put("phone",request.getPhone());
         parameter.put("type",msgSettings.getType());
