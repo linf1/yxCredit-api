@@ -6,9 +6,9 @@
        default-autowire="byName" default-lazy-init="false">
 
     <!--还款提醒推送任务-->
-    <!--<bean id="repaymentPushTask" class="com.zw.miaofuspd.task.RepaymentPushTask">-->
-        <!--<property name="cron" value="* * * 10 * ?" />-->
-        <!--<property name="taskName" value="定时跑批（还款提醒推送）"/>-->
-    <!--</bean>-->
+    <bean id="repaymentPushTask" class="com.zw.miaofuspd.task.RepaymentPushTask">
+        <property name="cron" value="* 30 10 * * ?" />
+        <property name="taskName" value="定时跑批（还款提醒推送）"/>
+    </bean>
 
 </beans>

@@ -1,9 +1,11 @@
 package com.zw.miaofuspd.dict.service;
 
 import com.base.util.StringUtils;
+import com.constants.SysConstant;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
 import com.zw.service.base.AbsServiceBase;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -115,4 +117,14 @@ public class DictServiceImpl extends AbsServiceBase implements IDictService {
         return list;
     }
 
+    @Override
+    public Map getSysDictValueByCode(String code,String parentCode) {
+        String sql = "select t1.id,t1.parent_id,t1.code,t1.value,t1.name,t1.remark,t1.create_time,t1.create_by from zw_sys_dict t1 INNER JOIN zw_sys_dict  t2  on  t1.parent_id = t2.id   where t1.is_delete = "
+                + SysConstant.INVALID + " and t1.code = '" + code + "' and t2.code = '" + parentCode+ "'" ;
+        List<Map> list = sunbmpDaoSupport.findForList(sql);
+        if (!CollectionUtils.isEmpty(list)) {
+           return list.get(0);
+        }
+        return null;
+    }
 }

@@ -5,6 +5,7 @@ import com.base.util.DateUtils;
 import com.base.util.TemplateUtils;
 import com.enums.DictEnum;
 import com.enums.RepaymentStatusEnum;
+import com.enums.SysDictEnum;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
 import com.zw.pojo.AppMessage;
 import com.zw.pojo.BusinessRepayment;
@@ -42,13 +43,16 @@ public class RepaymentPushTask extends AbsTask {
     /**
      * 预计还款时间减去的天数（如：1号放款，借款期限30天，那么最后正常还款时间为（30-7），逾期的第一天是（30+1））
      */
-    private final int day = 7;
+    private int day = 7;
 
     private Order order ;
 
     @Override
     public void doWork(){
         try {
+            //获取后台配置的预计还款时间减去的天数
+            getSettingInfo();
+
             String currentTime = DateUtils.getCurrentTime(DateUtils.STYLE_2);
             Date currentDate = DateUtils.strConvertToDate(currentTime,DateUtils.STYLE_2);
             List<BusinessRepayment> infoByStatus = businessRepaymentService.findRepaymentInfoByStatus(RepaymentStatusEnum.REPAYMENTS.getCode());
@@ -82,6 +86,18 @@ public class RepaymentPushTask extends AbsTask {
             }
         }catch (Exception e){
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取后台配置的预计还款时间减去的天数
+      */
+    private void getSettingInfo() {
+        Map sysDict = dictService.getSysDictValueByCode(SysDictEnum.advance_day.getCode(), SysDictEnum.advance_day.getParentCode());
+        if(sysDict != null ){
+            if(!StringUtils.isEmpty(sysDict.get("value"))) {
+                day = Integer.valueOf(sysDict.get("value").toString());
+            }
         }
     }
 

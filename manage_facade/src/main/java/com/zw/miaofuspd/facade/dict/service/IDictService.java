@@ -2,6 +2,7 @@ package com.zw.miaofuspd.facade.dict.service;
 
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wangmin on 2017/2/20.
@@ -51,5 +52,13 @@ public interface IDictService {
      * @throws Exception
      */
      List getDictList(String query) throws  Exception;
+
+    /**
+     * 取明细字典的值
+     * @param code 明细code
+     * @param parentCode 父code
+     * @return
+     */
+     Map getSysDictValueByCode(String code, String parentCode);
 
 }
