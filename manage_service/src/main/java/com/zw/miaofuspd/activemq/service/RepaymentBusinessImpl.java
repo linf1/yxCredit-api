@@ -19,13 +19,13 @@ import com.enums.OperationNodeEnum;
 import com.enums.OperationResultEnum;
 import com.zhiwang.zwfinance.app.jiguang.util.api.util.OrderStateEnum;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
-import com.zw.miaofuspd.facade.order.service.AppOrderService;
-import com.zw.miaofuspd.facade.order.service.IOrderOperationRecordService;
-import com.zw.miaofuspd.facade.pojo.MagOrder;
-import com.zw.miaofuspd.facade.pojo.OrderOperationRecord;
+import com.zw.service.IOrderOperationRecordService;
+import com.zw.pojo.Order;
+import com.zw.pojo.OrderOperationRecord;
 import com.zw.pojo.AppMessage;
 import com.zw.pojo.BusinessRepayment;
 import com.zw.service.IBusinessRepaymentService;
+import com.zw.service.IOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private AppOrderService appOrderService;
+    private IOrderService orderService;
 
     @Autowired
     private IOrderOperationRecordService orderOperationRecordService;
@@ -58,12 +58,12 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
     @Autowired
     private IMessageServer messageServer;
 
-    private  MagOrder order ;
+    private Order order ;
 
     @Override
     public boolean loanMoney(LoanDetailResponse loanDetailResponse) {
         String currentTime = DateUtils.getCurrentTime();
-        order = appOrderService.getOrderByNo(loanDetailResponse.getBusinessId());
+        order = orderService.getOrderByNo(loanDetailResponse.getBusinessId());
         OrderOperationRecord orderOperationRecord = new OrderOperationRecord();
         orderOperationRecord.setId(GeneratePrimaryKeyUtils.getUUIDKey());
         orderOperationRecord.setOperationTime(currentTime);
@@ -85,15 +85,15 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
 
     @Override
     public boolean setLoanInfo(LoanDetailResponse loanDetailResponse) {
-        MagOrder magOrder = new MagOrder();
-        magOrder.setId(loanDetailResponse.getBusinessId());
+        Order Order = new Order();
+        Order.setOrderNo(loanDetailResponse.getBusinessId());
         //设置为未还款状态
-        magOrder.setOrderState(String.valueOf(OrderStateEnum.PENDING_REPAYMENT.getCode()));
-        magOrder.setPayBackCard(loanDetailResponse.getLoanNo());
-        magOrder.setPayBackUser(loanDetailResponse.getLoanName());
-        magOrder.setAlterTime(DateUtils.getCurrentTime());
-        magOrder.setLoanTime(DateUtils.getCurrentTime());
-        return appOrderService.updateOrderById(magOrder) > 0;
+        Order.setOrderState(String.valueOf(OrderStateEnum.PENDING_REPAYMENT.getCode()));
+        Order.setPayBackCard(loanDetailResponse.getLoanNo());
+        Order.setPayBackUser(loanDetailResponse.getLoanName());
+        Order.setAlterTime(DateUtils.getCurrentTime());
+        Order.setLoanTime(DateUtils.getCurrentTime());
+        return orderService.updateOrderById(Order) > 0;
     }
 
     @Override
@@ -122,6 +122,7 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
             Map resData = (Map)byxResponse.getRes_data();
             LoanDetailResponse loanDetail = JSONObject.toJavaObject((JSON) resData.get("loanDetail"),LoanDetailResponse.class);
             if(loanDetail != null ){
+                loanDetail.setBusinessId("453601127108182016");
                 loanMoney(loanDetail);
                 JSONArray repaymentList = (JSONArray) resData.get("repaymentList");
                 //批量生成还款计划（多期的情况）
@@ -150,7 +151,7 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
                     for (Object item : repaymentList) {
                         RepaymentResponse repayment = JSONObject.toJavaObject((JSON)item,RepaymentResponse.class);
                         if(repayment != null){
-                            repayment.setOrderNo(resData.get("businessId").toString());
+                            repayment.setOrderNo("453601127108182016");
                             updateRepaymentInfo(repayment);
                         }
                     }

@@ -43,6 +43,8 @@ public class RepaymentPushAssentQueueListener implements SessionAwareMessageList
                     //MessageProducer producer = session.createProducer(this.repaymentPushAssentErrorQueue);
                     //producer.send(session.createTextMessage(text.getText()));
                     LOGGER.info("{}消息MQ处理失败--------------",LOG_TITLE);
+                }else{
+                    LOGGER.info("{}消息MQ处理成功--------------",LOG_TITLE);
                 }
             }else{
                 LOGGER.info("{}:不支持的消息类型--------------",LOG_TITLE);
@@ -56,9 +58,9 @@ public class RepaymentPushAssentQueueListener implements SessionAwareMessageList
     /**
      * 处理异常队列
      */
-    private Destination repaymentPushAssentErrorQueue;
-
-    public void setRepaymentPushAssentErrorQueue(Destination repaymentPushAssentErrorQueue) {
-        this.repaymentPushAssentErrorQueue = repaymentPushAssentErrorQueue;
-    }
+//    private Destination repaymentPushAssentErrorQueue;
+//
+//    public void setRepaymentPushAssentErrorQueue(Destination repaymentPushAssentErrorQueue) {
+//        this.repaymentPushAssentErrorQueue = repaymentPushAssentErrorQueue;
+//    }
 }

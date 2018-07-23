@@ -1,8 +1,8 @@
-package com.zw.miaofuspd.order.service;
+package com.zw.miaofuspd.activemq.service;
 
-import com.zw.miaofuspd.facade.order.service.IOrderOperationRecordService;
-import com.zw.miaofuspd.facade.pojo.OrderOperationRecord;
 import com.zw.miaofuspd.mapper.OrderOperationRecordMapper;
+import com.zw.pojo.OrderOperationRecord;
+import com.zw.service.IOrderOperationRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 /**

@@ -1,6 +1,6 @@
 package com.zw.miaofuspd.mapper;
 
-import com.zw.miaofuspd.facade.pojo.OrderOperationRecord;
+import com.zw.pojo.OrderOperationRecord;
 
 import java.util.List;
 

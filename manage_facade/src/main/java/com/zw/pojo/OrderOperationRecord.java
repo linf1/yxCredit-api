@@ -1,4 +1,4 @@
-package com.zw.miaofuspd.facade.pojo;
+package com.zw.pojo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

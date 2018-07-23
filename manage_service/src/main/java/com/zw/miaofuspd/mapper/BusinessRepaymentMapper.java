@@ -70,7 +70,7 @@ public interface BusinessRepaymentMapper {
      *              period 期数
      * @return 影响行数
      */
-    int updateByOrderIdAndPeriod(@Param("record") BusinessRepayment record);
+    int updateByOrderIdAndPeriod(BusinessRepayment record);
 
     /**
      * 根据订单id获取当前期数信息

@@ -6,11 +6,11 @@ import com.base.util.TemplateUtils;
 import com.enums.DictEnum;
 import com.enums.RepaymentStatusEnum;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
-import com.zw.miaofuspd.facade.order.service.AppOrderService;
-import com.zw.miaofuspd.facade.pojo.MagOrder;
 import com.zw.pojo.AppMessage;
 import com.zw.pojo.BusinessRepayment;
+import com.zw.pojo.Order;
 import com.zw.service.IBusinessRepaymentService;
+import com.zw.service.IOrderService;
 import com.zw.service.task.abs.AbsTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,13 +38,13 @@ public class RepaymentPushTask extends AbsTask {
     private IDictService dictService;
 
     @Autowired
-    private AppOrderService appOrderService;
+    private IOrderService orderService;
     /**
      * 预计还款时间减去的天数（如：1号放款，借款期限30天，那么最后正常还款时间为（30-7），逾期的第一天是（30+1））
      */
     private final int day = 7;
 
-    private MagOrder order ;
+    private Order order ;
 
     @Override
     public void doWork(){
@@ -61,7 +61,7 @@ public class RepaymentPushTask extends AbsTask {
 
                     if (normalDate.getTime() == currentDate.getTime()) {
                         String normalTemplate  = dictService.getDictInfo(DictEnum.JJDQ.getName().trim(),DictEnum.JJDQ.getCode().trim());
-                        order = appOrderService.getOrderByNo(info.getOrderNo());
+                        order = orderService.getOrderByNo(info.getOrderNo());
                         Map<String,String> parameter = new HashMap<>(5);
                         parameter.put("lastDate",DateUtils.getDateString(info.getRepaymentTime(),DateUtils.STYLE_2));
                         parameter.put("title","正常还款提醒");
@@ -70,7 +70,7 @@ public class RepaymentPushTask extends AbsTask {
 
                     }else if(exceedDate.getTime() == info.getRepaymentTime().getTime() ){
                         String exceedTemplate  = dictService.getDictInfo(DictEnum.YYQ.getName().trim(),DictEnum.YYQ.getCode().trim());
-                        order = appOrderService.getOrderByNo(info.getOrderNo());
+                        order = orderService.getOrderByNo(info.getOrderNo());
                         Map<String,String> parameter = new HashMap<>(5);
                         parameter.put("lastDate",DateUtils.getDateString(info.getRepaymentTime(),DateUtils.STYLE_2));
                         parameter.put("title","逾期提醒");

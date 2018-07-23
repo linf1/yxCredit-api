@@ -1,9 +1,6 @@
 package com.zw.miaofuspd.facade.order.service;
 
 
-import com.zw.miaofuspd.facade.pojo.MagOrder;
-
-import java.util.List;
 import java.util.Map;
 /**
  * Created by Administrator on 2017/2/20 0020.
@@ -77,23 +74,5 @@ public interface AppOrderService {
      * @return
      */
     Map updateOrderStatusByOrderId(String orderId,String state) throws Exception;
-
-
-    /**
-     * 按id更新订单信息
-     * @author 陈淸玉 create on 2018-07-19
-     * @param order 订单实体
-     * @return 影响行数
-     */
-    int updateOrderById(MagOrder order);
-
-    /**
-     * 按id获取订单信息
-     * @author 陈淸玉 create on 2018-07-19
-     * @param id 订单编号
-     * @return 一条订单数据
-     */
-    MagOrder getOrderByNo(String id);
-
 
 }

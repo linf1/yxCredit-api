@@ -3,10 +3,11 @@ package com.zw.miaofuspd.service;
 import com.base.util.DateUtils;
 import com.enums.RepaymentTypeEnum;
 import com.zw.miaofuspd.facade.order.service.AppOrderService;
-import com.zw.miaofuspd.facade.pojo.MagOrder;
 import com.zw.miaofuspd.mapper.BusinessRepaymentMapper;
 import com.zw.pojo.BusinessRepayment;
+import com.zw.pojo.Order;
 import com.zw.service.IBusinessRepaymentService;
+import com.zw.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class BusinessRepaymentServiceImpl implements IBusinessRepaymentService {
     private BusinessRepaymentMapper businessRepaymentMapper;
 
     @Autowired
-    private AppOrderService appOrderService;
+    private IOrderService orderService;
 
     @Override
     public boolean saveRepayment(BusinessRepayment repayment) {
@@ -85,10 +86,10 @@ public class BusinessRepaymentServiceImpl implements IBusinessRepaymentService {
                         break;
                     }
             }
-            MagOrder magOrder = appOrderService.getOrderByNo(record.getOrderNo());
-            map.put("loanTime",magOrder.getLoanTime());
-            map.put("payBackUser",magOrder.getPayBackUser());
-            map.put("payBackCard",magOrder.getPayBackCard());
+            Order order = orderService.getOrderByNo(record.getOrderNo());
+            map.put("loanTime",order.getLoanTime());
+            map.put("payBackUser",order.getPayBackUser());
+            map.put("payBackCard",order.getPayBackCard());
             return map;
         }
         return null;

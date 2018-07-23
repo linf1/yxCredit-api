@@ -39,6 +39,7 @@ public class RepaymentQueueListener implements SessionAwareMessageListener {
                 if(isOk){
                     //成功发送站内信息及短信
                     repaymentBusiness.sendMessage();
+                    LOGGER.info("------------推送放款及还款计划信息消息MQ处理成功--------------");
                 }else{
                     //TODO 失败可把消息放到异常队列
                     //MessageProducer producer = session.createProducer(this.repaymentErrorQueue);
@@ -59,9 +60,9 @@ public class RepaymentQueueListener implements SessionAwareMessageListener {
     /**
      * 处理异常队列
      */
-    private Destination repaymentErrorQueue;
-
-    public void setRepaymentErrorQueue(Destination repaymentErrorQueue) {
-        this.repaymentErrorQueue = repaymentErrorQueue;
-    }
+//    private Destination repaymentErrorQueue;
+//
+//    public void setRepaymentErrorQueue(Destination repaymentErrorQueue) {
+//        this.repaymentErrorQueue = repaymentErrorQueue;
+//    }
 }

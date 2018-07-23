@@ -5,10 +5,7 @@ import com.base.util.GeneratePrimaryKeyUtils;
 import com.zhiwang.zwfinance.app.jiguang.util.api.util.OrderStateEnum;
 import com.zhiwang.zwfinance.app.jiguang.util.api.util.OrderTypeEnum;
 import com.zw.miaofuspd.facade.order.service.AppOrderService;
-import com.zw.miaofuspd.facade.pojo.MagOrder;
-import com.zw.miaofuspd.mapper.MagOrderMapper;
 import com.zw.service.base.AbsServiceBase;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -29,9 +26,6 @@ import java.util.Map;
 @Service("appOrderServiceImpl")
 public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderService {
     /****************************************************碧友信**********************************************/
-
-    @Autowired
-    private MagOrderMapper magOrderMapper;
 
     /**
      * 根据用户ID和订单状态获取订单信息列表(2.审核中、3.待签约、4.待放款)
@@ -392,14 +386,5 @@ public class AppOrderServiceImpl extends AbsServiceBase implements AppOrderServi
 
     }
 
-    @Override
-    public int updateOrderById(MagOrder order) {
-        return  magOrderMapper.updateOrderByNo(order);
-    }
-
-    @Override
-    public MagOrder getOrderByNo(String id) {
-        return magOrderMapper.getOrderInfoByNo(id);
-    }
 
 }
