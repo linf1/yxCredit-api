@@ -128,6 +128,11 @@
         <property name="requestType" value="${getLoan.requestType}"/>
         <property name="requestUrl" value="${getLoan.requestUrl}"/>
     </bean>
+    <!-- 查询还款计划同步 韩梅生-->
+    <bean id="repaymentSettings" class="com.api.model.repayment.RepaymentSettings">
+        <property name="requestType" value="${getRepayment.requestType}"/>
+        <property name="requestUrl" value="${getRepayment.requestUrl}"/>
+    </bean>
 
 
 </beans>

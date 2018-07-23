@@ -127,7 +127,7 @@ public class RepaymentController {
      * @param orderId 订单编号
      * @return 成功失败
      */
-    @GetMapping("/getRepaymentByOrderId")
+    @PostMapping("/getRepaymentByOrderId")
     public ResultVO getRepaymentByOrderId(String orderId) {
         if(orderId == null){
             return ResultVO.error("参数异常");
@@ -158,6 +158,33 @@ public class RepaymentController {
         try {
             List<Map> businessRepaymentList = businessRepaymentService.findListByOrderId(businessRepayment);
             return ResultVO.ok(businessRepaymentList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVO.error(e.getMessage());
+        }
+    }
+    /**
+     * 查询还款计划
+     * @param  businessId 订单编号
+     *         repaymentType 还款类型
+     * @return 成功失败
+     */
+    @PostMapping("/getRepaymentListByProjectId")
+    public ResultVO getRepaymentListByProjectId(String businessId,Integer repaymentType) {
+        if(businessId == null || repaymentType == null){
+            return ResultVO.error("参数异常");
+        }
+        LOGGER.info("进入查询还款计划,参数为：{}",businessId,repaymentType);
+        BusinessRepayment businessRepayment = new BusinessRepayment();
+        businessRepayment.setOrderNo(businessId);
+        businessRepayment.setRepaymentType(repaymentType);
+        try {
+            BYXResponse  byxResponse = repaymentServer.getRepaymentListByProjectId(businessRepayment);
+            if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
+                LOGGER.info("查询还款计划成功----------------------------");
+                return ResultVO.ok(byxResponse.getRes_data());
+            }
+            return ResultVO.error(byxResponse.getRes_msg());
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVO.error(e.getMessage());

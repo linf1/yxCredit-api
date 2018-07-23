@@ -138,4 +138,24 @@ public class BYXResponse implements Serializable {
         final String decode = cryptoTools.decode(byxResponseJson);
         return BYXResponse.ok(JSONObject.parseObject(decode));
     }
+
+    /**
+     * 解析内容返回数组结果
+     * @param byxResponseJson 远程调用接口返回结果字符串
+     * @return BYXResponse
+     */
+
+    public static BYXResponse getArrayBYXResponse(String byxResponseJson,BYXSettings byxSettings) throws Exception {
+        if(StringUtils.isEmpty(byxResponseJson)){return error();}
+        CryptoTools cryptoTools = new CryptoTools(byxSettings.getDesKey(),byxSettings.getVi());
+        final BYXResponse response = JSONObject.parseObject(byxResponseJson, BYXResponse.class);
+        if(BYXResponse.resCode.success.getCode().equals(response.getRes_code())) {
+            if(response.getRes_data() != null){
+                final String decode = cryptoTools.decode(response.getRes_data().toString());
+                response.setRes_data(JSONObject.parseArray(decode));
+            }
+
+        }
+        return response;
+    }
 }
