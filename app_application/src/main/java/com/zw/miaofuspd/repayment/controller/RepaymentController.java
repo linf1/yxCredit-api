@@ -117,10 +117,11 @@ public class RepaymentController {
                 Map resData = (Map)byxResponse.getRes_data();
                 LoanDetailResponse loanDetail = JSONObject.toJavaObject((JSON) resData,LoanDetailResponse.class);
                 //更新订单放款信息
-                repaymentBusiness.loanMoney(loanDetail);
-                //生成对应还款计划
-                addRepayment(orderId);
-                return ResultVO.ok(byxResponse.getRes_data());
+                boolean isLoanMoney = repaymentBusiness.loanMoney(loanDetail);
+                if(isLoanMoney){
+                    //生成对应还款计划
+                    return addRepayment(orderId);
+                }
             }
             LOGGER.info("查询还款账号异常：{}",byxResponse.getRes_msg());
             return ResultVO.error(byxResponse.getRes_msg());
@@ -135,7 +136,7 @@ public class RepaymentController {
      * @param orderNo 订单编号
      * @throws Exception http 异常
      */
-    private void addRepayment(String orderNo) throws Exception {
+    private ResultVO addRepayment(String orderNo) throws Exception {
         BusinessRepayment repayment = new BusinessRepayment();
         repayment.setOrderNo(orderNo);
         //未还款的状态
@@ -152,7 +153,9 @@ public class RepaymentController {
                     repaymentBusiness.saveRepaymentInfo(repaymentResponse);
                 }
             }
+          return   ResultVO.ok("成功");
         }
+     return   ResultVO.error(repaymentInfo.getRes_msg());
     }
 
     /**
