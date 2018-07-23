@@ -42,6 +42,7 @@
         <property name="requestType" value="${sms.requestType}"/>
         <property name="requestUrl" value="${sms.url}"/>
         <property name="timeOut" value="${sms.timeOut}"/>
+        <property name="usable" value="${sms.usable}"/>
     </bean>
     <!-- 银行卡四要素BEAN create by 陈清玉-->
     <bean id="bankcardSettings" class="com.api.model.bankcard.BankcardSettings">

@@ -27,10 +27,24 @@ public class MsgSettings extends BaseSettings {
      * 短信超时时间
      */
     private Long timeOut;
+
     /**
      * 短信模板自定义的参数放在名称为”data”的Map中（使用短信模板，有需要替换的参数则必须有，没有参数则不需要）
      */
     private Map<String,Object> data;
+
+    /**
+     * 短信是否效 true 有效 false 失效
+     */
+    private boolean usable;
+
+    public boolean isUsable() {
+        return usable;
+    }
+
+    public void setUsable(boolean usable) {
+        this.usable = usable;
+    }
 
     public String getType() {
         return type;
