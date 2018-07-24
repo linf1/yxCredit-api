@@ -78,7 +78,7 @@ public class AssetRequest implements Serializable {
     /**
      *Y	String	提前还款最少计息天数－空
      */
-    private String assetPrepaymentMinDays = "";
+    private String assetPrepaymentMinDays;
     /**
      *Y	String	BYX用户中心用户ID
      */
