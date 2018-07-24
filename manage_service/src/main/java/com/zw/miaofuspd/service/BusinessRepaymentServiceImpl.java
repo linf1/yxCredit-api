@@ -128,7 +128,7 @@ public class BusinessRepaymentServiceImpl implements IBusinessRepaymentService {
                 Map<String,Object> map =  new HashMap<String,Object>();
                 map.put("id", businessRepayment.getId());
                 map.put("repaymentAccount", businessRepayment.getRepaymentAccount());//应还金额
-                map.put("repaymentTime",DateUtils.getDateString(businessRepayment.getRepaymentTime(),DateUtils.STYLE_1));
+                map.put("repaymentTime",DateUtils.getDateString(businessRepayment.getRepaymentYesTime(),DateUtils.STYLE_1));
                 listMap.add(map);
             }
             return listMap;
