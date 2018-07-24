@@ -7,6 +7,10 @@ package com.enums;
 public enum RepaymentTypeEnum {
 
     /**
+     * 全部
+     */
+    REPAYMENT_ALL(-1,"全部"),
+    /**
      *未还款
      */
     REPAYMENT_NO(0,"未还款"),

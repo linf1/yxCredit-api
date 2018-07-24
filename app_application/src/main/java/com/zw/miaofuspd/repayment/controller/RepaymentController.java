@@ -142,7 +142,7 @@ public class RepaymentController {
         BusinessRepayment repayment = new BusinessRepayment();
         repayment.setOrderNo(orderNo);
         //未还款的状态
-        repayment.setRepaymentType(RepaymentTypeEnum.REPAYMENT_NO.getCode());
+        repayment.setRepaymentType(RepaymentTypeEnum.REPAYMENT_ALL.getCode());
         //先删除数据库还款计划
         repaymentServer.deleteRepayment(orderNo);
         //调远程API获取还款计划
