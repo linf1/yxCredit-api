@@ -17,7 +17,6 @@ import com.constants.SysConstant;
 import com.enums.DictEnum;
 import com.enums.OperationNodeEnum;
 import com.enums.OperationResultEnum;
-import com.enums.RepaymentStatusEnum;
 import com.zhiwang.zwfinance.app.jiguang.util.api.util.OrderStateEnum;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
 import com.zw.service.IOrderOperationRecordService;
@@ -95,7 +94,7 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
         order.setAlterTime(DateUtils.getCurrentTime());
         //放款时间
         order.setLoanTime(DateUtils.getDateString(loanDetailResponse.getReviewTime(), DateUtils.STYLE_1));
-        return orderService.updateOrderById(order) > 0;
+        return orderService.updateOrderByNo(order) > 0;
     }
 
     @Override
@@ -175,9 +174,9 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
         Integer countNum = businessRepaymentService.countRepaymentByStatus(businessId);
         if(countNum == 0){
             Order order = new Order();
-            order.setId(businessId);
+            order.setOrderNo(businessId);
             order.setOrderState(String.valueOf(OrderStateEnum.ALREADY_SETTLED.getCode()));
-            orderService.updateOrderById(order);
+            orderService.updateOrderByNo(order);
             LOGGER.info("--------订单编号为{}的订单用户已经款项已经全部结清--------",businessId);
         }
     }
