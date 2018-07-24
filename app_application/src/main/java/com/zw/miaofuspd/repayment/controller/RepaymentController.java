@@ -13,7 +13,9 @@ import com.base.util.DateUtils;
 import com.enums.RepaymentStatusEnum;
 import com.enums.RepaymentTypeEnum;
 import com.zw.pojo.BusinessRepayment;
+import com.zw.pojo.Order;
 import com.zw.service.IBusinessRepaymentService;
+import com.zw.service.IOrderService;
 import com.zw.web.base.vo.ResultVO;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -41,6 +43,10 @@ public class RepaymentController {
 
     @Autowired
     private IRepaymentBusiness repaymentBusiness;
+
+    @Autowired
+    private IOrderService orderService;
+
 
     private final Logger LOGGER = LoggerFactory.getLogger(RepaymentController.class);
 
@@ -122,8 +128,9 @@ public class RepaymentController {
                 //更新订单放款信息
                 boolean isLoanMoney = repaymentBusiness.loanMoney(loanDetail);
                 if(isLoanMoney){
-                    //生成对应还款计划
-                    //return addRepayment(orderId);
+                    //发送短信
+                    Order order = orderService.getOrderByNo(orderId);
+                    repaymentBusiness.sendMessage(order);
                     return ResultVO.ok(byxResponse.getRes_msg());
                 }
             }
@@ -160,6 +167,8 @@ public class RepaymentController {
                     repaymentBusiness.saveRepaymentInfo(repaymentResponse);
                 }
             }
+            //如果用户款项已经结清就更新订单状态为已结清
+            repaymentBusiness.settleOrder(orderNo);
           return   ResultVO.ok(repaymentInfo.getRes_msg());
         }
      return   ResultVO.error(repaymentInfo.getRes_msg());
