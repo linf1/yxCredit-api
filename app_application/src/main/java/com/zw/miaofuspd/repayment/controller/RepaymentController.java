@@ -89,7 +89,10 @@ public class RepaymentController {
         try {
             BYXResponse  byxResponse = repaymentServer.prepaymentRecode(map);
             if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
-                return ResultVO.ok(byxResponse.getRes_data());
+                boolean isSuccess = repaymentServer.updateRepayment(map.get("repayId").toString());
+                if(isSuccess){
+                    return ResultVO.ok(byxResponse.getRes_data());
+                }
             }
             return ResultVO.error(byxResponse.getRes_msg());
         } catch (Exception e) {
