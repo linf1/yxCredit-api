@@ -1,5 +1,6 @@
 package com.activemq.entity.respose;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -7,7 +8,7 @@ import java.util.Date;
  * 还款计划接口请求实体
  * @author 陈淸玉 create 2018-07-10
  */
-public class RepaymentResponse {
+public class RepaymentResponse implements Serializable {
     /**
      * 还款主键
      */

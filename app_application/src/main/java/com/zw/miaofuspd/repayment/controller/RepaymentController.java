@@ -136,7 +136,8 @@ public class RepaymentController {
      * @param orderNo 订单编号
      * @throws Exception http 异常
      */
-    private ResultVO addRepayment(String orderNo) throws Exception {
+    @PostMapping("/addRepayment")
+    public ResultVO addRepayment(String orderNo) throws Exception {
         BusinessRepayment repayment = new BusinessRepayment();
         repayment.setOrderNo(orderNo);
         //未还款的状态
@@ -153,7 +154,7 @@ public class RepaymentController {
                     repaymentBusiness.saveRepaymentInfo(repaymentResponse);
                 }
             }
-          return   ResultVO.ok("成功");
+          return   ResultVO.ok(repaymentInfo.getRes_data());
         }
      return   ResultVO.error(repaymentInfo.getRes_msg());
     }
