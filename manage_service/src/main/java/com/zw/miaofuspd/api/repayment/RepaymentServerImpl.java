@@ -7,9 +7,11 @@ import com.api.model.repayment.LoanSettings;
 import com.api.model.repayment.PrepaymentRecodeSettings;
 import com.api.model.repayment.RepaymentSettings;
 import com.api.model.repayment.TrialRepaymentSettings;
+import com.api.service.ds.AbsDSBaseServer;
 import com.api.service.repayment.IRepaymentServer;
 import com.zw.api.HttpClientUtil;
 import com.zw.pojo.BusinessRepayment;
+import com.zw.service.base.AbsServiceBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,7 @@ import java.util.Map;
  * @author  韩梅生
  */
 @Service(IRepaymentServer.BEAN_KEY)
-public class RepaymentServerImpl implements IRepaymentServer {
+public class RepaymentServerImpl extends AbsServiceBase implements IRepaymentServer {
 
     @Autowired
     private TrialRepaymentSettings trialRepaymentSettings;
@@ -76,5 +78,11 @@ public class RepaymentServerImpl implements IRepaymentServer {
             return BYXResponse.getArrayBYXResponse(result, byxSettings);
         }
         return null;
+    }
+
+    @Override
+    public void deleteRepayment(String orderNo) throws Exception {
+        String delSQL = "delete from business_repayment where order_no = '"+orderNo+"'";
+        sunbmpDaoSupport.exeSql(delSQL);
     }
 }
