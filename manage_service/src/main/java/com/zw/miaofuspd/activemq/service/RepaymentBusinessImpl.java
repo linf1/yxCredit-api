@@ -199,6 +199,9 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
         if(businessRepayment.getRepaymentAccount() == null){
             businessRepayment.setRepaymentAccount(new BigDecimal(0.0000));
         }
+        if(businessRepayment.getRepaymentYesAccount() == null){
+            businessRepayment.setRepaymentYesAccount(new BigDecimal(0.0000));
+        }
         if(businessRepayment.getYesCapital() == null){
             businessRepayment.setYesCapital(new BigDecimal(0.0000));
         }

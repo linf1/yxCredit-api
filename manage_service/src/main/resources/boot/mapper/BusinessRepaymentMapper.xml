@@ -151,35 +151,7 @@
       where order_no = #{orderNo,jdbcType=VARCHAR} and  period = #{period,jdbcType=INTEGER}
   </select>
 
-    <update id="updateByOrderIdAndPeriod">
-    update business_repayment
-    set
-      status = #{status,jdbcType=VARCHAR},
-      period = #{period,jdbcType=INTEGER},
-      interest_start_time = #{interestStartTime,jdbcType=TIMESTAMP},
-      repayment_time = #{repaymentTime,jdbcType=TIMESTAMP},
-      repayment_yes_time = #{repaymentYesTime,jdbcType=TIMESTAMP},
-      repayment_account = #{repaymentAccount,jdbcType=DECIMAL},
-      repayment_yes_account = #{repaymentYesAccount,jdbcType=DECIMAL},
-      capital = #{capital,jdbcType=DECIMAL},
-      yes_capital = #{yesCapital,jdbcType=DECIMAL},
-      rate = #{rate,jdbcType=DECIMAL},
-      interest = #{interest,jdbcType=DECIMAL},
-      repayment_yes_interest = #{repaymentYesInterest,jdbcType=DECIMAL},
-      is_repayment = #{isRepayment,jdbcType=INTEGER},
-      repayment_type = #{repaymentType,jdbcType=INTEGER},
-      late_days = #{lateDays,jdbcType=INTEGER},
-      late_rate = #{lateRate,jdbcType=DECIMAL},
-      late_interest = #{lateInterest,jdbcType=DECIMAL},
-      derate_amount = #{derateAmount,jdbcType=DECIMAL},
-      channel_type = #{channelType,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      update_user_id = #{updateUserId,jdbcType=VARCHAR}
-   where order_no = #{orderNo,jdbcType=VARCHAR} and  period = #{period,jdbcType=INTEGER}
-  </update>
-
-    <select id="findListByOrderId" parameterType="com.zw.pojo.BusinessRepayment" resultMap="BaseResultMap">
+  <select id="findListByOrderId" parameterType="com.zw.pojo.BusinessRepayment" resultMap="BaseResultMap">
       SELECT
         id,
         order_no,
@@ -224,7 +196,7 @@
   <select id="findRepaymentInfoByStatus"  resultMap="BaseResultMap">
       SELECT order_no,DATE(repayment_time)as repaymentTime  FROM business_repayment  WHERE status = #{status}
   </select>
-    <update id="updateRepaymentById" parameterType="com.zw.pojo.BusinessRepayment">
+  <update id="updateRepaymentById" parameterType="com.zw.pojo.BusinessRepayment">
         update business_repayment
         <set >
             <if test="orderNo != null" >
@@ -313,6 +285,97 @@
             </if>
         </set>
         where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+  <update id="updateByOrderIdAndPeriod" parameterType="com.zw.pojo.BusinessRepayment">
+        update business_repayment
+        <set >
+            <if test="orderNo != null" >
+                order_no = #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="repaymentId != null" >
+                repayment_id = #{repaymentId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="period != null" >
+                period = #{period,jdbcType=INTEGER},
+            </if>
+            <if test="interestStartTime != null" >
+                interest_start_time = #{interestStartTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="repaymentTime != null" >
+                repayment_time = #{repaymentTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="repaymentYesTime != null" >
+                repayment_yes_time = #{repaymentYesTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="repaymentAccount != null" >
+                repayment_account = #{repaymentAccount,jdbcType=DECIMAL},
+            </if>
+            <if test="repaymentYesAccount != null" >
+                repayment_yes_account = #{repaymentYesAccount,jdbcType=DECIMAL},
+            </if>
+            <if test="capital != null" >
+                capital = #{capital,jdbcType=DECIMAL},
+            </if>
+            <if test="yesCapital != null" >
+                yes_capital = #{yesCapital,jdbcType=DECIMAL},
+            </if>
+            <if test="rate != null" >
+                rate = #{rate,jdbcType=DECIMAL},
+            </if>
+            <if test="interest != null" >
+                interest = #{interest,jdbcType=DECIMAL},
+            </if>
+            <if test="repaymentYesInterest != null" >
+                repayment_yes_interest = #{repaymentYesInterest,jdbcType=DECIMAL},
+            </if>
+            <if test="isRepayment != null" >
+                is_repayment = #{isRepayment,jdbcType=INTEGER},
+            </if>
+            <if test="repaymentType != null" >
+                repayment_type = #{repaymentType,jdbcType=INTEGER},
+            </if>
+            <if test="lateDays != null" >
+                late_days = #{lateDays,jdbcType=INTEGER},
+            </if>
+            <if test="lateRate != null" >
+                late_rate = #{lateRate,jdbcType=DECIMAL},
+            </if>
+            <if test="lateInterest != null" >
+                late_interest = #{lateInterest,jdbcType=DECIMAL},
+            </if>
+            <if test="derateAmount != null" >
+                derate_amount = #{derateAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="periods != null" >
+                periods = #{periods,jdbcType=INTEGER},
+            </if>
+            <if test="channelType != null" >
+                channel_type = #{channelType,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null" >
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUserId != null" >
+                create_user_id = #{createUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUserId != null" >
+                update_user_id = #{updateUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDeleted != null" >
+                is_deleted = #{isDeleted,jdbcType=INTEGER},
+            </if>
+        </set>
+      where order_no = #{orderNo,jdbcType=VARCHAR} and  period = #{period,jdbcType=INTEGER}
     </update>
 
 </mapper>
