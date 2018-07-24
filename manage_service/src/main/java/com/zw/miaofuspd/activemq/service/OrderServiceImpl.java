@@ -17,7 +17,7 @@ public class OrderServiceImpl extends AbsServiceBase implements IOrderService {
     private OrderMapper orderMapper;
 
     @Override
-    public int updateOrderById(Order order) {
+    public int updateOrderByNo(Order order) {
         return  orderMapper.updateOrderByNo(order);
     }
 

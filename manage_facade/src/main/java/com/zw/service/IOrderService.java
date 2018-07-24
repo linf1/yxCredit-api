@@ -14,7 +14,7 @@ public interface IOrderService {
      * @param order 订单实体
      * @return 影响行数
      */
-    int updateOrderById(Order order);
+    int updateOrderByNo(Order order);
 
     /**
      * 按id获取订单信息
