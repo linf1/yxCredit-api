@@ -76,7 +76,7 @@ public class AssetRequest implements Serializable {
      */
     private String assetPrepaymentTimeType;
     /**
-     *Y	String	提前还款最少计息天数－空
+     *Y	String	提前还款最少计息天数
      */
     private String assetPrepaymentMinDays;
     /**

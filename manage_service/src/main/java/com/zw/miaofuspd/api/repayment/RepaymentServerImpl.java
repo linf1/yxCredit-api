@@ -7,8 +7,8 @@ import com.api.model.repayment.LoanSettings;
 import com.api.model.repayment.PrepaymentRecodeSettings;
 import com.api.model.repayment.RepaymentSettings;
 import com.api.model.repayment.TrialRepaymentSettings;
-import com.api.service.ds.AbsDSBaseServer;
 import com.api.service.repayment.IRepaymentServer;
+import com.enums.RepaymentStatusEnum;
 import com.zw.api.HttpClientUtil;
 import com.zw.pojo.BusinessRepayment;
 import com.zw.service.base.AbsServiceBase;
@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -84,5 +83,17 @@ public class RepaymentServerImpl extends AbsServiceBase implements IRepaymentSer
     public void deleteRepayment(String orderNo) throws Exception {
         String delSQL = "delete from business_repayment where order_no = '"+orderNo+"'";
         sunbmpDaoSupport.exeSql(delSQL);
+    }
+
+    @Override
+    public boolean updateRepayment(String repayId) {
+        try {
+            String updateSQL = "update business_repayment set status = '"+ RepaymentStatusEnum.REPAYMENT_PROCESSING.getCode() +"' where repayment_id = '"+repayId+"'";
+            sunbmpDaoSupport.exeSql(updateSQL);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 }

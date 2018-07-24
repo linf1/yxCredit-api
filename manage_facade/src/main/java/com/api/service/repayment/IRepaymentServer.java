@@ -49,4 +49,9 @@ public interface IRepaymentServer {
      * @throws Exception 异常
      */
     void deleteRepayment(String orderNo) throws Exception;
+
+    /**
+     * 更新还款计划状态
+     */
+    boolean  updateRepayment(String repayId);
 }
