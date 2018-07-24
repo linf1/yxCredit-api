@@ -57,7 +57,7 @@ public class BusinessRepaymentServiceImpl implements IBusinessRepaymentService {
             Date currentDate = DateUtils.strConvertToDate(currentTime,DateUtils.STYLE_2);
             for(BusinessRepayment businessRepayment : businessRepaymentList) {
                 //起息日小于当前时间
-                if(currentDate.getTime() > businessRepayment.getInterestStartTime().getTime()
+                if(currentDate.getTime() >= businessRepayment.getInterestStartTime().getTime()
                         && RepaymentTypeEnum.OVERDUE.getCode().equals(businessRepayment.getRepaymentType())) {
                     map.put("id", businessRepayment.getId());
                     map.put("repaymentId",businessRepayment.getRepaymentId());
@@ -68,12 +68,13 @@ public class BusinessRepaymentServiceImpl implements IBusinessRepaymentService {
                     map.put("status", businessRepayment.getStatus());//还款状态  1、还款中、2还款处理中、3已还款
                     map.put("repaymentType", businessRepayment.getRepaymentType());//还款类型，0未还款,1 正常还款; 2 提前还款;3 部分提前还款;4逾期还款，5逾期未还;
                     map.put("repaymentTime", DateUtils.getDateString(businessRepayment.getRepaymentTime(),DateUtils.STYLE_1));
+                    map.put("isRepayment", businessRepayment.getIsRepayment());//是否提前还款，0否，1是
                 }
             }
             if(map.isEmpty()) {
                 //起息日小于当前时间
                 for(BusinessRepayment businessRepayment : businessRepaymentList)
-                    if (currentDate.getTime() > businessRepayment.getInterestStartTime().getTime()) {
+                    if (currentDate.getTime() >= businessRepayment.getInterestStartTime().getTime()) {
                         map.put("id",businessRepayment.getId());
                         map.put("repaymentId",businessRepayment.getRepaymentId());
                         map.put("period", businessRepayment.getPeriod());//当前期数
@@ -83,6 +84,7 @@ public class BusinessRepaymentServiceImpl implements IBusinessRepaymentService {
                         map.put("status",businessRepayment.getStatus());//还款状态  1、还款中、2还款处理中、3已还款
                         map.put("repaymentType",businessRepayment.getRepaymentType());//还款类型，0未还款,1 正常还款; 2 提前还款;3 部分提前还款;4逾期还款，5逾期未还;
                         map.put("repaymentTime",DateUtils.getDateString(businessRepayment.getRepaymentTime(),DateUtils.STYLE_1));
+                        map.put("isRepayment", businessRepayment.getIsRepayment());//是否提前还款，0否，1是
                         break;
                     }
             }
