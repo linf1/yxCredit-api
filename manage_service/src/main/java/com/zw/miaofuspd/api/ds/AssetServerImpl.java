@@ -11,6 +11,7 @@ import com.api.model.ds.DSMoneySettings;
 import com.api.model.repayment.BusinessSettings;
 import com.api.service.ds.IAssetServer;
 import com.api.service.ds.IDSMoneyServer;
+import com.zhiwang.zwfinance.app.jiguang.util.api.CryptoTools;
 import com.zw.api.HttpClientUtil;
 import com.zw.service.base.AbsServiceBase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,5 +71,20 @@ public class AssetServerImpl extends AbsServiceBase implements IAssetServer {
                 sunbmpDaoSupport.exeSql(sb.toString());
             }
         }
+    }
+
+    /**
+     * 加密解密字符串测试
+     * @param args
+     * @throws Exception
+     */
+    public static void main(String[] args) throws Exception {
+        String str = "MEfCTqYuwYjHwoiCkRZf/k3M7tE8WB+vkjwqaUpUMqcCY91QPkg3+y14SuNYVoIqRveXptKuWKdJ\n" +
+                "WzfBhRHaC2BCH8KYdYZSre+2+2QP02xGOGXYreM6uxzA/dw/Qs5uV8QxdHhC4WyZtAwLd2Ph4w==";
+
+        CryptoTools cryptoTools = new CryptoTools("QEI1LQBXXAA1TWX72FUI7L5H","CVPKUJTP");
+        final String decodesStr = cryptoTools.decode(str);
+        System.out.println(decodesStr);
+
     }
 }
