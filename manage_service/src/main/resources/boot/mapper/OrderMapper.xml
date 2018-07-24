@@ -422,6 +422,20 @@
   </update>
 
   <select id="getOrderInfoByNo"  resultMap="BaseResultMap">
-    select id,contract_amount,PERIODS,user_id,tel,applay_money, pay_back_user, pay_back_card,loan_time from mag_order where order_no = #{orderNo}
+    SELECT
+      magOrder.id AS id,
+      contract_amount,
+      magOrder.PERIODS AS PERIODS,
+      user_id,
+      tel,
+      applay_money,
+      pay_back_user,
+      pay_back_card,
+      loan_time,
+      proDetail.repayment as isRepayment
+    FROM
+	  mag_order AS magOrder
+    LEFT JOIN pro_working_product_detail AS proDetail ON magOrder.product_detail = proDetail.id
+    WHERE magOrder.order_no = #{orderNo}
   </select>
 </mapper>
