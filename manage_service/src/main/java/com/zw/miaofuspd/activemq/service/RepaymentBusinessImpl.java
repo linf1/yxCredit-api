@@ -17,6 +17,7 @@ import com.constants.SysConstant;
 import com.enums.DictEnum;
 import com.enums.OperationNodeEnum;
 import com.enums.OperationResultEnum;
+import com.enums.RepaymentStatusEnum;
 import com.zhiwang.zwfinance.app.jiguang.util.api.util.OrderStateEnum;
 import com.zw.miaofuspd.facade.dict.service.IDictService;
 import com.zw.service.IOrderOperationRecordService;
@@ -59,14 +60,14 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
     @Autowired
     private IMessageServer messageServer;
 
-    private Order order ;
+    private Order order;
 
     @Override
     public boolean loanMoney(LoanDetailResponse loanDetailResponse) {
         order = orderService.getOrderByNo(loanDetailResponse.getBusinessId());
         OrderOperationRecord orderOperationRecord = new OrderOperationRecord();
         orderOperationRecord.setId(GeneratePrimaryKeyUtils.getUUIDKey());
-        orderOperationRecord.setOperationTime(DateUtils.getDateString(loanDetailResponse.getReviewTime(),DateUtils.STYLE_10));
+        orderOperationRecord.setOperationTime(DateUtils.getDateString(loanDetailResponse.getReviewTime(), DateUtils.STYLE_10));
         orderOperationRecord.setDescription("已放款");
         //放款审核
         orderOperationRecord.setOperationNode(OperationNodeEnum.LOAN_AUDIT.getCode());
@@ -93,7 +94,7 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
         order.setPayBackUser(loanDetailResponse.getLoanName());
         order.setAlterTime(DateUtils.getCurrentTime());
         //放款时间
-        order.setLoanTime(DateUtils.getDateString(loanDetailResponse.getReviewTime(),DateUtils.STYLE_1));
+        order.setLoanTime(DateUtils.getDateString(loanDetailResponse.getReviewTime(), DateUtils.STYLE_1));
         return orderService.updateOrderById(order) > 0;
     }
 
@@ -120,23 +121,25 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean repaymentHandel(BYXResponse byxResponse) {
-        if(BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
-            Map resData = (Map)byxResponse.getRes_data();
-            LoanDetailResponse loanDetail = JSONObject.toJavaObject((JSON) resData.get("loanDetail"),LoanDetailResponse.class);
-            if(loanDetail != null ){
+    public boolean repaymentHandel(BYXResponse byxResponse) throws Exception {
+        if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
+            Map resData = (Map) byxResponse.getRes_data();
+            LoanDetailResponse loanDetail = JSONObject.toJavaObject((JSON) resData.get("loanDetail"), LoanDetailResponse.class);
+            if (loanDetail != null) {
                 loanMoney(loanDetail);
                 JSONArray repaymentList = (JSONArray) resData.get("repaymentList");
                 //批量生成还款计划（多期的情况）
-                if( repaymentList != null ){
+                if (repaymentList != null) {
                     for (Object item : repaymentList) {
-                        RepaymentResponse repayment = JSONObject.toJavaObject((JSON)item,RepaymentResponse.class);
-                        if(repayment != null){
+                        RepaymentResponse repayment = JSONObject.toJavaObject((JSON) item, RepaymentResponse.class);
+                        if (repayment != null) {
                             repayment.setOrderNo(loanDetail.getBusinessId());
                             saveRepaymentInfo(repayment);
                         }
                     }
-                    return  true;
+                    //成功发送站内信息及短信
+                    sendMessage(this.order);
+                    return true;
                 }
             }
         }
@@ -145,34 +148,50 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
 
     @Override
     public boolean repaymentPushAssentHandel(BYXResponse byxResponse) {
-        if(BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
-            Map resData = (Map)byxResponse.getRes_data();
-                JSONArray repaymentList = (JSONArray) resData.get("repaymentList");
-                //批量更新还款计划（多期的情况）
-                if( repaymentList != null){
-                    for (Object item : repaymentList) {
-                        RepaymentResponse repayment = JSONObject.toJavaObject((JSON)item,RepaymentResponse.class);
-                        if(repayment != null){
-                            repayment.setOrderNo(resData.get("businessId").toString());
-                            updateRepaymentInfo(repayment);
-                        }
+        if (BYXResponse.resCode.success.getCode().equals(byxResponse.getRes_code())) {
+            Map resData = (Map) byxResponse.getRes_data();
+            JSONArray repaymentList = (JSONArray) resData.get("repaymentList");
+            //订单编号
+            String businessId = resData.get("businessId").toString();
+            //批量更新还款计划（多期的情况）
+            if (repaymentList != null) {
+                for (Object item : repaymentList) {
+                    RepaymentResponse repayment = JSONObject.toJavaObject((JSON) item, RepaymentResponse.class);
+                    if (repayment != null) {
+                        repayment.setOrderNo(businessId);
+                        updateRepaymentInfo(repayment);
                     }
-                    return  true;
                 }
+                //如果用户款项已经结清就更新订单状态为已结清
+                 settleOrder(businessId);
+                return true;
+            }
         }
         return false;
     }
 
     @Override
-    public void sendMessage() throws Exception {
-        String contentTemplate = dictService.getDictInfo(DictEnum.FKCG.getName(),DictEnum.FKCG.getCode());
-        if(StringUtils.isEmpty(contentTemplate)){
-            LOGGER.info("--------缺少放款短信模板配置-----------");
-             return;
+    public void settleOrder(String businessId) {
+        Integer countNum = businessRepaymentService.countRepaymentByStatus(businessId);
+        if(countNum == 0){
+            Order order = new Order();
+            order.setId(businessId);
+            order.setOrderState(String.valueOf(OrderStateEnum.ALREADY_SETTLED.getCode()));
+            orderService.updateOrderById(order);
+            LOGGER.info("--------订单编号为{}的订单用户已经款项已经全部结清--------",businessId);
         }
-        Map<String,String> parameter = new HashMap<>(2);
-        parameter.put("applayMoney",order.getApplayMoney().toString());
-        parameter.put("periods",order.getPeriods());
+    }
+
+    @Override
+    public void sendMessage(Order order) throws Exception {
+        String contentTemplate = dictService.getDictInfo(DictEnum.FKCG.getName(), DictEnum.FKCG.getCode());
+        if (StringUtils.isEmpty(contentTemplate)) {
+            LOGGER.info("--------缺少放款短信模板配置-----------");
+            return;
+        }
+        Map<String, String> parameter = new HashMap<>(2);
+        parameter.put("applayMoney", order.getApplayMoney().toString());
+        parameter.put("periods", order.getPeriods());
         String content = TemplateUtils.getContent(contentTemplate, parameter);
 
         AppMessage appMessage = new AppMessage();
@@ -193,49 +212,50 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
 
     /**
      * 远程调用获取还款信息 如果字段为空 为对应字段赋初始值
+     *
      * @param businessRepayment 还款信息实体
      */
     private void initRepayment(BusinessRepayment businessRepayment) {
-        if(businessRepayment.getRepaymentAccount() == null){
+        if (businessRepayment.getRepaymentAccount() == null) {
             businessRepayment.setRepaymentAccount(new BigDecimal(0.0000));
         }
-        if(businessRepayment.getRepaymentYesAccount() == null){
+        if (businessRepayment.getRepaymentYesAccount() == null) {
             businessRepayment.setRepaymentYesAccount(new BigDecimal(0.0000));
         }
-        if(businessRepayment.getYesCapital() == null){
+        if (businessRepayment.getYesCapital() == null) {
             businessRepayment.setYesCapital(new BigDecimal(0.0000));
         }
-        if(businessRepayment.getRate() == null){
+        if (businessRepayment.getRate() == null) {
             businessRepayment.setRate(new BigDecimal(0.0000));
         }
-        if(businessRepayment.getInterest() == null){
+        if (businessRepayment.getInterest() == null) {
             businessRepayment.setInterest(new BigDecimal(0.0000));
         }
-        if(businessRepayment.getRepaymentYesInterest() == null){
+        if (businessRepayment.getRepaymentYesInterest() == null) {
             businessRepayment.setRepaymentYesInterest(new BigDecimal(0.0000));
         }
-        if(businessRepayment.getIsRepayment() == null){
+        if (businessRepayment.getIsRepayment() == null) {
             businessRepayment.setIsRepayment(0);
         }
-        if(businessRepayment.getRepaymentType() == null){
+        if (businessRepayment.getRepaymentType() == null) {
             businessRepayment.setRepaymentType(0);
         }
-        if(businessRepayment.getLateDays() == null){
+        if (businessRepayment.getLateDays() == null) {
             businessRepayment.setLateDays(0);
         }
-        if(businessRepayment.getLateRate() == null){
+        if (businessRepayment.getLateRate() == null) {
             businessRepayment.setLateRate(new BigDecimal(0.0000));
         }
-        if(businessRepayment.getLateInterest() == null){
+        if (businessRepayment.getLateInterest() == null) {
             businessRepayment.setLateInterest(new BigDecimal(0.0000));
         }
-        if(businessRepayment.getDerateAmount() == null){
+        if (businessRepayment.getDerateAmount() == null) {
             businessRepayment.setDerateAmount(new BigDecimal(0.0000));
         }
-        if(businessRepayment.getRemark() == null){
+        if (businessRepayment.getRemark() == null) {
             businessRepayment.setRemark("");
         }
-        if(businessRepayment.getChannelType() == null){
+        if (businessRepayment.getChannelType() == null) {
             businessRepayment.setChannelType("");
         }
     }

@@ -3,6 +3,8 @@ package com.activemq.service;
 import com.activemq.entity.respose.LoanDetailResponse;
 import com.activemq.entity.respose.RepaymentResponse;
 import com.api.model.common.BYXResponse;
+import com.sun.org.apache.xpath.internal.operations.Or;
+import com.zw.pojo.Order;
 
 /**
  * 放款业务服务
@@ -44,7 +46,7 @@ public interface IRepaymentBusiness {
      * @param byxResponse 获得的信息
      * @return 处理结果
      */
-    boolean repaymentHandel(BYXResponse byxResponse);
+    boolean repaymentHandel(BYXResponse byxResponse) throws Exception;
 
 
     /**
@@ -56,7 +58,16 @@ public interface IRepaymentBusiness {
 
     /**
      * 发送信息（短信，站内信）
+     * @param order 订单信息
+     * @throws  Exception http异常
      */
-    void sendMessage() throws Exception;
+    void sendMessage(Order order) throws Exception;
+
+    /**
+     * 如果还款计划已经全部还款 那么就更新订单状态为已经结清
+     * @param businessId 订单编号
+     * @return 是否更新成功
+     */
+    void settleOrder(String businessId);
 
 }

@@ -1,5 +1,6 @@
 package com.zw.service;
 
+import com.enums.RepaymentStatusEnum;
 import com.zw.pojo.BusinessRepayment;
 
 import java.util.List;
@@ -83,4 +84,11 @@ public interface IBusinessRepaymentService {
      * @return
      */
     List<Map> findListRecordByOrderNo(BusinessRepayment record);
+
+    /**
+     * 根据还款状态查询总数
+     * @param orderNo 订单编号
+     * @return 返回总数
+     */
+    Integer countRepaymentByStatus(String orderNo);
 }

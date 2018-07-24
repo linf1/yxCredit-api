@@ -1,6 +1,7 @@
 package com.zw.miaofuspd.service;
 
 import com.base.util.DateUtils;
+import com.enums.RepaymentStatusEnum;
 import com.enums.RepaymentTypeEnum;
 import com.zw.miaofuspd.facade.order.service.AppOrderService;
 import com.zw.miaofuspd.mapper.BusinessRepaymentMapper;
@@ -140,5 +141,10 @@ public class BusinessRepaymentServiceImpl implements IBusinessRepaymentService {
     @Override
     public List<BusinessRepayment> findRepaymentInfoByStatus(String status) {
         return businessRepaymentMapper.findRepaymentInfoByStatus(status);
+    }
+
+    @Override
+    public Integer countRepaymentByStatus(String orderNo) {
+        return businessRepaymentMapper.countRepaymentByStatus(orderNo);
     }
 }

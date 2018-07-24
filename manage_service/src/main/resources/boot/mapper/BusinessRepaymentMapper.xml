@@ -196,7 +196,7 @@
   <select id="findRepaymentInfoByStatus"  resultMap="BaseResultMap">
       SELECT order_no,DATE(repayment_time)as repaymentTime  FROM business_repayment  WHERE status = #{status}
   </select>
-  <update id="updateRepaymentById" parameterType="com.zw.pojo.BusinessRepayment">
+    <update id="updateRepaymentById" parameterType="com.zw.pojo.BusinessRepayment">
         update business_repayment
         <set >
             <if test="orderNo != null" >
@@ -377,5 +377,9 @@
         </set>
       where order_no = #{orderNo,jdbcType=VARCHAR} and  period = #{period,jdbcType=INTEGER}
     </update>
+
+    <select id="countRepaymentByStatus" resultType="java.lang.Integer">
+        SELECT COUNT(id) FROM business_repayment WHERE order_no = #{orderNo} AND status in(1,2)  AND is_deleted = 1
+    </select>
 
 </mapper>

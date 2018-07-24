@@ -85,4 +85,12 @@ public interface BusinessRepaymentMapper {
      */
     List<BusinessRepayment> findRepaymentInfoByStatus(@Param("status") String status);
 
+
+    /**
+     * 根据还款状态查询总数
+     * @param orderNo 订单编号
+     * @return 返回总数
+     */
+    Integer countRepaymentByStatus(@Param("orderNo")String orderNo);
+
 }
