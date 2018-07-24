@@ -1,6 +1,7 @@
 package com.activemq.entity.respose;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 放款信息返回实体
@@ -29,6 +30,11 @@ public class LoanDetailResponse implements Serializable {
      * String	放款描述
      */
     private String statusMsg;
+
+    /**
+     * 放款时间
+     */
+    private Date reviewTime;
 
     public String getBusinessId() {
         return businessId;
@@ -70,6 +76,14 @@ public class LoanDetailResponse implements Serializable {
         this.statusMsg = statusMsg;
     }
 
+    public Date getReviewTime() {
+        return reviewTime;
+    }
+
+    public void setReviewTime(Date reviewTime) {
+        this.reviewTime = reviewTime;
+    }
+
     public boolean isOk(){
         return "1".equals(this.status);
     }
@@ -82,6 +96,8 @@ public class LoanDetailResponse implements Serializable {
                 ", loanName='" + loanName + '\'' +
                 ", status='" + status + '\'' +
                 ", statusMsg='" + statusMsg + '\'' +
+                ", reviewTime=" + reviewTime +
                 '}';
     }
 }
+
