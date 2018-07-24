@@ -57,7 +57,7 @@ public class BusinessRepaymentServiceImpl implements IBusinessRepaymentService {
             Date currentDate = DateUtils.strConvertToDate(currentTime,DateUtils.STYLE_2);
             for(BusinessRepayment businessRepayment : businessRepaymentList) {
                 //起息日小于当前时间
-                if(currentDate.getTime() > businessRepayment.getInterestStartTime().getTime()
+                if(currentDate.getTime() >= businessRepayment.getInterestStartTime().getTime()
                         && RepaymentTypeEnum.OVERDUE.getCode().equals(businessRepayment.getRepaymentType())) {
                     map.put("id", businessRepayment.getId());
                     map.put("repaymentId",businessRepayment.getRepaymentId());
@@ -73,7 +73,7 @@ public class BusinessRepaymentServiceImpl implements IBusinessRepaymentService {
             if(map.isEmpty()) {
                 //起息日小于当前时间
                 for(BusinessRepayment businessRepayment : businessRepaymentList)
-                    if (currentDate.getTime() > businessRepayment.getInterestStartTime().getTime()) {
+                    if (currentDate.getTime() >= businessRepayment.getInterestStartTime().getTime()) {
                         map.put("id",businessRepayment.getId());
                         map.put("repaymentId",businessRepayment.getRepaymentId());
                         map.put("period", businessRepayment.getPeriod());//当前期数
