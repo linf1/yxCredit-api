@@ -28,7 +28,7 @@ public interface IRepaymentServer {
     /**
      * 查询还款账号
      * @author 韩梅生
-     *
+     * @throws Exception 异常
      */
     BYXResponse getLoan(Map map) throws Exception;
 
@@ -42,4 +42,11 @@ public interface IRepaymentServer {
      * @throws Exception 异常
      */
     BYXResponse getRepaymentListByProjectId(BusinessRepayment record) throws Exception;
+
+    /**
+     * 删除当前还款计划
+     * @param  orderNo 订单编号
+     * @throws Exception 异常
+     */
+    void deleteRepayment(String orderNo) throws Exception;
 }

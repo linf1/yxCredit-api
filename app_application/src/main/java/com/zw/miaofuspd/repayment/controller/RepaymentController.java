@@ -120,7 +120,8 @@ public class RepaymentController {
                 boolean isLoanMoney = repaymentBusiness.loanMoney(loanDetail);
                 if(isLoanMoney){
                     //生成对应还款计划
-                    return addRepayment(orderId);
+                    //return addRepayment(orderId);
+                    return ResultVO.ok(byxResponse.getRes_msg());
                 }
             }
             LOGGER.info("查询还款账号异常：{}",byxResponse.getRes_msg());
@@ -142,6 +143,8 @@ public class RepaymentController {
         repayment.setOrderNo(orderNo);
         //未还款的状态
         repayment.setRepaymentType(RepaymentTypeEnum.REPAYMENT_NO.getCode());
+        //先删除数据库还款计划
+        repaymentServer.deleteRepayment(orderNo);
         //调远程API获取还款计划
         BYXResponse repaymentInfo = repaymentServer.getRepaymentListByProjectId(repayment);
         if (BYXResponse.resCode.success.getCode().equals(repaymentInfo.getRes_code())) {
@@ -154,7 +157,7 @@ public class RepaymentController {
                     repaymentBusiness.saveRepaymentInfo(repaymentResponse);
                 }
             }
-          return   ResultVO.ok(repaymentInfo.getRes_data());
+          return   ResultVO.ok(repaymentInfo.getRes_msg());
         }
      return   ResultVO.error(repaymentInfo.getRes_msg());
     }
