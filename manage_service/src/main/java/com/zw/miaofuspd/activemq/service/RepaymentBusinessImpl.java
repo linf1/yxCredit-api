@@ -93,7 +93,8 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
         order.setPayBackCard(loanDetailResponse.getLoanNo());
         order.setPayBackUser(loanDetailResponse.getLoanName());
         order.setAlterTime(DateUtils.getCurrentTime());
-        order.setLoanTime(DateUtils.getCurrentTime());
+        //放款时间
+        order.setLoanTime(DateUtils.getDateString(loanDetailResponse.getReviewTime(),DateUtils.STYLE_1));
         return orderService.updateOrderById(order) > 0;
     }
 
