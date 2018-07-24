@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -104,6 +105,8 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
         businessRepayment.setId(GeneratePrimaryKeyUtils.getUUIDKey());
         businessRepayment.setUpdateUserId("");
         businessRepayment.setUpdateTime(new Date());
+        businessRepayment.setCreateTime(new Date());
+        initRepayment(businessRepayment);
         return businessRepaymentService.saveRepayment(businessRepayment);
     }
 
@@ -181,10 +184,56 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
         messageServer.sendLetter(appMessage);
 
         MsgRequest msgRequest = new MsgRequest();
-        msgRequest.setPhone("xxxxx");
+        msgRequest.setPhone(order.getTel());
         msgRequest.setContent(content);
         //发送短信
         messageServer.sendSms(msgRequest);
         LOGGER.info("--------发送短信及站内信成功-----------");
+    }
+
+    /**
+     * 远程调用获取还款信息 如果字段为空 为对应字段赋初始值
+     * @param businessRepayment 还款信息实体
+     */
+    private void initRepayment(BusinessRepayment businessRepayment) {
+        if(businessRepayment.getRepaymentAccount() == null){
+            businessRepayment.setRepaymentAccount(new BigDecimal(0.0000));
+        }
+        if(businessRepayment.getYesCapital() == null){
+            businessRepayment.setYesCapital(new BigDecimal(0.0000));
+        }
+        if(businessRepayment.getRate() == null){
+            businessRepayment.setRate(new BigDecimal(0.0000));
+        }
+        if(businessRepayment.getInterest() == null){
+            businessRepayment.setInterest(new BigDecimal(0.0000));
+        }
+        if(businessRepayment.getRepaymentYesInterest() == null){
+            businessRepayment.setRepaymentYesInterest(new BigDecimal(0.0000));
+        }
+        if(businessRepayment.getIsRepayment() == null){
+            businessRepayment.setIsRepayment(0);
+        }
+        if(businessRepayment.getRepaymentType() == null){
+            businessRepayment.setRepaymentType(0);
+        }
+        if(businessRepayment.getLateDays() == null){
+            businessRepayment.setLateDays(0);
+        }
+        if(businessRepayment.getLateRate() == null){
+            businessRepayment.setLateRate(new BigDecimal(0.0000));
+        }
+        if(businessRepayment.getLateInterest() == null){
+            businessRepayment.setLateInterest(new BigDecimal(0.0000));
+        }
+        if(businessRepayment.getDerateAmount() == null){
+            businessRepayment.setDerateAmount(new BigDecimal(0.0000));
+        }
+        if(businessRepayment.getRemark() == null){
+            businessRepayment.setRemark("");
+        }
+        if(businessRepayment.getChannelType() == null){
+            businessRepayment.setChannelType("");
+        }
     }
 }
