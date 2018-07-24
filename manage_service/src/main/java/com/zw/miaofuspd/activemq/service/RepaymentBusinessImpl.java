@@ -63,11 +63,10 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
 
     @Override
     public boolean loanMoney(LoanDetailResponse loanDetailResponse) {
-        String currentTime = DateUtils.getCurrentTime();
         order = orderService.getOrderByNo(loanDetailResponse.getBusinessId());
         OrderOperationRecord orderOperationRecord = new OrderOperationRecord();
         orderOperationRecord.setId(GeneratePrimaryKeyUtils.getUUIDKey());
-        orderOperationRecord.setOperationTime(currentTime);
+        orderOperationRecord.setOperationTime(DateUtils.getDateString(loanDetailResponse.getReviewTime(),DateUtils.STYLE_10));
         orderOperationRecord.setDescription("已放款");
         //放款审核
         orderOperationRecord.setOperationNode(OperationNodeEnum.LOAN_AUDIT.getCode());
@@ -199,6 +198,9 @@ public class RepaymentBusinessImpl implements IRepaymentBusiness {
     private void initRepayment(BusinessRepayment businessRepayment) {
         if(businessRepayment.getRepaymentAccount() == null){
             businessRepayment.setRepaymentAccount(new BigDecimal(0.0000));
+        }
+        if(businessRepayment.getRepaymentYesAccount() == null){
+            businessRepayment.setRepaymentYesAccount(new BigDecimal(0.0000));
         }
         if(businessRepayment.getYesCapital() == null){
             businessRepayment.setYesCapital(new BigDecimal(0.0000));
