@@ -52,6 +52,7 @@
 
     <dubbo:service interface="com.activemq.service.IRepaymentBusiness" timeout="30000"    ref="repaymentBusinessImpl"/>
 
-
+    <dubbo:service interface="com.zw.service.IOrderService" timeout="30000"
+                   ref="orderServiceImpl"/>
 
 </beans>
