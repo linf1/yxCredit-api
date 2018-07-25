@@ -83,6 +83,7 @@ public class AssetController {
               request.setThirdAssetOrderNum(orderMap.get("order_no") == null?"":orderMap.get("order_no").toString());
               request.setAssetCustomerName(orderMap.get("customer_name") == null?"":orderMap.get("customer_name").toString());
               request.setAssetPrepaymentMinDays(StringUtils.isEmpty(orderMap.get("repayment_days")) ? "" : orderMap.get("repayment_days").toString());
+              request.setAssetInvestRate(orderMap.get("assetInvestRate") == null ? "0" : orderMap.get("assetInvestRate").toString());
 
             try {
                 BYXResponse  byxResponse = iassetServer.thirdAssetsReceiver(request);
