@@ -153,11 +153,11 @@ public class RepaymentController {
         repayment.setOrderNo(orderNo);
         //未还款的状态
         repayment.setRepaymentType(RepaymentTypeEnum.REPAYMENT_ALL.getCode());
-        //先删除数据库还款计划
-        repaymentServer.deleteRepayment(orderNo);
         //调远程API获取还款计划
         BYXResponse repaymentInfo = repaymentServer.getRepaymentListByProjectId(repayment);
         if (BYXResponse.resCode.success.getCode().equals(repaymentInfo.getRes_code())) {
+            //先删除数据库还款计划
+            repaymentServer.deleteRepayment(orderNo);
             //多期产品会有多期还款计划
             JSONArray repaymentList = (JSONArray)repaymentInfo.getRes_data();
             for (Object item : repaymentList) {
