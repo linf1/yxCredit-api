@@ -20,6 +20,7 @@ public class HttpClientUtil {
     
     
     public static String post(String url, String param,List<Header> headerList) {// header方法扩展一下
+        logger.info("--------------http发送请求URL：{}-----------",url);
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(url);
         httpPost.addHeader(HTTP.CONTENT_TYPE, "application/json;charset=utf-8");//请求参数为JSON格式
