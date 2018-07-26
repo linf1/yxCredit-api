@@ -154,6 +154,7 @@ public class RepaymentController {
         //未还款的状态
         repayment.setRepaymentType(RepaymentTypeEnum.REPAYMENT_ALL.getCode());
         //调远程API获取还款计划
+        LOGGER.info("远程获取还款计划参数：{}",repayment.toString());
         BYXResponse repaymentInfo = repaymentServer.getRepaymentListByProjectId(repayment);
         if (BYXResponse.resCode.success.getCode().equals(repaymentInfo.getRes_code())) {
             //先删除数据库还款计划
@@ -171,6 +172,7 @@ public class RepaymentController {
             repaymentBusiness.settleOrder(orderNo);
           return   ResultVO.ok(repaymentInfo.getRes_msg());
         }
+        LOGGER.info("远程获取还款计划失败：{}",repaymentInfo.getRes_msg());
      return   ResultVO.error(repaymentInfo.getRes_msg());
     }
 

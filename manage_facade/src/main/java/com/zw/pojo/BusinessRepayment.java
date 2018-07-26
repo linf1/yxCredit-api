@@ -765,5 +765,33 @@ public class BusinessRepayment extends BaseEntity implements Serializable {
         this.remark = remark;
     }
 
-
+    @Override
+    public String toString() {
+        return "BusinessRepayment{" +
+                "id='" + id + '\'' +
+                ", orderNo='" + orderNo + '\'' +
+                ", repaymentId='" + repaymentId + '\'' +
+                ", status='" + status + '\'' +
+                ", period=" + period +
+                ", interestStartTime=" + interestStartTime +
+                ", repaymentTime=" + repaymentTime +
+                ", repaymentYesTime=" + repaymentYesTime +
+                ", repaymentAccount=" + repaymentAccount +
+                ", repaymentYesAccount=" + repaymentYesAccount +
+                ", capital=" + capital +
+                ", yesCapital=" + yesCapital +
+                ", rate=" + rate +
+                ", interest=" + interest +
+                ", repaymentYesInterest=" + repaymentYesInterest +
+                ", isRepayment=" + isRepayment +
+                ", repaymentType=" + repaymentType +
+                ", lateDays=" + lateDays +
+                ", lateRate=" + lateRate +
+                ", lateInterest=" + lateInterest +
+                ", derateAmount=" + derateAmount +
+                ", periods=" + periods +
+                ", channelType='" + channelType + '\'' +
+                ", remark='" + remark + '\'' +
+                '}';
+    }
 }
