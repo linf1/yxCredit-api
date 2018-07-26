@@ -102,7 +102,7 @@ public class BYXResponse implements Serializable {
      */
 
     public static BYXResponse getBYXResponse(String byxResponseJson,BYXSettings byxSettings) throws Exception {
-        if(StringUtils.isEmpty(byxResponseJson)){return error();}
+        if(StringUtils.isEmpty(byxResponseJson)){return error("调用远程接口失败！");}
         CryptoTools cryptoTools = new CryptoTools(byxSettings.getDesKey(),byxSettings.getVi());
         final BYXResponse response = JSONObject.parseObject(byxResponseJson, BYXResponse.class);
         if(BYXResponse.resCode.success.getCode().equals(response.getRes_code())) {
@@ -122,7 +122,7 @@ public class BYXResponse implements Serializable {
      */
 
     public static BYXResponse getBYXResponse(String byxResponseJson) throws Exception {
-        if(StringUtils.isEmpty(byxResponseJson)){return error();}
+        if(StringUtils.isEmpty(byxResponseJson)){return error("调用远程接口失败！");}
         return JSONObject.parseObject(byxResponseJson, BYXResponse.class);
     }
 
@@ -133,7 +133,7 @@ public class BYXResponse implements Serializable {
      * @return BYXResponse
      */
     public static BYXResponse getBYXResponseJson(String byxResponseJson,BYXSettings byxSettings) throws Exception {
-        if(StringUtils.isEmpty(byxResponseJson)){return error();}
+        if(StringUtils.isEmpty(byxResponseJson)){return error("调用远程接口失败！");}
         CryptoTools cryptoTools = new CryptoTools(byxSettings.getDesKey(),byxSettings.getVi());
         final String decode = cryptoTools.decode(byxResponseJson);
         return BYXResponse.ok(JSONObject.parseObject(decode));
@@ -146,7 +146,7 @@ public class BYXResponse implements Serializable {
      */
 
     public static BYXResponse getArrayBYXResponse(String byxResponseJson,BYXSettings byxSettings) throws Exception {
-        if(StringUtils.isEmpty(byxResponseJson)){return error();}
+        if(StringUtils.isEmpty(byxResponseJson)){return error("调用远程接口失败！");}
         CryptoTools cryptoTools = new CryptoTools(byxSettings.getDesKey(),byxSettings.getVi());
         final BYXResponse response = JSONObject.parseObject(byxResponseJson, BYXResponse.class);
         if(BYXResponse.resCode.success.getCode().equals(response.getRes_code())) {
